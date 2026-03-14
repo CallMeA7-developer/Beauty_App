@@ -26,6 +26,7 @@ import DeliveryMethods from './pages/DeliveryMethods'
 import PaymentMethods from './pages/PaymentMethods'
 import OrderConfirmation from './pages/OrderConfirmation'
 import Explore from './components/Explore'
+import AISkinConsultant from './pages/AiSkinConsultant'
 
 export default function App() {
   return (
@@ -57,6 +58,7 @@ export default function App() {
         <Route path='payment-methods' element={<PaymentMethods />} />
         <Route path='/order-confirmation' element={<OrderConfirmation />} />
         <Route path='/explore-popup' element={<Explore />} />
+        <Route path='/ai-skin-consultation' element={<AISkinConsultant />} />
       </Routes>
       <Footer />
     </div>
