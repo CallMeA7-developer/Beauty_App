@@ -1,0 +1,420 @@
+import {
+  IoChevronDown,
+  IoCameraOutline,
+  IoCheckmarkCircle,
+  IoSunnyOutline,
+  IoPersonCircleOutline,
+  IoWaterOutline,
+  IoSparklesOutline,
+  IoStarSharp,
+} from 'react-icons/io5'
+
+export default function SkinAnalysis() {
+  const skinConcerns = ['Acne', 'Aging', 'Dryness', 'Oiliness', 'Sensitivity', 'Dark Spots']
+  const skinTypes = ['Oily', 'Dry', 'Combination', 'Sensitive', 'Normal']
+  const ageRanges = ['18-25', '26-35', '36-45', '46-55', '55+']
+  const specificConcerns = ['Fine Lines', 'Wrinkles', 'Large Pores', 'Dark Circles', 'Uneven Tone', 'Hyperpigmentation', 'Redness', 'Blemishes', 'Texture', 'Dullness', 'Firmness', 'Hydration']
+
+  const guidelines = [
+    { icon: IoSunnyOutline, title: 'Good Lighting', desc: 'Natural daylight preferred' },
+    { icon: IoPersonCircleOutline, title: 'Face Forward', desc: 'Look directly at camera' },
+    { icon: IoSparklesOutline, title: 'Remove Makeup', desc: 'Clean, bare skin' },
+  ]
+
+  const quickStats = [
+    { label: 'Hydration', value: '92%' },
+    { label: 'Texture', value: '78%' },
+    { label: 'Clarity', value: '88%' },
+    { label: 'Tone Evenness', value: '81%' },
+  ]
+
+  const analysisCards = [
+    { title: 'Combination Skin', desc: 'T-zone shows moderate oiliness while cheek areas tend toward dryness. Balanced care recommended for optimal results.', badge: 'Confirmed' },
+    { title: 'Hydration Levels', desc: 'Excellent moisture retention detected. Continue current hydration routine with lightweight serums.' },
+    { title: 'Texture & Smoothness', desc: 'Minimal pore visibility with good overall texture. Occasional exfoliation will maintain smoothness.' },
+    { title: 'Pigmentation', desc: 'Mild uneven tone detected in cheek areas. Vitamin C treatments recommended for brightening.' },
+    { title: 'Fine Lines & Wrinkles', desc: 'Early signs around eye area. Preventive care with retinol and SPF strongly advised.' },
+    { title: 'Problem Areas', desc: 'Slight redness in T-zone. Consider calming ingredients like niacinamide and centella.' },
+  ]
+
+  const morningProducts = [
+    { name: 'Gentle Cleanser', benefit: 'Purifying & balancing', price: '$58', reviews: 342, image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=280&h=280&fit=crop' },
+    { name: 'Vitamin C Serum', benefit: 'Brightening & protection', price: '$125', reviews: 521, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=280&h=280&fit=crop' },
+    { name: 'Hydrating Moisturizer', benefit: 'Deep moisture lock', price: '$89', reviews: 467, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=280&h=280&fit=crop' },
+    { name: 'SPF 50 Sunscreen', benefit: 'Broad spectrum defense', price: '$72', reviews: 789, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=280&h=280&fit=crop' },
+  ]
+
+  const eveningProducts = [
+    { name: 'Makeup Remover', benefit: 'Gentle cleansing oil', price: '$54', reviews: 398, image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=280&h=280&fit=crop' },
+    { name: 'Exfoliating Toner', benefit: 'Refining & smoothing', price: '$68', reviews: 456, image: 'https://images.unsplash.com/photo-1620916297073-ff5f6c60c5b3?w=280&h=280&fit=crop' },
+    { name: 'Retinol Treatment', benefit: 'Anti-aging powerhouse', price: '$145', reviews: 634, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=280&h=280&fit=crop' },
+    { name: 'Night Cream', benefit: 'Intensive repair', price: '$98', reviews: 523, image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=280&h=280&fit=crop' },
+  ]
+
+  const targetedProducts = [
+    { name: 'Eye Cream', benefit: 'Reduces dark circles', price: '$82', reviews: 412, image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=280&h=280&fit=crop' },
+    { name: 'Dark Spot Corrector', benefit: 'Brightening treatment', price: '$115', reviews: 367, image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=280&h=280&fit=crop' },
+    { name: 'Pore Minimizer', benefit: 'Refining serum', price: '$95', reviews: 289, image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=280&h=280&fit=crop' },
+  ]
+
+  const timelinePoints = [
+    { date: 'Dec 15, 2024', score: 85, image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=120&h=120&fit=crop' },
+    { date: 'Nov 15, 2024', score: 81, image: 'https://images.unsplash.com/photo-1611349411198-e26e0d5f4a52?w=120&h=120&fit=crop' },
+    { date: 'Oct 15, 2024', score: 78, image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=120&h=120&fit=crop' },
+  ]
+
+  const faqs = [
+    { q: 'How accurate is the AI skin analysis?', a: 'Our AI technology analyzes skin with 98% accuracy, validated by dermatologists and based on millions of skin scans.' },
+    { q: 'How often should I get analyzed?', a: 'We recommend monthly analysis to track improvements and adjust your skincare routine as needed.' },
+    { q: 'Is my data private and secure?', a: 'Absolutely. All images and data are encrypted and never shared with third parties. Your privacy is our priority.' },
+    { q: 'Does the analysis cost anything?', a: 'The basic analysis is complimentary. Premium features include expert consultations and advanced tracking.' },
+    { q: 'Can I use recommended products from other brands?', a: 'While we recommend our scientifically formulated products, the analysis results can guide any skincare choice.' },
+    { q: 'How long until I see results?', a: 'Most users notice improvements within 4-6 weeks of following their personalized routine consistently.' },
+  ]
+
+  const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)
+
+  const ProductCard = ({ product, cols = 4 }) => (
+    <div className="bg-white rounded-[8px] overflow-hidden border border-[#E8E3D9]">
+      <img src={product.image} alt={product.name} className="w-full h-[280px] object-cover" />
+      <div className="p-6">
+        <p className="text-[13px] font-light italic text-[#8B7355] mb-2">Shan Loray</p>
+        <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
+        <p className="text-[14px] font-normal text-[#666666] mb-3">{product.benefit}</p>
+        <p className="text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.price}</p>
+        <div className="flex items-center gap-1 mb-4">
+          <Stars />
+          <span className="text-[12px] font-normal text-[#999999] ml-1">({product.reviews})</span>
+        </div>
+        <button className="w-full h-[48px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="bg-white font-['Cormorant_Garamond']">
+
+      {/* ── Hero ── */}
+      <div className="min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-[120px]">
+        <div className="w-[650px] relative z-10">
+          <p className="text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
+          <h1 className="text-[72px] font-bold text-[#1A1A1A] leading-[1] mb-6">Discover Your Skin's True Potential</h1>
+          <p className="text-[20px] font-normal text-[#666666] mb-8">Advanced AI technology analyzes your skin in 60 seconds with medical-grade precision</p>
+          <div className="w-[140px] h-[4px] bg-[#C9A870]" />
+        </div>
+        <div className="absolute right-[180px] top-1/2 -translate-y-1/2">
+          <img
+            src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=400&fit=crop"
+            alt="Skin Analysis Technology"
+            className="w-[400px] h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]"
+          />
+        </div>
+      </div>
+
+      {/* ── Breadcrumb ── */}
+      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
+        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
+        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Technology</span>
+        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[15px] font-normal text-[#666666]">Skin Analysis</span>
+      </div>
+
+      {/* ── Upload Section ── */}
+      <div className="min-h-[600px] px-[120px] py-[64px]">
+        <div className="max-w-[1200px] mx-auto">
+          <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
+          <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Upload a clear, front-facing photo in natural lighting for accurate results</p>
+
+          <div className="w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+            <div className="min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center">
+              <IoCameraOutline className="w-[80px] h-[80px] text-[#8B7355] mb-4" />
+              <h3 className="text-[24px] font-medium text-[#1A1A1A] mb-4">Upload Your Photo</h3>
+              <p className="text-[15px] font-normal text-[#666666] mb-6">Drag and drop your photo here or click to browse</p>
+              <div className="flex gap-3">
+                <button className="w-[180px] h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+                  Upload Photo
+                </button>
+                <button className="w-[180px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+                  Take Selfie
+                </button>
+              </div>
+            </div>
+            <div className="p-[32px] grid grid-cols-3 gap-6">
+              {guidelines.map((guide, idx) => (
+                <div key={idx} className="flex flex-col items-center text-center">
+                  <guide.icon className="w-[24px] h-[24px] text-[#8B7355] mb-2" />
+                  <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{guide.title}</h4>
+                  <p className="text-[14px] font-normal text-[#666666]">{guide.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="w-[800px] mx-auto mt-8 bg-[#F5F1EA] rounded-[12px] flex flex-col items-center justify-center py-6 px-6">
+            <p className="text-[16px] font-normal text-[#666666] mb-2">Don't have a photo ready?</p>
+            <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer underline">Take our skin questionnaire instead</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Questionnaire ── */}
+      <div className="min-h-[700px] bg-[#FDFBF7] px-[120px] py-[64px]">
+        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Tell Us About Your Skin</h2>
+        <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Help us understand your unique skin concerns for personalized recommendations</p>
+
+        <div className="max-w-[1200px] mx-auto grid grid-cols-2 gap-8 mb-12">
+          {/* Primary Concern */}
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Primary Skin Concern</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {skinConcerns.map((concern, idx) => (
+                <button key={concern} className={`h-[48px] px-4 text-[14px] rounded-[8px] transition-colors ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+                  {concern}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Skin Type */}
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Skin Type</h3>
+            <div className="grid grid-cols-3 gap-3">
+              {skinTypes.map((type, idx) => (
+                <button key={type} className={`h-[48px] px-4 text-[14px] rounded-[8px] transition-colors ${idx === 2 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+                  {type}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Current Routine */}
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Current Routine</h3>
+            <div className="w-full h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between px-5 cursor-pointer">
+              <span className="text-[15px] font-normal text-[#2B2B2B]">Moderate (4-6 products)</span>
+              <IoChevronDown className="w-[20px] h-[20px] text-[#8B7355]" />
+            </div>
+          </div>
+
+          {/* Sun Exposure */}
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Sun Exposure</h3>
+            <div className="pt-4">
+              <div className="relative w-full h-[8px] bg-[#E8E3D9] rounded-full mb-4">
+                <div className="absolute left-0 top-0 h-full w-[60%] bg-[#8B7355] rounded-full" />
+                <div className="absolute left-[60%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#8B7355] rounded-full border-4 border-white shadow-md" />
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[13px] font-normal text-[#666666]">Minimal</span>
+                <span className="text-[13px] font-normal text-[#666666]">Moderate</span>
+                <span className="text-[13px] font-normal text-[#666666]">High</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Age Range */}
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Age Range</h3>
+            <div className="grid grid-cols-3 gap-3">
+              {ageRanges.map((range, idx) => (
+                <button key={range} className={`h-[48px] px-4 text-[14px] rounded-[8px] transition-colors ${idx === 1 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+                  {range}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Specific Concerns */}
+          <div className="col-span-2 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Specific Concerns</h3>
+            <div className="grid grid-cols-4 gap-3">
+              {specificConcerns.map((concern, idx) => (
+                <label key={concern} className="flex items-center gap-3 cursor-pointer">
+                  <div className={`w-[18px] h-[18px] border-2 rounded-[2px] flex items-center justify-center flex-shrink-0 ${[0, 4, 8].includes(idx) ? 'border-[#8B7355] bg-[#8B7355]' : 'border-[#C9A870]'}`}>
+                    {[0, 4, 8].includes(idx) && <IoCheckmarkCircle className="w-[14px] h-[14px] text-white" />}
+                  </div>
+                  <span className="text-[14px] font-normal text-[#3D3D3D]">{concern}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <button className="w-[240px] h-[56px] bg-[#8B7355] text-white text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+            Analyze My Skin
+          </button>
+        </div>
+      </div>
+
+      {/* ── Analysis Results ── */}
+      <div className="min-h-[900px] bg-white px-[120px] py-[80px]">
+        <h2 className="text-[56px] font-bold text-[#1A1A1A] text-center mb-4">Your Skin Analysis Results</h2>
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#C9A870] text-white text-[14px] font-medium rounded-full">
+            <IoCheckmarkCircle className="w-[18px] h-[18px]" />
+            Analysis Complete
+          </div>
+        </div>
+
+        {/* Score Dashboard */}
+        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-[40px] mb-10">
+          <div className="text-center mb-8">
+            <div className="text-[64px] font-bold text-[#8B7355] mb-2">85/100</div>
+            <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-2">Healthy Skin</h3>
+            <p className="text-[16px] font-normal text-[#666666] max-w-[600px] mx-auto">Your skin shows excellent hydration and balanced oil production</p>
+          </div>
+          <div className="grid grid-cols-4 gap-6">
+            {quickStats.map((stat) => (
+              <div key={stat.label} className="flex flex-col items-center">
+                <IoWaterOutline className="w-[32px] h-[32px] text-[#8B7355] mb-2" />
+                <span className="text-[15px] font-normal text-[#666666] mb-1">{stat.label}</span>
+                <span className="text-[32px] font-semibold text-[#1A1A1A] mb-2">{stat.value}</span>
+                <div className="w-full h-[8px] bg-[#E8E3D9] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#8B7355] rounded-full" style={{ width: stat.value }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Analysis Cards */}
+        <div className="max-w-[1200px] mx-auto grid grid-cols-2 gap-8">
+          {analysisCards.map((card, idx) => (
+            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[28px]">
+              <div className="flex items-start justify-between mb-3">
+                <IoSparklesOutline className="w-[28px] h-[28px] text-[#8B7355]" />
+                {card.badge && <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[11px] font-medium rounded-full">{card.badge}</span>}
+              </div>
+              <h4 className="text-[20px] font-medium text-[#1A1A1A] mb-3">{card.title}</h4>
+              <p className="text-[15px] font-normal text-[#666666] leading-[1.6]">{card.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Product Recommendations ── */}
+      <div className="min-h-[800px] bg-[#FDFBF7] px-[120px] py-[80px]">
+        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
+        <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Curated specifically for your skin analysis results</p>
+
+        {/* Morning Routine */}
+        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[40px] mb-8">
+          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
+          <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-8">Morning Protection Routine</h3>
+          <div className="grid grid-cols-4 gap-5">
+            {morningProducts.map((product) => <ProductCard key={product.name} product={product} />)}
+          </div>
+        </div>
+
+        {/* Evening Routine */}
+        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[40px] mb-8">
+          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
+          <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-8">Evening Repair Routine</h3>
+          <div className="grid grid-cols-4 gap-5">
+            {eveningProducts.map((product) => <ProductCard key={product.name} product={product} />)}
+          </div>
+        </div>
+
+        {/* Targeted Treatments */}
+        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[40px] mb-8">
+          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
+          <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-8">Specialized Treatments</h3>
+          <div className="grid grid-cols-3 gap-5">
+            {targetedProducts.map((product) => <ProductCard key={product.name} product={product} />)}
+          </div>
+        </div>
+
+        <div className="flex justify-center gap-4">
+          <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+            View Complete Routine
+          </button>
+          <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+            Save to My Profile
+          </button>
+        </div>
+      </div>
+
+      {/* ── Progress Tracking ── */}
+      <div className="min-h-[400px] bg-white px-[120px] py-[64px]">
+        <h2 className="text-[48px] font-medium text-[#1A1A1A] mb-6">Track Your Skin Journey</h2>
+        <p className="text-[16px] font-normal text-[#666666] mb-[56px]">Monitor improvements with regular skin analysis</p>
+        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-[40px]">
+          <div className="flex items-center justify-between mb-8">
+            {timelinePoints.map((point, idx) => (
+              <div key={idx} className="flex flex-col items-center">
+                <img src={point.image} alt="Analysis" className="w-[120px] h-[120px] object-cover rounded-[8px] mb-4" />
+                <div className="text-[24px] font-semibold text-[#8B7355] mb-1">{point.score}</div>
+                <div className="text-[14px] font-normal text-[#666666]">{point.date}</div>
+              </div>
+            ))}
+            <button className="w-[180px] h-[48px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+              Schedule Next Analysis
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Expert Consultation ── */}
+      <div className="min-h-[320px] bg-[#F5F1EA] px-[120px] py-[64px]">
+        <div className="max-w-[1200px] mx-auto flex items-center gap-[64px]">
+          <div className="w-[600px]">
+            <h2 className="text-[36px] font-medium text-[#1A1A1A] mb-5">Want Expert Guidance?</h2>
+            <p className="text-[16px] font-normal text-[#666666] leading-[1.6] mb-8">Book a complimentary virtual consultation with our skincare specialists to discuss your results and personalized routine</p>
+            <div className="flex gap-4">
+              <button className="w-[200px] h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+                Book Consultation
+              </button>
+              <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-white/80 transition-colors">
+                Chat with Expert
+              </button>
+            </div>
+          </div>
+          <div className="flex-1">
+            <img
+              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=520&h=280&fit=crop"
+              alt="Expert Consultant"
+              className="w-full h-[280px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ── FAQ ── */}
+      <div className="min-h-[500px] bg-white px-[120px] py-[64px]">
+        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">Frequently Asked Questions</h2>
+        <div className="max-w-[900px] mx-auto space-y-4">
+          {faqs.map((faq, idx) => (
+            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-[17px] font-medium text-[#1A1A1A]">{faq.q}</h4>
+                <IoChevronDown className="w-[20px] h-[20px] text-[#8B7355] flex-shrink-0" />
+              </div>
+              {idx < 2 && (
+                <div className="bg-[#F5F1EA] rounded-[8px] p-5 mt-3">
+                  <p className="text-[15px] font-normal text-[#666666] leading-[1.7]">{faq.a}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Newsletter CTA ── */}
+      <div className="min-h-[180px] bg-gradient-to-b from-[#F5F1EA] to-white px-[120px] flex flex-col items-center justify-center">
+        <h3 className="text-[36px] font-medium text-[#1A1A1A] mb-3">Stay Updated on Skin Health</h3>
+        <p className="text-[16px] font-normal text-[#666666] mb-6">Get personalized skincare tips and exclusive offers</p>
+        <div className="flex items-center gap-2">
+          <input type="email" placeholder="Enter your email" className="w-[360px] h-[56px] px-5 bg-white text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <button className="h-[56px] px-8 bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+            Subscribe
+          </button>
+        </div>
+      </div>
+
+    </div>
+  )
+}
