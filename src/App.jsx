@@ -19,7 +19,7 @@ import OrderTracking from './pages/OrderTracking'
 import ProductDetail from './pages/ProductDetail'
 import MakeupProductDetail from './pages/MakeupProductDetail'
 import Wishlist from './pages/Wishlist'
-
+import Filter from './components/Filter'
 export default function App() {
   return (
     <div>
@@ -43,6 +43,7 @@ export default function App() {
         <Route path='/product-detail' element={<ProductDetail />} />
         <Route path='/makeup-product-detail' element={<MakeupProductDetail />} />
         <Route path='/wishlist' element={<Wishlist />} />
+        <Route path='/filter-popup' element={<Filter />} />
       </Routes>
       <Footer />
     </div>
