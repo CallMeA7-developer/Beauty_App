@@ -1,0 +1,266 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import {
+  IoCheckmarkCircle,
+  IoCarOutline,
+  IoFlashOutline,
+  IoRocketOutline,
+  IoGlobeOutline,
+  IoShieldCheckmarkOutline,
+  IoLocationOutline,
+  IoLockClosedOutline,
+  IoArrowBackOutline,
+} from 'react-icons/io5'
+
+export default function DeliveryMethods() {
+  const cartItems = [
+    { id: 1, brand: 'LA MER', name: 'Crème de la Mer Moisturizing Cream', quantity: 1, price: 380, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop' },
+    { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum', quantity: 2, price: 115, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=160&h=160&fit=crop' },
+    { id: 3, brand: 'TOM FORD', name: 'Black Orchid Eau de Parfum', quantity: 1, price: 265, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=160&h=160&fit=crop' },
+  ]
+
+  const deliveryOptions = [
+    { id: 1, icon: IoCarOutline, title: 'Standard Delivery', time: '3–5 Business Days', arrival: 'Arrives by Friday, Dec 15', price: 'FREE', priceValue: 0, description: 'Free delivery on all orders over $75', priceColor: 'text-green-600' },
+    { id: 2, icon: IoFlashOutline, title: 'Express Delivery', time: '1–2 Business Days', arrival: 'Arrives by Tuesday, Dec 12', price: '$25.00', priceValue: 25, description: '', priceColor: 'text-[#1A1A1A]' },
+    { id: 3, icon: IoRocketOutline, title: 'Same-Day Delivery', time: 'Order by 2:00 PM for same-day', arrival: 'Arrives today by 9:00 PM', price: '$45.00', priceValue: 45, description: 'Available in select locations', priceColor: 'text-[#1A1A1A]' },
+    { id: 4, icon: IoGlobeOutline, title: 'International Shipping', time: '7–14 Business Days', arrival: 'Estimated delivery varies by country', price: 'From $35.00', priceValue: 35, description: 'View international rates', priceColor: 'text-[#1A1A1A]' },
+  ]
+
+  const [selectedOption, setSelectedOption] = useState(1)
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const shipping = deliveryOptions.find(o => o.id === selectedOption)?.priceValue ?? 0
+  const tax = subtotal * 0.1
+  const total = subtotal + shipping + tax
+
+  const steps = [
+    { step: 1, label: 'Delivery Information', active: false, completed: true },
+    { step: 2, label: 'Delivery Method', active: true, completed: false },
+    { step: 3, label: 'Payment', active: false, completed: false },
+  ]
+
+  return (
+    <div className="bg-white font-['Cormorant_Garamond']">
+
+      {/* ── Breadcrumb ── */}
+      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
+        <Link to="/"><span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span></Link>
+        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <Link to="/cart"><span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Shopping Basket</span></Link>
+        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[15px] font-normal text-[#666666]">Checkout</span>
+      </div>
+
+      {/* ── Progress Steps ── */}
+      <div className="min-h-[120px] bg-gradient-to-b from-[#FDFBF7] to-white px-[120px] flex items-center justify-center">
+        <div className="max-w-[1200px] w-full">
+          <div className="flex items-center">
+            {steps.map((item, index) => (
+              <div key={item.step} className="flex items-center flex-1">
+                <div className="flex items-center gap-[16px]">
+                  <div className={`w-[48px] h-[48px] rounded-full flex items-center justify-center transition-all ${
+                    item.active ? 'bg-[#8B7355] text-white'
+                    : item.completed ? 'bg-green-600 text-white'
+                    : 'bg-white border-[2px] border-[#E8E3D9] text-[#999999]'
+                  }`}>
+                    {item.completed
+                      ? <IoCheckmarkCircle className="w-[28px] h-[28px]" />
+                      : <span className="text-[20px] font-semibold">{item.step}</span>
+                    }
+                  </div>
+                  <div className={`text-[18px] font-semibold ${
+                    item.active ? 'text-[#8B7355]' : item.completed ? 'text-green-600' : 'text-[#999999]'
+                  }`}>
+                    {item.label}
+                  </div>
+                </div>
+                {index < 2 && <div className="flex-1 h-[2px] bg-[#E8E3D9] mx-[24px]" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Main Content ── */}
+      <div className="min-h-[600px] px-[120px] py-[48px]">
+        <div className="max-w-[1200px] mx-auto flex gap-[40px]">
+
+          {/* ── Left — Delivery Options ── */}
+          <div className="flex-1">
+
+            {/* Delivery Method Selection */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[32px] mb-[32px]">
+              <h2 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Select Delivery Method</h2>
+
+              <div className="space-y-[16px]">
+                {deliveryOptions.map((option) => {
+                  const isSelected = selectedOption === option.id
+                  return (
+                    <div
+                      key={option.id}
+                      onClick={() => setSelectedOption(option.id)}
+                      className={`p-[20px] rounded-[8px] cursor-pointer transition-all ${
+                        isSelected
+                          ? 'bg-[#FDFBF7] border-[2px] border-[#8B7355]'
+                          : 'bg-white border border-[#E8E3D9] hover:border-[#C9A870]'
+                      }`}
+                    >
+                      <div className="flex items-start gap-[16px]">
+                        {/* Radio */}
+                        <div className={`w-[20px] h-[20px] rounded-full border-[2px] flex items-center justify-center mt-[6px] flex-shrink-0 transition-colors ${
+                          isSelected ? 'border-[#8B7355]' : 'border-[#E8E3D9]'
+                        }`}>
+                          {isSelected && <div className="w-[10px] h-[10px] rounded-full bg-[#8B7355]" />}
+                        </div>
+
+                        {/* Icon */}
+                        <option.icon className={`w-[32px] h-[32px] flex-shrink-0 mt-[2px] transition-colors ${
+                          isSelected ? 'text-[#8B7355]' : 'text-[#666666]'
+                        }`} />
+
+                        {/* Details */}
+                        <div className="flex-1">
+                          <div className="text-[18px] font-semibold text-[#1A1A1A] mb-[4px]">{option.title}</div>
+                          <div className="text-[15px] font-normal text-[#666666] mb-[2px]">{option.time}</div>
+                          <div className="text-[14px] font-light text-[#999999] mb-[6px]">{option.arrival}</div>
+                          {option.description && (
+                            <div className={`text-[13px] ${
+                              option.id === 4 ? 'font-medium text-[#8B7355] cursor-pointer hover:underline' : 'font-light italic text-[#999999]'
+                            }`}>
+                              {option.description}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Price */}
+                        <div className={`text-[18px] font-semibold flex-shrink-0 ${option.priceColor}`}>
+                          {option.price}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Delivery Instructions */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[32px] mb-[32px]">
+              <label className="text-[16px] font-medium text-[#666666] mb-[12px] block">
+                Delivery Instructions <span className="font-light text-[#999999]">(Optional)</span>
+              </label>
+              <textarea
+                placeholder="Add any special delivery instructions..."
+                className="w-full min-h-[100px] p-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[15px] font-light italic text-[#999999] placeholder:text-[#999999] resize-none outline-none focus:border-[#8B7355] transition-colors"
+              />
+            </div>
+
+            {/* Info Cards */}
+            <div className="grid grid-cols-2 gap-[20px]">
+              <div className="bg-[#FDFBF7] rounded-[8px] p-[16px] flex gap-[16px]">
+                <IoShieldCheckmarkOutline className="w-[28px] h-[28px] text-[#8B7355] flex-shrink-0" />
+                <div>
+                  <div className="text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">Signature Confirmation</div>
+                  <div className="text-[13px] font-normal text-[#666666]">Available for orders over $500</div>
+                </div>
+              </div>
+              <div className="bg-[#FDFBF7] rounded-[8px] p-[16px] flex gap-[16px]">
+                <IoLocationOutline className="w-[28px] h-[28px] text-[#8B7355] flex-shrink-0" />
+                <div>
+                  <div className="text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">Real-Time Tracking</div>
+                  <div className="text-[13px] font-normal text-[#666666]">Track your order every step</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Right — Order Summary ── */}
+          <div className="w-[360px] flex-shrink-0">
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[32px] sticky top-[24px]">
+              <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-[24px]">Order Summary</h2>
+
+              {/* Items */}
+              <div className="mb-[24px] space-y-[16px]">
+                {cartItems.map((item, index) => (
+                  <div key={item.id}>
+                    <div className="flex gap-[16px]">
+                      <img src={item.image} alt={item.name} className="w-[80px] h-[80px] rounded-[8px] object-cover flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="text-[12px] font-medium text-[#8B7355] mb-[2px]">{item.brand}</div>
+                        <div className="text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px]">{item.name}</div>
+                        <div className="text-[13px] font-normal text-[#666666]">{item.quantity} × ${item.price}</div>
+                        <div className="text-[14px] font-semibold text-[#1A1A1A]">${(item.price * item.quantity).toFixed(2)}</div>
+                      </div>
+                    </div>
+                    {index < cartItems.length - 1 && <div className="h-[1px] bg-[#E8E3D9] mt-[16px]" />}
+                  </div>
+                ))}
+              </div>
+
+              {/* Pricing */}
+              <div className="space-y-[12px] mb-[24px]">
+                <div className="flex justify-between">
+                  <span className="text-[16px] font-normal text-[#666666]">Subtotal</span>
+                  <span className="text-[16px] font-normal text-[#1A1A1A]">${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[16px] font-normal text-[#666666]">Shipping</span>
+                  <span className={`text-[16px] font-normal ${shipping === 0 ? 'text-green-600' : 'text-[#1A1A1A]'}`}>
+                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[16px] font-normal text-[#666666]">Estimated Tax</span>
+                  <span className="text-[16px] font-normal text-[#1A1A1A]">${tax.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <div className="h-[1px] bg-[#E8E3D9] mb-[24px]" />
+
+              <div className="flex justify-between mb-[24px]">
+                <span className="text-[22px] font-semibold text-[#1A1A1A]">Order Total</span>
+                <span className="text-[22px] font-semibold text-[#1A1A1A]">${total.toFixed(2)}</span>
+              </div>
+
+              {/* Promo */}
+              <div className="flex gap-[8px] mb-[24px]">
+                <input type="text" placeholder="Promo code" className="flex-1 h-[40px] px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
+                <button className="h-[40px] px-[20px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                  Apply
+                </button>
+              </div>
+
+              {/* CTAs */}
+              <div className="space-y-[16px] mb-[24px]">
+                <Link to="/payment">
+                  <button className="w-full h-[56px] bg-[#8B7355] text-white text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                    Continue to Payment
+                  </button>
+                </Link>
+                <Link to="/checkout">
+                  <button className="w-full flex items-center justify-center gap-[8px] text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
+                    <IoArrowBackOutline className="w-[16px] h-[16px]" />
+                    Back to Delivery Information
+                  </button>
+                </Link>
+              </div>
+
+              {/* Trust */}
+              <div className="flex items-center justify-around pt-[24px] border-t border-[#E8E3D9]">
+                <div className="flex flex-col items-center gap-[8px]">
+                  <IoLockClosedOutline className="w-[20px] h-[20px] text-[#666666]" />
+                  <span className="text-[12px] font-light text-[#666666]">Secure Checkout</span>
+                </div>
+                <div className="flex flex-col items-center gap-[8px]">
+                  <IoShieldCheckmarkOutline className="w-[20px] h-[20px] text-[#666666]" />
+                  <span className="text-[12px] font-light text-[#666666]">Money-Back</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-[80px]" />
+    </div>
+  )
+}

@@ -22,6 +22,8 @@ import Wishlist from './pages/Wishlist'
 import Filter from './components/Filter'
 import ShoppingBasket from './pages/ShoppingBasket'
 import DeliveryInfo from './pages/DeliveryInfo'
+import DeliveryMethods from './pages/DeliveryMethods'
+
 export default function App() {
   return (
     <div>
@@ -48,6 +50,7 @@ export default function App() {
         <Route path='/filter-popup' element={<Filter />} />
         <Route path='/shopping-cart' element={<ShoppingBasket />} />
         <Route path='/delivery-info-checkout' element={<DeliveryInfo />} />
+        <Route path='/delivery-methods' element={<DeliveryMethods />} />
       </Routes>
       <Footer />
     </div>
