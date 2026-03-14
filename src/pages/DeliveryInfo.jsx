@@ -1,0 +1,327 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import {
+  IoCheckmarkCircle,
+  IoAddOutline,
+  IoLockClosedOutline,
+  IoShieldCheckmarkOutline,
+  IoCardOutline,
+  IoLogoPaypal,
+} from 'react-icons/io5'
+
+export default function DeliveryInfo() {
+  const cartItems = [
+    { id: 1, brand: 'LA MER', name: 'Crème de la Mer Moisturizing Cream', quantity: 1, price: 380, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop' },
+    { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum', quantity: 2, price: 115, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=160&h=160&fit=crop' },
+    { id: 3, brand: 'TOM FORD', name: 'Black Orchid Eau de Parfum', quantity: 1, price: 265, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=160&h=160&fit=crop' },
+  ]
+
+  const [selectedAddress, setSelectedAddress] = useState(1)
+  const [saveAddress, setSaveAddress] = useState(false)
+  const [giftOption, setGiftOption] = useState(false)
+
+  const savedAddresses = [
+    { id: 1, label: 'Home', name: 'Alexandra Chen', address: '2847 Park Avenue, Apt 5B, New York, NY 10016, United States' },
+    { id: 2, label: 'Office', name: 'Alexandra Chen', address: '1250 Broadway, Suite 3600, New York, NY 10001, United States' },
+  ]
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const tax = subtotal * 0.1
+  const giftFee = giftOption ? 12 : 0
+  const total = subtotal + tax + giftFee
+
+  const steps = [
+    { step: 1, label: 'Delivery Information', active: true, completed: false },
+    { step: 2, label: 'Delivery Method', active: false, completed: false },
+    { step: 3, label: 'Payment', active: false, completed: false },
+  ]
+
+  const inputClass = "w-full h-[48px] px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[15px] font-normal text-[#1A1A1A] outline-none focus:border-[#8B7355] transition-colors"
+  const labelClass = "text-[14px] font-medium text-[#666666] mb-[8px] block"
+
+  return (
+    <div className="bg-white font-['Cormorant_Garamond']">
+
+      {/* ── Breadcrumb ── */}
+      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
+        <Link to="/"><span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span></Link>
+        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <Link to="/cart"><span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Shopping Basket</span></Link>
+        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[15px] font-normal text-[#666666]">Checkout</span>
+      </div>
+
+      {/* ── Progress Steps ── */}
+      <div className="min-h-[120px] bg-gradient-to-b from-[#FDFBF7] to-white px-[120px] flex items-center justify-center">
+        <div className="max-w-[1200px] w-full">
+          <div className="flex items-center">
+            {steps.map((item, index) => (
+              <div key={item.step} className="flex items-center flex-1">
+                <div className="flex items-center gap-[16px]">
+                  <div className={`w-[48px] h-[48px] rounded-full flex items-center justify-center transition-all ${
+                    item.active ? 'bg-[#8B7355] text-white' : item.completed ? 'bg-green-600 text-white' : 'bg-white border-[2px] border-[#E8E3D9] text-[#999999]'
+                  }`}>
+                    {item.completed
+                      ? <IoCheckmarkCircle className="w-[28px] h-[28px]" />
+                      : <span className="text-[20px] font-semibold">{item.step}</span>
+                    }
+                  </div>
+                  <div className={`text-[18px] font-semibold ${item.active ? 'text-[#8B7355]' : 'text-[#999999]'}`}>
+                    {item.label}
+                  </div>
+                </div>
+                {index < 2 && <div className="flex-1 h-[2px] bg-[#E8E3D9] mx-[24px]" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Main Content ── */}
+      <div className="min-h-[600px] px-[120px] py-[48px]">
+        <div className="max-w-[1200px] mx-auto flex gap-[40px]">
+
+          {/* ── Left — Form ── */}
+          <div className="flex-1">
+
+            {/* Delivery Info Card */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[32px] mb-[24px]">
+              <h2 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Delivery Information</h2>
+
+              {/* Saved Addresses */}
+              <div className="mb-[32px]">
+                <div className="text-[16px] font-medium text-[#666666] mb-[16px]">Saved Addresses</div>
+                <div className="grid grid-cols-2 gap-[16px] mb-[16px]">
+                  {savedAddresses.map((addr) => (
+                    <div
+                      key={addr.id}
+                      onClick={() => setSelectedAddress(addr.id)}
+                      className={`bg-[#FDFBF7] rounded-[8px] p-[20px] cursor-pointer transition-all ${
+                        selectedAddress === addr.id ? 'border-[2px] border-[#8B7355]' : 'border border-[#E8E3D9] hover:border-[#C9A870]'
+                      }`}
+                    >
+                      <div className="flex items-start gap-[12px]">
+                        <div className={`w-[20px] h-[20px] rounded-full border-[2px] flex items-center justify-center mt-[2px] flex-shrink-0 ${
+                          selectedAddress === addr.id ? 'border-[#8B7355]' : 'border-[#E8E3D9]'
+                        }`}>
+                          {selectedAddress === addr.id && <div className="w-[10px] h-[10px] rounded-full bg-[#8B7355]" />}
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-[14px] font-medium text-[#8B7355] mb-[8px]">{addr.label}</div>
+                          <div className="text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{addr.name}</div>
+                          <div className="text-[14px] font-normal text-[#666666] mb-[12px]">{addr.address}</div>
+                          <span className="text-[13px] font-medium text-[#8B7355] cursor-pointer hover:underline">Edit</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button className="w-full h-[48px] border-[1.5px] border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[8px] cursor-pointer hover:border-[#8B7355] transition-colors">
+                  <IoAddOutline className="w-[20px] h-[20px] text-[#666666]" />
+                  <span className="text-[15px] font-medium text-[#666666]">Add New Address</span>
+                </button>
+              </div>
+
+              {/* New Address Form */}
+              <div className="mb-[24px]">
+                <div className="text-[16px] font-medium text-[#666666] mb-[16px]">Or Enter New Address</div>
+                <div className="space-y-[16px]">
+                  <div>
+                    <label className={labelClass}>Full Name</label>
+                    <input type="text" placeholder="Enter your full name" className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Email Address</label>
+                    <input type="email" placeholder="Enter your email" className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Phone Number</label>
+                    <input type="tel" placeholder="Enter your phone number" className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Street Address</label>
+                    <input type="text" placeholder="Enter street address" className={inputClass} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-[16px]">
+                    <div>
+                      <label className={labelClass}>Apartment / Suite</label>
+                      <input type="text" placeholder="Apt, Suite, etc." className={inputClass} />
+                    </div>
+                    <div>
+                      <label className={labelClass}>City</label>
+                      <input type="text" placeholder="City" className={inputClass} />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-[16px]">
+                    <div>
+                      <label className={labelClass}>State / Province</label>
+                      <input type="text" placeholder="State/Province" className={inputClass} />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Postal Code</label>
+                      <input type="text" placeholder="Postal Code" className={inputClass} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Country</label>
+                    <select className={inputClass + ' cursor-pointer appearance-none'}>
+                      <option>United States</option>
+                      <option>Canada</option>
+                      <option>United Kingdom</option>
+                      <option>Australia</option>
+                      <option>United Arab Emirates</option>
+                      <option>Russia</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-[12px] pt-[8px]">
+                    <input
+                      type="checkbox"
+                      id="saveAddress"
+                      checked={saveAddress}
+                      onChange={() => setSaveAddress(!saveAddress)}
+                      className="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-[#E8E3D9] cursor-pointer accent-[#8B7355]"
+                    />
+                    <label htmlFor="saveAddress" className="text-[14px] font-normal text-[#666666] cursor-pointer">
+                      Save this address for future orders
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2 — Collapsed */}
+            <div className="bg-[#FDFBF7] rounded-[12px] border-[1.5px] border-[#E8E3D9] p-[24px] mb-[24px] opacity-60">
+              <div className="flex items-center gap-[16px]">
+                <div className="w-[40px] h-[40px] rounded-full bg-white border-[2px] border-[#E8E3D9] flex items-center justify-center">
+                  <span className="text-[18px] font-semibold text-[#999999]">2</span>
+                </div>
+                <div>
+                  <div className="text-[20px] font-semibold text-[#999999]">Delivery Method</div>
+                  <div className="text-[14px] font-normal text-[#999999]">Select shipping option</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 — Collapsed */}
+            <div className="bg-[#FDFBF7] rounded-[12px] border-[1.5px] border-[#E8E3D9] p-[24px] opacity-60">
+              <div className="flex items-center gap-[16px]">
+                <div className="w-[40px] h-[40px] rounded-full bg-white border-[2px] border-[#E8E3D9] flex items-center justify-center">
+                  <span className="text-[18px] font-semibold text-[#999999]">3</span>
+                </div>
+                <div>
+                  <div className="text-[20px] font-semibold text-[#999999]">Payment</div>
+                  <div className="text-[14px] font-normal text-[#999999]">Complete your purchase</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Right — Order Summary ── */}
+          <div className="w-[360px] flex-shrink-0">
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[32px] sticky top-[24px]">
+              <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-[24px]">Order Summary</h2>
+
+              {/* Items */}
+              <div className="mb-[24px] space-y-[16px]">
+                {cartItems.map((item, index) => (
+                  <div key={item.id}>
+                    <div className="flex gap-[16px]">
+                      <img src={item.image} alt={item.name} className="w-[80px] h-[80px] rounded-[8px] object-cover flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="text-[12px] font-medium text-[#8B7355] mb-[2px]">{item.brand}</div>
+                        <div className="text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px]">{item.name}</div>
+                        <div className="text-[13px] font-normal text-[#666666]">{item.quantity} × ${item.price}</div>
+                        <div className="text-[14px] font-semibold text-[#1A1A1A]">${(item.price * item.quantity).toFixed(2)}</div>
+                      </div>
+                    </div>
+                    {index < cartItems.length - 1 && <div className="h-[1px] bg-[#E8E3D9] mt-[16px]" />}
+                  </div>
+                ))}
+              </div>
+
+              {/* Pricing */}
+              <div className="space-y-[12px] mb-[24px]">
+                <div className="flex justify-between">
+                  <span className="text-[16px] font-normal text-[#666666]">Subtotal</span>
+                  <span className="text-[16px] font-normal text-[#1A1A1A]">${subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[16px] font-normal text-[#666666]">Shipping</span>
+                  <span className="text-[16px] font-normal text-green-600">FREE</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[16px] font-normal text-[#666666]">Estimated Tax</span>
+                  <span className="text-[16px] font-normal text-[#1A1A1A]">${tax.toFixed(2)}</span>
+                </div>
+                {giftOption && (
+                  <div className="flex justify-between">
+                    <span className="text-[16px] font-normal text-[#666666]">Gift Wrapping</span>
+                    <span className="text-[16px] font-normal text-[#1A1A1A]">$12.00</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="h-[1px] bg-[#E8E3D9] mb-[24px]" />
+              <div className="flex justify-between mb-[24px]">
+                <span className="text-[22px] font-semibold text-[#1A1A1A]">Order Total</span>
+                <span className="text-[22px] font-semibold text-[#1A1A1A]">${total.toFixed(2)}</span>
+              </div>
+
+              {/* Promo */}
+              <div className="flex gap-[8px] mb-[24px]">
+                <input type="text" placeholder="Promo code" className="flex-1 h-[40px] px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
+                <button className="h-[40px] px-[20px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                  Apply
+                </button>
+              </div>
+
+              {/* Gift option */}
+              <div className="flex items-center gap-[12px] mb-[32px]">
+                <input
+                  type="checkbox"
+                  id="giftOption"
+                  checked={giftOption}
+                  onChange={() => setGiftOption(!giftOption)}
+                  className="w-[18px] h-[18px] cursor-pointer accent-[#8B7355]"
+                />
+                <label htmlFor="giftOption" className="text-[14px] font-normal text-[#666666] cursor-pointer">
+                  Add gift message and wrapping (+$12)
+                </label>
+              </div>
+
+              {/* CTAs */}
+              <div className="space-y-[16px] mb-[24px]">
+                <button className="w-full h-[56px] bg-[#8B7355] text-white text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                  Continue to Delivery Method
+                </button>
+                <Link to="/cart">
+                  <button className="w-full text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
+                    Return to Cart
+                  </button>
+                </Link>
+              </div>
+
+              {/* Trust */}
+              <div className="flex items-center justify-around pt-[24px] border-t border-[#E8E3D9]">
+                <div className="flex flex-col items-center gap-[8px]">
+                  <IoLockClosedOutline className="w-[20px] h-[20px] text-[#666666]" />
+                  <span className="text-[12px] font-light text-[#666666]">Secure Checkout</span>
+                </div>
+                <div className="flex flex-col items-center gap-[8px]">
+                  <IoShieldCheckmarkOutline className="w-[20px] h-[20px] text-[#666666]" />
+                  <span className="text-[12px] font-light text-[#666666]">Money-Back</span>
+                </div>
+                <div className="flex flex-col items-center gap-[8px]">
+                  <IoCardOutline className="w-[20px] h-[20px] text-[#666666]" />
+                  <span className="text-[12px] font-light text-[#666666]">All Cards</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-[80px]" />
+    </div>
+  )
+}
