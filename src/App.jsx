@@ -28,6 +28,7 @@ import OrderConfirmation from './pages/OrderConfirmation'
 import Explore from './components/Explore'
 import AISkinConsultant from './pages/AiSkinConsultant'
 import PaymentMethods from './pages/PaymentMethods'
+import ShippingAddress from './pages/ShippingAddress'
 
 export default function App() {
   return (
@@ -61,6 +62,7 @@ export default function App() {
         <Route path='/explore-popup' element={<Explore />} />
         <Route path='/ai-skin-consultation' element={<AISkinConsultant />} />
         <Route path='/payment-methods' element={<PaymentMethods />} />
+        <Route path='/shipping-addresses' element={<ShippingAddress />} />
       </Routes>
       <Footer />
     </div>
