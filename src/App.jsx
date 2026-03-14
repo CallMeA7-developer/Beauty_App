@@ -23,7 +23,7 @@ import Filter from './components/Filter'
 import ShoppingBasket from './pages/ShoppingBasket'
 import DeliveryInfo from './pages/DeliveryInfo'
 import DeliveryMethods from './pages/DeliveryMethods'
-import PaymentMethods from './pages/PaymentMethods'
+import Payment from './pages/Payment'
 import OrderConfirmation from './pages/OrderConfirmation'
 import Explore from './components/Explore'
 import AISkinConsultant from './pages/AiSkinConsultant'
@@ -55,7 +55,7 @@ export default function App() {
         <Route path='/shopping-cart' element={<ShoppingBasket />} />
         <Route path='/delivery-info-checkout' element={<DeliveryInfo />} />
         <Route path='/delivery-methods' element={<DeliveryMethods />} />
-        <Route path='payment-methods' element={<PaymentMethods />} />
+        <Route path='payment-methods' element={<Payment />} />
         <Route path='/order-confirmation' element={<OrderConfirmation />} />
         <Route path='/explore-popup' element={<Explore />} />
         <Route path='/ai-skin-consultation' element={<AISkinConsultant />} />

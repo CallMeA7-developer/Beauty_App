@@ -12,7 +12,7 @@ import {
   IoWalletOutline,
 } from 'react-icons/io5'
 
-export default function PaymentMethods() {
+export default function Payment() {
   const cartItems = [
     { id: 1, brand: 'LA MER', name: 'Crème de la Mer Moisturizing Cream', quantity: 1, price: 380, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop' },
     { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum', quantity: 2, price: 115, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=160&h=160&fit=crop' },
