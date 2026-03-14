@@ -20,6 +20,7 @@ import ProductDetail from './pages/ProductDetail'
 import MakeupProductDetail from './pages/MakeupProductDetail'
 import Wishlist from './pages/Wishlist'
 import Filter from './components/Filter'
+import ShoppingBasket from './pages/ShoppingBasket'
 export default function App() {
   return (
     <div>
@@ -44,6 +45,7 @@ export default function App() {
         <Route path='/makeup-product-detail' element={<MakeupProductDetail />} />
         <Route path='/wishlist' element={<Wishlist />} />
         <Route path='/filter-popup' element={<Filter />} />
+        <Route path='/shopping-cart' element={<ShoppingBasket />} />
       </Routes>
       <Footer />
     </div>
