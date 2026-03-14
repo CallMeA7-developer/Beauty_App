@@ -25,6 +25,7 @@ import DeliveryInfo from './pages/DeliveryInfo'
 import DeliveryMethods from './pages/DeliveryMethods'
 import PaymentMethods from './pages/PaymentMethods'
 import OrderConfirmation from './pages/OrderConfirmation'
+import Explore from './components/Explore'
 
 export default function App() {
   return (
@@ -55,6 +56,7 @@ export default function App() {
         <Route path='/delivery-methods' element={<DeliveryMethods />} />
         <Route path='payment-methods' element={<PaymentMethods />} />
         <Route path='/order-confirmation' element={<OrderConfirmation />} />
+        <Route path='/explore-popup' element={<Explore />} />
       </Routes>
       <Footer />
     </div>
