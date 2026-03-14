@@ -23,6 +23,7 @@ import Filter from './components/Filter'
 import ShoppingBasket from './pages/ShoppingBasket'
 import DeliveryInfo from './pages/DeliveryInfo'
 import DeliveryMethods from './pages/DeliveryMethods'
+import PaymentMethods from './pages/PaymentMethods'
 
 export default function App() {
   return (
@@ -51,6 +52,7 @@ export default function App() {
         <Route path='/shopping-cart' element={<ShoppingBasket />} />
         <Route path='/delivery-info-checkout' element={<DeliveryInfo />} />
         <Route path='/delivery-methods' element={<DeliveryMethods />} />
+        <Route path='payment-methods' element={<PaymentMethods />} />
       </Routes>
       <Footer />
     </div>
