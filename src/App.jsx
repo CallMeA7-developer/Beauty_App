@@ -30,6 +30,8 @@ import AISkinConsultant from './pages/AiSkinConsultant'
 import PaymentMethods from './pages/PaymentMethods'
 import ShippingAddress from './pages/ShippingAddress'
 import EditAddress from './pages/EditAddress'
+import Notifications from './pages/Notifications'
+
 export default function App() {
   return (
     <div>
@@ -64,6 +66,7 @@ export default function App() {
         <Route path='/payment-methods' element={<PaymentMethods />} />
         <Route path='/shipping-addresses' element={<ShippingAddress />} />
         <Route path='/edit-address' element={<EditAddress />} />
+        <Route path='/notifications' element={<Notifications />} />
       </Routes>
       <Footer />
     </div>
