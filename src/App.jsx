@@ -33,6 +33,7 @@ import EditAddress from './pages/EditAddress'
 import Notifications from './pages/Notifications'
 import Privacy from './pages/Privacy'
 import Password from './pages/Password'
+import SplashScreen from './pages/SplashScreen'
 
 export default function App() {
   return (
@@ -71,6 +72,7 @@ export default function App() {
         <Route path='/notifications' element={<Notifications />} />
         <Route path='/privacy-setting' element={<Privacy />} />
         <Route path='/change-password' element={<Password />} />
+        <Route path='/fullscreen-splash' element={<SplashScreen />} />
       </Routes>
       <Footer />
     </div>
