@@ -78,8 +78,8 @@ export default function App() {
     </div>
   )
 }
-// first finish the page structure
-// connect it to github 
-// try to ask the claude AI that i can use JSX and its manage the backend ?
-// try to ask the claude AI that i can connect the domain to my website using JSX
-// so far using JSX for the BOLT its fine for tha backend
+// the page structure for the desktop its done 
+// now doing the wireup pages 
+// moving to mobile version
+// check for connection 
+// then move to bolt 
