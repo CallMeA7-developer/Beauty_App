@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   IoSearchOutline,
   IoFlaskOutline,
@@ -13,15 +12,6 @@ import {
 } from 'react-icons/io5'
 
 export default function Technology() {
-  
-  const location = useLocation()
-  useEffect(() => {
-    if (location.hash) {
-      const el = document.getElementById(location.hash.replace('#', ''))
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
-    }
-  }, [location])
-
   const innovationCards = [
     {
       tag: 'AI TECHNOLOGY',
@@ -29,6 +19,7 @@ export default function Technology() {
       description: 'Advanced AI-powered skin assessment with personalized recommendations tailored to your unique skin profile and concerns',
       image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=580&h=280&fit=crop',
       buttonText: 'Try Now',
+      path: '/skin-analysis',
     },
     {
       tag: 'AUGMENTED REALITY',
@@ -36,6 +27,7 @@ export default function Technology() {
       description: 'Test products virtually before purchase with our cutting-edge AR technology for makeup and beauty products',
       image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=580&h=280&fit=crop',
       buttonText: 'Launch AR',
+      path: '/virtual-tryon',
     },
     {
       tag: 'PERSONALIZATION',
@@ -43,6 +35,7 @@ export default function Technology() {
       description: 'Personalized product recommendations and customized beauty routines based on comprehensive skin analysis',
       image: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=580&h=280&fit=crop',
       buttonText: 'Get Started',
+      path: '/beauty-journey',
     },
     {
       tag: 'INNOVATION',
@@ -50,6 +43,7 @@ export default function Technology() {
       description: 'Breakthrough ingredients and scientific research combining nature and technology for superior results',
       image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=580&h=280&fit=crop',
       buttonText: 'Learn More',
+      path: '/advanced-formulations',
     },
   ]
 
@@ -117,9 +111,11 @@ export default function Technology() {
                 </div>
                 <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-3">{card.title}</h3>
                 <p className="text-[16px] font-normal text-[#666666] leading-[1.6] mb-4">{card.description}</p>
-                <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                  {card.buttonText}
-                </button>
+                <Link to={card.path} onClick={() => window.scrollTo(0, 0)}>
+                  <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+                    {card.buttonText}
+                  </button>
+                </Link>
               </div>
             </div>
           ))}
@@ -137,7 +133,7 @@ export default function Technology() {
         </div>
 
         {/* How It Works */}
-        <div id='how-it-works' className="bg-white pt-[64px] mb-[64px]">
+        <div className="bg-white pt-[64px] mb-[64px]">
           <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">How Our Technology Works</h2>
           <div className="flex justify-center gap-[48px]">
             {howItWorksSteps.map((step, idx) => (
