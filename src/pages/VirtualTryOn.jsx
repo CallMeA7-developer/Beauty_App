@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   IoCameraOutline,
   IoShareSocialOutline,
@@ -17,6 +19,15 @@ import {
 } from 'react-icons/io5'
 
 export default function VirtualTryOn() {
+
+  const location = useLocation()
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.replace('#', ''))
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    }
+  }, [location])
+
   const categoryTabs = ['Lips', 'Eyes', 'Face', 'Cheeks', 'Brows']
 
   const productsData = [
@@ -93,7 +104,7 @@ export default function VirtualTryOn() {
       </div>
 
       {/* ── Live Try-On Section ── */}
-      <div className="min-h-[720px] px-[120px] py-[64px] bg-white">
+      <div id='tryon-section' className="min-h-[720px] px-[120px] py-[64px] bg-white">
         <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-3">Start Your Virtual Try-On</h2>
         <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Choose your preferred method to begin</p>
 

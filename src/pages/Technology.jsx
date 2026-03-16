@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   IoSearchOutline,
   IoFlaskOutline,
@@ -11,6 +13,15 @@ import {
 } from 'react-icons/io5'
 
 export default function Technology() {
+  
+  const location = useLocation()
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.replace('#', ''))
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    }
+  }, [location])
+
   const innovationCards = [
     {
       tag: 'AI TECHNOLOGY',
@@ -126,7 +137,7 @@ export default function Technology() {
         </div>
 
         {/* How It Works */}
-        <div className="bg-white pt-[64px] mb-[64px]">
+        <div id='how-it-works' className="bg-white pt-[64px] mb-[64px]">
           <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">How Our Technology Works</h2>
           <div className="flex justify-center gap-[48px]">
             {howItWorksSteps.map((step, idx) => (

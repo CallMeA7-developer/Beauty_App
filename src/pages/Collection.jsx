@@ -1,6 +1,17 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { IoStarSharp, IoChevronBack, IoChevronForward, IoCheckmarkCircle, IoGiftOutline, IoSparklesOutline } from 'react-icons/io5'
 
 export default function Collection() {
+
+  const location = useLocation()
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.replace('#', ''))
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    }
+  }, [location])
+
   const collections = [
     {
       name: 'Signature Collection',
@@ -135,7 +146,7 @@ export default function Collection() {
         </div>
 
         {/* Browse by Category */}
-        <div className="mb-[48px]">
+        <div id='browse-by-category' className="mb-[48px]">
           <h2 className="text-[28px] font-medium text-[#1A1A1A] text-center mb-[32px]">Browse by Category</h2>
           <div className="flex items-center justify-center gap-[12px] flex-wrap">
             {categories.map((cat, idx) => (

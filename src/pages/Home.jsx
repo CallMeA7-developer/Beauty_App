@@ -52,7 +52,7 @@ export default function Home() {
               <p className="text-[18px] font-normal text-[#666666] leading-[1.7] mb-6">
                 Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
               </p>
-              <Link to="/ai-consultation">
+              <Link to="/skin-analysis#upload-section">
                 <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Begin Analysis →</span>
               </Link>
             </div>
@@ -72,7 +72,7 @@ export default function Home() {
               <p className="text-[18px] font-normal text-[#666666] leading-[1.7] mb-6">
                 Experience our complete collection through cutting-edge augmented reality technology in real-time
               </p>
-              <Link to="/virtual-tryon">
+              <Link to="/virtual-tryon#tryon-section">
                 <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Try Now →</span>
               </Link>
             </div>
@@ -110,7 +110,7 @@ export default function Home() {
               <p className="text-[17px] font-normal text-[#666666] leading-[1.75] mb-6">
                 Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
               </p>
-              <Link to="/technology">
+              <Link to="/technology#how-it-works">
                 <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Discover Tools →</span>
               </Link>
             </div>
@@ -159,7 +159,7 @@ export default function Home() {
         </div>
 
         <div className="text-center mt-[72px]">
-          <Link to="/collections">
+          <Link to="/collections#browse-by-category">
             <span className="text-[16px] font-normal text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">
               View All Products
             </span>
@@ -253,7 +253,7 @@ export default function Home() {
         </div>
 
         <div className="text-center">
-          <Link to="/collections">
+          <Link to="/collections" onClick={() => window.scrollTo(0, 0)}>
             <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">
               Explore Full Collection →
             </span>
@@ -273,7 +273,7 @@ export default function Home() {
             <p className="text-[18px] font-normal text-[#666666] leading-[1.85] mb-10">
               Our ingredients are sourced from pristine environments around the world, carefully selected for their potency and ethical cultivation.
             </p>
-            <Link to="/advanced-formulations">
+            <Link to="/advanced-formulations#our-story">
               <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">Our Story →</span>
             </Link>
           </div>

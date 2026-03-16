@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   IoChevronDown,
   IoCameraOutline,
@@ -10,6 +12,15 @@ import {
 } from 'react-icons/io5'
 
 export default function SkinAnalysis() {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.replace('#', ''))
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    }
+  }, [location])
+
   const skinConcerns = ['Acne', 'Aging', 'Dryness', 'Oiliness', 'Sensitivity', 'Dark Spots']
   const skinTypes = ['Oily', 'Dry', 'Combination', 'Sensitive', 'Normal']
   const ageRanges = ['18-25', '26-35', '36-45', '46-55', '55+']
@@ -123,7 +134,7 @@ export default function SkinAnalysis() {
       </div>
 
       {/* ── Upload Section ── */}
-      <div className="min-h-[600px] px-[120px] py-[64px]">
+      <div id="upload-section" className="min-h-[600px] px-[120px] py-[64px]">
         <div className="max-w-[1200px] mx-auto">
           <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
           <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Upload a clear, front-facing photo in natural lighting for accurate results</p>

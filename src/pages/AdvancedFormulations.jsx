@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
   IoFlaskOutline,
@@ -17,6 +19,15 @@ import {
 } from 'react-icons/io5'
 
 export default function AdvancedFormulations() {
+
+  const location = useLocation()
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.getElementById(location.hash.replace('#', ''))
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    }
+  }, [location])
+
   const innovationPillars = [
     { icon: IoFlaskOutline, title: 'Patented Technology', stat: '45+ Patents', desc: 'Exclusive delivery systems and breakthrough formulations' },
     { icon: IoGridOutline, title: 'Clinical Research', stat: '20+ Years', desc: 'Evidence-based skincare backed by rigorous testing' },
@@ -127,7 +138,7 @@ export default function AdvancedFormulations() {
       </div>
 
       {/* ── Innovation Pillars ── */}
-      <div className="min-h-[320px] px-[120px] py-[80px] bg-white">
+      <div id='our-story' className="min-h-[320px] px-[120px] py-[80px] bg-white">
         <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">Our Innovation Pillars</h2>
         <div className="grid grid-cols-4 gap-[24px]">
           {innovationPillars.map((pillar) => (
