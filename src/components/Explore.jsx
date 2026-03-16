@@ -1,54 +1,221 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoClose,
+  IoCloseOutline,
   IoSearchOutline,
   IoSparklesOutline,
+  IoSparkles,
   IoScanOutline,
   IoLeafOutline,
   IoColorPaletteOutline,
   IoFlaskOutline,
   IoWaterOutline,
   IoDiamondOutline,
+  IoChevronForward,
+  IoCameraOutline,
+  IoGiftOutline,
+  IoInformationCircleOutline,
+  IoChatbubbleOutline,
 } from 'react-icons/io5'
 
-export default function Explore() {
+// ─── Shared Data ──────────────────────────────────────────────────────────────
+const desktopCategories = [
+  { name: 'Skincare',     icon: IoLeafOutline,          color: '#688B8D', path: '/skincare'    },
+  { name: 'Makeup',       icon: IoColorPaletteOutline,  color: '#D4AFA3', path: '/makeup'      },
+  { name: 'Fragrance',    icon: IoFlaskOutline,          color: '#C9A870', path: '/fragrance'   },
+  { name: 'Body Care',    icon: IoWaterOutline,          color: '#B8A99A', path: '/collections' },
+  { name: 'Collections',  icon: IoDiamondOutline,        color: '#8B7355', path: '/collections' },
+]
+
+const mobileCategories = [
+  { name: 'Skincare',     gradient: 'from-[#E8F4F4] to-[#D4E8E8]', icon: '💧', path: '/skincare'    },
+  { name: 'Makeup',       gradient: 'from-[#FFE8E8] to-[#FFD4D4]', icon: '💄', path: '/makeup'      },
+  { name: 'Fragrance',    gradient: 'from-[#F5E8FF] to-[#E8D4FF]', icon: '🌸', path: '/fragrance'   },
+  { name: 'Body Care',    gradient: 'from-[#FFF4E8] to-[#FFE8D4]', icon: '🧴', path: '/collections' },
+  { name: 'Collections',  gradient: 'from-[#E8F9E8] to-[#D4F0D4]', icon: '🎁', path: '/collections' },
+]
+
+const featuredCollections = [
+  { title: 'Spring Radiance', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=280&h=200&fit=crop'    },
+  { title: 'Bestsellers Edit', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=280&h=200&fit=crop' },
+  { title: 'New Arrivals',     image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=280&h=200&fit=crop' },
+]
+
+const popularProducts = [
+  { name: 'Luminous Elixir', price: '$198', image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=100&h=100&fit=crop'   },
+  { name: 'Rose Lacquer',    price: '$52',  image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=100&h=100&fit=crop'   },
+  { name: 'Radiance Cream',  price: '$175', image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=100&h=100&fit=crop'   },
+  { name: 'Eye Complex',     price: '$145', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=100&h=100&fit=crop'   },
+  { name: 'Night Serum',     price: '$165', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=100&h=100&fit=crop'     },
+]
+
+const quickLinks = [
+  { label: 'Gift Guide',    icon: IoGiftOutline,              path: '/collections'         },
+  { label: 'About Us',      icon: IoInformationCircleOutline, path: '/advanced-formulations' },
+  { label: 'Sustainability', icon: IoLeafOutline,             path: '/advanced-formulations' },
+  { label: 'Contact',       icon: IoChatbubbleOutline,        path: '/search'              },
+]
+
+const trendingItems = [
+  { name: 'Luminous Youth Elixir', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=100&h=100&fit=crop' },
+  { name: 'Rose Lip Lacquer',      img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=100&h=100&fit=crop' },
+  { name: 'Radiance Cream',        img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=100&h=100&fit=crop' },
+]
+
+const popularSearches = ['Serums', 'Anti-aging', 'Moisturizers', 'Luxury Sets', 'New Arrivals', 'Best Sellers']
+
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+function ExploreMobile() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex flex-col">
+
+      {/* Header */}
+      <div className="bg-white px-5 h-[72px] flex items-center justify-between flex-shrink-0">
+        <div className="w-11" />
+        <div className="font-bold text-[20px] text-[#1A1A1A] tracking-[2px]">SHAN LORAY</div>
+        <button onClick={() => navigate(-1)} className="w-11 h-11 flex items-center justify-center">
+          <IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" />
+        </button>
+      </div>
+
+      {/* Hero Search */}
+      <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-5 py-8 flex flex-col justify-center flex-shrink-0">
+        <h1 className="text-[32px] font-semibold text-[#1A1A1A] text-center mb-2">Explore Shan Loray</h1>
+        <p className="text-[15px] font-normal text-[#666666] text-center mb-6">Discover your perfect beauty ritual</p>
+        <div className="w-full h-[52px] bg-white rounded-[26px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] px-5 flex items-center gap-3">
+          <IoSearchOutline className="w-5 h-5 text-[#8B7355] flex-shrink-0" />
+          <input
+            type="text"
+            placeholder="Search products, collections..."
+            className="flex-1 text-[14px] font-normal text-[#999999] bg-transparent outline-none"
+          />
+        </div>
+      </div>
+
+      {/* Shop by Category */}
+      <div className="bg-white px-5 py-8 flex-shrink-0">
+        <div className="flex flex-col items-center mb-6">
+          <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-3">Shop by Category</h2>
+          <div className="w-12 h-[2px] bg-[#C9A870]" />
+        </div>
+        <div className="space-y-3">
+          {mobileCategories.map((cat, idx) => (
+            <Link key={idx} to={cat.path}>
+              <div className={`h-[52px] bg-gradient-to-r ${cat.gradient} rounded-xl px-4 flex items-center justify-between`}>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{cat.icon}</span>
+                  <span className="text-[16px] font-medium text-[#2B2B2B]">{cat.name}</span>
+                </div>
+                <IoChevronForward className="w-5 h-5 text-[#999999]" />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Featured Collections */}
+      <div className="bg-white border-t border-[#F5F1EA] px-5 py-8 flex-shrink-0">
+        <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-6">Featured Collections</h2>
+        <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex gap-3" style={{ width: 'max-content' }}>
+            {featuredCollections.map((col, idx) => (
+              <div key={idx} className="w-[280px] h-[200px] rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] relative flex-shrink-0">
+                <img src={col.image} alt={col.title} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-5 left-5">
+                  <h3 className="text-[20px] font-semibold text-white">{col.title}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Smart Beauty Tools */}
+      <div className="bg-[#F9F4EE] px-5 py-8 flex-shrink-0">
+        <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-5">Smart Beauty Tools</h2>
+        <div className="space-y-3">
+          <Link to="/skin-analysis">
+            <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+              <div className="w-12 h-12 rounded-full bg-[#688B8D] flex items-center justify-center mb-4">
+                <IoSparkles className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">AI Beauty Consultant</h3>
+              <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">
+                Get personalized skincare recommendations based on your unique skin profile
+              </p>
+              <span className="text-[13px] font-medium text-[#8B7355]">Start Consultation →</span>
+            </div>
+          </Link>
+          <Link to="/virtual-tryon">
+            <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+              <div className="w-12 h-12 rounded-full bg-[#D4AFA3] flex items-center justify-center mb-4">
+                <IoCameraOutline className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">Virtual Try-On</h3>
+              <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">
+                Experience products virtually with augmented reality technology
+              </p>
+              <span className="text-[13px] font-medium text-[#8B7355]">Launch Try-On →</span>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      {/* Popular Right Now */}
+      <div className="bg-white px-5 py-8 flex-shrink-0">
+        <h2 className="text-[16px] font-semibold text-[#1A1A1A] mb-5">Popular Right Now</h2>
+        <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex gap-3" style={{ width: 'max-content' }}>
+            {popularProducts.map((product, idx) => (
+              <div key={idx} className="w-[100px] flex-shrink-0">
+                <div className="w-full h-[100px] rounded-lg overflow-hidden mb-2">
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                </div>
+                <p className="text-[13px] font-normal text-[#2B2B2B] leading-[1.3] mb-1">{product.name}</p>
+                <p className="text-[14px] font-semibold text-[#1A1A1A]">{product.price}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div className="bg-[#FDFBF7] px-5 py-8 flex-shrink-0">
+        <div className="grid grid-cols-2 gap-3">
+          {quickLinks.map((link, idx) => (
+            <Link key={idx} to={link.path}>
+              <div className="min-h-[56px] bg-white border-[1.5px] border-[#E8E3D9] rounded-xl flex flex-col items-center justify-center gap-2">
+                <link.icon className="w-5 h-5 text-[#8B7355]" />
+                <span className="text-[14px] font-medium text-[#2B2B2B]">{link.label}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  )
+}
+
+// ─── Desktop ──────────────────────────────────────────────────────────────────
+function ExploreDesktop() {
   const navigate = useNavigate()
   const [searchValue, setSearchValue] = useState('')
 
-  const categories = [
-    { name: 'Skincare', icon: IoLeafOutline, color: '#688B8D', path: '/skincare' },
-    { name: 'Makeup', icon: IoColorPaletteOutline, color: '#D4AFA3', path: '/makeup' },
-    { name: 'Fragrance', icon: IoFlaskOutline, color: '#C9A870', path: '/fragrance' },
-    { name: 'Body Care', icon: IoWaterOutline, color: '#B8A99A', path: '/collections' },
-    { name: 'Collections', icon: IoDiamondOutline, color: '#8B7355', path: '/collections' },
-  ]
-
-  const trendingItems = [
-    { name: 'Luminous Youth Elixir', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=100&h=100&fit=crop' },
-    { name: 'Rose Lip Lacquer', img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=100&h=100&fit=crop' },
-    { name: 'Radiance Cream', img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=100&h=100&fit=crop' },
-  ]
-
-  const popularSearches = ['Serums', 'Anti-aging', 'Moisturizers', 'Luxury Sets', 'New Arrivals', 'Best Sellers']
-
   const handleSearch = (e) => {
-    if (e.key === 'Enter' && searchValue.trim()) {
-      navigate('/search')
-    }
+    if (e.key === 'Enter' && searchValue.trim()) navigate('/search')
   }
 
   return (
     <div className="min-h-screen bg-black/65 flex items-center justify-center font-['Cormorant_Garamond'] py-[40px]">
-
-      {/* ── Main Panel ── */}
       <div className="w-[1200px] bg-white rounded-[16px] shadow-[0_16px_64px_rgba(0,0,0,0.15)] relative overflow-hidden">
 
-        {/* Close Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-[32px] right-[32px] w-[48px] h-[48px] flex items-center justify-center cursor-pointer hover:bg-[#F5F1EA] rounded-full transition-colors z-10"
-        >
+        {/* Close */}
+        <button onClick={() => navigate(-1)} className="absolute top-[32px] right-[32px] w-[48px] h-[48px] flex items-center justify-center cursor-pointer hover:bg-[#F5F1EA] rounded-full transition-colors z-10">
           <IoClose className="w-[32px] h-[32px] text-[#2B2B2B]" />
         </button>
 
@@ -66,18 +233,13 @@ export default function Explore() {
             <div>
               <h3 className="text-[20px] font-medium text-[#666666] mb-[16px]">Shop by Category</h3>
               <div className="flex flex-col gap-[8px]">
-                {categories.map((category, idx) => (
-                  <Link key={idx} to={category.path}>
+                {desktopCategories.map((cat, idx) => (
+                  <Link key={idx} to={cat.path}>
                     <div className="flex items-center gap-[16px] px-[16px] py-[12px] rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors group">
                       <div className="w-[48px] h-[48px] rounded-full bg-[#FDFBF7] group-hover:bg-white flex items-center justify-center flex-shrink-0 transition-colors">
-                        <category.icon
-                          className="w-[24px] h-[24px] transition-transform group-hover:scale-110"
-                          style={{ color: category.color }}
-                        />
+                        <cat.icon className="w-[24px] h-[24px] transition-transform group-hover:scale-110" style={{ color: cat.color }} />
                       </div>
-                      <span className="text-[18px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">
-                        {category.name}
-                      </span>
+                      <span className="text-[18px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">{cat.name}</span>
                     </div>
                   </Link>
                 ))}
@@ -87,15 +249,9 @@ export default function Explore() {
             {/* Col 2 — Featured */}
             <div>
               <h3 className="text-[20px] font-medium text-[#666666] mb-[16px]">Featured</h3>
-
-              {/* Featured Image */}
               <div className="mb-[16px]">
                 <div className="w-full h-[200px] rounded-[12px] overflow-hidden mb-[14px] group cursor-pointer">
-                  <img
-                    src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=360&h=240&fit=crop"
-                    alt="Spring 2024 Collection"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=360&h=240&fit=crop" alt="Spring 2024 Collection" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <h4 className="text-[18px] font-semibold text-[#1A1A1A] mb-[6px]">Spring 2024 Collection</h4>
                 <p className="text-[15px] font-normal text-[#666666] mb-[12px]">Discover botanical elegance</p>
@@ -103,23 +259,15 @@ export default function Explore() {
                   <span className="text-[14px] font-medium text-[#8B7355] cursor-pointer hover:underline">View Collection →</span>
                 </Link>
               </div>
-
-              {/* Trending Now */}
               <div className="mt-[20px]">
                 <h4 className="text-[16px] font-medium text-[#666666] mb-[12px]">Trending Now</h4>
                 <div className="flex gap-[12px]">
                   {trendingItems.map((item, idx) => (
                     <div key={idx} className="flex-1 cursor-pointer group">
                       <div className="w-full aspect-square rounded-[8px] overflow-hidden mb-[8px]">
-                        <img
-                          src={item.img}
-                          alt={item.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                        <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
-                      <p className="text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors">
-                        {item.name}
-                      </p>
+                      <p className="text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors">{item.name}</p>
                     </div>
                   ))}
                 </div>
@@ -128,7 +276,6 @@ export default function Explore() {
 
             {/* Col 3 — Search & Quick Links */}
             <div>
-              {/* Search Bar */}
               <div className="bg-white border border-[#E8E3D9] rounded-[8px] flex items-center px-[16px] mb-[24px] h-[52px] focus-within:border-[#8B7355] transition-colors">
                 <IoSearchOutline className="w-[20px] h-[20px] text-[#666666] mr-[12px] flex-shrink-0" />
                 <input
@@ -140,22 +287,18 @@ export default function Explore() {
                   className="flex-1 text-[15px] font-normal text-[#2B2B2B] bg-transparent outline-none placeholder:text-[#999999]"
                 />
               </div>
-
-              {/* Popular Searches */}
               <div className="mb-[24px]">
                 <h4 className="text-[16px] font-medium text-[#666666] mb-[12px]">Popular Searches</h4>
                 <div className="flex flex-wrap gap-[8px]">
                   {popularSearches.map((search, idx) => (
                     <Link key={idx} to="/search">
                       <div className="h-[36px] px-[16px] bg-[#FDFBF7] border border-[#E8E3D9] rounded-[18px] flex items-center cursor-pointer hover:bg-[#8B7355] hover:text-white hover:border-[#8B7355] transition-all">
-                        <span className="text-[14px] font-normal text-[#3D3D3D] group-hover:text-white">{search}</span>
+                        <span className="text-[14px] font-normal text-[#3D3D3D]">{search}</span>
                       </div>
                     </Link>
                   ))}
                 </div>
               </div>
-
-              {/* Quick Links */}
               <div className="flex flex-col gap-[10px]">
                 <Link to="/skin-analysis">
                   <div className="h-[52px] bg-[#FDFBF7] rounded-[8px] px-[16px] flex items-center gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
@@ -171,10 +314,11 @@ export default function Explore() {
                 </Link>
               </div>
             </div>
+
           </div>
         </div>
 
-        {/* ── Bottom Promo Banner ── */}
+        {/* Bottom Promo Banner */}
         <div className="absolute bottom-0 left-0 right-0 h-[80px] bg-gradient-to-r from-[#FDFBF7] to-[#F9F4EE] rounded-b-[16px] flex items-center justify-center border-t border-[#E8E3D9]">
           <span className="text-[17px] font-medium text-[#8B7355] mr-[12px]">New Members Get 15% Off First Order</span>
           <Link to="/account">
@@ -185,4 +329,17 @@ export default function Explore() {
       </div>
     </div>
   )
+}
+
+// ─── Main Export (Switcher) ───────────────────────────────────────────────────
+export default function Explore() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return isMobile ? <ExploreMobile /> : <ExploreDesktop />
 }
