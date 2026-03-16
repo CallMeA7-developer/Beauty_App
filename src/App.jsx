@@ -96,3 +96,11 @@ export default function App() {
     </div>
   )
 }
+
+// the desktop version its completed.
+// now we are working on mobile version.
+// note that the desktop its hidden on mobile and reversal also.
+// after the mobile version its completed ↓
+// we will do the link connect.
+// then we will clean our code by data layering.
+// then using bolt.
