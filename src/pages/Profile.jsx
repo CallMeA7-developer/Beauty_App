@@ -213,7 +213,7 @@ export default function Profile() {
             <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-[28px] font-medium text-[#1A1A1A]">Recent Orders</h2>
-                <Link to="/orders">
+                <Link to="/order-tracking">
                   <button className="px-5 h-[40px] bg-[#F5F1EA] text-[#8B7355] text-[14px] font-medium rounded-[8px] hover:bg-[#8B7355] hover:text-white transition-all">
                     View All Orders
                   </button>

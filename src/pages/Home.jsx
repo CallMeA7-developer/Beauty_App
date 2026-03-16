@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { IoCheckmarkCircle, IoChevronBack, IoChevronForward, IoStarSharp } from 'react-icons/io5'
 
 export default function Home() {
@@ -21,9 +22,11 @@ export default function Home() {
             <p className="text-[19px] font-normal text-[#666666] leading-[1.8] mb-8 max-w-[420px]">
               Discover a luminous transformation through our newest collection, where botanical elegance meets scientific precision
             </p>
-            <button className="border-[2px] border-[#1A1A1A] h-[52px] w-[160px] text-[15px] font-semibold text-[#1A1A1A] tracking-[1.5px] hover:bg-[#1A1A1A] hover:text-white transition-all">
-              Explore
-            </button>
+            <Link to="/explore">
+              <button className="border-[2px] border-[#1A1A1A] h-[52px] w-[160px] text-[15px] font-semibold text-[#1A1A1A] tracking-[1.5px] hover:bg-[#1A1A1A] hover:text-white transition-all">
+                Explore
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -36,7 +39,7 @@ export default function Home() {
       {/* ── Floating Technology Cards ── */}
       <section className="w-full relative" style={{ marginTop: '-80px', height: '440px' }}>
         <div className="relative px-[120px]">
-          {/* AI Consultation */}
+          {/* AI Consultation Card */}
           <div className="absolute" style={{ left: '180px', top: '0', width: '580px' }}>
             <div className="bg-white rounded-[24px] shadow-[0_12px_48px_rgba(0,0,0,0.12)] p-[64px]">
               <div className="w-[72px] h-[72px] rounded-full bg-[#688B8D] flex items-center justify-center mb-6">
@@ -49,11 +52,13 @@ export default function Home() {
               <p className="text-[18px] font-normal text-[#666666] leading-[1.7] mb-6">
                 Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
               </p>
-              <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Begin Analysis →</span>
+              <Link to="/ai-consultation">
+                <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Begin Analysis →</span>
+              </Link>
             </div>
           </div>
 
-          {/* Virtual Try-On */}
+          {/* Virtual Try-On Card */}
           <div className="absolute" style={{ left: '860px', top: '-60px', width: '540px' }}>
             <div className="bg-white rounded-[24px] shadow-[0_12px_48px_rgba(0,0,0,0.12)] p-[64px]">
               <div className="w-[72px] h-[72px] rounded-full bg-[#D4AFA3] flex items-center justify-center mb-6">
@@ -67,7 +72,9 @@ export default function Home() {
               <p className="text-[18px] font-normal text-[#666666] leading-[1.7] mb-6">
                 Experience our complete collection through cutting-edge augmented reality technology in real-time
               </p>
-              <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Try Now →</span>
+              <Link to="/virtual-tryon">
+                <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Try Now →</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -77,33 +84,35 @@ export default function Home() {
       <section className="w-full min-h-[820px] px-[120px] py-[96px]">
         <div className="grid grid-cols-6 gap-[20px]">
           {/* Large Hero Card */}
-          <div className="col-span-3 relative min-h-[820px] rounded-[12px] overflow-hidden">
+          <Link to="/skincare" className="col-span-3 relative min-h-[820px] rounded-[12px] overflow-hidden cursor-pointer group block">
             <img
               src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=720&h=820&fit=crop"
               alt="Botanical Serums Collection"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-[48px] left-[48px]">
               <h3 className="text-[44px] font-semibold text-white">Botanical Serums</h3>
             </div>
-          </div>
+          </Link>
 
           {/* Right Column */}
           <div className="col-span-3 flex flex-col gap-[20px]">
-            <div className="min-h-[400px] rounded-[12px] overflow-hidden">
+            <Link to="/makeup" className="min-h-[400px] rounded-[12px] overflow-hidden cursor-pointer group block">
               <img
                 src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=640&h=400&fit=crop"
                 alt="Artisan Tools"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-            </div>
+            </Link>
             <div className="bg-[#EBE6DC] rounded-[12px] p-[56px] min-h-[380px] flex flex-col justify-center">
               <h4 className="text-[28px] font-semibold text-[#2B2B2B] mb-5">Artisan Tools Collection</h4>
               <p className="text-[17px] font-normal text-[#666666] leading-[1.75] mb-6">
                 Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
               </p>
-              <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Discover Tools →</span>
+              <Link to="/technology">
+                <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Discover Tools →</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -125,14 +134,19 @@ export default function Home() {
               { name: 'Eye Renewal Complex', brand: 'Shan Loray', price: '$145', img: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=320&h=320&fit=crop' },
               { name: 'Botanical Night Serum', brand: 'Shan Loray', price: '$165', img: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=320&h=320&fit=crop' },
             ].map((product, idx) => (
-              <div key={idx} className="flex-shrink-0" style={{ width: '320px' }}>
+              <Link
+                key={idx}
+                to={`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}`}
+                className="flex-shrink-0 cursor-pointer group"
+                style={{ width: '320px' }}
+              >
                 <div className="min-h-[320px] bg-white rounded-[8px] overflow-hidden mb-6">
-                  <img src={product.img} alt={product.name} className="w-full h-full object-cover" />
+                  <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <p className="text-[14px] font-light italic text-[#8B7355] tracking-[1.2px] mb-3">{product.brand}</p>
                 <h4 className="text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-3">{product.name}</h4>
                 <p className="text-[19px] font-semibold text-[#1A1A1A]">{product.price}</p>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -145,7 +159,11 @@ export default function Home() {
         </div>
 
         <div className="text-center mt-[72px]">
-          <span className="text-[16px] font-normal text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">View All Products</span>
+          <Link to="/collections">
+            <span className="text-[16px] font-normal text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">
+              View All Products
+            </span>
+          </Link>
         </div>
       </section>
 
@@ -157,21 +175,24 @@ export default function Home() {
           <div className="w-[88px] h-[3px] bg-[#C9A870] mx-auto" />
         </div>
 
-        {/* Hero Product */}
+        {/* ── FIXED: Hero Product — proper side-by-side flex layout ── */}
         <div className="px-[120px] mb-[80px]">
-          <div className="relative flex items-start" style={{ minHeight: '640px' }}>
-            <div className="relative" style={{ width: '640px', height: '640px' }}>
+          <div className="flex items-start gap-[48px]">
+
+            {/* Left — Product Image */}
+            <div className="relative flex-shrink-0" style={{ width: '520px', height: '560px' }}>
               <img
                 src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=640&h=640&fit=crop"
                 alt="Ethereal Glow Concentrate"
-                className="w-full h-full object-cover rounded-[8px] shadow-[0_6px_28px_rgba(0,0,0,0.08)]"
+                className="w-full h-full object-cover rounded-[12px] shadow-[0_6px_28px_rgba(0,0,0,0.08)]"
               />
-              <div className="absolute top-[-20px] right-[-20px] bg-[#688B8D] h-[48px] px-6 rounded-[24px] flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.15)]">
-                <span className="text-[14px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
+              <div className="absolute top-[20px] right-[20px] bg-[#688B8D] h-[40px] px-5 rounded-[20px] flex items-center justify-center">
+                <span className="text-[13px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
               </div>
             </div>
 
-            <div className="absolute bg-white rounded-[24px] shadow-[0_12px_48px_rgba(0,0,0,0.12)] p-[56px]" style={{ left: '560px', top: '80px', width: '480px' }}>
+            {/* Right — Product Info Card */}
+            <div className="flex-1 bg-white rounded-[24px] shadow-[0_12px_48px_rgba(0,0,0,0.10)] p-[56px]">
               <p className="text-[13px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-6">Available March 15</p>
               <h3 className="text-[42px] font-semibold text-[#1A1A1A] leading-[1.15] mb-4">Ethereal Glow Concentrate</h3>
               <p className="text-[28px] font-bold text-[#2B2B2B] mb-6">$285</p>
@@ -191,9 +212,11 @@ export default function Home() {
                 ))}
               </div>
               <div className="space-y-4">
-                <button className="w-full h-[56px] bg-[#8B7355] text-white text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#7a6448] transition-colors">
-                  Pre-Order Now
-                </button>
+                <Link to="/product/ethereal-glow-concentrate">
+                  <button className="w-full h-[56px] bg-[#8B7355] text-white text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#7a6448] transition-colors">
+                    Pre-Order Now
+                  </button>
+                </Link>
                 <button className="w-full h-[56px] border-[2px] border-[#8B7355] bg-transparent text-[#8B7355] text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#8B7355] hover:text-white transition-all">
                   Notify Me
                 </button>
@@ -210,22 +233,31 @@ export default function Home() {
               { name: 'Velvet Skin Primer', price: '$78', img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=376&h=376&fit=crop' },
               { name: 'Botanical Lip Treatment', price: '$52', img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=376&h=376&fit=crop' },
             ].map((product, idx) => (
-              <div key={idx} style={{ width: '376px' }}>
+              <Link
+                key={idx}
+                to={`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}`}
+                style={{ width: '376px' }}
+                className="cursor-pointer group"
+              >
                 <div className="relative min-h-[376px] rounded-[8px] overflow-hidden mb-5">
-                  <img src={product.img} alt={product.name} className="w-full h-full object-cover" />
+                  <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-[16px] left-[16px] bg-[#D4AFA3] h-[32px] px-4 rounded-[16px] flex items-center justify-center">
                     <span className="text-[12px] font-semibold text-white uppercase tracking-[1px]">NEW</span>
                   </div>
                 </div>
                 <h4 className="text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-3">{product.name}</h4>
                 <p className="text-[19px] font-semibold text-[#1A1A1A]">{product.price}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
 
         <div className="text-center">
-          <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">Explore Full Collection →</span>
+          <Link to="/collections">
+            <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">
+              Explore Full Collection →
+            </span>
+          </Link>
         </div>
       </section>
 
@@ -236,12 +268,14 @@ export default function Home() {
             <p className="text-[13px] font-light uppercase text-[#C9A870] tracking-[3px] mb-6">PHILOSOPHY</p>
             <h2 className="text-[52px] font-bold text-[#1A1A1A] leading-[1.15] mb-8">Where Science Meets Nature</h2>
             <p className="text-[18px] font-normal text-[#666666] leading-[1.85] mb-6">
-              At Shan Loray, we believe true luxury lies in the marriage of cutting-edge biotechnology and timeless botanical wisdom. Each formulation is a testament to our commitment to efficacy, purity, and sustainable beauty.
+              At Shan Loray, we believe true luxury lies in the marriage of cutting-edge biotechnology and timeless botanical wisdom.
             </p>
             <p className="text-[18px] font-normal text-[#666666] leading-[1.85] mb-10">
               Our ingredients are sourced from pristine environments around the world, carefully selected for their potency and ethical cultivation.
             </p>
-            <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">Our Story →</span>
+            <Link to="/advanced-formulations">
+              <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">Our Story →</span>
+            </Link>
           </div>
           <div style={{ width: '42%' }}>
             <img
@@ -312,9 +346,11 @@ export default function Home() {
           </div>
         </div>
         <div className="text-center">
-          <button className="border-[2px] border-[#1A1A1A] h-[52px] w-[220px] text-[15px] font-medium text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all">
-            Follow Us on Instagram
-          </button>
+          <a href="https://instagram.com/shanloray" target="_blank" rel="noopener noreferrer">
+            <button className="border-[2px] border-[#1A1A1A] h-[52px] w-[220px] text-[15px] font-medium text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all">
+              Follow Us on Instagram
+            </button>
+          </a>
         </div>
       </section>
 

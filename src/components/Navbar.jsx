@@ -6,15 +6,15 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Collections', path: '/collections' },
-    { label: 'Skincare', path: '/skincare' },
-    { label: 'Makeup', path: '/makeup' },
-    { label: 'Fragrance', path: '/fragrance' },
-    { label: 'Technology', path: '/technology' },
-    { label: 'Journal', path: '/journal' },
+    { label: 'Skincare',    path: '/skincare' },
+    { label: 'Makeup',      path: '/makeup' },
+    { label: 'Fragrance',   path: '/fragrance' },
+    { label: 'Technology',  path: '/technology' },
+    { label: 'Journal',     path: '/journal' },
   ]
 
   return (
-    <header className="min-h-[80px] bg-white border-b border-[#E8E3D9] flex items-center justify-between px-[120px]">
+    <header className="min-h-[80px] bg-white border-b border-[#E8E3D9] flex items-center justify-between px-[120px] sticky top-0 z-50">
       {/* Logo */}
       <Link to="/">
         <div className="font-semibold text-[32px] text-[#1A1A1A] tracking-[3px] font-['Cormorant_Garamond']">
@@ -28,13 +28,11 @@ export default function Navbar() {
           const isActive = location.pathname === item.path
           return (
             <Link key={item.label} to={item.path} className="relative">
-              <span
-                className={`text-[16px] font-['Cormorant_Garamond'] cursor-pointer transition-all duration-300 ${
-                  isActive
-                    ? 'font-semibold text-[#C9A870]'
-                    : 'font-normal text-[#3D3D3D] hover:text-[#1A1A1A]'
-                }`}
-              >
+              <span className={`text-[16px] font-['Cormorant_Garamond'] cursor-pointer transition-all duration-300 ${
+                isActive
+                  ? 'font-semibold text-[#C9A870]'
+                  : 'font-normal text-[#3D3D3D] hover:text-[#1A1A1A]'
+              }`}>
                 {item.label}
               </span>
               {isActive && (

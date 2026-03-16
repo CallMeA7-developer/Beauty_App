@@ -3,7 +3,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
-import Skincare from './pages/Skincare'
+import Skincare from './pages/SkinCare'
 import Makeup from './pages/Makeup'
 import Fragrance from './pages/Fragrance'
 import Technology from './pages/Technology'
@@ -19,15 +19,15 @@ import OrderTracking from './pages/OrderTracking'
 import ProductDetail from './pages/ProductDetail'
 import MakeupProductDetail from './pages/MakeupProductDetail'
 import Wishlist from './pages/Wishlist'
+import Explore from './components/Explore'
 import Filter from './components/Filter'
 import ShoppingBasket from './pages/ShoppingBasket'
 import DeliveryInfo from './pages/DeliveryInfo'
 import DeliveryMethods from './pages/DeliveryMethods'
 import Payment from './pages/Payment'
-import OrderConfirmation from './pages/OrderConfirmation'
-import Explore from './components/Explore'
-import AISkinConsultant from './pages/AiSkinConsultant'
 import PaymentMethods from './pages/PaymentMethods'
+import OrderConfirmation from './pages/OrderConfirmation'
+import AISkinConsultant from './pages/AIskinConsultant'
 import ShippingAddress from './pages/ShippingAddress'
 import EditAddress from './pages/EditAddress'
 import Notifications from './pages/Notifications'
@@ -38,48 +38,61 @@ import SplashScreen from './pages/SplashScreen'
 export default function App() {
   return (
     <div>
-      <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/collections" element={<Collection />} />
-        <Route path="/skincare" element={<Skincare />} />
-        <Route path="/makeup" element={<Makeup />} />
-        <Route path="/fragrance" element={<Fragrance />} />
-        <Route path="/technology" element={<Technology />} />
-        <Route path="/skin-analysis" element={<SkinAnalysis />} />
-        <Route path='/virtual-try-on' element={<VirtualTryOn />} />
-        <Route path='/your-beauty-journey' element={<BeautyJourney />} />
-        <Route path='/advanced-formulations' element={<AdvancedFormulations />} />
-        <Route path='/search-overlay' element={<Search />} />
-        <Route path='/user-profile-dropdown' element={<Profile />} />
-        <Route path='/account-dashboard' element={<AccountDashboard />} />
-        <Route path='/edit-personal-info' element={<EditProfile />} />
-        <Route path='/track-order' element={<OrderTracking />} />
-        <Route path='/product-detail' element={<ProductDetail />} />
-        <Route path='/makeup-product-detail' element={<MakeupProductDetail />} />
-        <Route path='/wishlist' element={<Wishlist />} />
-        <Route path='/filter-popup' element={<Filter />} />
-        <Route path='/shopping-cart' element={<ShoppingBasket />} />
-        <Route path='/delivery-info-checkout' element={<DeliveryInfo />} />
-        <Route path='/delivery-methods' element={<DeliveryMethods />} />
-        <Route path='payment-methods' element={<Payment />} />
-        <Route path='/order-confirmation' element={<OrderConfirmation />} />
-        <Route path='/explore-popup' element={<Explore />} />
-        <Route path='/ai-skin-consultation' element={<AISkinConsultant />} />
-        <Route path='/payment-methods' element={<PaymentMethods />} />
-        <Route path='/shipping-addresses' element={<ShippingAddress />} />
-        <Route path='/edit-address' element={<EditAddress />} />
-        <Route path='/notifications' element={<Notifications />} />
-        <Route path='/privacy-setting' element={<Privacy />} />
-        <Route path='/change-password' element={<Password />} />
-        <Route path='/fullscreen-splash' element={<SplashScreen />} />
+        {/* ── Splash — no Navbar/Footer ── */}
+        <Route path="/splash" element={<SplashScreen />} />
+
+        {/* ── All other pages — with Navbar + Footer ── */}
+        <Route path="/*" element={
+          <>
+            <Navbar />
+            <Routes>
+              {/* Main */}
+              <Route path="/"                        element={<Home />} />
+              <Route path="/collections"             element={<Collection />} />
+              <Route path="/skincare"                element={<Skincare />} />
+              <Route path="/makeup"                  element={<Makeup />} />
+              <Route path="/fragrance"               element={<Fragrance />} />
+              <Route path="/technology"              element={<Technology />} />
+              <Route path="/explore"                 element={<Explore />} />
+              <Route path="/search"                  element={<Search />} />
+              <Route path="/filter"                  element={<Filter />} />
+
+              {/* Products */}
+              <Route path="/product/:id"             element={<ProductDetail />} />
+              <Route path="/makeup-product/:id"      element={<MakeupProductDetail />} />
+
+              {/* Technology */}
+              <Route path="/skin-analysis"           element={<SkinAnalysis />} />
+              <Route path="/virtual-tryon"           element={<VirtualTryOn />} />
+              <Route path="/beauty-journey"          element={<BeautyJourney />} />
+              <Route path="/advanced-formulations"   element={<AdvancedFormulations />} />
+              <Route path="/ai-consultation"         element={<AISkinConsultant />} />
+
+              {/* Account */}
+              <Route path="/account"                 element={<Profile />} />
+              <Route path="/dashboard"               element={<AccountDashboard />} />
+              <Route path="/edit-profile"            element={<EditProfile />} />
+              <Route path="/order-tracking"          element={<OrderTracking />} />
+              <Route path="/wishlist"                element={<Wishlist />} />
+              <Route path="/shipping-address"        element={<ShippingAddress />} />
+              <Route path="/edit-address"            element={<EditAddress />} />
+              <Route path="/payment-methods"         element={<PaymentMethods />} />
+              <Route path="/notifications"           element={<Notifications />} />
+              <Route path="/privacy-settings"        element={<Privacy />} />
+              <Route path="/change-password"         element={<Password />} />
+
+              {/* Checkout Flow */}
+              <Route path="/cart"                    element={<ShoppingBasket />} />
+              <Route path="/checkout"                element={<DeliveryInfo />} />
+              <Route path="/delivery-methods"        element={<DeliveryMethods />} />
+              <Route path="/payment"                 element={<Payment />} />
+              <Route path="/order-confirmation"      element={<OrderConfirmation />} />
+            </Routes>
+            <Footer />
+          </>
+        } />
       </Routes>
-      <Footer />
     </div>
   )
 }
-// the page structure for the desktop its done 
-// now doing the wireup pages 
-// moving to mobile version
-// check for connection 
-// then move to bolt 
