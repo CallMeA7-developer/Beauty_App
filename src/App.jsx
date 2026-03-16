@@ -31,6 +31,7 @@ import PaymentMethods from './pages/PaymentMethods'
 import ShippingAddress from './pages/ShippingAddress'
 import EditAddress from './pages/EditAddress'
 import Notifications from './pages/Notifications'
+import Privacy from './pages/Privacy'
 
 export default function App() {
   return (
@@ -67,6 +68,7 @@ export default function App() {
         <Route path='/shipping-addresses' element={<ShippingAddress />} />
         <Route path='/edit-address' element={<EditAddress />} />
         <Route path='/notifications' element={<Notifications />} />
+        <Route path='/privacy-setting' element={<Privacy />} />
       </Routes>
       <Footer />
     </div>
