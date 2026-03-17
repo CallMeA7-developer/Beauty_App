@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import {
   IoLeafOutline,
   IoSparkles,
@@ -13,10 +15,427 @@ import {
   IoCarOutline,
   IoReturnDownBackOutline,
   IoShieldCheckmarkOutline,
+  IoLogoInstagram,
+  IoLogoFacebook,
+  IoLogoPinterest,
+  IoLogoYoutube,
 } from 'react-icons/io5'
 
-export default function ProductDetail() {
-  const thumbnailImages = [
+// ─── Shared Data ──────────────────────────────────────────────────────────────
+const thumbnailImages = [
+  'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=64&h=64&fit=crop',
+  'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop',
+  'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=64&h=64&fit=crop',
+  'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop',
+  'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=64&h=64&fit=crop',
+]
+
+const keyBenefits = [
+  'Deep cleansing without stripping natural oils',
+  'Creates rich, creamy foam for luxurious feel',
+  'Balances and refines skin texture',
+  'Infused with nourishing botanical extracts',
+  'Suitable for all skin types, especially combination',
+  'Dermatologist-tested and pH-balanced',
+]
+
+const applicationSteps = [
+  { step: '1', text: 'Wet your face with lukewarm water',                           timing: 'Morning & Evening' },
+  { step: '2', text: 'Dispense a small amount into palm and work into lather',       timing: null               },
+  { step: '3', text: 'Gently massage onto face in circular motions',                 timing: 'For 60 seconds'   },
+  { step: '4', text: 'Rinse thoroughly and pat dry',                                 timing: null               },
+]
+
+const keyIngredients = [
+  { name: 'Glycerin',          concentration: '3%',   benefit: 'Deeply hydrates and maintains moisture balance'    },
+  { name: 'Green Tea Extract', concentration: '2%',   benefit: 'Powerful antioxidant protection and soothing'      },
+  { name: 'Chamomile',         concentration: '1.5%', benefit: 'Calms and reduces skin irritation'                  },
+  { name: 'Hyaluronic Acid',   concentration: '1%',   benefit: 'Provides lasting hydration and plumpness'          },
+]
+
+const sizeOptions = [
+  { size: '100ml',      price: '$68',  selected: true,  badge: null         },
+  { size: '200ml',      price: '$118', selected: false, badge: 'Best Value' },
+  { size: 'Travel 30ml', price: '$28', selected: false, badge: null         },
+]
+
+const reviews = [
+  { avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop', username: 'Emily S.',  verified: true,  tier: 'Elite Member', rating: 5, date: 'Dec 20, 2024', title: 'Best cleanser I have ever used!',    text: 'This foaming cleanser is absolutely amazing. It removes all my makeup and leaves my skin feeling fresh and clean without any tightness. The foam is so luxurious and a little goes a long way.', helpful: 18, notHelpful: 1, skinType: 'Combination', ageRange: '28-35' },
+  { avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&h=96&fit=crop', username: 'Rachel M.', verified: true,  tier: null,           rating: 5, date: 'Dec 18, 2024', title: 'Gentle yet effective',               text: 'I love how gentle this cleanser is on my sensitive skin. It thoroughly cleanses without causing any irritation. My skin feels balanced and hydrated after every use.',                          helpful: 12, notHelpful: 0, skinType: 'Sensitive',   ageRange: '36-45' },
+  { avatar: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=96&h=96&fit=crop', username: 'Lisa K.',   verified: false, tier: null,           rating: 4, date: 'Dec 15, 2024', title: 'Great product, amazing lather',      text: 'The lather is incredible and it rinses off so easily. My skin looks brighter and feels smoother. Only wish the bottle was a bit larger for the price.',                                       helpful: 8,  notHelpful: 2, skinType: 'Normal',      ageRange: '25-34' },
+]
+
+const relatedProducts = [
+  { image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Gentle Toner',  price: '$58',  rating: 4.8, reviews: 156 },
+  { image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Night Cream',   price: '$98',  rating: 4.9, reviews: 203 },
+  { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Eye Cream',     price: '$85',  rating: 4.7, reviews: 128 },
+  { image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Face Mask',     price: '$72',  rating: 4.8, reviews: 184 },
+]
+
+const trustBadges = [
+  { icon: IoCarOutline,              title: 'Free Shipping',        desc: 'On orders over $100'    },
+  { icon: IoReturnDownBackOutline,   title: '90-Day Returns',       desc: 'Hassle-free refunds'    },
+  { icon: IoShieldCheckmarkOutline,  title: 'Authentic Guarantee',  desc: '100% genuine products'  },
+]
+
+// ─── Mobile ───────────────────────────────────────────────────────────────────
+function ProductDetailMobile() {
+  const [selectedSize, setSelectedSize]   = useState('100ml')
+  const [quantity, setQuantity]           = useState(1)
+  const [activeThumb, setActiveThumb]     = useState(0)
+  const [openSection, setOpenSection]     = useState('description')
+
+  const toggleSection = (id) => setOpenSection(openSection === id ? null : id)
+
+  return (
+    <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
+
+      {/* Product Image Gallery */}
+      <div className="bg-white px-5 pt-5">
+        <div className="w-full h-[380px] rounded-[8px] overflow-hidden mb-3">
+          <img src={thumbnailImages[activeThumb].replace('w=64&h=64', 'w=440&h=480')} alt="Botanical Foaming Cleanser" className="w-full h-full object-cover" />
+        </div>
+        <div className="flex gap-2 justify-center mb-4">
+          {thumbnailImages.map((img, idx) => (
+            <button key={idx} onClick={() => setActiveThumb(idx)} className={`w-14 h-14 rounded-[8px] overflow-hidden border-2 transition-all ${idx === activeThumb ? 'border-[#8B7355]' : 'border-transparent'}`}>
+              <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="bg-white px-5 py-4">
+        <div className="mb-2">
+          <span className="text-[13px] font-light italic text-[#8B7355]">Shan Loray</span>
+          <span className="text-[11px] font-light text-[#999999] ml-2">Cleansing Collection</span>
+        </div>
+        <h1 className="text-[26px] font-semibold text-[#1A1A1A] leading-[1.3] mb-3">Botanical Foaming Cleanser</h1>
+
+        {/* Rating */}
+        <div className="flex items-center gap-2 mb-4">
+          <div className="flex gap-1">
+            {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-4 h-4 text-[#C9A870]" />)}
+          </div>
+          <span className="text-[14px] font-normal text-[#8B7355] underline">4.9 (342 reviews)</span>
+        </div>
+
+        {/* Price */}
+        <div className="mb-4">
+          <div className="text-[26px] font-semibold text-[#1A1A1A]">$68.00</div>
+          <div className="text-[13px] font-light text-[#666666]">or 4 payments of $17.00</div>
+        </div>
+
+        {/* Description */}
+        <p className="text-[15px] font-normal text-[#3D3D3D] leading-[1.6] mb-5">
+          A luxurious gel-to-foam cleanser that gently purifies while maintaining skin's natural moisture barrier. Infused with botanical extracts for a refreshing, spa-like cleansing experience.
+        </p>
+
+        {/* Size */}
+        <div className="mb-4">
+          <div className="text-[14px] font-medium text-[#1A1A1A] mb-3">Size</div>
+          <div className="flex gap-2">
+            {sizeOptions.map((opt) => (
+              <button
+                key={opt.size}
+                onClick={() => setSelectedSize(opt.size)}
+                className={`flex-1 h-11 rounded-[8px] text-[12px] font-medium flex flex-col items-center justify-center gap-0.5 transition-all ${
+                  selectedSize === opt.size ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B]'
+                }`}
+              >
+                <span>{opt.size}</span>
+                <span className={selectedSize === opt.size ? 'text-white/80' : 'text-[#8B7355]'}>{opt.price}</span>
+                {opt.badge && <span className="text-[9px] bg-[#C9A870] text-white px-1.5 py-0.5 rounded-full">{opt.badge}</span>}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Quantity */}
+        <div className="mb-5">
+          <div className="text-[14px] font-medium text-[#1A1A1A] mb-3">Quantity</div>
+          <div className="flex items-center w-[120px] h-11 border border-[#E8E3D9] rounded-[8px]">
+            <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="flex-1 flex items-center justify-center">
+              <IoRemoveOutline className="w-4 h-4 text-[#2B2B2B]" />
+            </button>
+            <span className="text-[16px] font-medium text-[#1A1A1A]">{quantity}</span>
+            <button onClick={() => setQuantity(quantity + 1)} className="flex-1 flex items-center justify-center">
+              <IoAddOutline className="w-4 h-4 text-[#2B2B2B]" />
+            </button>
+          </div>
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col gap-3 mb-4">
+          <button className="w-full h-14 bg-[#8B7355] text-white text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-2">
+            <IoBagOutline className="w-5 h-5" /> Add to Cart
+          </button>
+          <button className="w-full h-14 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[16px] font-semibold rounded-[8px]">
+            Buy Now
+          </button>
+        </div>
+
+        {/* Wishlist & Share */}
+        <div className="flex items-center gap-6 mb-6">
+          <button className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
+            <IoHeartOutline className="w-[18px] h-[18px]" /> Add to Wishlist
+          </button>
+          <button className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
+            <IoShareOutline className="w-[18px] h-[18px]" /> Share
+          </button>
+        </div>
+      </div>
+
+      {/* Key Benefits */}
+      <div className="bg-gradient-to-b from-[#FDFBF7] to-white mx-5 rounded-[12px] p-6 mb-5">
+        <h3 className="text-[18px] font-semibold text-[#1A1A1A] mb-4">Why You'll Love It</h3>
+        <div className="space-y-3">
+          {keyBenefits.map((benefit, idx) => (
+            <div key={idx} className="flex items-start gap-3">
+              <IoCheckmark className="w-4 h-4 text-[#8B7355] mt-1 flex-shrink-0" />
+              <span className="text-[14px] font-normal text-[#2B2B2B]">{benefit}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Accordion Sections */}
+      <div className="bg-white px-5 mb-5">
+        {[
+          {
+            id: 'description',
+            label: 'Full Description',
+            content: (
+              <p className="text-[14px] font-normal text-[#3D3D3D] leading-[1.7] pb-4">
+                Our Botanical Foaming Cleanser transforms from a silky gel into a rich, airy foam that deeply cleanses without compromising your skin's natural balance. Formulated with green tea extract, chamomile, and hyaluronic acid — removes impurities, makeup, and excess oil while delivering essential hydration. pH-balanced formula suitable for daily use, morning and evening.
+              </p>
+            )
+          },
+          {
+            id: 'howtouse',
+            label: 'How to Use',
+            content: (
+              <div className="space-y-4 pb-4">
+                {applicationSteps.map((item) => (
+                  <div key={item.step} className="flex gap-3">
+                    <div className="w-8 h-8 flex-shrink-0 bg-[#C9A870] rounded-full flex items-center justify-center">
+                      <span className="text-[14px] font-semibold text-white">{item.step}</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[14px] font-normal text-[#2B2B2B]">{item.text}</p>
+                      {item.timing && <p className="text-[12px] font-light italic text-[#666666]">{item.timing}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+          },
+          {
+            id: 'ingredients',
+            label: 'Key Ingredients',
+            content: (
+              <div className="space-y-3 pb-4">
+                {keyIngredients.map((ing, idx) => (
+                  <div key={idx} className="bg-[#FDFBF7] rounded-[8px] p-3">
+                    <div className="flex items-start justify-between mb-1">
+                      <h4 className="text-[14px] font-semibold text-[#1A1A1A]">{ing.name}</h4>
+                      <span className="bg-[#C9A870] text-white text-[10px] font-medium px-2 py-0.5 rounded-full">{ing.concentration}</span>
+                    </div>
+                    <p className="text-[13px] font-normal text-[#666666]">{ing.benefit}</p>
+                  </div>
+                ))}
+              </div>
+            )
+          },
+          {
+            id: 'skintype',
+            label: 'Skin Type',
+            content: (
+              <div className="bg-[#FDFBF7] rounded-[8px] p-4 mb-4">
+                <div className="text-[14px] font-medium text-[#1A1A1A] mb-2">Best For</div>
+                <div className="flex gap-2 flex-wrap">
+                  {['Combination', 'Oily', 'Normal'].map((type) => (
+                    <div key={type} className="bg-white border border-[#E8E3D9] text-[#8B7355] text-[13px] font-normal px-3 py-1.5 rounded-full">{type}</div>
+                  ))}
+                </div>
+              </div>
+            )
+          },
+        ].map(({ id, label, content }) => (
+          <div key={id} className="border-b border-[#E8E3D9]">
+            <button onClick={() => toggleSection(id)} className="w-full flex items-center justify-between py-4">
+              <span className="text-[16px] font-medium text-[#1A1A1A]">{label}</span>
+              <IoChevronDown className={`w-5 h-5 text-[#8B7355] transition-transform duration-200 ${openSection === id ? 'rotate-180' : ''}`} />
+            </button>
+            {openSection === id && content}
+          </div>
+        ))}
+      </div>
+
+      {/* Customer Reviews */}
+      <div className="bg-white px-5 mb-5">
+        <h3 className="text-[22px] font-semibold text-[#1A1A1A] mb-4">Customer Reviews</h3>
+
+        {/* Rating Summary */}
+        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F1EA] rounded-[12px] p-5 mb-5">
+          <div className="flex items-center gap-5 mb-4">
+            <div className="text-center">
+              <div className="text-[40px] font-semibold text-[#1A1A1A]">4.9</div>
+              <div className="flex gap-1 justify-center mb-1">
+                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-4 h-4 text-[#C9A870]" />)}
+              </div>
+              <div className="text-[12px] font-normal text-[#666666]">342 reviews</div>
+            </div>
+            <div className="flex-1 space-y-1.5">
+              {[5,4,3,2,1].map((r) => (
+                <div key={r} className="flex items-center gap-2">
+                  <span className="text-[11px] text-[#666666] w-10">{r} stars</span>
+                  <div className="flex-1 h-2 bg-white rounded-full overflow-hidden">
+                    <div className="h-full bg-[#C9A870]" style={{ width: r === 5 ? '88%' : r === 4 ? '10%' : '2%' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <button className="w-full h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">Write Review</button>
+        </div>
+
+        {/* Filter Chips */}
+        <div className="flex gap-2 mb-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          {['Most Recent', 'Highest Rated', 'Verified Purchase'].map((filter, idx) => (
+            <button key={filter} className={`h-9 px-4 text-[13px] font-normal rounded-[8px] whitespace-nowrap flex-shrink-0 ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B]'}`}>
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        {/* Review Cards */}
+        <div className="space-y-4 mb-4">
+          {reviews.map((review, idx) => (
+            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] p-4">
+              <div className="flex gap-3 mb-3">
+                <img src={review.avatar} alt={review.username} className="w-10 h-10 rounded-full object-cover" />
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="text-[14px] font-medium text-[#1A1A1A]">{review.username}</span>
+                    {review.verified && <div className="bg-[#8B7355] text-white text-[9px] font-normal px-2 py-0.5 rounded-full">Verified</div>}
+                    {review.tier && <div className="bg-[#C9A870] text-white text-[9px] font-normal px-2 py-0.5 rounded-full">{review.tier}</div>}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, i) => <IoStarSharp key={i} className={`w-3 h-3 ${i < review.rating ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />)}
+                    </div>
+                    <span className="text-[11px] font-light text-[#999999]">{review.date}</span>
+                  </div>
+                </div>
+              </div>
+              <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-2">{review.title}</h4>
+              <p className="text-[13px] font-normal text-[#3D3D3D] leading-[1.6] mb-3">{review.text}</p>
+              <div className="flex items-center justify-between pt-3 border-t border-[#F5F1EA]">
+                <div className="flex gap-2">
+                  <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] px-2.5 py-1 rounded-full">{review.skinType}</div>
+                  <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] px-2.5 py-1 rounded-full">{review.ageRange}</div>
+                </div>
+                <span className="text-[12px] font-normal text-[#666666]">Helpful ({review.helpful})</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button className="w-full h-12 bg-white border border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] mb-5">
+          Load More
+        </button>
+      </div>
+
+      {/* Complete Your Routine */}
+      <div className="bg-white px-5 mb-5">
+        <h3 className="text-[20px] font-semibold text-[#1A1A1A] mb-4">Complete Your Routine</h3>
+        <div className="grid grid-cols-2 gap-3">
+          {relatedProducts.map((product, idx) => (
+            <div key={idx} className="bg-white rounded-[8px] shadow-[0_2px_8px_rgba(0,0,0,0.06)] overflow-hidden">
+              <div className="relative h-[160px]">
+                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                <button className="absolute bottom-2 right-2 w-8 h-8 bg-[#8B7355] rounded-full flex items-center justify-center">
+                  <IoBagOutline className="w-4 h-4 text-white" />
+                </button>
+              </div>
+              <div className="p-3">
+                <p className="text-[11px] font-light italic text-[#8B7355] mb-1">{product.brand}</p>
+                <h4 className="text-[13px] font-medium text-[#1A1A1A] mb-1 line-clamp-2">{product.name}</h4>
+                <div className="flex items-center gap-1 mb-1">
+                  {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-3 h-3 text-[#C9A870]" />)}
+                  <span className="text-[10px] text-[#666666]">({product.reviews})</span>
+                </div>
+                <span className="text-[15px] font-semibold text-[#1A1A1A]">{product.price}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Trust Badges */}
+      <div className="bg-[#FDFBF7] rounded-[12px] mx-5 p-5 mb-5">
+        <div className="space-y-4">
+          {trustBadges.map((badge, idx) => (
+            <div key={idx} className="flex items-center gap-3">
+              <badge.icon className="w-6 h-6 text-[#8B7355]" />
+              <div>
+                <div className="text-[14px] font-medium text-[#1A1A1A]">{badge.title}</div>
+                <div className="text-[12px] font-light text-[#666666]">{badge.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Newsletter */}
+      <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] px-5 py-8 mb-5 flex flex-col items-center text-center">
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-2">Join Our Beauty Community</h3>
+        <p className="text-[13px] font-normal text-[#666666] mb-4">Exclusive offers and skincare tips</p>
+        <div className="w-full flex gap-2">
+          <input type="email" placeholder="Enter your email" className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <button className="h-12 px-5 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px]">Subscribe</button>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full bg-[#2B2B2B] px-5 py-10">
+        <div className="mb-8">
+          <h3 className="text-[16px] font-semibold text-white tracking-[2px] mb-2">SHAN LORAY</h3>
+          <p className="text-[11px] font-light italic text-[#C4B5A0]">Timeless Luxury Beauty</p>
+        </div>
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          {[
+            { title: 'Shop',  links: ['Skincare', 'Makeup', 'Fragrance']          },
+            { title: 'Help',  links: ['Contact', 'Shipping', 'Returns']            },
+            { title: 'About', links: ['Our Story', 'Ingredients', 'Sustainability'] },
+          ].map(({ title, links }) => (
+            <div key={title}>
+              <h4 className="text-[13px] font-medium text-white mb-3">{title}</h4>
+              <div className="space-y-2">
+                {links.map((l) => <p key={l} className="text-[12px] font-normal text-[#C4B5A0]">{l}</p>)}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center gap-6 mb-5">
+          <IoLogoInstagram className="w-5 h-5 text-[#C4B5A0]" />
+          <IoLogoFacebook  className="w-5 h-5 text-[#C4B5A0]" />
+          <IoLogoPinterest className="w-5 h-5 text-[#C4B5A0]" />
+          <IoLogoYoutube   className="w-5 h-5 text-[#C4B5A0]" />
+        </div>
+        <div className="border-t border-[#3D3D3D] pt-4 text-center">
+          <p className="text-[11px] font-light text-[#808080]">© 2024 Shan Loray. All rights reserved.</p>
+        </div>
+      </footer>
+
+    </div>
+  )
+}
+
+// ─── Desktop ──────────────────────────────────────────────────────────────────
+function ProductDetailDesktop() {
+  const desktopThumbs = [
     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=212&h=212&fit=crop',
     'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=212&h=212&fit=crop',
     'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=212&h=212&fit=crop',
@@ -24,143 +443,88 @@ export default function ProductDetail() {
     'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=212&h=212&fit=crop',
   ]
 
-  const keyBenefits = [
-    'Reduces fine lines by 47% in 4 weeks',
-    'Boosts collagen production naturally',
-    'Improves skin elasticity and firmness',
-    'Hydrates deeply for 24-hour moisture',
-    'Brightens and evens skin tone',
-    'Minimizes appearance of pores',
-  ]
-
-  const applicationSteps = [
-    { step: '1', instruction: 'Cleanse and tone your face thoroughly', timing: 'Morning & Evening' },
-    { step: '2', instruction: 'Apply 3-4 drops to fingertips and warm between hands', timing: null },
-    { step: '3', instruction: 'Gently press into face, neck, and décolletage', timing: 'Use upward motions' },
-    { step: '4', instruction: 'Follow with your favorite moisturizer', timing: 'Allow 60 seconds to absorb' },
-  ]
-
-  const keyIngredients = [
-    { name: 'Palmitoyl Tripeptide-38', scientific: "Matrixyl synthe'6", benefit: 'Stimulates six major components of the skin matrix for comprehensive anti-aging benefits', concentration: '8%' },
-    { name: 'Hyaluronic Acid Complex', scientific: 'Sodium Hyaluronate', benefit: 'Multi-molecular weight formula provides deep and surface hydration', concentration: '2%' },
-    { name: 'Niacinamide', scientific: 'Vitamin B3', benefit: 'Improves skin barrier function and reduces inflammation', concentration: '5%' },
-    { name: 'Retinol Encapsulate', scientific: 'Microencapsulated Retinol', benefit: 'Time-released delivery minimizes irritation while maximizing efficacy', concentration: '0.5%' },
-  ]
-
-  const reviews = [
-    { avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop', username: 'Jennifer M.', verified: true, tier: 'Elite Member', rating: 5, date: 'Dec 18, 2024', title: 'Life-changing serum!', text: 'I have tried countless serums over the years, but nothing compares to this. After just 3 weeks, my fine lines around my eyes have visibly diminished, and my skin feels incredibly supple.', helpful: 24, notHelpful: 2, skinType: 'Dry', ageRange: '35-44' },
-    { avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&h=96&fit=crop', username: 'Sarah K.', verified: true, tier: 'VIP', rating: 5, date: 'Dec 15, 2024', title: 'Best investment in my skincare routine', text: 'This serum has completely transformed my skin. The peptide formula is incredibly effective, and I noticed results within the first week. My skin looks more radiant and feels firmer.', helpful: 18, notHelpful: 1, skinType: 'Combination', ageRange: '45-54' },
-    { avatar: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=96&h=96&fit=crop', username: 'Michelle L.', verified: false, tier: null, rating: 4, date: 'Dec 10, 2024', title: 'Excellent quality, pricey but effective', text: 'The quality is undeniable, and I can see improvements in my skin texture and firmness. Will definitely repurchase.', helpful: 12, notHelpful: 0, skinType: 'Normal', ageRange: '25-34' },
-  ]
-
-  const relatedProducts = [
-    { image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Hydrating Essence', price: '$78.00', reviews: 156 },
+  const desktopRelated = [
+    { image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Hydrating Essence',      price: '$78.00',  reviews: 156 },
     { image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Night Recovery Cream', price: '$145.00', reviews: 203 },
-    { image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Radiance Booster', price: '$98.00', reviews: 128 },
-    { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Eye Renewal Complex', price: '$124.00', reviews: 184 },
+    { image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Radiance Booster',      price: '$98.00',  reviews: 128 },
+    { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Eye Renewal Complex',   price: '$124.00', reviews: 184 },
   ]
-
-  const Stars = ({ count = 5, size = '18' }) => [...Array(5)].map((_, i) => (
-    <IoStarSharp key={i} className={`w-[${size}px] h-[${size}px] ${i < count ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />
-  ))
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
-      {/* ── Breadcrumb ── */}
+      {/* Breadcrumb */}
       <div className="px-[120px] py-[20px]">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="text-[13px] font-light text-[#666666]">
-            Home / Skincare / Serums / Age-Defying Serum
-          </div>
+        <div className="max-w-[1200px] mx-auto text-[13px] font-light text-[#666666]">
+          Home / Skincare / Cleansers / Botanical Foaming Cleanser
         </div>
       </div>
 
-      {/* ── Main Content ── */}
+      {/* Main Content */}
       <div className="px-[120px] pb-[64px]">
         <div className="max-w-[1200px] mx-auto">
 
-          {/* ── Product Section ── */}
+          {/* Product Section */}
           <div className="flex gap-[40px] mb-[64px]">
 
             {/* Left — Gallery */}
             <div className="w-[580px] flex-shrink-0">
-              {/* Hero Image */}
               <div className="w-full h-[680px] rounded-[8px] overflow-hidden mb-[20px]">
-                <img
-                  src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=1160&h=1360&fit=crop"
-                  alt="Age-Defying Serum"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                />
+                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1160&h=1360&fit=crop" alt="Botanical Foaming Cleanser" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
-
-              {/* Thumbnails */}
               <div className="flex gap-[12px] mb-[32px]">
-                {thumbnailImages.map((img, idx) => (
+                {desktopThumbs.map((img, idx) => (
                   <div key={idx} className={`w-[106px] h-[106px] rounded-[8px] overflow-hidden cursor-pointer border-2 transition-all ${idx === 0 ? 'border-[#8B7355]' : 'border-transparent hover:border-[#E8E3D9]'}`}>
                     <img src={img} alt={`Product view ${idx + 1}`} className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
-
-              {/* Feature Icons */}
               <div className="flex gap-[12px]">
                 {[
-                  { icon: IoLeafOutline, title: 'Cruelty-Free', desc: 'Never Tested on Animals' },
-                  { icon: IoSparkles, title: 'Clean Beauty', desc: 'No Harmful Ingredients' },
-                  { icon: IoSyncOutline, title: 'Sustainable', desc: 'Eco-Conscious Packaging' },
-                ].map((feature, idx) => (
+                  { icon: IoLeafOutline, title: 'Cruelty-Free',  desc: 'Never Tested on Animals'    },
+                  { icon: IoSparkles,    title: 'Clean Beauty',  desc: 'No Harmful Ingredients'      },
+                  { icon: IoSyncOutline, title: 'Sustainable',   desc: 'Eco-Conscious Packaging'     },
+                ].map((f, idx) => (
                   <div key={idx} className="flex-1 bg-[#FDFBF7] rounded-[8px] p-[20px] text-center">
-                    <feature.icon className="w-[28px] h-[28px] text-[#8B7355] mx-auto mb-[8px]" />
-                    <div className="text-[14px] font-medium text-[#1A1A1A] mb-[4px]">{feature.title}</div>
-                    <div className="text-[13px] font-light text-[#666666]">{feature.desc}</div>
+                    <f.icon className="w-[28px] h-[28px] text-[#8B7355] mx-auto mb-[8px]" />
+                    <div className="text-[14px] font-medium text-[#1A1A1A] mb-[4px]">{f.title}</div>
+                    <div className="text-[13px] font-light text-[#666666]">{f.desc}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right — Product Info */}
+            {/* Right — Info */}
             <div className="flex-1">
               <div className="mb-[8px]">
                 <span className="text-[14px] font-light italic text-[#8B7355]">Shan Loray</span>
-                <span className="text-[12px] font-light text-[#999999] ml-[8px]">Advanced Skincare Collection</span>
+                <span className="text-[12px] font-light text-[#999999] ml-[8px]">Cleansing Collection</span>
               </div>
-
-              <h1 className="text-[36px] font-semibold text-[#1A1A1A] mb-[16px] leading-[1.3]">Age-Defying Serum</h1>
-
-              {/* Rating */}
+              <h1 className="text-[36px] font-semibold text-[#1A1A1A] mb-[16px] leading-[1.3]">Botanical Foaming Cleanser</h1>
               <div className="flex items-center gap-[8px] mb-[24px]">
                 <div className="flex gap-[2px]">
-                  {[...Array(5)].map((_, idx) => <IoStarSharp key={idx} className="w-[18px] h-[18px] text-[#C9A870]" />)}
+                  {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[18px] h-[18px] text-[#C9A870]" />)}
                 </div>
                 <span className="text-[15px] font-normal text-[#2B2B2B]">4.9</span>
-                <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">(284 reviews)</span>
+                <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">(342 reviews)</span>
               </div>
-
-              {/* Price */}
               <div className="mb-[20px]">
-                <div className="text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">$156.00</div>
-                <div className="text-[14px] font-light text-[#666666]">or 4 interest-free payments of $39.00</div>
+                <div className="text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">$68.00</div>
+                <div className="text-[14px] font-light text-[#666666]">or 4 interest-free payments of $17.00</div>
               </div>
-
-              {/* Description */}
               <p className="text-[16px] font-normal text-[#3D3D3D] leading-[1.6] mb-[32px]">
-                A revolutionary peptide-rich formula that visibly reduces fine lines and wrinkles while boosting skin's natural collagen production. Experience transformative results with our most potent anti-aging serum.
+                A luxurious gel-to-foam cleanser that gently purifies while maintaining skin's natural moisture barrier. Infused with botanical extracts for a refreshing, spa-like cleansing experience.
               </p>
 
-              {/* Size Selection */}
+              {/* Size */}
               <div className="mb-[24px]">
                 <div className="text-[14px] font-medium text-[#1A1A1A] mb-[12px]">Size</div>
                 <div className="flex gap-[12px]">
-                  {[
-                    { size: '30ml', price: '$156', selected: true, badge: null },
-                    { size: '50ml', price: '$245', selected: false, badge: 'Best Value' },
-                    { size: '100ml', price: '$420', selected: false, badge: null },
-                  ].map((option, idx) => (
-                    <button key={idx} className={`flex-1 h-[48px] rounded-[8px] text-[14px] font-medium cursor-pointer transition-all ${option.selected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
+                  {sizeOptions.map((opt, idx) => (
+                    <button key={idx} className={`flex-1 h-[48px] rounded-[8px] text-[14px] font-medium cursor-pointer transition-all ${opt.selected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
                       <div className="flex items-center justify-center gap-[6px]">
-                        <span>{option.size} — {option.price}</span>
-                        {option.badge && <span className="text-[10px] bg-[#C9A870] text-white px-[6px] py-[2px] rounded-full">{option.badge}</span>}
+                        <span>{opt.size} — {opt.price}</span>
+                        {opt.badge && <span className="text-[10px] bg-[#C9A870] text-white px-[6px] py-[2px] rounded-full">{opt.badge}</span>}
                       </div>
                     </button>
                   ))}
@@ -171,36 +535,28 @@ export default function ProductDetail() {
               <div className="mb-[24px]">
                 <div className="text-[14px] font-medium text-[#1A1A1A] mb-[12px]">Quantity</div>
                 <div className="flex items-center gap-[12px] w-[140px] h-[48px] border border-[#E8E3D9] rounded-[8px]">
-                  <button className="flex-1 flex items-center justify-center cursor-pointer hover:text-[#8B7355] transition-colors">
-                    <IoRemoveOutline className="w-[20px] h-[20px]" />
-                  </button>
+                  <button className="flex-1 flex items-center justify-center"><IoRemoveOutline className="w-[20px] h-[20px]" /></button>
                   <span className="text-[16px] font-medium text-[#1A1A1A]">1</span>
-                  <button className="flex-1 flex items-center justify-center cursor-pointer hover:text-[#8B7355] transition-colors">
-                    <IoAddOutline className="w-[20px] h-[20px]" />
-                  </button>
+                  <button className="flex-1 flex items-center justify-center"><IoAddOutline className="w-[20px] h-[20px]" /></button>
                 </div>
               </div>
 
-              {/* CTA Buttons */}
+              {/* CTAs */}
               <div className="flex flex-col gap-[16px] mb-[20px]">
-                <button className="w-full h-[56px] bg-[#8B7355] text-white text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] cursor-pointer hover:bg-[#7A6347] transition-colors">
-                  <IoBagOutline className="w-[20px] h-[20px]" />
-                  Add to Cart
+                <button className="w-full h-[56px] bg-[#8B7355] text-white text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] hover:bg-[#7A6347] transition-colors">
+                  <IoBagOutline className="w-[20px] h-[20px]" /> Add to Cart
                 </button>
-                <button className="w-full h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[16px] font-semibold rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors">
+                <button className="w-full h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[16px] font-semibold rounded-[8px] hover:bg-[#FDFBF7] transition-colors">
                   Buy Now
                 </button>
               </div>
 
-              {/* Wishlist & Share */}
               <div className="flex items-center gap-[32px] mb-[32px]">
-                <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
-                  <IoHeartOutline className="w-[18px] h-[18px]" />
-                  Add to Wishlist
+                <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
+                  <IoHeartOutline className="w-[18px] h-[18px]" /> Add to Wishlist
                 </button>
-                <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
-                  <IoShareOutline className="w-[18px] h-[18px]" />
-                  Share
+                <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
+                  <IoShareOutline className="w-[18px] h-[18px]" /> Share
                 </button>
               </div>
 
@@ -219,50 +575,7 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* ── Tabs ── */}
-          <div className="mb-[64px]">
-            <div className="border-b border-[#E8E3D9] mb-[32px]">
-              <div className="flex gap-[48px]">
-                {['Details', 'How to Use', 'Ingredients', 'Reviews'].map((tab, idx) => (
-                  <button key={tab} className={`pb-[16px] text-[16px] font-medium cursor-pointer transition-colors ${idx === 0 ? 'text-[#1A1A1A] border-b-[3px] border-[#8B7355]' : 'text-[#666666] hover:text-[#8B7355]'}`}>
-                    {tab}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Details Tab */}
-            <div>
-              <p className="text-[15px] font-normal text-[#3D3D3D] leading-[1.7] mb-[20px]">
-                Our Age-Defying Serum represents the pinnacle of skincare science, combining cutting-edge peptide technology with time-tested botanical extracts. This luxurious formula penetrates deeply into the skin's layers to target multiple signs of aging simultaneously.
-              </p>
-              <p className="text-[15px] font-normal text-[#3D3D3D] leading-[1.7] mb-[40px]">
-                Developed in collaboration with leading dermatologists and backed by clinical studies, this powerful serum delivers visible results within just four weeks of consistent use. Suitable for all skin types and free from parabens, sulfates, and synthetic fragrances.
-              </p>
-
-              <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[32px]">
-                <h3 className="text-[20px] font-semibold text-[#1A1A1A] mb-[28px]">What Makes It Special</h3>
-                <div className="grid grid-cols-2 gap-[24px]">
-                  {[
-                    { icon: IoSparkles, title: 'Advanced Peptide Complex', desc: 'Proprietary blend of six different peptides works synergistically to boost collagen and elastin production' },
-                    { icon: IoLeafOutline, title: 'Botanical Antioxidants', desc: 'Green tea, vitamin C, and resveratrol protect against environmental damage and free radicals' },
-                    { icon: IoSyncOutline, title: 'Time-Release Technology', desc: 'Microencapsulation ensures active ingredients are delivered gradually for maximum efficacy' },
-                    { icon: IoShieldCheckmarkOutline, title: 'Clinically Proven', desc: 'Backed by independent clinical studies showing significant improvement in skin firmness and texture' },
-                  ].map((feature, idx) => (
-                    <div key={idx} className="flex gap-[16px]">
-                      <feature.icon className="w-[24px] h-[24px] text-[#C9A870] flex-shrink-0 mt-[4px]" />
-                      <div>
-                        <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{feature.title}</h4>
-                        <p className="text-[14px] font-normal text-[#666666] leading-[1.5]">{feature.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ── How to Use ── */}
+          {/* How to Use */}
           <div className="mb-[64px]">
             <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">How to Use</h3>
             <div className="space-y-[24px] mb-[32px]">
@@ -272,98 +585,58 @@ export default function ProductDetail() {
                     <span className="text-[32px] font-semibold text-white">{step.step}</span>
                   </div>
                   <div className="flex-1 pt-[8px]">
-                    <p className="text-[15px] font-normal text-[#2B2B2B] mb-[6px]">{step.instruction}</p>
+                    <p className="text-[15px] font-normal text-[#2B2B2B] mb-[6px]">{step.text}</p>
                     {step.timing && <p className="text-[13px] font-light italic text-[#666666]">{step.timing}</p>}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="bg-[#FDFBF7] rounded-[12px] p-[28px]">
-              <div className="flex items-start gap-[16px]">
-                <IoSparkles className="w-[28px] h-[28px] text-[#C9A870] flex-shrink-0" />
-                <div>
-                  <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-[12px]">Expert Tips</h4>
-                  <ul className="space-y-[8px]">
-                    {['For best results, use consistently twice daily for at least 4 weeks', 'Always apply to damp skin for enhanced absorption', 'Layer under SPF during daytime use to protect your investment', 'Store in a cool, dry place away from direct sunlight to maintain potency'].map((tip, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-[14px] font-normal text-[#2B2B2B]">
-                        <IoCheckmark className="w-[14px] h-[14px] text-[#8B7355] mt-1 flex-shrink-0" />
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* ── Ingredients ── */}
+          {/* Ingredients */}
           <div className="mb-[64px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Ingredients</h3>
+            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Key Ingredients</h3>
             <div className="grid grid-cols-2 gap-[24px] mb-[32px]">
-              {keyIngredients.map((ingredient, idx) => (
+              {keyIngredients.map((ing, idx) => (
                 <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[24px]">
                   <div className="flex items-start justify-between mb-[12px]">
-                    <div>
-                      <h4 className="text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{ingredient.name}</h4>
-                      <p className="text-[13px] font-light italic text-[#999999]">{ingredient.scientific}</p>
-                    </div>
-                    <div className="bg-[#C9A870] text-white text-[12px] font-medium px-[10px] py-[4px] rounded-full flex-shrink-0 ml-2">
-                      {ingredient.concentration}
-                    </div>
+                    <h4 className="text-[16px] font-semibold text-[#1A1A1A]">{ing.name}</h4>
+                    <div className="bg-[#C9A870] text-white text-[12px] font-medium px-[10px] py-[4px] rounded-full ml-2">{ing.concentration}</div>
                   </div>
-                  <p className="text-[14px] font-normal text-[#666666] leading-[1.5]">{ingredient.benefit}</p>
+                  <p className="text-[14px] font-normal text-[#666666] leading-[1.5]">{ing.benefit}</p>
                 </div>
               ))}
             </div>
-            <div className="bg-[#FDFBF7] rounded-[12px] p-[28px]">
-              <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-[16px]">Full Ingredient List</h4>
-              <p className="text-[15px] font-normal text-[#3D3D3D] leading-[1.7]">
-                Water, <span className="font-semibold text-[#8B7355]">Palmitoyl Tripeptide-38</span>, Glycerin, <span className="font-semibold text-[#8B7355]">Sodium Hyaluronate</span>, <span className="font-semibold text-[#8B7355]">Niacinamide</span>, Butylene Glycol, <span className="font-semibold text-[#8B7355]">Retinol</span>, Polysorbate 20, Carbomer, Phenoxyethanol, Caprylyl Glycol, Tocopherol, Green Tea Extract, Resveratrol, Ascorbyl Glucoside, Ceramide NP, Sodium Lactate
-              </p>
-            </div>
           </div>
 
-          {/* ── Reviews ── */}
+          {/* Reviews */}
           <div className="mb-[64px]">
             <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Customer Reviews</h3>
-
-            {/* Rating Summary */}
             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F1EA] rounded-[12px] p-[40px] mb-[40px]">
               <div className="flex items-start gap-[48px]">
                 <div className="text-center flex-shrink-0">
                   <div className="text-[48px] font-semibold text-[#1A1A1A] mb-[8px]">4.9</div>
                   <div className="flex gap-[4px] mb-[8px] justify-center">
-                    {[...Array(5)].map((_, idx) => <IoStarSharp key={idx} className="w-[20px] h-[20px] text-[#C9A870]" />)}
+                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[20px] h-[20px] text-[#C9A870]" />)}
                   </div>
-                  <div className="text-[15px] font-normal text-[#666666]">284 reviews</div>
+                  <div className="text-[15px] font-normal text-[#666666]">342 reviews</div>
                 </div>
                 <div className="flex-1">
-                  {[5, 4, 3, 2, 1].map((rating) => (
-                    <div key={rating} className="flex items-center gap-[12px] mb-[8px]">
-                      <span className="text-[14px] font-normal text-[#666666] w-[60px]">{rating} stars</span>
+                  {[5,4,3,2,1].map((r) => (
+                    <div key={r} className="flex items-center gap-[12px] mb-[8px]">
+                      <span className="text-[14px] font-normal text-[#666666] w-[60px]">{r} stars</span>
                       <div className="flex-1 h-[8px] bg-white rounded-full overflow-hidden">
-                        <div className="h-full bg-[#C9A870] rounded-full" style={{ width: rating === 5 ? '85%' : rating === 4 ? '12%' : '2%' }} />
+                        <div className="h-full bg-[#C9A870] rounded-full" style={{ width: r === 5 ? '88%' : r === 4 ? '10%' : '2%' }} />
                       </div>
-                      <span className="text-[14px] font-normal text-[#666666] w-[40px] text-right">{rating === 5 ? '242' : rating === 4 ? '34' : '8'}</span>
                     </div>
                   ))}
                 </div>
-                <button className="bg-[#8B7355] text-white text-[16px] font-semibold px-[32px] h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7A6347] transition-colors flex-shrink-0">
+                <button className="bg-[#8B7355] text-white text-[16px] font-semibold px-[32px] h-[48px] rounded-[8px] hover:bg-[#7A6347] transition-colors flex-shrink-0">
                   Write a Review
                 </button>
               </div>
             </div>
 
-            {/* Filters */}
-            <div className="flex gap-[16px] mb-[32px]">
-              {['Most Recent', 'Highest Rated', 'Verified Purchase'].map((filter) => (
-                <button key={filter} className="flex items-center gap-[8px] bg-white border border-[#E8E3D9] text-[#2B2B2B] text-[14px] font-normal px-[20px] h-[40px] rounded-[8px] cursor-pointer hover:border-[#8B7355] transition-colors">
-                  {filter} <IoChevronDown className="w-[16px] h-[16px]" />
-                </button>
-              ))}
-            </div>
-
-            {/* Reviews List */}
             <div className="space-y-[24px] mb-[32px]">
               {reviews.map((review, idx) => (
                 <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[24px]">
@@ -392,30 +665,24 @@ export default function ProductDetail() {
                     </div>
                     <div className="flex items-center gap-[16px]">
                       <span className="text-[13px] font-normal text-[#666666]">Was this helpful?</span>
-                      <button className="text-[13px] font-normal text-[#8B7355] cursor-pointer hover:underline">Yes ({review.helpful})</button>
-                      <button className="text-[13px] font-normal text-[#666666] cursor-pointer hover:underline">No ({review.notHelpful})</button>
+                      <button className="text-[13px] font-normal text-[#8B7355] hover:underline">Yes ({review.helpful})</button>
+                      <button className="text-[13px] font-normal text-[#666666] hover:underline">No ({review.notHelpful})</button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-
-            <div className="text-center">
-              <button className="bg-white border border-[#8B7355] text-[#8B7355] text-[15px] font-medium px-[48px] h-[48px] rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors">
-                Load More Reviews
-              </button>
-            </div>
           </div>
 
-          {/* ── Related Products ── */}
+          {/* Related Products */}
           <div className="mb-[64px]">
             <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Complete Your Routine</h3>
             <div className="grid grid-cols-4 gap-[20px]">
-              {relatedProducts.map((product, idx) => (
+              {desktopRelated.map((product, idx) => (
                 <div key={idx} className="cursor-pointer group">
                   <div className="relative mb-[16px]">
                     <img src={product.image} alt={product.name} className="w-full h-[320px] object-cover rounded-[8px]" />
-                    <button className="absolute bottom-[12px] right-[12px] w-[40px] h-[40px] bg-[#8B7355] rounded-full flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
+                    <button className="absolute bottom-[12px] right-[12px] w-[40px] h-[40px] bg-[#8B7355] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
                       <IoBagOutline className="w-[20px] h-[20px] text-white" />
                     </button>
                   </div>
@@ -433,14 +700,10 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* ── Trust Section ── */}
+          {/* Trust Section */}
           <div className="bg-[#FDFBF7] rounded-[12px] p-[32px]">
             <div className="grid grid-cols-3 gap-[32px]">
-              {[
-                { icon: IoCarOutline, title: 'Complimentary Shipping', desc: 'Free shipping on orders $150+' },
-                { icon: IoReturnDownBackOutline, title: '60-Day Money-Back Guarantee', desc: 'Full refund if not satisfied' },
-                { icon: IoShieldCheckmarkOutline, title: '100% Authentic Products', desc: 'Guaranteed genuine Shan Loray' },
-              ].map((item, idx) => (
+              {trustBadges.map((item, idx) => (
                 <div key={idx} className="text-center">
                   <item.icon className="w-[28px] h-[28px] text-[#8B7355] mx-auto mb-[12px]" />
                   <h4 className="text-[15px] font-medium text-[#2B2B2B] mb-[6px]">{item.title}</h4>
@@ -449,10 +712,23 @@ export default function ProductDetail() {
               ))}
             </div>
           </div>
+
         </div>
       </div>
-
       <div className="h-[80px]" />
     </div>
   )
+}
+
+// ─── Main Export (Switcher) ───────────────────────────────────────────────────
+export default function ProductDetail() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return isMobile ? <ProductDetailMobile /> : <ProductDetailDesktop />
 }
