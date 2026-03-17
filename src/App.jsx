@@ -98,9 +98,8 @@ export default function App() {
 }
 
 // the desktop version its completed.
-// now we are working on mobile version.
-// the obile version codes its separated from the desktop version 
-// after the mobile version its completed ↓
-// we will do the link connect.
-// then we will clean our code by data layering.
+// now we are workig on the mobile version.
+// the mobile version code its combined to desktop.
+// after mobile version its completed ↓
+// we will clean our code by data layering.
 // then using bolt.
