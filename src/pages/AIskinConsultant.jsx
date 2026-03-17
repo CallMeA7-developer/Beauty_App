@@ -18,7 +18,16 @@ import {
   IoSearchOutline,
   IoVideocamOutline,
   IoDocumentTextOutline,
+  IoClose,
+  IoImagesOutline,
+  IoCloudUploadOutline,
+  IoHappyOutline,
+  IoResizeOutline,
   IoLogoInstagram,
+  IoInformationCircleOutline,
+  IoCashOutline,
+  IoChevronBack,
+  IoChevronForward,
   IoLogoFacebook,
   IoLogoPinterest,
   IoLogoYoutube,
@@ -88,8 +97,15 @@ const faqs = [
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function AISkinConsultantMobile() {
   const [expandedFaq, setExpandedFaq] = useState(new Set([0, 1]))
+  const [showUploadPopup, setShowUploadPopup] = useState(false)
+  const [showBookingPopup, setShowBookingPopup] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(18)
+  const [selectedTime, setSelectedTime] = useState(3)
+  const [selectedDuration, setSelectedDuration] = useState(1)
+  const [selectedExpert, setSelectedExpert] = useState(0)
 
   return (
+    <>
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
 
       {/* ── Breadcrumb ── */}
@@ -119,14 +135,18 @@ function AISkinConsultantMobile() {
       </div>
 
       {/* ── Quick Start Card ── */}
-      <div className="px-5 -mt-2 mb-10">
+      <div className="px-5 -mt-8 mb-10">
         <div className="bg-white rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-6">
           <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-1">Begin Your Analysis</h3>
           <p className="text-[13px] font-normal text-[#666666] mb-4">Three simple ways to start</p>
           <div className="space-y-4">
             {quickStartCards.map((card, idx) => (
-              <div key={idx} className="rounded-xl p-4"
-                style={{ backgroundColor: card.bgColor, border: card.borderColor ? `1px solid ${card.borderColor}` : 'none' }}>
+              <div
+                key={idx}
+                className="rounded-xl p-4 cursor-pointer"
+                style={{ backgroundColor: card.bgColor, border: card.borderColor ? `1px solid ${card.borderColor}` : 'none' }}
+                onClick={() => { if (idx === 2) setShowBookingPopup(true) }}
+              >
                 <div className="flex items-center gap-3 mb-3">
                   <card.icon className="w-7 h-7 flex-shrink-0" style={{ color: card.iconColor }} />
                   <div>
@@ -135,7 +155,10 @@ function AISkinConsultantMobile() {
                   </div>
                 </div>
                 {idx === 0 && (
-                  <button className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-medium rounded-lg">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowUploadPopup(true) }}
+                    className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-medium rounded-lg"
+                  >
                     Upload Photo
                   </button>
                 )}
@@ -361,6 +384,339 @@ function AISkinConsultantMobile() {
       </footer>
 
     </div>
+
+      {/* ── Upload Photo Popup ── */}
+      {showUploadPopup && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, backgroundColor: '#FDFBF7', overflowY: 'auto' }} className="font-['Cormorant_Garamond']">
+
+          {/* Gold top accent bar */}
+          <div className="h-[3px] bg-[#C9A870] w-full" />
+
+          {/* Header */}
+          <div className="px-5 pt-6 pb-4 relative flex flex-col items-center">
+            <button
+              onClick={() => setShowUploadPopup(false)}
+              className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center"
+            >
+              <IoClose className="w-6 h-6 text-[#2B2B2B]" />
+            </button>
+            <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-1">Upload Your Photo</h2>
+            <p className="text-[13px] font-light italic text-[#8B7355]">Get instant AI analysis in 60 seconds</p>
+          </div>
+
+          {/* Upload Options */}
+          <div className="px-5 space-y-3 mb-4">
+            {/* Take Photo Now */}
+            <button className="w-full bg-white border border-[#E8E3D9] rounded-[12px] px-5 py-4 flex items-center gap-4 text-left shadow-sm">
+              <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <IoCameraOutline className="w-7 h-7 text-[#8B7355]" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-[16px] font-medium text-[#1A1A1A]">Take Photo Now</h3>
+                <p className="text-[12px] font-normal text-[#666666]">Use your camera for instant capture</p>
+              </div>
+              <IoChevronDown className="w-5 h-5 text-[#8B7355] -rotate-90 flex-shrink-0" />
+            </button>
+
+            {/* Choose from Gallery */}
+            <button className="w-full bg-white border-2 border-dashed border-[#C9A870] rounded-[12px] px-5 py-4 flex items-center gap-4 text-left">
+              <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <IoImagesOutline className="w-7 h-7 text-[#8B7355]" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-[16px] font-medium text-[#1A1A1A]">Choose from Gallery</h3>
+                <p className="text-[12px] font-normal text-[#666666]">Select existing photo from device</p>
+              </div>
+              <IoChevronDown className="w-5 h-5 text-[#8B7355] -rotate-90 flex-shrink-0" />
+            </button>
+          </div>
+
+          {/* Drag & Drop Zone */}
+          <div className="px-5 mb-5">
+            <div className="border-2 border-dashed border-[#E8E3D9] rounded-[12px] bg-white py-8 flex flex-col items-center">
+              <IoCloudUploadOutline className="w-10 h-10 text-[#C9A870] mb-3" />
+              <p className="text-[15px] font-medium text-[#666666] mb-1">Drag & drop your photo here</p>
+              <p className="text-[13px] font-light italic text-[#8B7355]">or tap to browse</p>
+            </div>
+          </div>
+
+          {/* Photo Guidelines */}
+          <div className="mx-5 bg-[#F5F1EA] rounded-[12px] px-5 py-5 mb-5">
+            <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-4">Photo Guidelines</h4>
+            <div className="space-y-3">
+              {[
+                { Icon: IoSunnyOutline,  text: 'Use natural lighting, avoid flash' },
+                { Icon: IoCameraOutline, text: 'Face camera directly, neutral expression' },
+                { Icon: IoHappyOutline,  text: 'Remove makeup for accurate analysis' },
+                { Icon: IoResizeOutline, text: 'Keep 12-18 inches from camera' },
+              ].map(({ Icon, text }, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <Icon className="w-[18px] h-[18px] text-[#8B7355] flex-shrink-0" />
+                  <p className="text-[14px] font-normal text-[#3D3D3D]">{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Format Badges */}
+          <div className="flex items-center justify-center gap-4 mb-5">
+            <div className="flex items-center gap-2">
+              {['JPG', 'PNG'].map((fmt) => (
+                <div key={fmt} className="px-4 py-1.5 bg-[#E8E3D9] rounded-full">
+                  <span className="text-[12px] font-semibold text-[#666666]">{fmt}</span>
+                </div>
+              ))}
+            </div>
+            <div className="w-px h-5 bg-[#E8E3D9]" />
+            <span className="text-[13px] font-normal text-[#666666]">Max 10MB</span>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="px-5 pb-8 space-y-3">
+            <button disabled className="w-full h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[10px] opacity-60 cursor-not-allowed">
+              Upload & Analyze
+            </button>
+            <button onClick={() => setShowUploadPopup(false)} className="w-full h-[52px] bg-white border border-[#E8E3D9] text-[#666666] text-[15px] font-medium rounded-[10px]">
+              Cancel
+            </button>
+          </div>
+
+        </div>
+      )}
+
+      {/* ── Book Live Session Popup ── */}
+      {showBookingPopup && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999, backgroundColor: '#fff', overflowY: 'auto' }} className="font-['Cormorant_Garamond']">
+
+          {/* Gold Header Bar */}
+          <div className="min-h-[64px] bg-[#C9A870] px-5 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
+            <button onClick={() => setShowBookingPopup(false)} className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center">
+              <IoChevronBack className="w-6 h-6 text-white" />
+            </button>
+            <h1 className="text-[18px] font-semibold text-white">Book Live Session</h1>
+            <button className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center">
+              <IoInformationCircleOutline className="w-6 h-6 text-white" />
+            </button>
+          </div>
+
+          {/* Hero */}
+          <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-5 py-8 flex flex-col items-center">
+            <p className="text-[11px] font-light italic text-[#8B7355] tracking-[1.5px] mb-2">PERSONALIZED LIVE CONSULTATION</p>
+            <h2 className="text-[28px] font-bold text-[#1A1A1A] leading-tight mb-2 text-center">Choose Your Expert</h2>
+            <p className="text-[14px] font-normal text-[#666666] text-center px-4">Connect with certified specialists for real-time guidance</p>
+            <div className="w-16 h-[3px] bg-[#C9A870] mt-4" />
+          </div>
+
+          {/* Consultation Type Selector */}
+          <div className="bg-white px-5 py-5">
+            <h3 className="text-[17px] font-medium text-[#1A1A1A] mb-4">Select Consultation Type</h3>
+            <div className="flex overflow-x-auto gap-3 pb-2" style={{ scrollbarWidth: 'none' }}>
+              {[
+                { title: 'Skin Analysis',    description: 'Deep skin assessment & recommendations', bg: '#F5F1EA' },
+                { title: 'Makeup Tutorial',  description: 'Professional makeup techniques & tips',  bg: 'white', border: true },
+                { title: 'Product Guidance', description: 'Personalized product selection',           bg: 'white', border: true },
+              ].map((type, idx) => (
+                <div key={idx} className="min-w-[240px] rounded-xl p-4 flex items-start gap-3 flex-shrink-0"
+                  style={{ backgroundColor: type.bg, border: type.border ? '1px solid #E8E3D9' : 'none' }}>
+                  <IoVideocamOutline className="w-7 h-7 flex-shrink-0 text-[#8B7355]" />
+                  <div>
+                    <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{type.title}</h4>
+                    <p className="text-[12px] font-normal text-[#666666]">{type.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Experts Grid */}
+          <div className="bg-[#FDFBF7] px-5 py-6">
+            <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-5">Our Specialists</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { name: 'Dr. Elena Martinez', credentials: 'Board Certified Dermatologist', image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=180&h=200&fit=crop', specialties: ['Anti-Aging', 'Acne', 'Sensitive Skin'], rating: 4.9, languages: 'EN, ES, FR', available: true },
+                { name: 'Sarah Chen',          credentials: 'Master Makeup Artist',          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=180&h=200&fit=crop', specialties: ['Bridal', 'Editorial', 'Color Theory'], rating: 4.8, languages: 'EN, ZH', available: true },
+                { name: 'Dr. James Wilson',    credentials: 'Cosmetic Dermatologist',        image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=180&h=200&fit=crop', specialties: ['Pigmentation', 'Texture', 'Anti-Aging'], rating: 4.9, languages: 'EN, FR', available: false },
+                { name: 'Olivia Kim',          credentials: 'Skincare Specialist',            image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=180&h=200&fit=crop', specialties: ['Hydration', 'Natural Glow', 'K-Beauty'], rating: 4.7, languages: 'EN, KO', available: true },
+              ].map((expert, idx) => (
+                <button key={idx} onClick={() => setSelectedExpert(idx)}
+                  className={`bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden text-left transition-all ${selectedExpert === idx ? 'ring-2 ring-[#8B7355]' : ''}`}>
+                  <div className="relative">
+                    <img src={expert.image} alt={expert.name} className="w-full h-[140px] object-cover object-top" />
+                    {expert.available && (
+                      <div className="absolute top-2 right-2 bg-[#4CAF50] px-2 py-1 rounded-full">
+                        <span className="text-[10px] font-semibold text-white">Available</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <h4 className="text-[14px] font-medium text-[#1A1A1A] mb-0.5">{expert.name}</h4>
+                    <p className="text-[11px] text-[#8B7355] mb-2">{expert.credentials}</p>
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {expert.specialties.slice(0,2).map((s, si) => (
+                        <span key={si} className="text-[10px] bg-[#F5F1EA] text-[#8B7355] px-2 py-0.5 rounded-full">{s}</span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => <span key={i} className="text-[#C9A870] text-[11px]">★</span>)}
+                      <span className="text-[11px] text-[#666666] ml-1">({expert.rating})</span>
+                    </div>
+                    <p className="text-[10px] italic text-[#8B7355] mt-1">{expert.languages}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Calendar */}
+          <div className="bg-white px-5 py-6">
+            <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">Choose Date</h3>
+            <div className="flex items-center justify-between mb-4">
+              <button className="p-2"><IoChevronBack className="w-5 h-5 text-[#8B7355]" /></button>
+              <h4 className="text-[16px] font-medium text-[#1A1A1A]">December 2024</h4>
+              <button className="p-2"><IoChevronForward className="w-5 h-5 text-[#8B7355]" /></button>
+            </div>
+            <div className="grid grid-cols-7 gap-1 mb-2">
+              {['S','M','T','W','T','F','S'].map((d, i) => (
+                <div key={i} className="text-center text-[12px] font-medium text-[#8B7355] h-8 flex items-center justify-center">{d}</div>
+              ))}
+            </div>
+            <div className="grid grid-cols-7 gap-1">
+              {[null,null,null,null,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31].map((date, idx) => (
+                <div key={idx} className="h-[44px] flex items-center justify-center">
+                  {date ? (
+                    <button
+                      onClick={() => setSelectedDate(date)}
+                      className={`w-full h-full rounded-lg text-[13px] font-medium transition-all ${
+                        selectedDate === date ? 'bg-[#8B7355] text-white' :
+                        date < 15 ? 'text-[#E8E3D9]' :
+                        'bg-white border border-[#E8E3D9] text-[#1A1A1A]'
+                      }`}
+                    >{date}</button>
+                  ) : <div />}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Time Slots */}
+          <div className="bg-[#FAF8F5] px-5 py-5 border-t border-[#E8E3D9]">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-1">Available Times</h3>
+            <p className="text-[13px] text-[#666666] mb-4">Monday, Dec {selectedDate}</p>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { time: '9:00 AM',  available: true },
+                { time: '10:30 AM', available: true },
+                { time: '12:00 PM', available: false },
+                { time: '2:00 PM',  available: true },
+                { time: '3:30 PM',  available: true },
+                { time: '5:00 PM',  available: false },
+                { time: '9:00 AM',  available: true },
+                { time: '10:30 AM', available: true },
+                { time: '2:00 PM',  available: true },
+              ].map((slot, idx) => (
+                <button key={idx}
+                  onClick={() => slot.available && setSelectedTime(idx)}
+                  disabled={!slot.available}
+                  className={`h-11 rounded-lg text-[13px] font-medium transition-all ${
+                    !slot.available ? 'bg-[#F5F5F5] text-[#BBBBBB] line-through' :
+                    selectedTime === idx ? 'bg-[#8B7355] text-white' :
+                    'bg-white border border-[#E8E3D9] text-[#1A1A1A]'
+                  }`}
+                >{slot.time}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* Session Duration */}
+          <div className="bg-white px-5 py-5">
+            <h3 className="text-[17px] font-medium text-[#1A1A1A] mb-4">Session Duration</h3>
+            <div className="flex gap-3">
+              {[{ d: '30 min', p: '$49' }, { d: '60 min', p: '$89' }, { d: '90 min', p: '$129' }].map((dur, idx) => (
+                <button key={idx} onClick={() => setSelectedDuration(idx)}
+                  className={`flex-1 h-11 rounded-full text-[13px] font-medium transition-all ${
+                    selectedDuration === idx ? 'bg-[#8B7355] text-white shadow-[0_4px_12px_rgba(139,115,85,0.25)]' :
+                    'bg-white border border-[#E8E3D9] text-[#333333]'
+                  }`}
+                >{dur.d} - {dur.p}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* Booking Summary */}
+          <div className="px-5 py-5">
+            <div className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5">
+              <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-4">Your Booking</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=40&h=40&fit=crop" alt="Expert" className="w-10 h-10 rounded-full object-cover" />
+                  <span className="text-[14px] font-normal text-[#333333]">Dr. Elena Martinez</span>
+                </div>
+                {[
+                  { icon: IoCalendarOutline, text: `Monday, Dec ${selectedDate}, 2024` },
+                  { icon: IoTimeOutline,     text: '2:00 PM – 3:00 PM' },
+                  { icon: IoVideocamOutline, text: 'Video Consultation' },
+                  { icon: IoCashOutline,     text: ['$49','$89','$129'][selectedDuration], gold: true },
+                ].map(({ icon: Icon, text, gold }, i) => (
+                  <div key={i}>
+                    <div className="h-px bg-[#E8E3D9]" />
+                    <div className="flex items-center gap-3 pt-3">
+                      <Icon className="w-5 h-5 text-[#8B7355]" />
+                      <span className={`text-[14px] font-normal ${gold ? 'font-semibold text-[#8B7355] text-[16px]' : 'text-[#333333]'}`}>{text}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* User Details Form */}
+          <div className="bg-[#FDFBF7] px-5 py-5">
+            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-4">Your Details</h3>
+            <div className="space-y-3">
+              <input type="text"  placeholder="Full Name"   className="w-full h-[52px] px-4 bg-white border border-[#E8E3D9] rounded-lg text-[14px] outline-none" />
+              <input type="email" placeholder="Email Address" className="w-full h-[52px] px-4 bg-white border border-[#E8E3D9] rounded-lg text-[14px] outline-none" />
+              <input type="tel"   placeholder="Phone Number"  className="w-full h-[52px] px-4 bg-white border border-[#E8E3D9] rounded-lg text-[14px] outline-none" />
+              <textarea placeholder="Special requests or concerns (optional)" className="w-full h-[100px] px-4 py-3 bg-white border border-[#E8E3D9] rounded-lg text-[14px] outline-none resize-none" />
+            </div>
+          </div>
+
+          {/* Terms */}
+          <div className="bg-white px-5 py-4 flex items-center gap-3">
+            <div className="w-5 h-5 border-2 border-[#8B7355] rounded flex items-center justify-center flex-shrink-0">
+              <IoCheckmarkCircle className="w-4 h-4 text-[#8B7355]" />
+            </div>
+            <p className="text-[13px] text-[#666666]">I agree to <span className="text-[#8B7355] underline">terms & privacy policy</span></p>
+          </div>
+
+          {/* Bottom Action */}
+          <div className="bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
+            <div className="h-[3px] bg-[#C9A870]" />
+            <div className="px-5 py-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[16px] text-[#666666]">Total:</span>
+                <span className="text-[24px] font-bold text-[#1A1A1A]">{['$49','$89','$129'][selectedDuration]}</span>
+              </div>
+              <button className="w-full min-h-[56px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mb-2">
+                <span className="text-[17px] font-semibold text-white">Confirm Booking</span>
+              </button>
+              <p className="text-[12px] font-light italic text-[#8B7355] text-center mb-3">Instant confirmation via email</p>
+              <button onClick={() => setShowBookingPopup(false)} className="w-full py-3">
+                <span className="text-[14px] font-medium text-[#666666]">Change selection</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Footer Nav */}
+          <div className="bg-[#F5F5F5] h-14 flex items-center justify-center gap-4">
+            <span className="text-[14px] font-medium text-[#8B7355]">View My Bookings</span>
+            <span className="text-[#999999]">•</span>
+            <span className="text-[14px] font-medium text-[#8B7355]">Reschedule/Cancel</span>
+          </div>
+
+        </div>
+      )}
+
+    </>
   )
 }
 
