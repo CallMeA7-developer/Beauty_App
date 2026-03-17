@@ -20,6 +20,136 @@ import {
   IoFlowerOutline,
 } from 'react-icons/io5'
 
+// Makeup subcategories with swatch data (from shop-makeup-dropdown-open)
+const makeupSubcategories = [
+  {
+    name: 'Face',
+    count: 5,
+    swatchType: 'gradient',
+    swatchColors: ['#FFE5D9', '#FFD4C4'],
+    path: '/makeup',
+  },
+  {
+    name: 'Eyes',
+    count: 4,
+    swatchType: 'multi',
+    swatchColors: ['#C9A870', '#8B7355', '#E8D5C4'],
+    path: '/makeup',
+  },
+  {
+    name: 'Lips',
+    count: 4,
+    swatchType: 'gradient',
+    swatchColors: ['#D4969C', '#C57B85'],
+    path: '/makeup',
+  },
+  {
+    name: 'Sets & Palettes',
+    count: 3,
+    swatchType: 'icon',
+    swatchColors: [],
+    path: '/makeup',
+  },
+]
+
+// Face sub-items (from shop-face-dropdown)
+const faceItems = [
+  { name: 'Foundation',  image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=80&h=80&fit=crop', type: 'shadeRange', description: '12 shades available' },
+  { name: 'Concealer',   image: 'https://images.unsplash.com/photo-1596704017254-9b121068ec31?w=80&h=80&fit=crop',  type: 'swatches',   swatches: ['#FFE5D9','#F5D4C4','#E8C4A0','#D4A882','#C9A870'], description: '8 shades available' },
+  { name: 'Powder',      image: 'https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=80&h=80&fit=crop',  type: 'badges',     badges: ['Matte','Satin','Luminous'], description: '6 options' },
+  { name: 'Blush',       image: 'https://images.unsplash.com/photo-1583241800698-c8186278e259?w=80&h=80&fit=crop',  type: 'gradient',   gradient: ['#FFB5C0','#D4969C'], description: '10 shades' },
+  { name: 'Highlighter', image: 'https://images.unsplash.com/photo-1515688594390-b649af70d282?w=80&h=80&fit=crop',  type: 'shimmer',    description: '6 luminous shades' },
+]
+
+// Eyes sub-items (from shop-eyes-dropdown)
+const eyesItems = [
+  { name: 'Eyeshadow', image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=80&h=80&fit=crop', type: 'colorSwatches', swatches: ['#FFE5D9','#F5D4C4','#E8C4A0','#D4A882','#C9A870','#8B7355'], description: '15 palettes available' },
+  { name: 'Eyeliner',  image: 'https://images.unsplash.com/photo-1631730486572-226d1f595b68?w=80&h=80&fit=crop', type: 'badges',       badges: ['Liquid','Gel','Pencil'], description: '8 formulas' },
+  { name: 'Mascara',   image: 'https://images.unsplash.com/photo-1631730486670-448828a11265?w=80&h=80&fit=crop', type: 'sparkle',      description: '6 volumizing options' },
+  { name: 'Eyebrow',   image: 'https://images.unsplash.com/photo-1598452963314-b09f397a5c48?w=80&h=80&fit=crop', type: 'shadeBar',     description: '10 shaping products' },
+]
+
+// Lips sub-items (from shop-lips-dropdown)
+const lipsItems = [
+  { name: 'Lipstick',  image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=80&h=80&fit=crop', type: 'colorSwatches', swatches: ['#8B4A5C','#C73E3A','#E8967A','#D4A89C','#A8717D','#6B3940'], description: '18 shades available' },
+  { name: 'Lip Gloss', image: 'https://images.unsplash.com/photo-1631730486613-940cdec63645?w=80&h=80&fit=crop', type: 'badges',       badges: ['Shimmer','Pearl','Clear'], description: '12 glossy finishes' },
+  { name: 'Lip Liner', image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=80&h=80&fit=crop', type: 'shadeBar',     description: '10 defining shades' },
+  { name: 'Lip Care',  image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop', type: 'sparkle',      description: '8 nourishing treatments' },
+]
+
+// Cleanser sub-types (from shop-cleanser-dropdown)
+const cleanserTypes = [
+  { name: 'Foaming Cleanser', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=64&h=64&fit=crop', description: 'Deep cleansing formula' },
+  { name: 'Gel Cleanser',     image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Oil-control & refreshing' },
+  { name: 'Cream Cleanser',   image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop', description: 'Gentle & hydrating' },
+  { name: 'Oil Cleanser',     image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=64&h=64&fit=crop', description: 'Makeup dissolving' },
+]
+
+// Serum sub-types (from shop-serums-dropdown)
+const serumTypes = [
+  { name: 'Hydrating Serum',   image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=64&h=64&fit=crop', description: 'Deep moisture boost' },
+  { name: 'Vitamin C Serum',   image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Brightening & glow'  },
+  { name: 'Retinol Serum',     image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop', description: 'Anti-aging power'    },
+  { name: 'Niacinamide Serum', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=64&h=64&fit=crop', description: 'Pore refining'        },
+  { name: 'Peptide Serum',     image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=64&h=64&fit=crop', description: 'Firming & lifting'   },
+  { name: 'Exfoliating Serum', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=64&h=64&fit=crop', description: 'Smooth texture'      },
+]
+
+// Moisturizer sub-types (from shop-moisturizers-dropdown)
+const moisturizerTypes = [
+  { name: 'Day Cream',          image: 'https://images.unsplash.com/photo-1556228841-db8e34940cad?w=64&h=64&fit=crop', description: 'Daily hydration'   },
+  { name: 'Night Cream',        image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Overnight repair'  },
+  { name: 'Gel Moisturizer',    image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Oil-free hydration' },
+  { name: 'Rich Cream',         image: 'https://images.unsplash.com/photo-1570194065650-d99fb4f8f4b9?w=64&h=64&fit=crop', description: 'Deep nourishment'  },
+  { name: 'Tinted Moisturizer', image: 'https://images.unsplash.com/photo-1631730486572-226d1f595b68?w=64&h=64&fit=crop', description: 'Coverage + care'   },
+  { name: 'Barrier Cream',      image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=64&h=64&fit=crop', description: 'Skin protection'   },
+]
+
+// Eye Care sub-types (from shop-eyecare-dropdown)
+const eyeCareTypes = [
+  { name: 'Eye Cream',  image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=64&h=64&fit=crop', description: 'Anti-aging care'      },
+  { name: 'Eye Serum',  image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Intensive treatment'   },
+  { name: 'Eye Gel',    image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop', description: 'Lightweight hydration' },
+  { name: 'Eye Mask',   image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=64&h=64&fit=crop', description: 'Instant refresh'       },
+  { name: 'Eye Balm',   image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=64&h=64&fit=crop', description: 'Deep nourishment'      },
+  { name: 'Eye Primer', image: 'https://images.unsplash.com/photo-1631730486572-226d1f595b68?w=64&h=64&fit=crop', description: 'Smooth base'           },
+]
+
+// Mask sub-types (from shop-mask-dropdown)
+const maskTypes = [
+  { name: 'Sheet Mask',   image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=64&h=64&fit=crop', description: 'Deep hydration'     },
+  { name: 'Clay Mask',    image: 'https://images.unsplash.com/photo-1556228852-80a3c565a5b1?w=64&h=64&fit=crop', description: 'Purifying treatment'  },
+  { name: 'Sleep Mask',   image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Overnight renewal'   },
+  { name: 'Peel-Off Mask',image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Gentle exfoliation'  },
+  { name: 'Hydrogel Mask',image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Cooling refresh'     },
+  { name: 'Bubble Mask',  image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=64&h=64&fit=crop', description: 'Oxygenating care'    },
+]
+
+// Sunscreen sub-types (from shop-sunscreen-dropdown)
+const sunscreenTypes = [
+  { name: 'Mineral SPF 50+',  image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop', description: 'Broad spectrum protection' },
+  { name: 'Tinted SPF 45',    image: 'https://images.unsplash.com/photo-1556228852-80a3c565a5b1?w=64&h=64&fit=crop', description: 'Natural coverage shield'    },
+  { name: 'Hydrating SPF 30', image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Moisture + protection'      },
+  { name: 'Sport SPF 60',     image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Active defense formula'     },
+  { name: 'Anti-Aging SPF 40',image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Youth preserving shield'    },
+  { name: 'Powder SPF 35',    image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=64&h=64&fit=crop', description: 'Touch-up protection'        },
+]
+
+// Fragrance types (from shop-fragrance-dropdown)
+const fragranceTypes = [
+  { name: 'Eau de Parfum',  image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=64&h=64&fit=crop', description: 'Intense & long-lasting' },
+  { name: 'Eau de Toilette', image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=64&h=64&fit=crop', description: 'Light & refreshing'     },
+  { name: 'Body Mist',      image: 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=64&h=64&fit=crop', description: 'Subtle fragrance veil'  },
+  { name: 'Discovery Sets', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=64&h=64&fit=crop', description: 'Sample our collection'  },
+]
+// Body Care types (from shop-bodycare-dropdown)
+const bodyCareTypes = [
+  { name: 'Body Lotion', image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=64&h=64&fit=crop', description: 'Rich hydration'   },
+  { name: 'Body Wash',   image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=64&h=64&fit=crop', description: 'Gentle cleansing' },
+  { name: 'Scrubs',      image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Smooth & refine'  },
+  { name: 'Hand Care',   image: 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=64&h=64&fit=crop', description: 'Nourish & protect'},
+]
+
 // ─── Shared Data ──────────────────────────────────────────────────────────────
 const desktopCollections = [
   { name: 'Signature Collection', subtitle: 'THE ICONS',         description: 'Our most beloved formulas in one essential edit',              products: '12 Products', price: 'From $485', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=580&h=720&fit=crop', badge: false },
@@ -67,12 +197,7 @@ const mobileCategories = [
   },
   {
     id: 'makeup', name: 'Makeup', icon: IoColorPaletteOutline, count: 18,
-    subcategories: [
-      { name: 'Face',          count: 8 },
-      { name: 'Eyes',          count: 5 },
-      { name: 'Lips',          count: 3 },
-      { name: 'Brushes & Tools', count: 2 },
-    ]
+    subcategories: makeupSubcategories,
   },
   { id: 'fragrance', name: 'Fragrance', icon: IoFlowerOutline,   count: 12, subcategories: [] },
   { id: 'bodycare',  name: 'Body Care', icon: IoSparklesOutline, count: 8,  subcategories: [] },
@@ -99,6 +224,16 @@ const mobileFilterTabs = ['All Products', 'Best Sellers', 'New Arrivals', 'Sale'
 function CollectionMobile() {
   const [expandedCategory, setExpandedCategory] = useState('skincare')
   const [activeFilter, setActiveFilter]         = useState('All Products')
+  const [expandedFace, setExpandedFace]         = useState(false)
+  const [expandedEyes, setExpandedEyes]         = useState(false)
+  const [expandedLips, setExpandedLips]         = useState(false)
+  const [expandedCleanser, setExpandedCleanser] = useState(false)
+  const [expandedSerum, setExpandedSerum]       = useState(false)
+  const [expandedMoisturizer, setExpandedMoisturizer] = useState(false)
+  const [expandedEyeCare, setExpandedEyeCare]         = useState(false)
+  const [expandedMask, setExpandedMask]               = useState(false)
+  const [expandedSunscreen, setExpandedSunscreen]     = useState(false)
+  const [expandedFragrance, setExpandedFragrance]     = useState(false)
 
   const toggleCategory = (id) => setExpandedCategory(expandedCategory === id ? null : id)
 
@@ -156,48 +291,440 @@ function CollectionMobile() {
               </div>
             </button>
 
-            {/* Expanded — Skincare grid */}
+            {/* Expanded — Skincare list (matching Figma) */}
             {category.id === 'skincare' && expandedCategory === category.id && (
-              <div className="bg-[#FDFBF7] px-5 py-4">
+              <div className="bg-white">
+                {category.subcategories.map((sub) => (
+                  <div key={sub.name}>
+                    {/* Cleanser row — tappable, expands grid below */}
+                    {sub.name === 'Cleansers' && (
+                      <div>
+                        <button
+                          onClick={() => setExpandedCleanser(!expandedCleanser)}
+                          className={`w-full min-h-[56px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedCleanser ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <img src={sub.image} alt={sub.name} className="w-9 h-9 rounded-full object-cover" />
+                            <span className="text-[15px] font-medium text-[#1A1A1A]">{sub.name}</span>
+                          </div>
+                          <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedCleanser ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Cleanser type grid */}
+                        {expandedCleanser && (
+                          <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
+                            <div className="grid grid-cols-2 gap-3">
+                              {cleanserTypes.map((type) => (
+                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                  <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                                  <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                                  <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                                  <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Serums row — tappable, expands grid below */}
+                    {sub.name === 'Serums' && (
+                      <div>
+                        <button
+                          onClick={() => setExpandedSerum(!expandedSerum)}
+                          className={`w-full min-h-[56px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedSerum ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <img src={sub.image} alt={sub.name} className="w-9 h-9 rounded-full object-cover" />
+                            <span className="text-[15px] font-medium text-[#1A1A1A]">{sub.name}</span>
+                          </div>
+                          <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedSerum ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Serum type grid */}
+                        {expandedSerum && (
+                          <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
+                            <div className="grid grid-cols-2 gap-3">
+                              {serumTypes.map((type) => (
+                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                  <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                                  <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                                  <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                                  <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Moisturizers row — tappable, expands grid below */}
+                    {sub.name === 'Moisturizers' && (
+                      <div>
+                        <button
+                          onClick={() => setExpandedMoisturizer(!expandedMoisturizer)}
+                          className={`w-full min-h-[56px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedMoisturizer ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <img src={sub.image} alt={sub.name} className="w-9 h-9 rounded-full object-cover" />
+                            <span className="text-[15px] font-medium text-[#1A1A1A]">{sub.name}</span>
+                          </div>
+                          <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedMoisturizer ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Moisturizer type grid */}
+                        {expandedMoisturizer && (
+                          <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
+                            <div className="grid grid-cols-2 gap-3">
+                              {moisturizerTypes.map((type) => (
+                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                  <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                                  <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                                  <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                                  <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Eye Care row — tappable, expands grid below */}
+                    {sub.name === 'Eye Care' && (
+                      <div>
+                        <button
+                          onClick={() => setExpandedEyeCare(!expandedEyeCare)}
+                          className={`w-full min-h-[56px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedEyeCare ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <img src={sub.image} alt={sub.name} className="w-9 h-9 rounded-full object-cover" />
+                            <span className="text-[15px] font-medium text-[#1A1A1A]">{sub.name}</span>
+                          </div>
+                          <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedEyeCare ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Eye Care type grid */}
+                        {expandedEyeCare && (
+                          <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
+                            <div className="grid grid-cols-2 gap-3">
+                              {eyeCareTypes.map((type) => (
+                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                  <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                                  <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                                  <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                                  <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Masks row — tappable, expands grid below */}
+                    {sub.name === 'Masks' && (
+                      <div>
+                        <button
+                          onClick={() => setExpandedMask(!expandedMask)}
+                          className={`w-full min-h-[56px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedMask ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <img src={sub.image} alt={sub.name} className="w-9 h-9 rounded-full object-cover" />
+                            <span className="text-[15px] font-medium text-[#1A1A1A]">{sub.name}</span>
+                          </div>
+                          <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedMask ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Mask type grid */}
+                        {expandedMask && (
+                          <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
+                            <div className="grid grid-cols-2 gap-3">
+                              {maskTypes.map((type) => (
+                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                  <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                                  <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                                  <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                                  <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Sunscreen row — tappable, expands grid below */}
+                    {sub.name === 'Sunscreen' && (
+                      <div>
+                        <button
+                          onClick={() => setExpandedSunscreen(!expandedSunscreen)}
+                          className={`w-full min-h-[56px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedSunscreen ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <img src={sub.image} alt={sub.name} className="w-9 h-9 rounded-full object-cover" />
+                            <span className="text-[15px] font-medium text-[#1A1A1A]">{sub.name}</span>
+                          </div>
+                          <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedSunscreen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Sunscreen type grid */}
+                        {expandedSunscreen && (
+                          <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
+                            <div className="grid grid-cols-2 gap-3">
+                              {sunscreenTypes.map((type) => (
+                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                  <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                                  <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                                  <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                                  <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Expanded — Makeup with swatches + Face drill-down */}
+            {category.id === 'makeup' && expandedCategory === category.id && (
+              <div className="bg-[#FDFBF7]">
+                {category.subcategories.map((sub) => (
+                  <div key={sub.name}>
+                    {/* Face row */}
+                    {sub.name === 'Face' && (
+                      <button
+                        onClick={() => setExpandedFace(!expandedFace)}
+                        className={`w-full min-h-[52px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedFace ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full flex-shrink-0" style={{ background: 'linear-gradient(135deg, #FFE5D9, #FFD4C4)' }} />
+                          <span className="text-[14px] font-medium text-[#2B2B2B]">Face</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[12px] font-normal text-[#999999]">5 items</span>
+                          <IoChevronDown className={`w-4 h-4 text-[#8B7355] transition-transform duration-200 ${expandedFace ? 'rotate-180' : ''}`} />
+                        </div>
+                      </button>
+                    )}
+
+                    {/* Eyes row */}
+                    {sub.name === 'Eyes' && (
+                      <button
+                        onClick={() => setExpandedEyes(!expandedEyes)}
+                        className={`w-full min-h-[52px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedEyes ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full flex-shrink-0 relative overflow-hidden">
+                            <div className="absolute inset-0 flex">
+                              <div className="flex-1" style={{ backgroundColor: '#C9A870' }} />
+                              <div className="flex-1" style={{ backgroundColor: '#8B7355' }} />
+                              <div className="flex-1" style={{ backgroundColor: '#E8D5C4' }} />
+                            </div>
+                          </div>
+                          <span className="text-[14px] font-medium text-[#2B2B2B]">Eyes</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[12px] font-normal text-[#999999]">4 items</span>
+                          <IoChevronDown className={`w-4 h-4 text-[#8B7355] transition-transform duration-200 ${expandedEyes ? 'rotate-180' : ''}`} />
+                        </div>
+                      </button>
+                    )}
+
+                    {/* Lips row */}
+                    {sub.name === 'Lips' && (
+                      <button
+                        onClick={() => setExpandedLips(!expandedLips)}
+                        className={`w-full min-h-[52px] px-5 flex items-center justify-between border-b border-[#E8E3D9] transition-colors ${expandedLips ? 'bg-[#FDFBF7]' : 'bg-white hover:bg-[#FAF8F5]'}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full flex-shrink-0" style={{ background: 'linear-gradient(135deg, #D4969C, #C57B85)' }} />
+                          <span className="text-[14px] font-medium text-[#2B2B2B]">Lips</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[12px] font-normal text-[#999999]">4 items</span>
+                          <IoChevronDown className={`w-4 h-4 text-[#8B7355] transition-transform duration-200 ${expandedLips ? 'rotate-180' : ''}`} />
+                        </div>
+                      </button>
+                    )}
+
+                    {/* Sets & Palettes row */}
+                    {sub.name === 'Sets & Palettes' && (
+                      <Link to={sub.path || '/makeup'}>
+                        <div className="min-h-[52px] bg-white hover:bg-[#FAF8F5] px-5 flex items-center justify-between border-b border-[#E8E3D9] last:border-b-0 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <div className="w-7 h-7 bg-[#F5F1EA] rounded-full flex items-center justify-center flex-shrink-0">
+                              <IoGiftOutline className="w-4 h-4 text-[#C9A870]" />
+                            </div>
+                            <span className="text-[14px] font-medium text-[#2B2B2B]">{sub.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[12px] font-normal text-[#999999]">{sub.count} items</span>
+                            <IoChevronForward className="w-4 h-4 text-[#8B7355]" />
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+
+                    {/* Face drill-down items (from shop-face-dropdown) */}
+                    {sub.name === 'Face' && expandedFace && (
+                      <div className="bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] px-4 py-2">
+                        {faceItems.map((item, idx) => (
+                          <div
+                            key={item.name}
+                            className={`min-h-[72px] hover:bg-[#FAF8F5] flex items-center gap-3 px-2 py-2 cursor-pointer ${idx < faceItems.length - 1 ? 'border-b border-[#E8E3D9]' : ''}`}
+                          >
+                            <img src={item.image} alt={item.name} className="w-[64px] h-[64px] rounded-[8px] object-cover flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{item.name}</h3>
+                              {item.type === 'shadeRange' && (
+                                <div className="w-[100px] h-[5px] rounded-full mb-1" style={{ background: 'linear-gradient(90deg, #FFE5D9 0%, #C9A870 50%, #8B7355 100%)' }} />
+                              )}
+                              {item.type === 'swatches' && (
+                                <div className="flex items-center gap-1 mb-1">
+                                  {item.swatches.map((color, i) => (
+                                    <div key={i} className="w-[20px] h-[20px] rounded-full border border-[#E8E3D9]" style={{ backgroundColor: color }} />
+                                  ))}
+                                </div>
+                              )}
+                              {item.type === 'badges' && (
+                                <div className="flex items-center gap-1 mb-1 flex-wrap">
+                                  {item.badges.map((badge) => (
+                                    <span key={badge} className="text-[9px] font-normal text-[#8B7355] bg-[#F5F1EA] px-[5px] py-[2px] rounded-[12px]">{badge}</span>
+                                  ))}
+                                </div>
+                              )}
+                              {item.type === 'gradient' && (
+                                <div className="w-[28px] h-[28px] rounded-full mb-1" style={{ background: `linear-gradient(135deg, ${item.gradient[0]}, ${item.gradient[1]})` }} />
+                              )}
+                              {item.type === 'shimmer' && (
+                                <IoSparklesOutline className="w-4 h-4 text-[#C9A870] mb-1" />
+                              )}
+                              <p className="text-[12px] font-normal text-[#999999]">{item.description}</p>
+                            </div>
+                            <IoChevronForward className="w-[16px] h-[16px] text-[#8B7355] flex-shrink-0" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Eyes drill-down items (from shop-eyes-dropdown) */}
+                    {sub.name === 'Eyes' && expandedEyes && (
+                      <div className="bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] px-4 py-2">
+                        {eyesItems.map((item, idx) => (
+                          <div
+                            key={item.name}
+                            className={`min-h-[72px] hover:bg-[#FAF8F5] flex items-center gap-3 px-2 py-2 cursor-pointer ${idx < eyesItems.length - 1 ? 'border-b border-[#E8E3D9]' : ''}`}
+                          >
+                            <img src={item.image} alt={item.name} className="w-[64px] h-[64px] rounded-[8px] object-cover flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{item.name}</h3>
+                              {item.type === 'colorSwatches' && (
+                                <div className="flex items-center gap-1 mb-1">
+                                  {item.swatches.map((color, i) => (
+                                    <div key={i} className="w-[18px] h-[18px] rounded-full border border-[#E8E3D9]" style={{ backgroundColor: color }} />
+                                  ))}
+                                </div>
+                              )}
+                              {item.type === 'badges' && (
+                                <div className="flex items-center gap-1 mb-1 flex-wrap">
+                                  {item.badges.map((badge) => (
+                                    <span key={badge} className="text-[9px] font-normal text-[#8B7355] bg-[#F5F1EA] px-[5px] py-[2px] rounded-[12px]">{badge}</span>
+                                  ))}
+                                </div>
+                              )}
+                              {item.type === 'sparkle' && (
+                                <IoSparklesOutline className="w-4 h-4 text-[#C9A870] mb-1" />
+                              )}
+                              {item.type === 'shadeBar' && (
+                                <div className="w-[100px] h-[5px] rounded-full mb-1" style={{ background: 'linear-gradient(90deg, #E8D5C4 0%, #C9A870 50%, #8B7355 100%)' }} />
+                              )}
+                              <p className="text-[12px] font-normal text-[#999999]">{item.description}</p>
+                            </div>
+                            <IoChevronForward className="w-[16px] h-[16px] text-[#8B7355] flex-shrink-0" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Lips drill-down items (from shop-lips-dropdown) */}
+                    {sub.name === 'Lips' && expandedLips && (
+                      <div className="bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] px-4 py-2">
+                        {lipsItems.map((item, idx) => (
+                          <div
+                            key={item.name}
+                            className={`min-h-[72px] hover:bg-[#FAF8F5] flex items-center gap-3 px-2 py-2 cursor-pointer ${idx < lipsItems.length - 1 ? 'border-b border-[#E8E3D9]' : ''}`}
+                          >
+                            <img src={item.image} alt={item.name} className="w-[64px] h-[64px] rounded-[8px] object-cover flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{item.name}</h3>
+                              {item.type === 'colorSwatches' && (
+                                <div className="flex items-center gap-1 mb-1 flex-wrap">
+                                  {item.swatches.map((color, i) => (
+                                    <div key={i} className="w-[18px] h-[18px] rounded-full border border-[#E8E3D9]" style={{ backgroundColor: color }} />
+                                  ))}
+                                </div>
+                              )}
+                              {item.type === 'badges' && (
+                                <div className="flex items-center gap-1 mb-1 flex-wrap">
+                                  {item.badges.map((badge) => (
+                                    <span key={badge} className="text-[9px] font-normal text-[#8B7355] bg-[#F5F1EA] px-[5px] py-[2px] rounded-[12px]">{badge}</span>
+                                  ))}
+                                </div>
+                              )}
+                              {item.type === 'shadeBar' && (
+                                <div className="w-[100px] h-[5px] rounded-full mb-1" style={{ background: 'linear-gradient(90deg, #F5D4C4 0%, #D4969C 50%, #8B4A5C 100%)' }} />
+                              )}
+                              {item.type === 'sparkle' && (
+                                <IoSparklesOutline className="w-4 h-4 text-[#C9A870] mb-1" />
+                              )}
+                              <p className="text-[12px] font-normal text-[#999999]">{item.description}</p>
+                            </div>
+                            <IoChevronForward className="w-[16px] h-[16px] text-[#8B7355] flex-shrink-0" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Expanded — Fragrance 2x2 grid */}
+            {category.id === 'fragrance' && expandedCategory === category.id && (
+              <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                 <div className="grid grid-cols-2 gap-3">
-                  {category.subcategories.map((sub) => (
-                    <div key={sub.name} className="bg-white border border-[#E8E3D9] rounded-[8px] p-3 flex flex-col items-center gap-2">
-                      <img src={sub.image} alt={sub.name} className="w-8 h-8 rounded-full object-cover" />
-                      <span className="text-[13px] font-normal text-[#2B2B2B] text-center">{sub.name}</span>
-                      <IoChevronForward className="w-3 h-3 text-[#8B7355]" />
+                  {fragranceTypes.map((type) => (
+                    <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                      <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                      <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                      <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                      <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Expanded — Makeup list */}
-            {category.id === 'makeup' && expandedCategory === category.id && (
-              <div className="bg-[#FDFBF7]">
-                {category.subcategories.map((sub) => (
-                  <div key={sub.name} className="min-h-[48px] px-5 flex items-center justify-between border-b border-[#E8E3D9] last:border-b-0">
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-[#E8E3D9] rounded-full" />
-                      <span className="text-[14px] font-medium text-[#2B2B2B]">{sub.name}</span>
+            {/* Expanded — Body Care 2x2 grid */}
+            {category.id === 'bodycare' && expandedCategory === category.id && (
+              <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
+                <div className="grid grid-cols-2 gap-3">
+                  {bodyCareTypes.map((type) => (
+                    <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                      <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
+                      <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
+                      <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
+                      <IoChevronForward className="w-[14px] h-[14px] text-[#8B7355]" />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[12px] font-normal text-[#999999]">{sub.count}</span>
-                      <IoChevronForward className="w-4 h-4 text-[#8B7355]" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Expanded — other categories simple */}
-            {category.subcategories.length === 0 && expandedCategory === category.id && (
-              <div className="bg-[#FDFBF7] px-5 py-4">
-                <Link to={`/${category.id}`}>
-                  <div className="flex items-center justify-between py-3">
-                    <span className="text-[15px] font-normal text-[#2B2B2B]">View All {category.name}</span>
-                    <IoChevronForward className="w-4 h-4 text-[#8B7355]" />
-                  </div>
-                </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>
