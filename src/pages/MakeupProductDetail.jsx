@@ -103,109 +103,109 @@ export default function MakeupProductDetail() {
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Breadcrumb ── */}
-      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Makeup</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Lipsticks</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#666666]">Velvet Matte Lipstick</span>
+      <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Makeup</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Lipsticks</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">Velvet Matte Lipstick</span>
       </div>
 
       {/* ── Main Content ── */}
-      <div className="px-[120px] py-[64px]">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-8 md:py-12 lg:py-[64px]">
 
         {/* ── Product Section ── */}
-        <div className="flex gap-[40px] mb-[80px]">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-10 lg:gap-[40px] mb-12 md:mb-16 lg:mb-[80px]">
 
           {/* Left — Gallery */}
-          <div className="w-[580px] flex-shrink-0">
-            <div className="w-full h-[680px] rounded-[8px] overflow-hidden mb-[20px]">
+          <div className="w-full md:w-[320px] lg:w-[580px] flex-shrink-0">
+            <div className="w-full h-[360px] md:h-[420px] lg:h-[680px] rounded-[8px] overflow-hidden mb-4 lg:mb-[20px]">
               <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=1160&h=1360&fit=crop" alt="Velvet Matte Lipstick" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
 
             {/* Thumbnails */}
-            <div className="flex gap-[12px] mb-[32px]">
+            <div className="flex gap-[8px] lg:gap-[12px] mb-5 lg:mb-[32px]">
               {thumbnailImages.map((img, idx) => (
-                <div key={idx} className={`w-[106px] h-[106px] rounded-[8px] overflow-hidden cursor-pointer border-2 transition-all ${idx === 0 ? 'border-[#8B7355]' : 'border-transparent hover:border-[#E8E3D9]'}`}>
+                <div key={idx} className={`w-[56px] h-[56px] md:w-[52px] md:h-[52px] lg:w-[106px] lg:h-[106px] rounded-[8px] overflow-hidden cursor-pointer border-2 transition-all ${idx === 0 ? 'border-[#8B7355]' : 'border-transparent hover:border-[#E8E3D9]'}`}>
                   <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
 
             {/* Virtual Try-On CTA */}
-            <div className="w-full bg-gradient-to-b from-[#F5F1EA] to-white rounded-[12px] p-[32px] mb-[24px]">
+            <div className="w-full bg-gradient-to-b from-[#F5F1EA] to-white rounded-[12px] p-5 lg:p-[32px] mb-4 lg:mb-[24px]">
               <div className="flex flex-col items-center">
-                <IoCameraOutline className="w-[48px] h-[48px] text-[#8B7355] mb-[16px]" />
-                <h3 className="text-[24px] font-medium text-[#1A1A1A] mb-[8px]">Try This Shade Virtually</h3>
-                <p className="text-[15px] font-normal text-[#666666] text-center mb-[24px]">See how it looks on you instantly with AR technology</p>
-                <button className="w-full h-[56px] bg-[#8B7355] text-white text-[16px] font-medium rounded-[8px] mb-[12px] hover:bg-[#7a6448] transition-colors">
+                <IoCameraOutline className="w-[40px] h-[40px] lg:w-[48px] lg:h-[48px] text-[#8B7355] mb-3 lg:mb-[16px]" />
+                <h3 className="text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-[8px]">Try This Shade Virtually</h3>
+                <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] text-center mb-5 lg:mb-[24px]">See how it looks on you instantly with AR technology</p>
+                <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] mb-[10px] lg:mb-[12px] hover:bg-[#7a6448] transition-colors">
                   Launch Virtual Try-On
                 </button>
-                <button className="w-full h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+                <button className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                   Upload Your Photo
                 </button>
               </div>
             </div>
 
             {/* Feature Icons */}
-            <div className="flex gap-[12px]">
+            <div className="flex gap-[8px] lg:gap-[12px]">
               {[
                 { icon: IoLeafOutline, title: 'Cruelty-Free', desc: 'Never Tested on Animals' },
                 { icon: IoSparklesOutline, title: 'Vegan Formula', desc: '100% Plant-Based' },
                 { icon: IoFlashOutline, title: 'Long-Lasting', desc: '16-Hour Wear' },
               ].map((feature, idx) => (
-                <div key={idx} className="flex-1 bg-[#FDFBF7] rounded-[8px] p-[20px] text-center">
-                  <feature.icon className="w-[28px] h-[28px] text-[#8B7355] mx-auto mb-[8px]" />
-                  <div className="text-[14px] font-medium text-[#1A1A1A] mb-[4px]">{feature.title}</div>
-                  <div className="text-[13px] font-light text-[#666666]">{feature.desc}</div>
+                <div key={idx} className="flex-1 bg-[#FDFBF7] rounded-[8px] p-3 lg:p-[20px] text-center">
+                  <feature.icon className="w-[22px] h-[22px] lg:w-[28px] lg:h-[28px] text-[#8B7355] mx-auto mb-[6px] lg:mb-[8px]" />
+                  <div className="text-[12px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[3px] lg:mb-[4px]">{feature.title}</div>
+                  <div className="hidden md:block text-[11px] lg:text-[13px] font-light text-[#666666]">{feature.desc}</div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Right — Product Info */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="mb-[8px]">
-              <span className="text-[14px] font-light italic text-[#8B7355]">Shan Loray</span>
+              <span className="text-[13px] lg:text-[14px] font-light italic text-[#8B7355]">Shan Loray</span>
             </div>
-            <h1 className="text-[36px] font-semibold text-[#1A1A1A] mb-[8px]">Velvet Matte Lipstick</h1>
-            <p className="text-[16px] font-light italic text-[#666666] mb-[16px]">Luxurious Color, Weightless Comfort</p>
+            <h1 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-[8px]">Velvet Matte Lipstick</h1>
+            <p className="text-[14px] lg:text-[16px] font-light italic text-[#666666] mb-4 lg:mb-[16px]">Luxurious Color, Weightless Comfort</p>
 
             {/* Rating */}
-            <div className="flex items-center gap-[8px] mb-[24px]">
+            <div className="flex items-center gap-[8px] mb-5 lg:mb-[24px]">
               <div className="flex gap-[2px]">
-                {[...Array(5)].map((_, idx) => <IoStarSharp key={idx} className="w-[18px] h-[18px] text-[#C9A870]" />)}
+                {[...Array(5)].map((_, idx) => <IoStarSharp key={idx} className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#C9A870]" />)}
               </div>
-              <span className="text-[15px] font-normal text-[#2B2B2B]">4.9</span>
-              <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">(342 reviews)</span>
+              <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">4.9</span>
+              <span className="text-[14px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">(342 reviews)</span>
             </div>
 
             {/* Price */}
-            <div className="mb-[20px]">
-              <div className="text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">$48.00</div>
-              <div className="text-[14px] font-light text-[#666666]">or 4 interest-free payments of $12.00</div>
+            <div className="mb-4 lg:mb-[20px]">
+              <div className="text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">$48.00</div>
+              <div className="text-[13px] lg:text-[14px] font-light text-[#666666]">or 4 interest-free payments of $12.00</div>
             </div>
 
             {/* Description */}
-            <p className="text-[16px] font-normal text-[#3D3D3D] leading-[1.6] mb-[32px]">
+            <p className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#3D3D3D] leading-[1.6] mb-6 lg:mb-[32px]">
               A revolutionary matte lipstick that delivers rich, velvety color with a feather-light feel. Infused with nourishing oils and antioxidants for all-day comfort without drying.
             </p>
 
             {/* Shade Selector */}
-            <div className="mb-[28px]">
-              <div className="text-[14px] font-medium text-[#1A1A1A] mb-[12px]">Shade: Ruby Rose</div>
-              <div className="grid grid-cols-8 gap-[12px]">
+            <div className="mb-6 lg:mb-[28px]">
+              <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Shade: Ruby Rose</div>
+              <div className="grid grid-cols-8 gap-[8px] lg:gap-[12px]">
                 {shadeOptions.map((shade, idx) => (
                   <div key={idx} className="relative">
                     <div
-                      className={`w-[48px] h-[48px] rounded-full cursor-pointer hover:scale-110 transition-transform ${idx === 0 ? 'ring-4 ring-[#C9A870] ring-offset-2' : ''}`}
+                      className={`w-[36px] h-[36px] md:w-[40px] md:h-[40px] lg:w-[48px] lg:h-[48px] rounded-full cursor-pointer hover:scale-110 transition-transform ${idx === 0 ? 'ring-4 ring-[#C9A870] ring-offset-2' : ''}`}
                       style={{ backgroundColor: shade.color }}
                       title={shade.name}
                     />
                     {shade.badge && (
-                      <div className="absolute -top-[8px] -right-[8px] bg-[#C9A870] text-white text-[9px] font-medium px-[6px] py-[2px] rounded-full">
+                      <div className="absolute -top-[6px] -right-[6px] lg:-top-[8px] lg:-right-[8px] bg-[#C9A870] text-white text-[8px] lg:text-[9px] font-medium px-[5px] lg:px-[6px] py-[2px] rounded-full">
                         {shade.badge}
                       </div>
                     )}
@@ -215,24 +215,24 @@ export default function MakeupProductDetail() {
             </div>
 
             {/* AR Quick Try Panel */}
-            <div className="w-full bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-[24px] mb-[28px]">
-              <div className="flex gap-[20px]">
-                <div className="w-[80px] h-[80px] flex-shrink-0 rounded-[8px] overflow-hidden">
+            <div className="w-full bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-4 lg:p-[24px] mb-5 lg:mb-[28px]">
+              <div className="flex gap-4 lg:gap-[20px]">
+                <div className="w-[64px] h-[64px] lg:w-[80px] lg:h-[80px] flex-shrink-0 rounded-[8px] overflow-hidden">
                   <img src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=160&h=160&fit=crop" alt="AR Preview" className="w-full h-full object-cover" />
                 </div>
-                <div className="flex-1">
-                  <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-[8px]">See It On You</h4>
-                  <p className="text-[14px] font-normal text-[#666666] mb-[16px]">Try this shade instantly with AR</p>
-                  <button className="w-full h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] flex items-center justify-center gap-[8px] hover:bg-[#7a6448] transition-colors">
-                    <IoCameraOutline className="w-[20px] h-[20px]" />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-[6px] lg:mb-[8px]">See It On You</h4>
+                  <p className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-3 lg:mb-[16px]">Try this shade instantly with AR</p>
+                  <button className="w-full h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] flex items-center justify-center gap-[8px] hover:bg-[#7a6448] transition-colors">
+                    <IoCameraOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
                     Try Virtually Now
                   </button>
-                  <div className="flex items-center justify-center gap-[16px] mt-[12px]">
-                    <span className="text-[12px] font-light text-[#666666] flex items-center gap-[4px]">
-                      <IoCameraOutline className="w-[14px] h-[14px]" /> Works with camera
+                  <div className="flex items-center justify-center gap-3 lg:gap-[16px] mt-[10px] lg:mt-[12px]">
+                    <span className="text-[11px] lg:text-[12px] font-light text-[#666666] flex items-center gap-[4px]">
+                      <IoCameraOutline className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px]" /> Works with camera
                     </span>
-                    <span className="text-[12px] font-light text-[#666666] flex items-center gap-[4px]">
-                      <IoCloudUploadOutline className="w-[14px] h-[14px]" /> Upload photo
+                    <span className="text-[11px] lg:text-[12px] font-light text-[#666666] flex items-center gap-[4px]">
+                      <IoCloudUploadOutline className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px]" /> Upload photo
                     </span>
                   </div>
                 </div>
@@ -240,11 +240,11 @@ export default function MakeupProductDetail() {
             </div>
 
             {/* Finish */}
-            <div className="mb-[24px]">
-              <div className="text-[14px] font-medium text-[#1A1A1A] mb-[12px]">Finish</div>
-              <div className="flex gap-[12px]">
+            <div className="mb-5 lg:mb-[24px]">
+              <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Finish</div>
+              <div className="flex gap-[10px] lg:gap-[12px]">
                 {[{ label: 'Matte', selected: true }, { label: 'Satin', selected: false }].map((option) => (
-                  <button key={option.label} className={`w-[140px] h-[48px] rounded-full text-[14px] font-medium cursor-pointer transition-all ${option.selected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
+                  <button key={option.label} className={`w-[120px] lg:w-[140px] h-[44px] lg:h-[48px] rounded-full text-[13px] lg:text-[14px] font-medium cursor-pointer transition-all ${option.selected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
                     {option.label}
                   </button>
                 ))}
@@ -252,48 +252,48 @@ export default function MakeupProductDetail() {
             </div>
 
             {/* Quantity */}
-            <div className="mb-[24px]">
-              <div className="text-[14px] font-medium text-[#1A1A1A] mb-[12px]">Quantity</div>
-              <div className="flex items-center gap-[12px] w-[140px] h-[48px] border border-[#E8E3D9] rounded-[8px]">
+            <div className="mb-5 lg:mb-[24px]">
+              <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Quantity</div>
+              <div className="flex items-center gap-[12px] w-[130px] lg:w-[140px] h-[44px] lg:h-[48px] border border-[#E8E3D9] rounded-[8px]">
                 <button className="flex-1 flex items-center justify-center cursor-pointer hover:text-[#8B7355] transition-colors">
-                  <IoRemoveOutline className="w-[20px] h-[20px]" />
+                  <IoRemoveOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
                 </button>
-                <span className="text-[16px] font-medium text-[#1A1A1A]">1</span>
+                <span className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A]">1</span>
                 <button className="flex-1 flex items-center justify-center cursor-pointer hover:text-[#8B7355] transition-colors">
-                  <IoAddOutline className="w-[20px] h-[20px]" />
+                  <IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
                 </button>
               </div>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col gap-[16px] mb-[20px]">
-              <button className="w-full h-[56px] bg-[#8B7355] text-white text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                <IoBagOutline className="w-[20px] h-[20px]" />
+            <div className="flex flex-col gap-3 lg:gap-[16px] mb-4 lg:mb-[20px]">
+              <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                <IoBagOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
                 Add to Cart
               </button>
-              <button className="w-full h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[16px] font-semibold rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors">
+              <button className="w-full h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[16px] font-semibold rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors">
                 Buy with Virtual Try-On
               </button>
             </div>
 
             {/* Secondary Actions */}
-            <div className="flex items-center gap-[32px] mb-[32px]">
-              <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
-                <IoHeartOutline className="w-[18px] h-[18px]" /> Add to Wishlist
+            <div className="flex items-center gap-5 lg:gap-[32px] mb-6 lg:mb-[32px]">
+              <button className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
+                <IoHeartOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Add to Wishlist
               </button>
-              <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
-                <IoShareOutline className="w-[18px] h-[18px]" /> Share
+              <button className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
+                <IoShareOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Share
               </button>
             </div>
 
             {/* Key Benefits */}
-            <div className="bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-[24px]">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A] mb-[16px]">Key Benefits</h3>
-              <div className="space-y-[12px]">
+            <div className="bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-4 lg:p-[24px]">
+              <h3 className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px]">Key Benefits</h3>
+              <div className="space-y-[10px] lg:space-y-[12px]">
                 {keyBenefits.map((benefit, idx) => (
-                  <div key={idx} className="flex items-start gap-[12px]">
-                    <IoCheckmark className="w-[16px] h-[16px] text-[#8B7355] mt-[4px] flex-shrink-0" />
-                    <span className="text-[15px] font-normal text-[#2B2B2B]">{benefit}</span>
+                  <div key={idx} className="flex items-start gap-[10px] lg:gap-[12px]">
+                    <IoCheckmark className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] text-[#8B7355] mt-[3px] lg:mt-[4px] flex-shrink-0" />
+                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">{benefit}</span>
                   </div>
                 ))}
               </div>
@@ -302,11 +302,11 @@ export default function MakeupProductDetail() {
         </div>
 
         {/* ── Tabs ── */}
-        <div className="mb-[80px]">
-          <div className="border-b border-[#E8E3D9] mb-[40px]">
-            <div className="flex gap-[48px]">
+        <div className="mb-10 md:mb-14 lg:mb-[80px]">
+          <div className="border-b border-[#E8E3D9] mb-8 lg:mb-[40px] overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-6 md:gap-8 lg:gap-[48px] w-max md:w-auto">
               {['Details', 'How to Use', 'Ingredients', 'Reviews (342)', 'Virtual Try-On Gallery'].map((tab, idx) => (
-                <button key={tab} className={`pb-[16px] text-[16px] font-medium cursor-pointer transition-colors ${idx === 0 ? 'text-[#1A1A1A] border-b-[3px] border-[#8B7355]' : 'text-[#666666] hover:text-[#8B7355]'}`}>
+                <button key={tab} className={`pb-4 lg:pb-[16px] text-[14px] lg:text-[16px] font-medium cursor-pointer transition-colors whitespace-nowrap ${idx === 0 ? 'text-[#1A1A1A] border-b-[3px] border-[#8B7355]' : 'text-[#666666] hover:text-[#8B7355]'}`}>
                   {tab}
                 </button>
               ))}
@@ -324,29 +324,29 @@ export default function MakeupProductDetail() {
           </div>
 
           {/* How to Use */}
-          <div className="mb-[48px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">How to Use</h3>
-            <div className="space-y-[24px] mb-[32px]">
+          <div className="mb-10 lg:mb-[48px]">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">How to Use</h3>
+            <div className="space-y-5 lg:space-y-[24px] mb-6 lg:mb-[32px]">
               {applicationSteps.map((step) => (
-                <div key={step.step} className="flex gap-[24px]">
-                  <div className="w-[56px] h-[56px] flex-shrink-0 bg-[#C9A870] rounded-full flex items-center justify-center">
-                    <span className="text-[32px] font-semibold text-white">{step.step}</span>
+                <div key={step.step} className="flex gap-5 lg:gap-[24px]">
+                  <div className="w-[44px] h-[44px] lg:w-[56px] lg:h-[56px] flex-shrink-0 bg-[#C9A870] rounded-full flex items-center justify-center">
+                    <span className="text-[22px] lg:text-[32px] font-semibold text-white">{step.step}</span>
                   </div>
-                  <div className="flex-1 pt-[8px]">
-                    <p className="text-[15px] font-normal text-[#2B2B2B] mb-[6px]">{step.instruction}</p>
-                    {step.timing && <p className="text-[13px] font-light italic text-[#666666]">{step.timing}</p>}
+                  <div className="flex-1 pt-[6px] lg:pt-[8px]">
+                    <p className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B] mb-[4px] lg:mb-[6px]">{step.instruction}</p>
+                    {step.timing && <p className="text-[12px] lg:text-[13px] font-light italic text-[#666666]">{step.timing}</p>}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="bg-[#FDFBF7] rounded-[12px] p-[28px]">
-              <div className="flex items-start gap-[16px]">
-                <IoSparklesOutline className="w-[28px] h-[28px] text-[#C9A870] flex-shrink-0" />
+            <div className="bg-[#FDFBF7] rounded-[12px] p-5 lg:p-[28px]">
+              <div className="flex items-start gap-4 lg:gap-[16px]">
+                <IoSparklesOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#C9A870] flex-shrink-0" />
                 <div>
-                  <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-[12px]">Pro Tips</h4>
+                  <h4 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Pro Tips</h4>
                   <ul className="space-y-[8px]">
                     {['Use lip liner before application for longer-lasting color', 'Apply lip balm 5 minutes before for extra comfort', 'Try the virtual try-on feature to find your perfect shade'].map((tip, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-[14px] font-normal text-[#2B2B2B]">
+                      <li key={idx} className="flex items-start gap-2 text-[13px] lg:text-[14px] font-normal text-[#2B2B2B]">
                         <IoCheckmark className="w-[14px] h-[14px] text-[#8B7355] mt-1 flex-shrink-0" />
                         {tip}
                       </li>
@@ -358,88 +358,88 @@ export default function MakeupProductDetail() {
           </div>
 
           {/* Ingredients */}
-          <div className="mb-[48px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Ingredients</h3>
-            <div className="grid grid-cols-2 gap-[24px]">
+          <div className="mb-10 lg:mb-[48px]">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Ingredients</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-[24px]">
               {keyIngredients.map((ingredient, idx) => (
-                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[24px]">
-                  <div className="flex items-start justify-between mb-[12px]">
+                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px]">
+                  <div className="flex items-start justify-between mb-3 lg:mb-[12px]">
                     <div>
-                      <h4 className="text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{ingredient.name}</h4>
-                      <p className="text-[13px] font-light italic text-[#999999]">{ingredient.scientific}</p>
+                      <h4 className="text-[15px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{ingredient.name}</h4>
+                      <p className="text-[12px] lg:text-[13px] font-light italic text-[#999999]">{ingredient.scientific}</p>
                     </div>
-                    <div className="bg-[#C9A870] text-white text-[12px] font-medium px-[10px] py-[4px] rounded-full flex-shrink-0 ml-2">{ingredient.concentration}</div>
+                    <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[8px] lg:px-[10px] py-[4px] rounded-full flex-shrink-0 ml-2">{ingredient.concentration}</div>
                   </div>
-                  <p className="text-[14px] font-normal text-[#666666] leading-[1.5]">{ingredient.benefit}</p>
+                  <p className="text-[13px] lg:text-[14px] font-normal text-[#666666] leading-[1.5]">{ingredient.benefit}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Reviews */}
-          <div className="mb-[48px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Customer Reviews</h3>
-            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F1EA] rounded-[12px] p-[40px] mb-[40px]">
-              <div className="flex items-start gap-[48px]">
+          <div className="mb-10 lg:mb-[48px]">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Customer Reviews</h3>
+            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F1EA] rounded-[12px] p-6 md:p-8 lg:p-[40px] mb-8 lg:mb-[40px]">
+              <div className="flex flex-col md:flex-row items-start gap-6 lg:gap-[48px]">
                 <div className="text-center flex-shrink-0">
-                  <div className="text-[48px] font-semibold text-[#1A1A1A] mb-[8px]">4.9</div>
+                  <div className="text-[40px] lg:text-[48px] font-semibold text-[#1A1A1A] mb-[8px]">4.9</div>
                   <div className="flex gap-[4px] mb-[8px] justify-center">
-                    {[...Array(5)].map((_, idx) => <IoStarSharp key={idx} className="w-[20px] h-[20px] text-[#C9A870]" />)}
+                    {[...Array(5)].map((_, idx) => <IoStarSharp key={idx} className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />)}
                   </div>
-                  <div className="text-[15px] font-normal text-[#666666]">342 reviews</div>
+                  <div className="text-[14px] lg:text-[15px] font-normal text-[#666666]">342 reviews</div>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 w-full">
                   {[5, 4, 3, 2, 1].map((rating) => (
-                    <div key={rating} className="flex items-center gap-[12px] mb-[8px]">
-                      <span className="text-[14px] font-normal text-[#666666] w-[60px]">{rating} stars</span>
-                      <div className="flex-1 h-[8px] bg-white rounded-full overflow-hidden">
+                    <div key={rating} className="flex items-center gap-3 lg:gap-[12px] mb-[8px]">
+                      <span className="text-[13px] lg:text-[14px] font-normal text-[#666666] w-[52px] lg:w-[60px]">{rating} stars</span>
+                      <div className="flex-1 h-[7px] lg:h-[8px] bg-white rounded-full overflow-hidden">
                         <div className="h-full bg-[#C9A870] rounded-full" style={{ width: rating === 5 ? '90%' : rating === 4 ? '8%' : '2%' }} />
                       </div>
-                      <span className="text-[14px] font-normal text-[#666666] w-[40px] text-right">{rating === 5 ? '308' : rating === 4 ? '27' : '7'}</span>
+                      <span className="text-[13px] lg:text-[14px] font-normal text-[#666666] w-[36px] lg:w-[40px] text-right">{rating === 5 ? '308' : rating === 4 ? '27' : '7'}</span>
                     </div>
                   ))}
                 </div>
-                <button className="bg-[#8B7355] text-white text-[16px] font-semibold px-[32px] h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors flex-shrink-0">
+                <button className="w-full md:w-auto bg-[#8B7355] text-white text-[14px] lg:text-[16px] font-semibold px-6 lg:px-[32px] h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors flex-shrink-0">
                   Write a Review
                 </button>
               </div>
             </div>
 
-            <div className="flex gap-[16px] mb-[32px]">
+            <div className="flex gap-[10px] lg:gap-[16px] mb-6 lg:mb-[32px] overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
               {['Most Recent', 'Highest Rated', 'Verified Purchase'].map((filter) => (
-                <button key={filter} className="flex items-center gap-[8px] bg-white border border-[#E8E3D9] text-[#2B2B2B] text-[14px] font-normal px-[20px] h-[40px] rounded-[8px] cursor-pointer hover:border-[#8B7355] transition-colors">
-                  {filter} <IoChevronDown className="w-[16px] h-[16px]" />
+                <button key={filter} className="flex items-center gap-[6px] lg:gap-[8px] bg-white border border-[#E8E3D9] text-[#2B2B2B] text-[13px] lg:text-[14px] font-normal px-4 lg:px-[20px] h-[38px] lg:h-[40px] rounded-[8px] cursor-pointer hover:border-[#8B7355] transition-colors whitespace-nowrap flex-shrink-0">
+                  {filter} <IoChevronDown className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
                 </button>
               ))}
             </div>
 
-            <div className="space-y-[24px]">
+            <div className="space-y-5 lg:space-y-[24px]">
               {reviews.map((review, idx) => (
-                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[24px]">
-                  <div className="flex gap-[16px] mb-[16px]">
-                    <img src={review.avatar} alt={review.username} className="w-[48px] h-[48px] rounded-full object-cover flex-shrink-0" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-[8px] mb-[4px]">
-                        <span className="text-[15px] font-medium text-[#1A1A1A]">{review.username}</span>
-                        {review.verified && <div className="bg-[#8B7355] text-white text-[10px] font-normal px-[8px] py-[2px] rounded-full">Verified</div>}
+                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px]">
+                  <div className="flex gap-4 lg:gap-[16px] mb-4 lg:mb-[16px]">
+                    <img src={review.avatar} alt={review.username} className="w-[44px] h-[44px] lg:w-[48px] lg:h-[48px] rounded-full object-cover flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-[8px] mb-[4px] flex-wrap">
+                        <span className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A]">{review.username}</span>
+                        {review.verified && <div className="bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[8px] py-[2px] rounded-full">Verified</div>}
                       </div>
-                      <div className="flex items-center gap-[12px]">
+                      <div className="flex items-center gap-3 lg:gap-[12px]">
                         <div className="flex gap-[2px]"><Stars count={review.rating} /></div>
-                        <span className="text-[13px] font-light text-[#999999]">{review.date}</span>
+                        <span className="text-[12px] lg:text-[13px] font-light text-[#999999]">{review.date}</span>
                       </div>
                     </div>
                   </div>
-                  <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{review.title}</h4>
-                  <p className="text-[15px] font-normal text-[#3D3D3D] leading-[1.6] mb-[16px]">{review.text}</p>
-                  <div className="flex items-center justify-between pt-[16px] border-t border-[#F5F1EA]">
+                  <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{review.title}</h4>
+                  <p className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#3D3D3D] leading-[1.6] mb-4 lg:mb-[16px]">{review.text}</p>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-4 lg:pt-[16px] border-t border-[#F5F1EA]">
                     {review.tryOnMention ? (
-                      <div className="bg-[#F5F1EA] text-[#8B7355] text-[12px] font-normal px-[12px] py-[4px] rounded-full flex items-center gap-[4px]">
-                        <IoCameraOutline className="w-[14px] h-[14px]" /> Used Virtual Try-On
+                      <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-normal px-[10px] lg:px-[12px] py-[4px] rounded-full flex items-center gap-[4px] self-start">
+                        <IoCameraOutline className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px]" /> Used Virtual Try-On
                       </div>
                     ) : <div />}
-                    <div className="flex items-center gap-[16px]">
-                      <span className="text-[13px] font-normal text-[#666666]">Was this helpful?</span>
-                      <button className="text-[13px] font-normal text-[#8B7355] cursor-pointer hover:underline">Yes ({review.helpful})</button>
+                    <div className="flex items-center gap-3 lg:gap-[16px]">
+                      <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Was this helpful?</span>
+                      <button className="text-[12px] lg:text-[13px] font-normal text-[#8B7355] cursor-pointer hover:underline">Yes ({review.helpful})</button>
                     </div>
                   </div>
                 </div>
@@ -449,87 +449,87 @@ export default function MakeupProductDetail() {
         </div>
 
         {/* ── Related Products ── */}
-        <div className="mb-[80px]">
-          <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Complete Your Look</h3>
-          <div className="grid grid-cols-4 gap-[20px]">
+        <div className="mb-12 md:mb-16 lg:mb-[80px]">
+          <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Complete Your Look</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-[20px]">
             {relatedProducts.map((product, idx) => (
               <div key={idx} className="cursor-pointer group">
-                <div className="relative mb-[16px]">
-                  <img src={product.image} alt={product.name} className="w-full h-[320px] object-cover rounded-[8px]" />
-                  <button className="absolute bottom-[12px] right-[12px] w-[40px] h-[40px] bg-[#8B7355] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
-                    <IoBagOutline className="w-[20px] h-[20px] text-white" />
+                <div className="relative mb-3 lg:mb-[16px]">
+                  <img src={product.image} alt={product.name} className="w-full h-[200px] md:h-[240px] lg:h-[320px] object-cover rounded-[8px]" />
+                  <button className="absolute bottom-[10px] right-[10px] lg:bottom-[12px] lg:right-[12px] w-[36px] h-[36px] lg:w-[40px] lg:h-[40px] bg-[#8B7355] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
+                    <IoBagOutline className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] text-white" />
                   </button>
                 </div>
-                <div className="text-[12px] font-light italic text-[#8B7355] mb-[4px]">{product.brand}</div>
-                <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-[4px]">{product.name}</h4>
-                <div className="flex items-center gap-[6px] mb-[4px]">
-                  <div className="flex gap-[2px]">{[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)}</div>
-                  <span className="text-[13px] font-normal text-[#666666]">({product.reviews})</span>
+                <div className="text-[11px] lg:text-[12px] font-light italic text-[#8B7355] mb-[4px]">{product.brand}</div>
+                <h4 className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-[4px]">{product.name}</h4>
+                <div className="flex items-center gap-[4px] lg:gap-[6px] mb-[4px]">
+                  <div className="flex gap-[2px]">{[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px] text-[#C9A870]" />)}</div>
+                  <span className="text-[11px] lg:text-[13px] font-normal text-[#666666]">({product.reviews})</span>
                 </div>
-                <div className="text-[16px] font-semibold text-[#2B2B2B]">{product.price}</div>
+                <div className="text-[14px] md:text-[15px] lg:text-[16px] font-semibold text-[#2B2B2B]">{product.price}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* ── How It Works ── */}
-        <div className="w-full bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-[64px] mb-[80px]">
-          <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">How Virtual Try-On Works</h2>
-          <div className="flex justify-center gap-[48px]">
+        <div className="w-full bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-6 md:p-10 lg:p-[64px] mb-12 md:mb-16 lg:mb-[80px]">
+          <h2 className="text-[28px] md:text-[34px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">How Virtual Try-On Works</h2>
+          <div className="flex flex-col md:flex-row justify-center gap-5 md:gap-6 lg:gap-[48px]">
             {howItWorksSteps.map((step) => (
-              <div key={step.number} className="w-[360px] bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px] text-center">
-                <div className="flex justify-center mb-[20px]">
-                  <img src={step.image} alt={step.title} className="w-[120px] h-[120px] object-cover rounded-[8px]" />
+              <div key={step.number} className="w-full md:w-auto md:flex-1 lg:w-[360px] lg:flex-none bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-6 lg:p-[32px] text-center">
+                <div className="flex justify-center mb-4 lg:mb-[20px]">
+                  <img src={step.image} alt={step.title} className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px] object-cover rounded-[8px]" />
                 </div>
-                <div className="flex justify-center mb-[16px]">
-                  <div className="w-[48px] h-[48px] bg-[#8B7355] text-white text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div>
+                <div className="flex justify-center mb-3 lg:mb-[16px]">
+                  <div className="w-[40px] h-[40px] lg:w-[48px] lg:h-[48px] bg-[#8B7355] text-white text-[20px] lg:text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div>
                 </div>
-                <h4 className="text-[20px] font-medium text-[#1A1A1A] mb-[8px]">{step.title}</h4>
-                <p className="text-[15px] font-normal text-[#666666] leading-[1.6]">{step.desc}</p>
+                <h4 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-[8px]">{step.title}</h4>
+                <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.6]">{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* ── Pro Tips + Customer Try-Ons ── */}
-        <div className="flex gap-[32px] mb-[80px]">
-          <div className="w-[380px] flex-shrink-0 bg-[#F5F1EA] rounded-[12px] p-[32px]">
-            <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-[24px]">Tips for Best Virtual Try-On Results</h3>
-            <div className="space-y-[20px]">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-[32px] mb-12 md:mb-16 lg:mb-[80px]">
+          <div className="w-full md:w-[280px] lg:w-[380px] flex-shrink-0 bg-[#F5F1EA] rounded-[12px] p-5 lg:p-[32px]">
+            <h3 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5 lg:mb-[24px]">Tips for Best Virtual Try-On Results</h3>
+            <div className="space-y-4 lg:space-y-[20px]">
               {proTips.map((tip, idx) => (
-                <div key={idx} className="flex gap-[12px]">
-                  <tip.icon className="w-[24px] h-[24px] text-[#8B7355] flex-shrink-0 mt-[2px]" />
+                <div key={idx} className="flex gap-3 lg:gap-[12px]">
+                  <tip.icon className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#8B7355] flex-shrink-0 mt-[2px]" />
                   <div>
-                    <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-[4px]">{tip.title}</h4>
-                    <p className="text-[14px] font-normal text-[#666666] leading-[1.5]">{tip.desc}</p>
+                    <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[4px]">{tip.title}</h4>
+                    <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] leading-[1.5]">{tip.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex-1">
-            <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-[24px]">See How Customers Style It</h3>
-            <div className="grid grid-cols-3 gap-[24px]">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-5 lg:mb-[24px]">See How Customers Style It</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-[24px]">
               {customerTryOns.map((item, idx) => (
                 <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden">
                   <div className="relative group">
-                    <img src={item.image} alt={item.username} className="w-full h-[340px] object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-[20px]">
-                      <button className="w-full h-[48px] bg-white text-[#8B7355] text-[14px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+                    <img src={item.image} alt={item.username} className="w-full h-[260px] md:h-[280px] lg:h-[340px] object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4 lg:p-[20px]">
+                      <button className="w-full h-[44px] lg:h-[48px] bg-white text-[#8B7355] text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                         Try This Look
                       </button>
                     </div>
                   </div>
-                  <div className="p-[16px]">
+                  <div className="p-3 lg:p-[16px]">
                     <div className="flex items-center gap-[8px] mb-[8px]">
-                      <img src={item.avatar} alt={item.username} className="w-[32px] h-[32px] rounded-full object-cover" />
-                      <span className="text-[14px] font-medium text-[#1A1A1A]">{item.username}</span>
+                      <img src={item.avatar} alt={item.username} className="w-[28px] h-[28px] lg:w-[32px] lg:h-[32px] rounded-full object-cover" />
+                      <span className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A]">{item.username}</span>
                     </div>
-                    <p className="text-[13px] font-normal text-[#666666] mb-[12px]">Shade: {item.shade}</p>
-                    <div className="flex items-center gap-[16px] text-[13px] font-normal text-[#666666]">
-                      <span className="flex items-center gap-[4px]"><IoHeartOutline className="w-[14px] h-[14px]" />{item.likes}</span>
-                      <span className="flex items-center gap-[4px]"><IoShareOutline className="w-[14px] h-[14px]" />{item.shares}</span>
+                    <p className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-3 lg:mb-[12px]">Shade: {item.shade}</p>
+                    <div className="flex items-center gap-3 lg:gap-[16px] text-[12px] lg:text-[13px] font-normal text-[#666666]">
+                      <span className="flex items-center gap-[4px]"><IoHeartOutline className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px]" />{item.likes}</span>
+                      <span className="flex items-center gap-[4px]"><IoShareOutline className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px]" />{item.shares}</span>
                     </div>
                   </div>
                 </div>
@@ -539,29 +539,31 @@ export default function MakeupProductDetail() {
         </div>
 
         {/* ── Trust Banner ── */}
-        <div className="bg-[#FDFBF7] rounded-[12px] p-[40px] mb-[80px]">
-          <div className="grid grid-cols-3 gap-[48px]">
+        <div className="bg-[#FDFBF7] rounded-[12px] p-6 md:p-8 lg:p-[40px] mb-12 md:mb-16 lg:mb-[80px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[48px]">
             {[
               { icon: IoCarOutline, title: 'Complimentary Shipping', desc: 'Free shipping on orders $75+' },
               { icon: IoReturnDownBackOutline, title: '30-Day Return Policy', desc: 'Full refund if not satisfied' },
               { icon: IoShieldCheckmarkOutline, title: '100% Authentic Products', desc: 'Guaranteed genuine Shan Loray' },
             ].map((item, idx) => (
-              <div key={idx} className="text-center">
-                <item.icon className="w-[32px] h-[32px] text-[#8B7355] mx-auto mb-[12px]" />
-                <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-[6px]">{item.title}</h4>
-                <p className="text-[14px] font-light text-[#666666]">{item.desc}</p>
+              <div key={idx} className="flex md:flex-col md:items-center md:text-center items-center gap-4 md:gap-0">
+                <item.icon className="w-[26px] h-[26px] lg:w-[32px] lg:h-[32px] text-[#8B7355] md:mx-auto md:mb-[12px] flex-shrink-0" />
+                <div>
+                  <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] md:mb-[6px]">{item.title}</h4>
+                  <p className="text-[12px] lg:text-[14px] font-light text-[#666666]">{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         {/* ── Newsletter ── */}
-        <div className="min-h-[180px] bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] flex flex-col items-center justify-center p-[48px]">
-          <h3 className="text-[36px] font-medium text-[#1A1A1A] mb-[12px]">Get Beauty Tips & Exclusive Offers</h3>
-          <p className="text-[15px] font-normal text-[#666666] mb-[24px]">Join 50,000+ beauty lovers</p>
-          <div className="flex items-center gap-[12px]">
-            <input type="email" placeholder="Enter your email" className="w-[360px] h-[56px] px-[20px] bg-white text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-            <button className="h-[56px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
+        <div className="bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] flex flex-col items-center justify-center p-8 md:p-10 lg:p-[48px]">
+          <h3 className="text-[24px] md:text-[30px] lg:text-[36px] font-medium text-[#1A1A1A] mb-[10px] lg:mb-[12px] text-center">Get Beauty Tips & Exclusive Offers</h3>
+          <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-5 lg:mb-[24px] text-center">Join 50,000+ beauty lovers</p>
+          <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
+            <input type="email" placeholder="Enter your email" className="w-full md:w-[300px] lg:w-[360px] h-[52px] lg:h-[56px] px-[20px] bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+            <button className="w-full md:w-auto h-[52px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
           </div>
         </div>
 
