@@ -838,7 +838,7 @@ function CollectionMobile() {
   )
 }
 
-// ─── Desktop ──────────────────────────────────────────────────────────────────
+// ─── Desktop (+ Tablet responsive) ───────────────────────────────────────────
 function CollectionDesktop() {
   const location = useLocation()
 
@@ -853,48 +853,48 @@ function CollectionDesktop() {
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* Hero Banner */}
-      <div className="min-h-[480px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-[120px]">
-        <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[500px] h-[480px] object-cover opacity-15" />
-        <div className="w-[650px] relative z-10">
-          <p className="text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">EXCLUSIVE COLLECTIONS</p>
-          <h1 className="text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-6">Curated for You</h1>
-          <p className="text-[20px] font-normal text-[#666666] mb-8">Discover thoughtfully assembled beauty collections for every occasion</p>
-          <div className="w-[140px] h-[4px] bg-[#C9A870] shadow-[0_2px_8px_rgba(201,168,112,0.3)]" />
+      <div className="min-h-[360px] md:min-h-[420px] lg:min-h-[480px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px]">
+        <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[200px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-15" />
+        <div className="w-full max-w-[650px] relative z-10">
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">EXCLUSIVE COLLECTIONS</p>
+          <h1 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">Curated for You</h1>
+          <p className="text-[16px] md:text-[18px] lg:text-[20px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">Discover thoughtfully assembled beauty collections for every occasion</p>
+          <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870] shadow-[0_2px_8px_rgba(201,168,112,0.3)]" />
         </div>
-        <div className="absolute right-[180px] top-1/2 -translate-y-1/2">
-          <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop" alt="Featured Collection" className="w-[400px] h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
+        <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
+          <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop" alt="Featured Collection" className="w-[320px] h-[320px] lg:w-[400px] lg:h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
 
       {/* Breadcrumb */}
-      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#666666]">Collections</span>
+      <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
+        <span className="text-[14px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
+        <span className="text-[14px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[14px] lg:text-[15px] font-normal text-[#666666]">Collections</span>
       </div>
 
       {/* Main Content */}
-      <div className="px-[120px] py-[64px]">
+      <div className="px-6 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
 
         {/* Collections Grid */}
-        <div className="grid grid-cols-2 gap-[20px] mb-[64px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10 md:mb-12 lg:mb-[64px]">
           {desktopCollections.map((collection, idx) => (
-            <div key={idx} className={`${idx < 2 ? 'h-[720px]' : 'h-[420px]'} bg-white rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.10)] group cursor-pointer relative`}>
+            <div key={idx} className={`${idx < 2 ? 'h-[420px] md:h-[560px] lg:h-[720px]' : 'h-[300px] md:h-[360px] lg:h-[420px]'} bg-white rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.10)] group cursor-pointer relative`}>
               <div className="relative w-full h-full">
                 <img src={collection.image} alt={collection.name} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                {collection.badge && <div className="absolute top-[20px] right-[20px] px-[16px] py-[8px] bg-[#C9A870] text-white text-[12px] font-medium rounded-full">LIMITED</div>}
-                <div className="absolute bottom-0 left-0 right-0 p-[32px] text-white">
-                  <p className="text-[14px] font-light italic tracking-[2px] mb-2">{collection.subtitle}</p>
-                  <h3 className={`${idx < 2 ? 'text-[48px]' : 'text-[36px]'} font-bold mb-3`}>{collection.name}</h3>
-                  <p className="text-[18px] font-normal mb-4">{collection.description}</p>
+                {collection.badge && <div className="absolute top-[16px] right-[16px] lg:top-[20px] lg:right-[20px] px-[14px] py-[7px] lg:px-[16px] lg:py-[8px] bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium rounded-full">LIMITED</div>}
+                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 lg:p-[32px] text-white">
+                  <p className="text-[12px] lg:text-[14px] font-light italic tracking-[2px] mb-2">{collection.subtitle}</p>
+                  <h3 className={`${idx < 2 ? 'text-[28px] md:text-[36px] lg:text-[48px]' : 'text-[22px] md:text-[28px] lg:text-[36px]'} font-bold mb-2 lg:mb-3`}>{collection.name}</h3>
+                  <p className="text-[14px] md:text-[15px] lg:text-[18px] font-normal mb-3 lg:mb-4">{collection.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-[16px] font-normal">{collection.products}</span>
-                    <span className="text-[20px] font-semibold">{collection.price}</span>
+                    <span className="text-[13px] lg:text-[16px] font-normal">{collection.products}</span>
+                    <span className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold">{collection.price}</span>
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
-                  <button className="opacity-0 group-hover:opacity-100 px-[32px] py-[14px] bg-white text-[#8B7355] text-[15px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-opacity duration-300">
+                  <button className="opacity-0 group-hover:opacity-100 px-[24px] lg:px-[32px] py-[12px] lg:py-[14px] bg-white text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-opacity duration-300">
                     Explore Collection
                   </button>
                 </div>
@@ -904,51 +904,51 @@ function CollectionDesktop() {
         </div>
 
         {/* Browse by Category */}
-        <div id="browse-by-category" className="mb-[48px]">
-          <h2 className="text-[28px] font-medium text-[#1A1A1A] text-center mb-[32px]">Browse by Category</h2>
-          <div className="flex items-center justify-center gap-[12px] flex-wrap">
+        <div id="browse-by-category" className="mb-10 md:mb-12 lg:mb-[48px]">
+          <h2 className="text-[22px] md:text-[25px] lg:text-[28px] font-medium text-[#1A1A1A] text-center mb-6 lg:mb-[32px]">Browse by Category</h2>
+          <div className="flex items-center justify-center gap-[10px] lg:gap-[12px] flex-wrap">
             {desktopCategories.map((cat, idx) => (
-              <div key={cat} className={`px-[20px] py-[10px] rounded-full cursor-pointer transition-all ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#8B7355] hover:text-white'}`}>
-                <span className="text-[14px] font-medium">{cat}</span>
+              <div key={cat} className={`px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] rounded-full cursor-pointer transition-all ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#8B7355] hover:text-white'}`}>
+                <span className="text-[13px] lg:text-[14px] font-medium">{cat}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Featured Products */}
-        <div className="flex gap-[20px] mb-[48px]">
-          <div className="w-[460px] h-[560px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer">
-            <div className="relative w-full h-[380px]">
+        <div className="flex flex-col md:flex-row gap-5 mb-10 md:mb-12 lg:mb-[48px]">
+          <div className="w-full md:w-[340px] lg:w-[460px] md:h-[480px] lg:h-[560px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer">
+            <div className="relative w-full h-[260px] md:h-[300px] lg:h-[380px]">
               <img src={featuredProducts[0].image} alt={featuredProducts[0].name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute bottom-0 left-0 right-0 h-[180px] bg-gradient-to-t from-black/50 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-[24px] text-white">
-                <p className="text-[17px] font-normal mb-2">{featuredProducts[0].description}</p>
-                <h3 className="text-[28px] font-medium mb-3">{featuredProducts[0].name}</h3>
-                <p className="text-[24px] font-semibold">{featuredProducts[0].price}</p>
+              <div className="absolute bottom-0 left-0 right-0 h-[160px] bg-gradient-to-t from-black/50 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5 lg:p-[24px] text-white">
+                <p className="text-[14px] lg:text-[17px] font-normal mb-1 lg:mb-2">{featuredProducts[0].description}</p>
+                <h3 className="text-[20px] lg:text-[28px] font-medium mb-2 lg:mb-3">{featuredProducts[0].name}</h3>
+                <p className="text-[20px] lg:text-[24px] font-semibold">{featuredProducts[0].price}</p>
               </div>
             </div>
-            <div className="p-[24px]">
-              <p className="text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
+            <div className="p-5 lg:p-[24px]">
+              <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
               <div className="flex items-center gap-[6px]">
-                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)}
-                <span className="text-[13px] font-normal text-[#999999] ml-1">({featuredProducts[0].reviews})</span>
+                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
+                <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({featuredProducts[0].reviews})</span>
               </div>
             </div>
           </div>
-          <div className="flex-1 flex flex-col gap-[20px]">
+          <div className="flex-1 flex flex-col gap-4 lg:gap-[20px]">
             {[featuredProducts[1], featuredProducts[2]].map((product, idx) => (
-              <div key={idx} className="w-full h-[270px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer flex">
-                <div className="w-[280px] h-full relative overflow-hidden">
+              <div key={idx} className="w-full h-[180px] md:h-[220px] lg:h-[270px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer flex">
+                <div className="w-[160px] md:w-[220px] lg:w-[280px] h-full relative overflow-hidden flex-shrink-0">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
-                <div className="flex-1 p-[24px] flex flex-col justify-center">
-                  <p className="text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
-                  <h4 className="text-[22px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
-                  <p className="text-[15px] font-normal text-[#999999] leading-[1.5] mb-3">{product.description}</p>
-                  <p className="text-[22px] font-semibold text-[#1A1A1A] mb-3">{product.price}</p>
+                <div className="flex-1 p-4 md:p-5 lg:p-[24px] flex flex-col justify-center">
+                  <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">Shan Loray</p>
+                  <h4 className="text-[16px] md:text-[18px] lg:text-[22px] font-medium text-[#2B2B2B] leading-[1.2] mb-1 lg:mb-2">{product.name}</h4>
+                  <p className="text-[13px] lg:text-[15px] font-normal text-[#999999] leading-[1.5] mb-2 lg:mb-3 line-clamp-2">{product.description}</p>
+                  <p className="text-[18px] lg:text-[22px] font-semibold text-[#1A1A1A] mb-2 lg:mb-3">{product.price}</p>
                   <div className="flex items-center gap-[6px]">
-                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)}
-                    <span className="text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
+                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[13px] h-[13px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
+                    <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
                   </div>
                 </div>
               </div>
@@ -957,40 +957,40 @@ function CollectionDesktop() {
         </div>
 
         {/* Square Products */}
-        <div className="grid grid-cols-3 gap-[20px] mb-[48px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10 md:mb-12 lg:mb-[48px]">
           {squareProducts.map((product, idx) => (
             <div key={idx} className="group cursor-pointer">
-              <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
+              <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 lg:mb-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
                 <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-              <p className="text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
-              <h4 className="text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
-              <p className="text-[15px] font-normal text-[#999999] leading-[1.5] mb-2">{product.description}</p>
-              <p className="text-[19px] font-semibold text-[#1A1A1A] mb-2">{product.price}</p>
+              <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
+              <h4 className="text-[17px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
+              <p className="text-[13px] lg:text-[15px] font-normal text-[#999999] leading-[1.5] mb-2">{product.description}</p>
+              <p className="text-[17px] lg:text-[19px] font-semibold text-[#1A1A1A] mb-2">{product.price}</p>
               <div className="flex items-center gap-[6px]">
-                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)}
-                <span className="text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
+                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
+                <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
               </div>
             </div>
           ))}
         </div>
 
         {/* Rectangular Products */}
-        <div className="grid grid-cols-2 gap-[20px] mb-[96px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16 md:mb-20 lg:mb-[96px]">
           {rectangularProducts.map((product, idx) => (
-            <div key={idx} className="w-full h-[400px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
-              <div className="relative w-full h-[280px] overflow-hidden">
+            <div key={idx} className="w-full bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
+              <div className="relative w-full h-[200px] md:h-[240px] lg:h-[280px] overflow-hidden">
                 <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-              <div className="p-[24px]">
-                <p className="text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
-                <h4 className="text-[22px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
-                <p className="text-[15px] font-normal text-[#999999] leading-[1.5] mb-3">{product.description}</p>
+              <div className="p-5 lg:p-[24px]">
+                <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
+                <h4 className="text-[18px] lg:text-[22px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
+                <p className="text-[13px] lg:text-[15px] font-normal text-[#999999] leading-[1.5] mb-3">{product.description}</p>
                 <div className="flex items-center justify-between">
-                  <p className="text-[22px] font-semibold text-[#1A1A1A]">{product.price}</p>
+                  <p className="text-[18px] lg:text-[22px] font-semibold text-[#1A1A1A]">{product.price}</p>
                   <div className="flex items-center gap-[6px]">
-                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)}
-                    <span className="text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
+                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
+                    <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
                   </div>
                 </div>
               </div>
@@ -999,39 +999,39 @@ function CollectionDesktop() {
         </div>
 
         {/* Benefits */}
-        <div className="grid grid-cols-3 gap-[64px] mb-[96px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 lg:gap-[64px] mb-16 md:mb-20 lg:mb-[96px]">
           {benefits.map((benefit, idx) => (
             <div key={idx} className="flex flex-col items-center text-center">
-              <div className="w-[64px] h-[64px] rounded-full bg-[#F5F1EA] flex items-center justify-center mb-5">
-                <benefit.icon className="w-[32px] h-[32px] text-[#C9A870]" />
+              <div className="w-[56px] h-[56px] lg:w-[64px] lg:h-[64px] rounded-full bg-[#F5F1EA] flex items-center justify-center mb-4 lg:mb-5">
+                <benefit.icon className="w-[28px] h-[28px] lg:w-[32px] lg:h-[32px] text-[#C9A870]" />
               </div>
-              <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-3">{benefit.title}</h4>
-              <p className="text-[15px] font-normal text-[#666666] leading-[1.6]">{benefit.description}</p>
+              <h4 className="text-[17px] lg:text-[18px] font-medium text-[#1A1A1A] mb-3">{benefit.title}</h4>
+              <p className="text-[14px] lg:text-[15px] font-normal text-[#666666] leading-[1.6]">{benefit.description}</p>
             </div>
           ))}
         </div>
 
         {/* Newsletter */}
-        <div className="min-h-[140px] bg-[#F5F1EA] rounded-[16px] flex flex-col items-center justify-center px-[64px] mb-[96px]">
-          <h3 className="text-[32px] font-medium text-[#1A1A1A] mb-2">Join Our Beauty Circle</h3>
-          <p className="text-[16px] font-normal text-[#666666] mb-6">Get early access to new collections</p>
-          <div className="flex items-center gap-[12px]">
-            <input type="email" placeholder="Enter your email" className="w-[360px] h-[56px] px-5 bg-white text-[15px] font-normal text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-            <button className="h-[56px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
+        <div className="bg-[#F5F1EA] rounded-[16px] flex flex-col items-center justify-center px-6 md:px-10 lg:px-[64px] py-10 lg:py-0 lg:min-h-[140px] mb-16 md:mb-20 lg:mb-[96px]">
+          <h3 className="text-[24px] md:text-[28px] lg:text-[32px] font-medium text-[#1A1A1A] mb-2 text-center">Join Our Beauty Circle</h3>
+          <p className="text-[14px] lg:text-[16px] font-normal text-[#666666] mb-6 text-center">Get early access to new collections</p>
+          <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
+            <input type="email" placeholder="Enter your email" className="w-full md:w-[300px] lg:w-[360px] h-[52px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] font-normal text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+            <button className="w-full md:w-auto h-[52px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
           </div>
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-center gap-[8px] mb-[96px]">
-          <button className="w-[44px] h-[44px] border border-[#E8E3D9] rounded-[6px] flex items-center justify-center cursor-pointer hover:bg-[#F5F1EA] transition-colors">
-            <IoChevronBack className="w-[20px] h-[20px] text-[#666666]" />
+        <div className="flex items-center justify-center gap-[8px] mb-16 md:mb-20 lg:mb-[96px]">
+          <button className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] flex items-center justify-center cursor-pointer hover:bg-[#F5F1EA] transition-colors">
+            <IoChevronBack className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
           </button>
-          <button className="w-[44px] h-[44px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[6px]">1</button>
+          <button className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[6px]">1</button>
           {[2, 3].map((num) => (
-            <button key={num} className="w-[44px] h-[44px] border border-[#E8E3D9] rounded-[6px] text-[15px] font-medium text-[#3D3D3D] cursor-pointer hover:bg-[#F5F1EA] transition-colors">{num}</button>
+            <button key={num} className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] text-[14px] lg:text-[15px] font-medium text-[#3D3D3D] cursor-pointer hover:bg-[#F5F1EA] transition-colors">{num}</button>
           ))}
-          <button className="w-[44px] h-[44px] border border-[#E8E3D9] rounded-[6px] flex items-center justify-center cursor-pointer hover:bg-[#F5F1EA] transition-colors">
-            <IoChevronForward className="w-[20px] h-[20px] text-[#666666]" />
+          <button className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] flex items-center justify-center cursor-pointer hover:bg-[#F5F1EA] transition-colors">
+            <IoChevronForward className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
           </button>
         </div>
 
