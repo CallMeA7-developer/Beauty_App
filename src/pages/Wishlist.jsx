@@ -463,130 +463,154 @@ function WishlistMobile() {
   )
 }
 
-// ─── Desktop ──────────────────────────────────────────────────────────────────
+// ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function WishlistDesktop() {
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
-      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Account Dashboard</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#666666]">Wishlist</span>
+
+      {/* Breadcrumb */}
+      <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">Account Dashboard</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Wishlist</span>
       </div>
-      <div className="min-h-[140px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-[120px]">
+
+      {/* Page Header */}
+      <div className="min-h-[100px] md:min-h-[120px] lg:min-h-[140px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-6 md:px-[60px] lg:px-[120px]">
         <div className="max-w-[1200px] w-full">
-          <h1 className="text-[48px] font-semibold text-[#1A1A1A]">My Wishlist</h1>
-          <p className="text-[18px] font-normal text-[#666666] mt-[8px]">12 saved items awaiting your attention</p>
+          <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold text-[#1A1A1A]">My Wishlist</h1>
+          <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">12 saved items awaiting your attention</p>
         </div>
       </div>
-      <div className="min-h-[600px] px-[120px] py-[48px]">
-        <div className="max-w-[1200px] mx-auto flex gap-[40px]">
-          <div className="w-[320px] flex-shrink-0">
-            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[28px] mb-[24px]">
+
+      {/* Main Content */}
+      <div className="px-6 md:px-[60px] lg:px-[120px] py-8 md:py-10 lg:py-[48px]">
+        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-[40px]">
+
+          {/* Sidebar */}
+          <div className="w-full md:w-[240px] lg:w-[320px] flex-shrink-0">
+
+            {/* User Card */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[28px] mb-5 lg:mb-[24px]">
               <div className="flex flex-col items-center">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&h=240&fit=crop" alt="User Avatar" className="w-[120px] h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-[16px]" />
-                <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">Alexandra Chen</h2>
-                <div className="bg-[#C9A870] text-white text-[12px] font-medium px-[16px] py-[6px] rounded-full mb-[16px]">Elite Member</div>
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&h=240&fit=crop" alt="User Avatar" className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-4 lg:mb-[16px]" />
+                <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">Alexandra Chen</h2>
+                <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[14px] lg:px-[16px] py-[5px] lg:py-[6px] rounded-full mb-4 lg:mb-[16px]">Elite Member</div>
                 <div className="flex items-center gap-[8px]">
-                  <IoSparkles className="w-[20px] h-[20px] text-[#C9A870]" />
-                  <span className="text-[20px] font-medium text-[#8B7355]">2,450 Points</span>
+                  <IoSparkles className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
+                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">2,450 Points</span>
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[8px] mb-[24px]">
+
+            {/* Navigation */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[8px] mb-5 lg:mb-[24px]">
               {navigationItems.map((item) => (
-                <div key={item.label} className={`flex items-center justify-between h-[56px] px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
-                  <div className="flex items-center gap-[16px]">
-                    <item.icon className={`w-[22px] h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
-                    <span className={`text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
+                <div key={item.label} className={`flex items-center justify-between h-[48px] lg:h-[56px] px-3 lg:px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
+                  <div className="flex items-center gap-3 lg:gap-[16px]">
+                    <item.icon className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
+                    <span className={`text-[13px] lg:text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
                   </div>
-                  {item.badge ? <div className="bg-[#C9A870] text-white text-[11px] font-medium px-[8px] py-[2px] rounded-full">{item.badge}</div>
-                    : item.tag ? <div className="bg-[#8B7355] text-white text-[10px] font-normal px-[8px] py-[2px] rounded-[4px]">{item.tag}</div> : null}
+                  {item.badge ? <div className="bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium px-[7px] lg:px-[8px] py-[2px] rounded-full">{item.badge}</div>
+                    : item.tag ? <div className="hidden md:block bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[7px] lg:px-[8px] py-[2px] rounded-[4px]">{item.tag}</div> : null}
                 </div>
               ))}
             </div>
-            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[24px]">
-              <div className="grid grid-cols-3 gap-[16px]">
+
+            {/* Stats */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[24px]">
+              <div className="grid grid-cols-3 gap-3 lg:gap-[16px]">
                 {[{ label: 'Total Orders', value: '24' }, { label: 'Wishlist Items', value: '12' }, { label: 'Reviews Written', value: '8' }].map((stat) => (
                   <div key={stat.label} className="text-center">
-                    <div className="text-[24px] font-semibold text-[#8B7355] mb-[4px]">{stat.value}</div>
-                    <div className="text-[11px] font-light text-[#666666]">{stat.label}</div>
+                    <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{stat.value}</div>
+                    <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          <div className="flex-1">
-            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[24px] flex items-center justify-between mb-[24px]">
+
+          {/* Main Area */}
+          <div className="flex-1 min-w-0">
+
+            {/* Toolbar */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-4 lg:p-[24px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 lg:mb-[24px]">
               <div className="flex items-center gap-[12px]">
-                <span className="text-[15px] font-normal text-[#666666]">Sort by:</span>
+                <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Sort by:</span>
                 <div className="flex items-center gap-[8px] cursor-pointer">
-                  <span className="text-[15px] font-medium text-[#1A1A1A]">Latest Added</span>
-                  <IoChevronDown className="w-[16px] h-[16px] text-[#666666]" />
+                  <span className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A]">Latest Added</span>
+                  <IoChevronDown className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] text-[#666666]" />
                 </div>
               </div>
-              <div className="flex items-center gap-[12px]">
-                <button className="h-[40px] px-[20px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] font-medium rounded-[8px] cursor-pointer flex items-center gap-[8px] hover:border-[#8B7355] transition-colors">
-                  <IoFunnelOutline className="w-[16px] h-[16px]" />Filter
+              <div className="flex items-center gap-[10px] lg:gap-[12px]">
+                <button className="h-[38px] lg:h-[40px] px-4 lg:px-[20px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer flex items-center gap-[6px] lg:gap-[8px] hover:border-[#8B7355] transition-colors">
+                  <IoFunnelOutline className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px]" />Filter
                 </button>
-                <button className="h-[40px] px-[20px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] font-medium rounded-[8px] cursor-pointer flex items-center gap-[8px] hover:border-[#8B7355] transition-colors">
-                  <IoShareSocialOutline className="w-[16px] h-[16px]" />Share Wishlist
+                <button className="h-[38px] lg:h-[40px] px-4 lg:px-[20px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer flex items-center gap-[6px] lg:gap-[8px] hover:border-[#8B7355] transition-colors">
+                  <IoShareSocialOutline className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px]" />Share Wishlist
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-[24px] mb-[24px]">
+
+            {/* Product Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-[24px] mb-5 lg:mb-[24px]">
               {wishlistProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[20px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300">
-                  <div className="relative w-full h-[280px] rounded-[8px] overflow-hidden mb-[16px] group">
+                <div key={product.id} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-4 lg:p-[20px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300">
+                  <div className="relative w-full h-[220px] md:h-[240px] lg:h-[280px] rounded-[8px] overflow-hidden mb-4 lg:mb-[16px] group">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <button className="absolute top-[12px] right-[12px] w-[36px] h-[36px] rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center">
-                      <IoHeart className="w-[20px] h-[20px] text-[#C84848]" />
+                    <button className="absolute top-[12px] right-[12px] w-[34px] h-[34px] lg:w-[36px] lg:h-[36px] rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center">
+                      <IoHeart className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C84848]" />
                     </button>
-                    {product.stock === 'Low Stock' && <div className="absolute top-[12px] left-[12px] bg-[#E5A84D] text-white text-[11px] font-medium px-[10px] py-[4px] rounded-full">Low Stock</div>}
+                    {product.stock === 'Low Stock' && <div className="absolute top-[12px] left-[12px] bg-[#E5A84D] text-white text-[10px] lg:text-[11px] font-medium px-[10px] py-[4px] rounded-full">Low Stock</div>}
                   </div>
-                  <div className="mb-[16px]">
-                    <div className="text-[13px] font-medium text-[#8B7355] mb-[4px]">{product.brand}</div>
-                    <h3 className="text-[18px] font-semibold text-[#1A1A1A] mb-[8px] leading-[1.3]">{product.name}</h3>
+                  <div className="mb-4 lg:mb-[16px]">
+                    <div className="text-[12px] lg:text-[13px] font-medium text-[#8B7355] mb-[4px]">{product.brand}</div>
+                    <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[8px] leading-[1.3]">{product.name}</h3>
                     <div className="flex items-center gap-[8px] mb-[8px]">
-                      <div className="flex items-center gap-[2px]">{[1,2,3,4,5].map((s) => <IoStarSharp key={s} className="w-[14px] h-[14px] text-[#C9A870]" />)}</div>
-                      <span className="text-[13px] text-[#999999]">({product.reviews})</span>
+                      <div className="flex items-center gap-[2px]">{[1,2,3,4,5].map((s) => <IoStarSharp key={s} className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px] text-[#C9A870]" />)}</div>
+                      <span className="text-[12px] lg:text-[13px] text-[#999999]">({product.reviews})</span>
                     </div>
-                    <div className="flex items-center gap-[8px] mb-[8px]">
-                      {product.originalPrice !== product.currentPrice && <span className="text-[16px] text-[#999999] line-through">${product.originalPrice}</span>}
-                      <span className="text-[22px] font-semibold text-[#1A1A1A]">${product.currentPrice}</span>
-                      {product.originalPrice !== product.currentPrice && <span className="text-[13px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Save ${product.originalPrice - product.currentPrice}</span>}
+                    <div className="flex items-center gap-[8px] mb-[8px] flex-wrap">
+                      {product.originalPrice !== product.currentPrice && <span className="text-[14px] lg:text-[16px] text-[#999999] line-through">${product.originalPrice}</span>}
+                      <span className="text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">${product.currentPrice}</span>
+                      {product.originalPrice !== product.currentPrice && <span className="text-[12px] lg:text-[13px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Save ${product.originalPrice - product.currentPrice}</span>}
                     </div>
-                    <div className={`inline-block px-[12px] py-[4px] rounded-[4px] text-[12px] font-medium ${product.stock === 'In Stock' ? 'bg-[#F0F8F0] text-[#7BA85D]' : 'bg-[#FFF4E6] text-[#E5A84D]'}`}>{product.stock}</div>
+                    <div className={`inline-block px-[10px] lg:px-[12px] py-[4px] rounded-[4px] text-[11px] lg:text-[12px] font-medium ${product.stock === 'In Stock' ? 'bg-[#F0F8F0] text-[#7BA85D]' : 'bg-[#FFF4E6] text-[#E5A84D]'}`}>{product.stock}</div>
                   </div>
-                  <div className="space-y-[12px]">
-                    <button className="w-full h-[48px] bg-[#8B7355] text-white text-[16px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
-                      <IoBagOutline className="w-[18px] h-[18px]" />Add to Cart
+                  <div className="space-y-3 lg:space-y-[12px]">
+                    <button className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[16px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
+                      <IoBagOutline className="w-[17px] h-[17px] lg:w-[18px] lg:h-[18px]" />Add to Cart
                     </button>
-                    <button className="w-full text-[14px] font-medium text-[#C84848] underline">Remove</button>
+                    <button className="w-full text-[13px] lg:text-[14px] font-medium text-[#C84848] underline">Remove</button>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="bg-[#F5F1EA] rounded-[12px] p-[24px] flex items-center justify-between mb-[32px]">
-              <button className="text-[14px] font-medium text-[#C84848] underline">Clear All Items</button>
-              <button className="h-[48px] px-[32px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[15px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all">Continue Shopping</button>
+
+            {/* Bottom Actions */}
+            <div className="bg-[#F5F1EA] rounded-[12px] p-4 lg:p-[24px] flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 lg:mb-[32px]">
+              <button className="text-[13px] lg:text-[14px] font-medium text-[#C84848] underline">Clear All Items</button>
+              <button className="w-full sm:w-auto h-[44px] lg:h-[48px] px-6 lg:px-[32px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all">Continue Shopping</button>
             </div>
-            <div className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] p-[32px] max-w-[520px] mx-auto">
-              <div className="flex items-center justify-between mb-[24px]">
-                <h2 className="text-[24px] font-semibold text-[#1A1A1A]">Share Your Wishlist</h2>
-                <IoCloseOutline className="w-[24px] h-[24px] text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors" />
+
+            {/* Share Wishlist Panel */}
+            <div className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] p-6 lg:p-[32px] max-w-full md:max-w-[520px] mx-auto">
+              <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
+                <h2 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A]">Share Your Wishlist</h2>
+                <IoCloseOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors" />
               </div>
-              <div className="bg-[#F5F1EA] rounded-[8px] p-[16px] flex items-center justify-between mb-[24px]">
-                <span className="text-[14px] text-[#666666]">shanloray.com/wishlist/alexandrachen</span>
-                <button className="flex items-center gap-[8px] text-[14px] font-medium text-[#8B7355]">
-                  <IoCopyOutline className="w-[18px] h-[18px]" />Copy
+              <div className="bg-[#F5F1EA] rounded-[8px] p-4 lg:p-[16px] flex items-center justify-between mb-5 lg:mb-[24px]">
+                <span className="text-[12px] lg:text-[14px] text-[#666666] truncate mr-3">shanloray.com/wishlist/alexandrachen</span>
+                <button className="flex-shrink-0 flex items-center gap-[6px] lg:gap-[8px] text-[13px] lg:text-[14px] font-medium text-[#8B7355]">
+                  <IoCopyOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />Copy
                 </button>
               </div>
-              <div className="flex items-center justify-center gap-[16px]">
+              <div className="flex items-center justify-center gap-4 lg:gap-[16px]">
                 {[{ icon: IoLogoInstagram, label: 'Instagram' }, { icon: IoLogoWhatsapp, label: 'WhatsApp' }, { icon: IoMail, label: 'Email' }].map((s) => (
-                  <button key={s.label} className="w-[56px] h-[56px] rounded-full bg-[#FDFBF7] border-[1.5px] border-[#E8E3D9] flex items-center justify-center hover:bg-[#8B7355] group transition-all">
-                    <s.icon className="w-[28px] h-[28px] text-[#8B7355] group-hover:text-white transition-colors" />
+                  <button key={s.label} className="w-[52px] h-[52px] lg:w-[56px] lg:h-[56px] rounded-full bg-[#FDFBF7] border-[1.5px] border-[#E8E3D9] flex items-center justify-center hover:bg-[#8B7355] group transition-all">
+                    <s.icon className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355] group-hover:text-white transition-colors" />
                   </button>
                 ))}
               </div>
@@ -594,7 +618,7 @@ function WishlistDesktop() {
           </div>
         </div>
       </div>
-      <div className="h-[80px]" />
+      <div className="h-[40px] md:h-[60px] lg:h-[80px]" />
     </div>
   )
 }
