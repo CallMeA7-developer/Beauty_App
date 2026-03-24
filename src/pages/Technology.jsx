@@ -332,47 +332,47 @@ function TechnologyMobile() {
   )
 }
 
-// ─── Desktop (untouched) ──────────────────────────────────────────────────────
+// ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function TechnologyDesktop() {
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* Hero */}
-      <div className="min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-[120px]">
-        <div className="w-[650px] relative z-10">
-          <p className="text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">ADVANCED BEAUTY TECHNOLOGY</p>
-          <h1 className="text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-6">Innovation Meets Beauty</h1>
-          <p className="text-[20px] font-normal text-[#666666] mb-8">Experience the future of personalized beauty with cutting-edge technology</p>
-          <div className="w-[140px] h-[4px] bg-[#C9A870]" />
+      <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
+        <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">ADVANCED BEAUTY TECHNOLOGY</p>
+          <h1 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">Innovation Meets Beauty</h1>
+          <p className="text-[15px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Experience the future of personalized beauty with cutting-edge technology</p>
+          <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
-        <div className="absolute right-[180px] top-1/2 -translate-y-1/2">
+        <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
           <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=400&fit=crop" alt="" className="w-[400px] h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
 
       {/* Breadcrumb */}
-      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
-        <span className="text-[15px] text-[#8B7355] cursor-pointer">Home</span>
-        <span className="text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[15px] text-[#666666]">Technology</span>
+      <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">Technology</span>
       </div>
 
       {/* Main Content */}
-      <div className="px-[120px] py-[64px]">
+      <div className="px-6 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
 
         {/* Innovation Cards */}
-        <div className="grid grid-cols-2 gap-[32px] mb-[64px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-[32px] mb-10 md:mb-14 lg:mb-[64px]">
           {innovationCards.map((card, idx) => (
             <div key={idx} className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
-              <div className="w-full h-[280px] overflow-hidden">
+              <div className="w-full h-[200px] md:h-[240px] lg:h-[280px] overflow-hidden">
                 <img src={card.image} alt={card.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
-              <div className="p-[32px]">
-                <div className="px-[16px] py-[6px] bg-[#F5F1EA] text-[#8B7355] text-[11px] font-medium rounded-full inline-block mb-3">{card.tag}</div>
-                <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-3">{card.title}</h3>
-                <p className="text-[16px] text-[#666666] leading-[1.6] mb-4">{card.description}</p>
+              <div className="p-5 md:p-6 lg:p-[32px]">
+                <div className="px-[14px] lg:px-[16px] py-[5px] lg:py-[6px] bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full inline-block mb-3">{card.tag}</div>
+                <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-3">{card.title}</h3>
+                <p className="text-[14px] lg:text-[16px] text-[#666666] leading-[1.6] mb-4">{card.description}</p>
                 <Link to={card.path} onClick={() => window.scrollTo(0, 0)}>
-                  <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">{card.buttonText}</button>
+                  <button className="h-[44px] lg:h-[48px] px-6 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">{card.buttonText}</button>
                 </Link>
               </div>
             </div>
@@ -380,51 +380,53 @@ function TechnologyDesktop() {
         </div>
 
         {/* Stats Bar */}
-        <div className="min-h-[120px] bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] rounded-[16px] flex items-center justify-center gap-[96px] mb-[64px]">
+        <div className="min-h-[100px] lg:min-h-[120px] bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] rounded-[16px] flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-[96px] mb-10 md:mb-14 lg:mb-[64px] py-6 lg:py-0">
           {stats.map((stat, idx) => (
             <div key={idx} className="flex flex-col items-center">
-              <stat.icon className="w-[48px] h-[48px] text-[#8B7355] mb-3" />
-              <p className="text-[24px] font-medium text-[#1A1A1A] mb-1">{stat.value}</p>
-              <p className="text-[15px] text-[#666666]">{stat.label}</p>
+              <stat.icon className="w-[36px] h-[36px] md:w-[40px] md:h-[40px] lg:w-[48px] lg:h-[48px] text-[#8B7355] mb-2 lg:mb-3" />
+              <p className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-1">{stat.value}</p>
+              <p className="text-[13px] lg:text-[15px] text-[#666666]">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* How It Works */}
-        <div className="bg-white pt-[64px] mb-[64px]">
-          <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">How Our Technology Works</h2>
-          <div className="flex justify-center gap-[48px]">
+        <div className="bg-white pt-8 md:pt-10 lg:pt-[64px] mb-10 md:mb-14 lg:mb-[64px]">
+          <h2 className="text-[28px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">How Our Technology Works</h2>
+          <div className="flex flex-col md:flex-row justify-center gap-5 md:gap-6 lg:gap-[48px]">
             {howItWorksSteps.map((step, idx) => (
-              <div key={idx} className="w-[360px] bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[24px]">
-                <div className="flex justify-center mb-4"><img src={step.image} alt={step.title} className="w-[120px] h-[120px] object-cover rounded-[8px]" /></div>
-                <div className="flex justify-center mb-3">
-                  <div className="w-[48px] h-[48px] bg-[#8B7355] text-white text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div>
+              <div key={idx} className="w-full md:flex-1 lg:w-[360px] lg:flex-none bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px]">
+                <div className="flex justify-center mb-4">
+                  <img src={step.image} alt={step.title} className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px] object-cover rounded-[8px]" />
                 </div>
-                <h4 className="text-[20px] font-medium text-[#1A1A1A] text-center mb-2">{step.title}</h4>
-                <p className="text-[15px] text-[#666666] text-center leading-[1.6]">{step.description}</p>
+                <div className="flex justify-center mb-3">
+                  <div className="w-[40px] h-[40px] lg:w-[48px] lg:h-[48px] bg-[#8B7355] text-white text-[20px] lg:text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div>
+                </div>
+                <h4 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] text-center mb-2">{step.title}</h4>
+                <p className="text-[13px] lg:text-[15px] text-[#666666] text-center leading-[1.6]">{step.description}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-3 gap-[24px] mb-[64px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-[24px] mb-10 md:mb-14 lg:mb-[64px]">
           {desktopBenefits.map((benefit, idx) => (
-            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[24px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] transition-all duration-300">
-              <benefit.icon className="w-[32px] h-[32px] text-[#8B7355] mb-4" />
-              <h4 className="text-[20px] font-medium text-[#1A1A1A] mb-2">{benefit.title}</h4>
-              <p className="text-[15px] text-[#666666] leading-[1.6]">{benefit.description}</p>
+            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] transition-all duration-300">
+              <benefit.icon className="w-[26px] h-[26px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-3 lg:mb-4" />
+              <h4 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2">{benefit.title}</h4>
+              <p className="text-[13px] lg:text-[15px] text-[#666666] leading-[1.6]">{benefit.description}</p>
             </div>
           ))}
         </div>
 
         {/* CTA */}
-        <div className="min-h-[140px] bg-[#F5F1EA] rounded-[16px] flex flex-col items-center justify-center px-[64px] mb-[64px]">
-          <h3 className="text-[32px] font-medium text-[#1A1A1A] mb-2">Experience Innovation Today</h3>
-          <p className="text-[16px] text-[#666666] mb-6">Join thousands using AI-powered beauty technology</p>
-          <div className="flex items-center gap-[12px]">
-            <input type="email" placeholder="Enter your email" className="w-[360px] h-[56px] px-5 bg-white text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-            <button className="h-[56px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Get Started</button>
+        <div className="min-h-[120px] lg:min-h-[140px] bg-[#F5F1EA] rounded-[16px] flex flex-col items-center justify-center px-6 md:px-10 lg:px-[64px] py-8 lg:py-0 mb-10 md:mb-14 lg:mb-[64px]">
+          <h3 className="text-[22px] md:text-[26px] lg:text-[32px] font-medium text-[#1A1A1A] mb-2 text-center">Experience Innovation Today</h3>
+          <p className="text-[13px] lg:text-[16px] text-[#666666] mb-5 lg:mb-6 text-center">Join thousands using AI-powered beauty technology</p>
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <input type="email" placeholder="Enter your email" className="w-full sm:w-[280px] lg:w-[360px] h-[52px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+            <button className="w-full sm:w-auto h-[52px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Get Started</button>
           </div>
         </div>
 
