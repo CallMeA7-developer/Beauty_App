@@ -85,19 +85,19 @@ export default function SkinAnalysis() {
 
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)
 
-  const ProductCard = ({ product, cols = 4 }) => (
+  const ProductCard = ({ product }) => (
     <div className="bg-white rounded-[8px] overflow-hidden border border-[#E8E3D9]">
-      <img src={product.image} alt={product.name} className="w-full h-[280px] object-cover" />
-      <div className="p-6">
-        <p className="text-[13px] font-light italic text-[#8B7355] mb-2">Shan Loray</p>
-        <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
-        <p className="text-[14px] font-normal text-[#666666] mb-3">{product.benefit}</p>
-        <p className="text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.price}</p>
+      <img src={product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
+      <div className="p-4 md:p-5 lg:p-6">
+        <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] mb-2">Shan Loray</p>
+        <h4 className="text-[14px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
+        <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-3">{product.benefit}</p>
+        <p className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.price}</p>
         <div className="flex items-center gap-1 mb-4">
           <Stars />
-          <span className="text-[12px] font-normal text-[#999999] ml-1">({product.reviews})</span>
+          <span className="text-[11px] lg:text-[12px] font-normal text-[#999999] ml-1">({product.reviews})</span>
         </div>
-        <button className="w-full h-[48px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+        <button className="w-full h-[42px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
           Add to Cart
         </button>
       </div>
@@ -108,14 +108,14 @@ export default function SkinAnalysis() {
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Hero ── */}
-      <div className="min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-[120px]">
-        <div className="w-[650px] relative z-10">
-          <p className="text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
-          <h1 className="text-[72px] font-bold text-[#1A1A1A] leading-[1] mb-6">Discover Your Skin's True Potential</h1>
-          <p className="text-[20px] font-normal text-[#666666] mb-8">Advanced AI technology analyzes your skin in 60 seconds with medical-grade precision</p>
-          <div className="w-[140px] h-[4px] bg-[#C9A870]" />
+      <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
+        <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
+          <h1 className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">Discover Your Skin's True Potential</h1>
+          <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Advanced AI technology analyzes your skin in 60 seconds with medical-grade precision</p>
+          <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
-        <div className="absolute right-[180px] top-1/2 -translate-y-1/2">
+        <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
           <img
             src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=400&fit=crop"
             alt="Skin Analysis Technology"
@@ -125,64 +125,64 @@ export default function SkinAnalysis() {
       </div>
 
       {/* ── Breadcrumb ── */}
-      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer">Technology</span>
-        <span className="text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[15px] font-normal text-[#666666]">Skin Analysis</span>
+      <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Technology</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">Skin Analysis</span>
       </div>
 
       {/* ── Upload Section ── */}
-      <div id="upload-section" className="min-h-[600px] px-[120px] py-[64px]">
+      <div id="upload-section" className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
         <div className="max-w-[1200px] mx-auto">
-          <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
-          <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Upload a clear, front-facing photo in natural lighting for accurate results</p>
+          <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
+          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Upload a clear, front-facing photo in natural lighting for accurate results</p>
 
-          <div className="w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-            <div className="min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center">
-              <IoCameraOutline className="w-[80px] h-[80px] text-[#8B7355] mb-4" />
-              <h3 className="text-[24px] font-medium text-[#1A1A1A] mb-4">Upload Your Photo</h3>
-              <p className="text-[15px] font-normal text-[#666666] mb-6">Drag and drop your photo here or click to browse</p>
-              <div className="flex gap-3">
-                <button className="w-[180px] h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+          <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+            <div className="min-h-[280px] md:min-h-[340px] lg:min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center px-4 py-8 lg:py-0">
+              <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-4" />
+              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Upload Your Photo</h3>
+              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 text-center">Drag and drop your photo here or click to browse</p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
                   Upload Photo
                 </button>
-                <button className="w-[180px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                   Take Selfie
                 </button>
               </div>
             </div>
-            <div className="p-[32px] grid grid-cols-3 gap-6">
+            <div className="p-5 md:p-6 lg:p-[32px] grid grid-cols-3 gap-4 lg:gap-6">
               {guidelines.map((guide, idx) => (
                 <div key={idx} className="flex flex-col items-center text-center">
-                  <guide.icon className="w-[24px] h-[24px] text-[#8B7355] mb-2" />
-                  <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{guide.title}</h4>
-                  <p className="text-[14px] font-normal text-[#666666]">{guide.desc}</p>
+                  <guide.icon className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px] text-[#8B7355] mb-2" />
+                  <h4 className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] mb-1">{guide.title}</h4>
+                  <p className="text-[11px] lg:text-[14px] font-normal text-[#666666]">{guide.desc}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="w-[800px] mx-auto mt-8 bg-[#F5F1EA] rounded-[12px] flex flex-col items-center justify-center py-6 px-6">
-            <p className="text-[16px] font-normal text-[#666666] mb-2">Don't have a photo ready?</p>
-            <span className="text-[16px] font-medium text-[#8B7355] cursor-pointer underline">Take our skin questionnaire instead</span>
+          <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto mt-6 lg:mt-8 bg-[#F5F1EA] rounded-[12px] flex flex-col items-center justify-center py-5 px-6">
+            <p className="text-[14px] lg:text-[16px] font-normal text-[#666666] mb-2">Don't have a photo ready?</p>
+            <span className="text-[14px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer underline">Take our skin questionnaire instead</span>
           </div>
         </div>
       </div>
 
       {/* ── Questionnaire ── */}
-      <div className="min-h-[700px] bg-[#FDFBF7] px-[120px] py-[64px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Tell Us About Your Skin</h2>
-        <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Help us understand your unique skin concerns for personalized recommendations</p>
+      <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
+        <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Tell Us About Your Skin</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Help us understand your unique skin concerns for personalized recommendations</p>
 
-        <div className="max-w-[1200px] mx-auto grid grid-cols-2 gap-8 mb-12">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-8 mb-10 lg:mb-12">
           {/* Primary Concern */}
-          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
-            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Primary Skin Concern</h3>
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Primary Skin Concern</h3>
             <div className="grid grid-cols-2 gap-3">
               {skinConcerns.map((concern, idx) => (
-                <button key={concern} className={`h-[48px] px-4 text-[14px] rounded-[8px] transition-colors ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+                <button key={concern} className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
                   {concern}
                 </button>
               ))}
@@ -190,11 +190,11 @@ export default function SkinAnalysis() {
           </div>
 
           {/* Skin Type */}
-          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
-            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Skin Type</h3>
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Skin Type</h3>
             <div className="grid grid-cols-3 gap-3">
               {skinTypes.map((type, idx) => (
-                <button key={type} className={`h-[48px] px-4 text-[14px] rounded-[8px] transition-colors ${idx === 2 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+                <button key={type} className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${idx === 2 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
                   {type}
                 </button>
               ))}
@@ -202,36 +202,36 @@ export default function SkinAnalysis() {
           </div>
 
           {/* Current Routine */}
-          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
-            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Current Routine</h3>
-            <div className="w-full h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between px-5 cursor-pointer">
-              <span className="text-[15px] font-normal text-[#2B2B2B]">Moderate (4-6 products)</span>
-              <IoChevronDown className="w-[20px] h-[20px] text-[#8B7355]" />
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Current Routine</h3>
+            <div className="w-full h-[48px] lg:h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between px-5 cursor-pointer">
+              <span className="text-[13px] lg:text-[15px] font-normal text-[#2B2B2B]">Moderate (4-6 products)</span>
+              <IoChevronDown className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355]" />
             </div>
           </div>
 
           {/* Sun Exposure */}
-          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
-            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Sun Exposure</h3>
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Sun Exposure</h3>
             <div className="pt-4">
               <div className="relative w-full h-[8px] bg-[#E8E3D9] rounded-full mb-4">
                 <div className="absolute left-0 top-0 h-full w-[60%] bg-[#8B7355] rounded-full" />
                 <div className="absolute left-[60%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#8B7355] rounded-full border-4 border-white shadow-md" />
               </div>
               <div className="flex justify-between">
-                <span className="text-[13px] font-normal text-[#666666]">Minimal</span>
-                <span className="text-[13px] font-normal text-[#666666]">Moderate</span>
-                <span className="text-[13px] font-normal text-[#666666]">High</span>
+                <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Minimal</span>
+                <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Moderate</span>
+                <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">High</span>
               </div>
             </div>
           </div>
 
           {/* Age Range */}
-          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
-            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Age Range</h3>
+          <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Age Range</h3>
             <div className="grid grid-cols-3 gap-3">
               {ageRanges.map((range, idx) => (
-                <button key={range} className={`h-[48px] px-4 text-[14px] rounded-[8px] transition-colors ${idx === 1 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+                <button key={range} className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${idx === 1 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
                   {range}
                 </button>
               ))}
@@ -239,15 +239,15 @@ export default function SkinAnalysis() {
           </div>
 
           {/* Specific Concerns */}
-          <div className="col-span-2 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px]">
-            <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Specific Concerns</h3>
-            <div className="grid grid-cols-4 gap-3">
+          <div className="md:col-span-2 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Specific Concerns</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {specificConcerns.map((concern, idx) => (
                 <label key={concern} className="flex items-center gap-3 cursor-pointer">
-                  <div className={`w-[18px] h-[18px] border-2 rounded-[2px] flex items-center justify-center flex-shrink-0 ${[0, 4, 8].includes(idx) ? 'border-[#8B7355] bg-[#8B7355]' : 'border-[#C9A870]'}`}>
-                    {[0, 4, 8].includes(idx) && <IoCheckmarkCircle className="w-[14px] h-[14px] text-white" />}
+                  <div className={`w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] border-2 rounded-[2px] flex items-center justify-center flex-shrink-0 ${[0, 4, 8].includes(idx) ? 'border-[#8B7355] bg-[#8B7355]' : 'border-[#C9A870]'}`}>
+                    {[0, 4, 8].includes(idx) && <IoCheckmarkCircle className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px] text-white" />}
                   </div>
-                  <span className="text-[14px] font-normal text-[#3D3D3D]">{concern}</span>
+                  <span className="text-[13px] lg:text-[14px] font-normal text-[#3D3D3D]">{concern}</span>
                 </label>
               ))}
             </div>
@@ -255,36 +255,36 @@ export default function SkinAnalysis() {
         </div>
 
         <div className="flex justify-center">
-          <button className="w-[240px] h-[56px] bg-[#8B7355] text-white text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+          <button className="w-full sm:w-[200px] lg:w-[240px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
             Analyze My Skin
           </button>
         </div>
       </div>
 
       {/* ── Analysis Results ── */}
-      <div className="min-h-[900px] bg-white px-[120px] py-[80px]">
-        <h2 className="text-[56px] font-bold text-[#1A1A1A] text-center mb-4">Your Skin Analysis Results</h2>
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#C9A870] text-white text-[14px] font-medium rounded-full">
-            <IoCheckmarkCircle className="w-[18px] h-[18px]" />
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
+        <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">Your Skin Analysis Results</h2>
+        <div className="flex justify-center mb-8 lg:mb-12">
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">
+            <IoCheckmarkCircle className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
             Analysis Complete
           </div>
         </div>
 
         {/* Score Dashboard */}
-        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-[40px] mb-10">
-          <div className="text-center mb-8">
-            <div className="text-[64px] font-bold text-[#8B7355] mb-2">85/100</div>
-            <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-2">Healthy Skin</h3>
-            <p className="text-[16px] font-normal text-[#666666] max-w-[600px] mx-auto">Your skin shows excellent hydration and balanced oil production</p>
+        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-8 lg:p-[40px] mb-8 lg:mb-10">
+          <div className="text-center mb-6 lg:mb-8">
+            <div className="text-[48px] md:text-[56px] lg:text-[64px] font-bold text-[#8B7355] mb-2">85/100</div>
+            <h3 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2">Healthy Skin</h3>
+            <p className="text-[13px] lg:text-[16px] font-normal text-[#666666] max-w-[600px] mx-auto">Your skin shows excellent hydration and balanced oil production</p>
           </div>
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {quickStats.map((stat) => (
               <div key={stat.label} className="flex flex-col items-center">
-                <IoWaterOutline className="w-[32px] h-[32px] text-[#8B7355] mb-2" />
-                <span className="text-[15px] font-normal text-[#666666] mb-1">{stat.label}</span>
-                <span className="text-[32px] font-semibold text-[#1A1A1A] mb-2">{stat.value}</span>
-                <div className="w-full h-[8px] bg-[#E8E3D9] rounded-full overflow-hidden">
+                <IoWaterOutline className="w-[24px] h-[24px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-2" />
+                <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-1">{stat.label}</span>
+                <span className="text-[24px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-2">{stat.value}</span>
+                <div className="w-full h-[7px] lg:h-[8px] bg-[#E8E3D9] rounded-full overflow-hidden">
                   <div className="h-full bg-[#8B7355] rounded-full" style={{ width: stat.value }} />
                 </div>
               </div>
@@ -293,76 +293,76 @@ export default function SkinAnalysis() {
         </div>
 
         {/* Analysis Cards */}
-        <div className="max-w-[1200px] mx-auto grid grid-cols-2 gap-8">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-8">
           {analysisCards.map((card, idx) => (
-            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[28px]">
+            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
               <div className="flex items-start justify-between mb-3">
-                <IoSparklesOutline className="w-[28px] h-[28px] text-[#8B7355]" />
-                {card.badge && <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[11px] font-medium rounded-full">{card.badge}</span>}
+                <IoSparklesOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355]" />
+                {card.badge && <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{card.badge}</span>}
               </div>
-              <h4 className="text-[20px] font-medium text-[#1A1A1A] mb-3">{card.title}</h4>
-              <p className="text-[15px] font-normal text-[#666666] leading-[1.6]">{card.desc}</p>
+              <h4 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-3">{card.title}</h4>
+              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.6]">{card.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* ── Product Recommendations ── */}
-      <div className="min-h-[800px] bg-[#FDFBF7] px-[120px] py-[80px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
-        <p className="text-[16px] font-normal text-[#666666] text-center mb-[56px]">Curated specifically for your skin analysis results</p>
+      <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Curated specifically for your skin analysis results</p>
 
         {/* Morning Routine */}
-        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[40px] mb-8">
-          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
-          <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-8">Morning Protection Routine</h3>
-          <div className="grid grid-cols-4 gap-5">
+        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
+          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
+          <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Morning Protection Routine</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
             {morningProducts.map((product) => <ProductCard key={product.name} product={product} />)}
           </div>
         </div>
 
         {/* Evening Routine */}
-        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[40px] mb-8">
-          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
-          <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-8">Evening Repair Routine</h3>
-          <div className="grid grid-cols-4 gap-5">
+        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
+          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
+          <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Evening Repair Routine</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
             {eveningProducts.map((product) => <ProductCard key={product.name} product={product} />)}
           </div>
         </div>
 
         {/* Targeted Treatments */}
-        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[40px] mb-8">
-          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
-          <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-8">Specialized Treatments</h3>
-          <div className="grid grid-cols-3 gap-5">
+        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
+          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
+          <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Specialized Treatments</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
             {targetedProducts.map((product) => <ProductCard key={product.name} product={product} />)}
           </div>
         </div>
 
-        <div className="flex justify-center gap-4">
-          <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <button className="w-full sm:w-[200px] h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
             View Complete Routine
           </button>
-          <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+          <button className="w-full sm:w-[200px] h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
             Save to My Profile
           </button>
         </div>
       </div>
 
       {/* ── Progress Tracking ── */}
-      <div className="min-h-[400px] bg-white px-[120px] py-[64px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] mb-6">Track Your Skin Journey</h2>
-        <p className="text-[16px] font-normal text-[#666666] mb-[56px]">Monitor improvements with regular skin analysis</p>
-        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-[40px]">
-          <div className="flex items-center justify-between mb-8">
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-4 lg:mb-6">Track Your Skin Journey</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">Monitor improvements with regular skin analysis</p>
+        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-6 lg:p-[40px]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
             {timelinePoints.map((point, idx) => (
               <div key={idx} className="flex flex-col items-center">
-                <img src={point.image} alt="Analysis" className="w-[120px] h-[120px] object-cover rounded-[8px] mb-4" />
-                <div className="text-[24px] font-semibold text-[#8B7355] mb-1">{point.score}</div>
-                <div className="text-[14px] font-normal text-[#666666]">{point.date}</div>
+                <img src={point.image} alt="Analysis" className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] object-cover rounded-[8px] mb-4" />
+                <div className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#8B7355] mb-1">{point.score}</div>
+                <div className="text-[12px] lg:text-[14px] font-normal text-[#666666]">{point.date}</div>
               </div>
             ))}
-            <button className="w-[180px] h-[48px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+            <button className="w-full sm:w-[180px] h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
               Schedule Next Analysis
             </button>
           </div>
@@ -370,43 +370,43 @@ export default function SkinAnalysis() {
       </div>
 
       {/* ── Expert Consultation ── */}
-      <div className="min-h-[320px] bg-[#F5F1EA] px-[120px] py-[64px]">
-        <div className="max-w-[1200px] mx-auto flex items-center gap-[64px]">
-          <div className="w-[600px]">
-            <h2 className="text-[36px] font-medium text-[#1A1A1A] mb-5">Want Expert Guidance?</h2>
-            <p className="text-[16px] font-normal text-[#666666] leading-[1.6] mb-8">Book a complimentary virtual consultation with our skincare specialists to discuss your results and personalized routine</p>
-            <div className="flex gap-4">
-              <button className="w-[200px] h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+      <div className="bg-[#F5F1EA] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-8 lg:gap-[64px]">
+          <div className="w-full md:w-auto md:flex-1 lg:w-[600px] lg:flex-none">
+            <h2 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Want Expert Guidance?</h2>
+            <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] leading-[1.6] mb-6 lg:mb-8">Book a complimentary virtual consultation with our skincare specialists to discuss your results and personalized routine</p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="w-full sm:w-[180px] lg:w-[200px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
                 Book Consultation
               </button>
-              <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-white/80 transition-colors">
+              <button className="w-full sm:w-[180px] lg:w-[200px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-white/80 transition-colors">
                 Chat with Expert
               </button>
             </div>
           </div>
-          <div className="flex-1">
+          <div className="w-full md:flex-1">
             <img
               src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=520&h=280&fit=crop"
               alt="Expert Consultant"
-              className="w-full h-[280px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
+              className="w-full h-[200px] md:h-[240px] lg:h-[280px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
             />
           </div>
         </div>
       </div>
 
       {/* ── FAQ ── */}
-      <div className="min-h-[500px] bg-white px-[120px] py-[64px]">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">Frequently Asked Questions</h2>
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Frequently Asked Questions</h2>
         <div className="max-w-[900px] mx-auto space-y-4">
           {faqs.map((faq, idx) => (
-            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] p-5">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-[17px] font-medium text-[#1A1A1A]">{faq.q}</h4>
-                <IoChevronDown className="w-[20px] h-[20px] text-[#8B7355] flex-shrink-0" />
+            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] p-4 lg:p-5">
+              <div className="flex items-center justify-between mb-3 gap-3">
+                <h4 className="text-[14px] md:text-[15px] lg:text-[17px] font-medium text-[#1A1A1A]">{faq.q}</h4>
+                <IoChevronDown className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0" />
               </div>
               {idx < 2 && (
-                <div className="bg-[#F5F1EA] rounded-[8px] p-5 mt-3">
-                  <p className="text-[15px] font-normal text-[#666666] leading-[1.7]">{faq.a}</p>
+                <div className="bg-[#F5F1EA] rounded-[8px] p-4 lg:p-5 mt-3">
+                  <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.7]">{faq.a}</p>
                 </div>
               )}
             </div>
@@ -415,12 +415,12 @@ export default function SkinAnalysis() {
       </div>
 
       {/* ── Newsletter CTA ── */}
-      <div className="min-h-[180px] bg-gradient-to-b from-[#F5F1EA] to-white px-[120px] flex flex-col items-center justify-center">
-        <h3 className="text-[36px] font-medium text-[#1A1A1A] mb-3">Stay Updated on Skin Health</h3>
-        <p className="text-[16px] font-normal text-[#666666] mb-6">Get personalized skincare tips and exclusive offers</p>
-        <div className="flex items-center gap-2">
-          <input type="email" placeholder="Enter your email" className="w-[360px] h-[56px] px-5 bg-white text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-[56px] px-8 bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-0 lg:min-h-[180px] flex flex-col items-center justify-center">
+        <h3 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">Stay Updated on Skin Health</h3>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-5 lg:mb-6 text-center">Get personalized skincare tips and exclusive offers</p>
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+          <input type="email" placeholder="Enter your email" className="w-full sm:w-[280px] lg:w-[360px] h-[48px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <button className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
             Subscribe
           </button>
         </div>
