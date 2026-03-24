@@ -97,9 +97,3 @@ export default function App() {
   )
 }
 
-// the desktop version its completed.
-// now we are workig on the mobile version.
-// the mobile version code its combined to desktop.
-// after mobile version its completed ↓
-// we will clean our code by data layering.
-// then using bolt.
