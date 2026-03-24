@@ -261,7 +261,7 @@ function VirtualTryOnMobile() {
   )
 }
 
-// ─── Desktop (untouched) ──────────────────────────────────────────────────────
+// ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function VirtualTryOnDesktop() {
   const savedLooks = [
     { date: 'Dec 20, 2024', products: '5 Products', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=280&h=280&fit=crop' },
@@ -270,79 +270,82 @@ function VirtualTryOnDesktop() {
     { date: 'Dec 5, 2024',  products: '3 Products', image: 'https://images.unsplash.com/photo-1556740772-1a741367b93e?w=280&h=280&fit=crop' },
   ]
   const trendingLooks = [
-    { image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=380&h=460&fit=crop', creator: 'Sarah Chen',    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=48&h=48&fit=crop', desc: 'Natural Glow Makeup',   products: 5, hearts: 1234, shares: 89 },
-    { image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=380&h=460&fit=crop', creator: 'Emma Wilson',   avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop', desc: 'Bold Evening Look',     products: 7, hearts: 2156, shares: 143 },
-    { image: 'https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?w=380&h=460&fit=crop', creator: 'Olivia Taylor', avatar: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=48&h=48&fit=crop', desc: 'Soft Romantic Style',   products: 4, hearts: 987,  shares: 67 },
+    { image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=380&h=460&fit=crop', creator: 'Sarah Chen',    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=48&h=48&fit=crop', desc: 'Natural Glow Makeup',  products: 5, hearts: 1234, shares: 89  },
+    { image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=380&h=460&fit=crop', creator: 'Emma Wilson',   avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop', desc: 'Bold Evening Look',    products: 7, hearts: 2156, shares: 143 },
+    { image: 'https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?w=380&h=460&fit=crop', creator: 'Olivia Taylor', avatar: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=48&h=48&fit=crop', desc: 'Soft Romantic Style',  products: 4, hearts: 987,  shares: 67  },
   ]
   const howItWorksSteps = [
-    { number: '1', title: 'Choose Method',    desc: 'Camera or upload photo',    image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=120&h=120&fit=crop' },
-    { number: '2', title: 'Select Products',  desc: 'Browse & test virtually',   image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=120&h=120&fit=crop' },
-    { number: '3', title: 'Save & Share',     desc: 'Keep your favorite looks',  image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=120&h=120&fit=crop' },
+    { number: '1', title: 'Choose Method',   desc: 'Camera or upload photo',   image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=120&h=120&fit=crop' },
+    { number: '2', title: 'Select Products', desc: 'Browse & test virtually',  image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=120&h=120&fit=crop' },
+    { number: '3', title: 'Save & Share',    desc: 'Keep your favorite looks', image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=120&h=120&fit=crop' },
   ]
   const proTips = [
-    { icon: IoFlashOutline,        title: 'Best Lighting',   desc: 'Use natural daylight for accurate color matching' },
-    { icon: IoCameraOutline,       title: 'Face Position',   desc: 'Center your face and maintain neutral expression' },
-    { icon: IoSparklesOutline,     title: 'Clean Skin',      desc: 'Remove makeup for best AR tracking' },
-    { icon: IoColorPaletteOutline, title: 'Try Multiple',    desc: 'Test various shades to find perfect match' },
-    { icon: IoAlbumsOutline,       title: 'Save Favorites',  desc: 'Create collections of looks you love' },
+    { icon: IoFlashOutline,        title: 'Best Lighting',  desc: 'Use natural daylight for accurate color matching' },
+    { icon: IoCameraOutline,       title: 'Face Position',  desc: 'Center your face and maintain neutral expression'  },
+    { icon: IoSparklesOutline,     title: 'Clean Skin',     desc: 'Remove makeup for best AR tracking'                },
+    { icon: IoColorPaletteOutline, title: 'Try Multiple',   desc: 'Test various shades to find perfect match'         },
+    { icon: IoAlbumsOutline,       title: 'Save Favorites', desc: 'Create collections of looks you love'              },
   ]
   const recommendedProducts = [
     { image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=300&h=300&fit=crop', name: 'Luxury Lipstick Set', match: '95% Match', price: '$125' },
-    { image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=300&h=300&fit=crop', name: 'Blush Palette Pro',   match: '92% Match', price: '$78' },
-    { image: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=300&h=300&fit=crop', name: 'Eye Shadow Deluxe',   match: '90% Match', price: '$98' },
+    { image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=300&h=300&fit=crop', name: 'Blush Palette Pro',   match: '92% Match', price: '$78'  },
+    { image: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=300&h=300&fit=crop', name: 'Eye Shadow Deluxe',   match: '90% Match', price: '$98'  },
   ]
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
+
       {/* Hero */}
-      <div className="min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-[120px]">
-        <div className="w-[650px] relative z-10">
-          <p className="text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AR-POWERED VIRTUAL TRY-ON</p>
-          <h1 className="text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-6">Try Before You Buy</h1>
-          <p className="text-[20px] font-normal text-[#666666] mb-8">Experience luxury beauty products virtually with advanced AR technology</p>
-          <div className="w-[140px] h-[4px] bg-[#C9A870]" />
+      <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
+        <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AR-POWERED VIRTUAL TRY-ON</p>
+          <h1 className="text-[44px] md:text-[60px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">Try Before You Buy</h1>
+          <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Experience luxury beauty products virtually with advanced AR technology</p>
+          <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
-        <div className="absolute right-[180px] top-1/2 -translate-y-1/2">
+        <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
           <img src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=400&h=400&fit=crop" alt="" className="w-[400px] h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
 
       {/* Breadcrumb */}
-      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
-        <span className="text-[15px] text-[#8B7355] cursor-pointer">Home</span><span className="text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[15px] text-[#8B7355] cursor-pointer">Technology</span><span className="text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[15px] text-[#666666]">Virtual Try-On</span>
+      <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer whitespace-nowrap">Technology</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666] whitespace-nowrap">Virtual Try-On</span>
       </div>
 
       {/* Live Try-On */}
-      <div id="tryon-section" className="min-h-[720px] px-[120px] py-[64px] bg-white">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-3">Start Your Virtual Try-On</h2>
-        <p className="text-[16px] text-[#666666] text-center mb-[56px]">Choose your preferred method to begin</p>
-        <div className="flex gap-[32px] items-start justify-center">
-          <div className="w-[800px]">
-            <div className="min-h-[500px] bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] flex flex-col items-center justify-center mb-5">
-              <IoCameraOutline className="w-[80px] h-[80px] text-[#8B7355] mb-6" />
-              <h3 className="text-[24px] font-medium text-[#1A1A1A] mb-3">Ready to Try On</h3>
-              <p className="text-[15px] text-[#666666] mb-8">Position your face in the frame to begin</p>
-              <div className="flex gap-4">
-                <button className="w-[200px] h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Launch Camera Try-On</button>
-                <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">Upload Photo</button>
+      <div id="tryon-section" className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px] bg-white">
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-3">Start Your Virtual Try-On</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#666666] text-center mb-10 lg:mb-[56px]">Choose your preferred method to begin</p>
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-[32px] items-start justify-center">
+          <div className="w-full lg:w-[800px]">
+            <div className="min-h-[320px] md:min-h-[420px] lg:min-h-[500px] bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] flex flex-col items-center justify-center mb-5 py-8 lg:py-0">
+              <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-6" />
+              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-3">Ready to Try On</h3>
+              <p className="text-[13px] lg:text-[15px] text-[#666666] mb-8 text-center px-4">Position your face in the frame to begin</p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button className="w-full sm:w-[180px] lg:w-[200px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Launch Camera Try-On</button>
+                <button className="w-full sm:w-[160px] lg:w-[200px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">Upload Photo</button>
               </div>
             </div>
           </div>
-          <div className="w-[320px]">
-            <div className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[24px]">
-              <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-5">Select Products</h4>
-              <div className="space-y-3">
+          <div className="w-full lg:w-[320px]">
+            <div className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px]">
+              <h4 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Select Products</h4>
+              <div className="grid grid-cols-3 lg:grid-cols-1 gap-3">
                 {[
-                  { image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=80&h=80&fit=crop', name: 'Ruby Lipstick' },
+                  { image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=80&h=80&fit=crop', name: 'Ruby Lipstick'  },
                   { image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=80&h=80&fit=crop', name: 'Gold Eyeshadow' },
-                  { image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=80&h=80&fit=crop', name: 'Rose Blush' },
+                  { image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=80&h=80&fit=crop', name: 'Rose Blush'     },
                 ].map((product, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] cursor-pointer hover:bg-[#ebe6dc] transition-colors">
-                    <img src={product.image} alt={product.name} className="w-[80px] h-[80px] object-cover rounded-[6px]" />
-                    <span className="text-[14px] text-[#1A1A1A]">{product.name}</span>
+                  <div key={idx} className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 p-2 lg:p-3 bg-[#F5F1EA] rounded-[8px] cursor-pointer hover:bg-[#ebe6dc] transition-colors">
+                    <img src={product.image} alt={product.name} className="w-[60px] h-[60px] lg:w-[80px] lg:h-[80px] object-cover rounded-[6px] flex-shrink-0" />
+                    <span className="text-[12px] lg:text-[14px] text-[#1A1A1A] text-center lg:text-left">{product.name}</span>
                   </div>
                 ))}
               </div>
@@ -352,33 +355,33 @@ function VirtualTryOnDesktop() {
       </div>
 
       {/* Category Tabs */}
-      <div className="min-h-[120px] px-[120px] py-[32px] bg-[#FDFBF7] flex items-center justify-center">
-        <div className="flex gap-[24px]">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-6 lg:py-[32px] bg-[#FDFBF7] flex items-center justify-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        <div className="flex gap-3 md:gap-4 lg:gap-[24px]">
           {categoryTabs.map((tab, idx) => (
-            <button key={tab} className={`w-[180px] h-[64px] rounded-[12px] text-[16px] font-medium transition-all ${idx === 0 ? 'bg-[#8B7355] text-white shadow-[0_4px_16px_rgba(139,115,85,0.2)]' : 'bg-white text-[#3D3D3D] border border-[#E8E3D9] hover:border-[#8B7355] hover:text-[#8B7355]'}`}>{tab}</button>
+            <button key={tab} className={`w-[120px] md:w-[150px] lg:w-[180px] h-[48px] md:h-[56px] lg:h-[64px] rounded-[12px] text-[13px] md:text-[14px] lg:text-[16px] font-medium transition-all flex-shrink-0 ${idx === 0 ? 'bg-[#8B7355] text-white shadow-[0_4px_16px_rgba(139,115,85,0.2)]' : 'bg-white text-[#3D3D3D] border border-[#E8E3D9] hover:border-[#8B7355] hover:text-[#8B7355]'}`}>{tab}</button>
           ))}
         </div>
       </div>
 
       {/* Product Gallery */}
-      <div className="min-h-[800px] px-[120px] py-[64px] bg-white">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] mb-[48px]">Try-On Enabled Products</h2>
-        <div className="grid grid-cols-3 gap-[32px]">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px] bg-white">
+        <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] mb-8 lg:mb-[48px]">Try-On Enabled Products</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-[32px]">
           {productsData.map((product, idx) => (
             <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
               <div className="relative">
-                <img src={product.image} alt={product.name} className="w-full h-[360px] object-cover" />
-                <div className="absolute top-4 right-4 px-3 py-1 bg-[#8B7355] text-white text-[11px] font-medium rounded-full flex items-center gap-1">
-                  <IoCameraOutline className="w-[14px] h-[14px]" /> AR Enabled
+                <img src={product.image} alt={product.name} className="w-full h-[240px] md:h-[280px] lg:h-[360px] object-cover" />
+                <div className="absolute top-4 right-4 px-3 py-1 bg-[#8B7355] text-white text-[10px] lg:text-[11px] font-medium rounded-full flex items-center gap-1">
+                  <IoCameraOutline className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px]" /> AR Enabled
                 </div>
               </div>
-              <div className="p-[24px]">
-                <p className="text-[13px] font-light italic text-[#8B7355] mb-2">{product.brand}</p>
-                <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-1">{product.name}</h3>
-                <p className="text-[14px] text-[#666666] mb-3">{product.shade}</p>
-                <p className="text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.price}</p>
-                <div className="flex items-center gap-1 mb-4"><Stars /><span className="text-[12px] text-[#999999] ml-1">({product.reviews})</span></div>
-                <button className="w-full h-[48px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Try Virtually</button>
+              <div className="p-4 lg:p-[24px]">
+                <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] mb-2">{product.brand}</p>
+                <h3 className="text-[15px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-1">{product.name}</h3>
+                <p className="text-[13px] lg:text-[14px] text-[#666666] mb-3">{product.shade}</p>
+                <p className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.price}</p>
+                <div className="flex items-center gap-1 mb-4"><Stars /><span className="text-[11px] lg:text-[12px] text-[#999999] ml-1">({product.reviews})</span></div>
+                <button className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Try Virtually</button>
               </div>
             </div>
           ))}
@@ -386,18 +389,18 @@ function VirtualTryOnDesktop() {
       </div>
 
       {/* Saved Looks */}
-      <div className="min-h-[520px] px-[120px] py-[64px] bg-[#FDFBF7]">
-        <h2 className="text-[36px] font-medium text-[#1A1A1A] mb-[48px]">My Saved Looks</h2>
-        <div className="grid grid-cols-4 gap-[24px]">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px] bg-[#FDFBF7]">
+        <h2 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-8 lg:mb-[48px]">My Saved Looks</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-[24px]">
           {savedLooks.map((look, idx) => (
             <div key={idx} className="relative group cursor-pointer">
-              <img src={look.image} alt="Saved Look" className="w-full h-[280px] object-cover rounded-[12px]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-[12px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-5">
-                <p className="text-[14px] text-white mb-1">{look.date}</p>
-                <p className="text-[13px] text-white/80 mb-4">{look.products}</p>
+              <img src={look.image} alt="Saved Look" className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover rounded-[12px]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-[12px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-4 lg:p-5">
+                <p className="text-[13px] lg:text-[14px] text-white mb-1">{look.date}</p>
+                <p className="text-[12px] lg:text-[13px] text-white/80 mb-3 lg:mb-4">{look.products}</p>
                 <div className="flex gap-2">
-                  <button className="w-[80px] h-[36px] bg-white text-[#1A1A1A] text-[13px] font-medium rounded-[6px]">Share</button>
-                  <button className="w-[80px] h-[36px] bg-[#8B7355] text-white text-[13px] font-medium rounded-[6px]">Apply</button>
+                  <button className="w-[70px] lg:w-[80px] h-[32px] lg:h-[36px] bg-white text-[#1A1A1A] text-[12px] lg:text-[13px] font-medium rounded-[6px]">Share</button>
+                  <button className="w-[70px] lg:w-[80px] h-[32px] lg:h-[36px] bg-[#8B7355] text-white text-[12px] lg:text-[13px] font-medium rounded-[6px]">Apply</button>
                 </div>
               </div>
             </div>
@@ -406,28 +409,28 @@ function VirtualTryOnDesktop() {
       </div>
 
       {/* Trending Looks */}
-      <div className="min-h-[640px] px-[120px] py-[64px] bg-white">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] mb-[48px]">Trending Beauty Looks</h2>
-        <div className="grid grid-cols-3 gap-[32px]">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px] bg-white">
+        <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] mb-8 lg:mb-[48px]">Trending Beauty Looks</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-[32px]">
           {trendingLooks.map((look, idx) => (
             <div key={idx} className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden">
-              <img src={look.image} alt={look.desc} className="w-full h-[320px] object-cover" />
-              <div className="p-[24px]">
+              <img src={look.image} alt={look.desc} className="w-full h-[240px] md:h-[280px] lg:h-[320px] object-cover" />
+              <div className="p-4 lg:p-[24px]">
                 <div className="flex items-center gap-3 mb-4">
-                  <img src={look.avatar} alt={look.creator} className="w-[48px] h-[48px] object-cover rounded-full" />
+                  <img src={look.avatar} alt={look.creator} className="w-[40px] h-[40px] lg:w-[48px] lg:h-[48px] object-cover rounded-full" />
                   <div>
-                    <h4 className="text-[16px] font-medium text-[#1A1A1A]">{look.creator}</h4>
-                    <p className="text-[13px] text-[#666666]">{look.desc}</p>
+                    <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A]">{look.creator}</h4>
+                    <p className="text-[12px] lg:text-[13px] text-[#666666]">{look.desc}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[12px] font-medium rounded-full">{look.products} Products</span>
-                  <div className="flex items-center gap-4 text-[14px] text-[#666666]">
-                    <span className="flex items-center gap-1"><IoHeartOutline className="w-[16px] h-[16px]" />{look.hearts}</span>
-                    <span className="flex items-center gap-1"><IoShareSocialOutline className="w-[16px] h-[16px]" />{look.shares}</span>
+                <div className="flex items-center gap-3 lg:gap-4 mb-4">
+                  <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full">{look.products} Products</span>
+                  <div className="flex items-center gap-3 lg:gap-4 text-[13px] lg:text-[14px] text-[#666666]">
+                    <span className="flex items-center gap-1"><IoHeartOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />{look.hearts}</span>
+                    <span className="flex items-center gap-1"><IoShareSocialOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />{look.shares}</span>
                   </div>
                 </div>
-                <button className="w-full h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Try This Look</button>
+                <button className="w-full h-[44px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Try This Look</button>
               </div>
             </div>
           ))}
@@ -435,90 +438,90 @@ function VirtualTryOnDesktop() {
       </div>
 
       {/* How It Works */}
-      <div className="min-h-[400px] px-[120px] py-[64px] bg-[#FDFBF7]">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">How Virtual Try-On Works</h2>
-        <div className="flex justify-center gap-[48px]">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px] bg-[#FDFBF7]">
+        <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">How Virtual Try-On Works</h2>
+        <div className="flex flex-col md:flex-row justify-center gap-5 md:gap-6 lg:gap-[48px]">
           {howItWorksSteps.map((step) => (
-            <div key={step.number} className="w-[360px] bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[24px]">
-              <div className="flex justify-center mb-4"><img src={step.image} alt={step.title} className="w-[120px] h-[120px] object-cover rounded-[8px]" /></div>
-              <div className="flex justify-center mb-3"><div className="w-[48px] h-[48px] bg-[#8B7355] text-white text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div></div>
-              <h4 className="text-[20px] font-medium text-[#1A1A1A] text-center mb-2">{step.title}</h4>
-              <p className="text-[15px] text-[#666666] text-center leading-[1.6]">{step.desc}</p>
+            <div key={step.number} className="w-full md:flex-1 lg:w-[360px] lg:flex-none bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px]">
+              <div className="flex justify-center mb-4"><img src={step.image} alt={step.title} className="w-[80px] h-[80px] lg:w-[120px] lg:h-[120px] object-cover rounded-[8px]" /></div>
+              <div className="flex justify-center mb-3"><div className="w-[40px] h-[40px] lg:w-[48px] lg:h-[48px] bg-[#8B7355] text-white text-[20px] lg:text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div></div>
+              <h4 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] text-center mb-2">{step.title}</h4>
+              <p className="text-[13px] lg:text-[15px] text-[#666666] text-center leading-[1.6]">{step.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Tech Features */}
-      <div className="min-h-[140px] px-[120px] py-[32px] bg-white flex items-center justify-center">
-        <div className="w-full bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] rounded-[16px] p-[40px] flex items-center justify-around">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-6 md:py-8 lg:py-[32px] bg-white flex items-center justify-center">
+        <div className="w-full bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] rounded-[16px] p-6 md:p-8 lg:p-[40px] flex flex-col sm:flex-row items-center justify-around gap-8 sm:gap-4">
           {[
-            { icon: IoCheckmarkCircle,    value: '98% Accuracy',       label: 'Real-Time Tracking' },
-            { icon: IoColorPaletteOutline, value: 'True-to-Life Colors', label: 'Color-Matched Technology' },
-            { icon: IoFlashOutline,        value: 'Instant Results',     label: 'Try 100+ Products' },
+            { icon: IoCheckmarkCircle,    value: '98% Accuracy',        label: 'Real-Time Tracking'        },
+            { icon: IoColorPaletteOutline, value: 'True-to-Life Colors', label: 'Color-Matched Technology'  },
+            { icon: IoFlashOutline,        value: 'Instant Results',      label: 'Try 100+ Products'         },
           ].map((stat, idx) => (
             <div key={idx} className="flex flex-col items-center">
-              <stat.icon className="w-[48px] h-[48px] text-[#8B7355] mb-3" />
-              <p className="text-[24px] font-medium text-[#1A1A1A] mb-1">{stat.value}</p>
-              <p className="text-[15px] text-[#666666]">{stat.label}</p>
+              <stat.icon className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] lg:w-[48px] lg:h-[48px] text-[#8B7355] mb-3" />
+              <p className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-1">{stat.value}</p>
+              <p className="text-[13px] lg:text-[15px] text-[#666666]">{stat.label}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Share Experience */}
-      <div className="min-h-[360px] px-[120px] py-[64px] bg-[#FDFBF7]">
-        <h2 className="text-[36px] font-medium text-[#1A1A1A] text-center mb-3">Share Your Look</h2>
-        <p className="text-[16px] text-[#666666] text-center mb-[48px]">Show off your virtual try-on results with friends and followers</p>
-        <div className="max-w-[900px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-[40px]">
-          <div className="w-[600px] h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white rounded-[8px] mx-auto mb-8 flex items-center justify-center">
-            <IoPlayCircle className="w-[64px] h-[64px] text-[#8B7355]" />
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px] bg-[#FDFBF7]">
+        <h2 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] text-center mb-3">Share Your Look</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#666666] text-center mb-10 lg:mb-[48px]">Show off your virtual try-on results with friends and followers</p>
+        <div className="max-w-[900px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 md:p-8 lg:p-[40px]">
+          <div className="w-full md:max-w-[600px] h-[240px] md:h-[320px] lg:h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white rounded-[8px] mx-auto mb-6 lg:mb-8 flex items-center justify-center">
+            <IoPlayCircle className="w-[48px] h-[48px] md:w-[56px] md:h-[56px] lg:w-[64px] lg:h-[64px] text-[#8B7355]" />
           </div>
-          <div className="flex items-center justify-center gap-6 mb-6">
+          <div className="flex items-center justify-center gap-4 lg:gap-6 mb-6">
             {[IoLogoInstagram, IoLogoFacebook, IoLogoPinterest, IoLogoWhatsapp].map((Icon, idx) => (
-              <button key={idx} className="w-[44px] h-[44px] bg-[#8B7355] text-white rounded-full flex items-center justify-center hover:bg-[#7a6448] transition-colors">
-                <Icon className="w-[20px] h-[20px]" />
+              <button key={idx} className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] bg-[#8B7355] text-white rounded-full flex items-center justify-center hover:bg-[#7a6448] transition-colors">
+                <Icon className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
               </button>
             ))}
           </div>
           <div className="flex justify-center">
-            <button className="w-[200px] h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#F5F1EA] transition-colors">
-              <IoDownloadOutline className="w-[20px] h-[20px]" /> Download Image
+            <button className="w-full sm:w-[200px] h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#F5F1EA] transition-colors">
+              <IoDownloadOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /> Download Image
             </button>
           </div>
         </div>
       </div>
 
       {/* Pro Tips + Recommendations */}
-      <div className="px-[120px] py-[64px] bg-white">
-        <div className="flex gap-[32px]">
-          <div className="w-[380px] bg-[#F5F1EA] rounded-[12px] p-[32px]">
-            <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-6">Pro Tips for Best Results</h3>
-            <div className="space-y-5">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px] bg-white">
+        <div className="flex flex-col md:flex-row gap-6 lg:gap-[32px]">
+          <div className="w-full md:w-[280px] lg:w-[380px] bg-[#F5F1EA] rounded-[12px] p-5 lg:p-[32px] flex-shrink-0">
+            <h3 className="text-[18px] md:text-[19px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5 lg:mb-6">Pro Tips for Best Results</h3>
+            <div className="space-y-4 lg:space-y-5">
               {proTips.map((tip, idx) => (
                 <div key={idx} className="flex gap-3">
-                  <tip.icon className="w-[24px] h-[24px] text-[#8B7355] flex-shrink-0 mt-1" />
+                  <tip.icon className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#8B7355] flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-1">{tip.title}</h4>
-                    <p className="text-[14px] text-[#666666] leading-[1.5]">{tip.desc}</p>
+                    <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{tip.title}</h4>
+                    <p className="text-[12px] lg:text-[14px] text-[#666666] leading-[1.5]">{tip.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <div className="flex-1">
-            <h3 className="text-[28px] font-medium text-[#1A1A1A] mb-6">Based on Your Try-Ons</h3>
-            <div className="flex gap-[24px]">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-5 lg:mb-6">Based on Your Try-Ons</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-[24px]">
               {recommendedProducts.map((product, idx) => (
-                <div key={idx} className="w-[300px] bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden">
+                <div key={idx} className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden">
                   <div className="relative">
-                    <img src={product.image} alt={product.name} className="w-full h-[300px] object-cover" />
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-[#C9A870] text-white text-[12px] font-medium rounded-full">{product.match}</div>
+                    <img src={product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[300px] object-cover" />
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium rounded-full">{product.match}</div>
                   </div>
-                  <div className="p-[20px]">
-                    <h4 className="text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
-                    <p className="text-[20px] font-semibold text-[#1A1A1A] mb-4">{product.price}</p>
-                    <button className="w-full h-[48px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Add to Cart</button>
+                  <div className="p-4 lg:p-[20px]">
+                    <h4 className="text-[15px] lg:text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
+                    <p className="text-[17px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3 lg:mb-4">{product.price}</p>
+                    <button className="w-full h-[42px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Add to Cart</button>
                   </div>
                 </div>
               ))}
@@ -528,12 +531,12 @@ function VirtualTryOnDesktop() {
       </div>
 
       {/* Newsletter CTA */}
-      <div className="min-h-[180px] bg-gradient-to-b from-[#F5F1EA] to-white px-[120px] flex flex-col items-center justify-center">
-        <h3 className="text-[36px] font-medium text-[#1A1A1A] mb-3">Get Virtual Try-On Tips</h3>
-        <p className="text-[16px] text-[#666666] mb-6">Exclusive beauty content and personalized recommendations</p>
-        <div className="flex items-center gap-3">
-          <input type="email" placeholder="Enter your email" className="w-[360px] h-[56px] px-5 bg-white text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-[56px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
+      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-0 lg:min-h-[180px] flex flex-col items-center justify-center">
+        <h3 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">Get Virtual Try-On Tips</h3>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#666666] mb-5 lg:mb-6 text-center">Exclusive beauty content and personalized recommendations</p>
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <input type="email" placeholder="Enter your email" className="w-full sm:w-[280px] lg:w-[360px] h-[48px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <button className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
         </div>
       </div>
     </div>
