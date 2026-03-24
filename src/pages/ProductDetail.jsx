@@ -433,7 +433,7 @@ function ProductDetailMobile() {
   )
 }
 
-// ─── Desktop ──────────────────────────────────────────────────────────────────
+// ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function ProductDetailDesktop() {
   const desktopThumbs = [
     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=212&h=212&fit=crop',
@@ -444,87 +444,87 @@ function ProductDetailDesktop() {
   ]
 
   const desktopRelated = [
-    { image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Hydrating Essence',      price: '$78.00',  reviews: 156 },
-    { image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Night Recovery Cream', price: '$145.00', reviews: 203 },
-    { image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Radiance Booster',      price: '$98.00',  reviews: 128 },
-    { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=550&h=640&fit=crop', brand: 'Shan Loray', name: 'Eye Renewal Complex',   price: '$124.00', reviews: 184 },
+    { image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=550&h=640&fit=crop',    brand: 'Shan Loray', name: 'Hydrating Essence',      price: '$78.00',  reviews: 156 },
+    { image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=550&h=640&fit=crop',  brand: 'Shan Loray', name: 'Night Recovery Cream',   price: '$145.00', reviews: 203 },
+    { image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=550&h=640&fit=crop',  brand: 'Shan Loray', name: 'Radiance Booster',        price: '$98.00',  reviews: 128 },
+    { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=550&h=640&fit=crop',  brand: 'Shan Loray', name: 'Eye Renewal Complex',     price: '$124.00', reviews: 184 },
   ]
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* Breadcrumb */}
-      <div className="px-[120px] py-[20px]">
-        <div className="max-w-[1200px] mx-auto text-[13px] font-light text-[#666666]">
+      <div className="px-6 md:px-[60px] lg:px-[120px] py-[20px]">
+        <div className="max-w-[1200px] mx-auto text-[12px] md:text-[13px] font-light text-[#666666]">
           Home / Skincare / Cleansers / Botanical Foaming Cleanser
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="px-[120px] pb-[64px]">
+      <div className="px-6 md:px-[60px] lg:px-[120px] pb-10 md:pb-14 lg:pb-[64px]">
         <div className="max-w-[1200px] mx-auto">
 
           {/* Product Section */}
-          <div className="flex gap-[40px] mb-[64px]">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-10 lg:gap-[40px] mb-10 md:mb-14 lg:mb-[64px]">
 
             {/* Left — Gallery */}
-            <div className="w-[580px] flex-shrink-0">
-              <div className="w-full h-[680px] rounded-[8px] overflow-hidden mb-[20px]">
+            <div className="w-full md:w-[320px] lg:w-[580px] flex-shrink-0">
+              <div className="w-full h-[360px] md:h-[420px] lg:h-[680px] rounded-[8px] overflow-hidden mb-4 lg:mb-[20px]">
                 <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1160&h=1360&fit=crop" alt="Botanical Foaming Cleanser" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
-              <div className="flex gap-[12px] mb-[32px]">
+              <div className="flex gap-[8px] lg:gap-[12px] mb-6 lg:mb-[32px]">
                 {desktopThumbs.map((img, idx) => (
-                  <div key={idx} className={`w-[106px] h-[106px] rounded-[8px] overflow-hidden cursor-pointer border-2 transition-all ${idx === 0 ? 'border-[#8B7355]' : 'border-transparent hover:border-[#E8E3D9]'}`}>
+                  <div key={idx} className={`w-[60px] h-[60px] md:w-[52px] md:h-[52px] lg:w-[106px] lg:h-[106px] rounded-[8px] overflow-hidden cursor-pointer border-2 transition-all ${idx === 0 ? 'border-[#8B7355]' : 'border-transparent hover:border-[#E8E3D9]'}`}>
                     <img src={img} alt={`Product view ${idx + 1}`} className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
-              <div className="flex gap-[12px]">
+              <div className="flex gap-[8px] lg:gap-[12px]">
                 {[
-                  { icon: IoLeafOutline, title: 'Cruelty-Free',  desc: 'Never Tested on Animals'    },
-                  { icon: IoSparkles,    title: 'Clean Beauty',  desc: 'No Harmful Ingredients'      },
-                  { icon: IoSyncOutline, title: 'Sustainable',   desc: 'Eco-Conscious Packaging'     },
+                  { icon: IoLeafOutline, title: 'Cruelty-Free', desc: 'Never Tested on Animals'  },
+                  { icon: IoSparkles,    title: 'Clean Beauty', desc: 'No Harmful Ingredients'    },
+                  { icon: IoSyncOutline, title: 'Sustainable',  desc: 'Eco-Conscious Packaging'   },
                 ].map((f, idx) => (
-                  <div key={idx} className="flex-1 bg-[#FDFBF7] rounded-[8px] p-[20px] text-center">
-                    <f.icon className="w-[28px] h-[28px] text-[#8B7355] mx-auto mb-[8px]" />
-                    <div className="text-[14px] font-medium text-[#1A1A1A] mb-[4px]">{f.title}</div>
-                    <div className="text-[13px] font-light text-[#666666]">{f.desc}</div>
+                  <div key={idx} className="flex-1 bg-[#FDFBF7] rounded-[8px] p-3 lg:p-[20px] text-center">
+                    <f.icon className="w-[22px] h-[22px] lg:w-[28px] lg:h-[28px] text-[#8B7355] mx-auto mb-[6px] lg:mb-[8px]" />
+                    <div className="text-[12px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[3px] lg:mb-[4px]">{f.title}</div>
+                    <div className="hidden md:block text-[11px] lg:text-[13px] font-light text-[#666666]">{f.desc}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Right — Info */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="mb-[8px]">
-                <span className="text-[14px] font-light italic text-[#8B7355]">Shan Loray</span>
-                <span className="text-[12px] font-light text-[#999999] ml-[8px]">Cleansing Collection</span>
+                <span className="text-[13px] lg:text-[14px] font-light italic text-[#8B7355]">Shan Loray</span>
+                <span className="text-[11px] lg:text-[12px] font-light text-[#999999] ml-[8px]">Cleansing Collection</span>
               </div>
-              <h1 className="text-[36px] font-semibold text-[#1A1A1A] mb-[16px] leading-[1.3]">Botanical Foaming Cleanser</h1>
-              <div className="flex items-center gap-[8px] mb-[24px]">
+              <h1 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px] leading-[1.3]">Botanical Foaming Cleanser</h1>
+              <div className="flex items-center gap-[8px] mb-5 lg:mb-[24px]">
                 <div className="flex gap-[2px]">
-                  {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[18px] h-[18px] text-[#C9A870]" />)}
+                  {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#C9A870]" />)}
                 </div>
-                <span className="text-[15px] font-normal text-[#2B2B2B]">4.9</span>
-                <span className="text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">(342 reviews)</span>
+                <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">4.9</span>
+                <span className="text-[14px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">(342 reviews)</span>
               </div>
-              <div className="mb-[20px]">
-                <div className="text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">$68.00</div>
-                <div className="text-[14px] font-light text-[#666666]">or 4 interest-free payments of $17.00</div>
+              <div className="mb-5 lg:mb-[20px]">
+                <div className="text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">$68.00</div>
+                <div className="text-[13px] lg:text-[14px] font-light text-[#666666]">or 4 interest-free payments of $17.00</div>
               </div>
-              <p className="text-[16px] font-normal text-[#3D3D3D] leading-[1.6] mb-[32px]">
+              <p className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#3D3D3D] leading-[1.6] mb-6 lg:mb-[32px]">
                 A luxurious gel-to-foam cleanser that gently purifies while maintaining skin's natural moisture barrier. Infused with botanical extracts for a refreshing, spa-like cleansing experience.
               </p>
 
               {/* Size */}
-              <div className="mb-[24px]">
-                <div className="text-[14px] font-medium text-[#1A1A1A] mb-[12px]">Size</div>
-                <div className="flex gap-[12px]">
+              <div className="mb-5 lg:mb-[24px]">
+                <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Size</div>
+                <div className="flex gap-[8px] lg:gap-[12px]">
                   {sizeOptions.map((opt, idx) => (
-                    <button key={idx} className={`flex-1 h-[48px] rounded-[8px] text-[14px] font-medium cursor-pointer transition-all ${opt.selected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
-                      <div className="flex items-center justify-center gap-[6px]">
+                    <button key={idx} className={`flex-1 h-[44px] lg:h-[48px] rounded-[8px] text-[12px] md:text-[13px] lg:text-[14px] font-medium cursor-pointer transition-all ${opt.selected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
+                      <div className="flex items-center justify-center gap-[4px] lg:gap-[6px] flex-wrap">
                         <span>{opt.size} — {opt.price}</span>
-                        {opt.badge && <span className="text-[10px] bg-[#C9A870] text-white px-[6px] py-[2px] rounded-full">{opt.badge}</span>}
+                        {opt.badge && <span className="text-[9px] lg:text-[10px] bg-[#C9A870] text-white px-[5px] lg:px-[6px] py-[2px] rounded-full">{opt.badge}</span>}
                       </div>
                     </button>
                   ))}
@@ -532,42 +532,42 @@ function ProductDetailDesktop() {
               </div>
 
               {/* Quantity */}
-              <div className="mb-[24px]">
-                <div className="text-[14px] font-medium text-[#1A1A1A] mb-[12px]">Quantity</div>
-                <div className="flex items-center gap-[12px] w-[140px] h-[48px] border border-[#E8E3D9] rounded-[8px]">
-                  <button className="flex-1 flex items-center justify-center"><IoRemoveOutline className="w-[20px] h-[20px]" /></button>
-                  <span className="text-[16px] font-medium text-[#1A1A1A]">1</span>
-                  <button className="flex-1 flex items-center justify-center"><IoAddOutline className="w-[20px] h-[20px]" /></button>
+              <div className="mb-5 lg:mb-[24px]">
+                <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Quantity</div>
+                <div className="flex items-center gap-[12px] w-[130px] lg:w-[140px] h-[44px] lg:h-[48px] border border-[#E8E3D9] rounded-[8px]">
+                  <button className="flex-1 flex items-center justify-center"><IoRemoveOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /></button>
+                  <span className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A]">1</span>
+                  <button className="flex-1 flex items-center justify-center"><IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /></button>
                 </div>
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-col gap-[16px] mb-[20px]">
-                <button className="w-full h-[56px] bg-[#8B7355] text-white text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] hover:bg-[#7A6347] transition-colors">
-                  <IoBagOutline className="w-[20px] h-[20px]" /> Add to Cart
+              <div className="flex flex-col gap-3 lg:gap-[16px] mb-4 lg:mb-[20px]">
+                <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] hover:bg-[#7A6347] transition-colors">
+                  <IoBagOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /> Add to Cart
                 </button>
-                <button className="w-full h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[16px] font-semibold rounded-[8px] hover:bg-[#FDFBF7] transition-colors">
+                <button className="w-full h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] lg:text-[16px] font-semibold rounded-[8px] hover:bg-[#FDFBF7] transition-colors">
                   Buy Now
                 </button>
               </div>
 
-              <div className="flex items-center gap-[32px] mb-[32px]">
-                <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
-                  <IoHeartOutline className="w-[18px] h-[18px]" /> Add to Wishlist
+              <div className="flex items-center gap-6 lg:gap-[32px] mb-6 lg:mb-[32px]">
+                <button className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
+                  <IoHeartOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Add to Wishlist
                 </button>
-                <button className="flex items-center gap-[8px] text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
-                  <IoShareOutline className="w-[18px] h-[18px]" /> Share
+                <button className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
+                  <IoShareOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Share
                 </button>
               </div>
 
               {/* Key Benefits */}
-              <div className="bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-[24px]">
-                <h3 className="text-[18px] font-semibold text-[#1A1A1A] mb-[16px]">Key Benefits</h3>
-                <div className="space-y-[12px]">
+              <div className="bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-5 lg:p-[24px]">
+                <h3 className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px]">Key Benefits</h3>
+                <div className="space-y-[10px] lg:space-y-[12px]">
                   {keyBenefits.map((benefit, idx) => (
-                    <div key={idx} className="flex items-start gap-[12px]">
-                      <IoCheckmark className="w-[16px] h-[16px] text-[#8B7355] mt-[4px] flex-shrink-0" />
-                      <span className="text-[15px] font-normal text-[#2B2B2B]">{benefit}</span>
+                    <div key={idx} className="flex items-start gap-[10px] lg:gap-[12px]">
+                      <IoCheckmark className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] text-[#8B7355] mt-[3px] lg:mt-[4px] flex-shrink-0" />
+                      <span className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">{benefit}</span>
                     </div>
                   ))}
                 </div>
@@ -576,17 +576,17 @@ function ProductDetailDesktop() {
           </div>
 
           {/* How to Use */}
-          <div className="mb-[64px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">How to Use</h3>
-            <div className="space-y-[24px] mb-[32px]">
+          <div className="mb-10 md:mb-14 lg:mb-[64px]">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">How to Use</h3>
+            <div className="space-y-5 lg:space-y-[24px]">
               {applicationSteps.map((step) => (
-                <div key={step.step} className="flex gap-[24px]">
-                  <div className="w-[56px] h-[56px] flex-shrink-0 bg-[#C9A870] rounded-full flex items-center justify-center">
-                    <span className="text-[32px] font-semibold text-white">{step.step}</span>
+                <div key={step.step} className="flex gap-5 lg:gap-[24px]">
+                  <div className="w-[44px] h-[44px] lg:w-[56px] lg:h-[56px] flex-shrink-0 bg-[#C9A870] rounded-full flex items-center justify-center">
+                    <span className="text-[22px] lg:text-[32px] font-semibold text-white">{step.step}</span>
                   </div>
-                  <div className="flex-1 pt-[8px]">
-                    <p className="text-[15px] font-normal text-[#2B2B2B] mb-[6px]">{step.text}</p>
-                    {step.timing && <p className="text-[13px] font-light italic text-[#666666]">{step.timing}</p>}
+                  <div className="flex-1 pt-[6px] lg:pt-[8px]">
+                    <p className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B] mb-[4px] lg:mb-[6px]">{step.text}</p>
+                    {step.timing && <p className="text-[12px] lg:text-[13px] font-light italic text-[#666666]">{step.timing}</p>}
                   </div>
                 </div>
               ))}
@@ -594,79 +594,79 @@ function ProductDetailDesktop() {
           </div>
 
           {/* Ingredients */}
-          <div className="mb-[64px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Key Ingredients</h3>
-            <div className="grid grid-cols-2 gap-[24px] mb-[32px]">
+          <div className="mb-10 md:mb-14 lg:mb-[64px]">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Key Ingredients</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-[24px]">
               {keyIngredients.map((ing, idx) => (
-                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[24px]">
-                  <div className="flex items-start justify-between mb-[12px]">
-                    <h4 className="text-[16px] font-semibold text-[#1A1A1A]">{ing.name}</h4>
-                    <div className="bg-[#C9A870] text-white text-[12px] font-medium px-[10px] py-[4px] rounded-full ml-2">{ing.concentration}</div>
+                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[24px]">
+                  <div className="flex items-start justify-between mb-3 lg:mb-[12px]">
+                    <h4 className="text-[15px] lg:text-[16px] font-semibold text-[#1A1A1A]">{ing.name}</h4>
+                    <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[8px] lg:px-[10px] py-[4px] rounded-full ml-2">{ing.concentration}</div>
                   </div>
-                  <p className="text-[14px] font-normal text-[#666666] leading-[1.5]">{ing.benefit}</p>
+                  <p className="text-[13px] lg:text-[14px] font-normal text-[#666666] leading-[1.5]">{ing.benefit}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Reviews */}
-          <div className="mb-[64px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Customer Reviews</h3>
-            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F1EA] rounded-[12px] p-[40px] mb-[40px]">
-              <div className="flex items-start gap-[48px]">
+          <div className="mb-10 md:mb-14 lg:mb-[64px]">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Customer Reviews</h3>
+            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F1EA] rounded-[12px] p-6 md:p-8 lg:p-[40px] mb-8 lg:mb-[40px]">
+              <div className="flex flex-col md:flex-row items-start gap-6 lg:gap-[48px]">
                 <div className="text-center flex-shrink-0">
-                  <div className="text-[48px] font-semibold text-[#1A1A1A] mb-[8px]">4.9</div>
+                  <div className="text-[40px] lg:text-[48px] font-semibold text-[#1A1A1A] mb-[8px]">4.9</div>
                   <div className="flex gap-[4px] mb-[8px] justify-center">
-                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[20px] h-[20px] text-[#C9A870]" />)}
+                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />)}
                   </div>
-                  <div className="text-[15px] font-normal text-[#666666]">342 reviews</div>
+                  <div className="text-[14px] lg:text-[15px] font-normal text-[#666666]">342 reviews</div>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 w-full">
                   {[5,4,3,2,1].map((r) => (
-                    <div key={r} className="flex items-center gap-[12px] mb-[8px]">
-                      <span className="text-[14px] font-normal text-[#666666] w-[60px]">{r} stars</span>
-                      <div className="flex-1 h-[8px] bg-white rounded-full overflow-hidden">
+                    <div key={r} className="flex items-center gap-3 lg:gap-[12px] mb-[8px]">
+                      <span className="text-[13px] lg:text-[14px] font-normal text-[#666666] w-[52px] lg:w-[60px]">{r} stars</span>
+                      <div className="flex-1 h-[7px] lg:h-[8px] bg-white rounded-full overflow-hidden">
                         <div className="h-full bg-[#C9A870] rounded-full" style={{ width: r === 5 ? '88%' : r === 4 ? '10%' : '2%' }} />
                       </div>
                     </div>
                   ))}
                 </div>
-                <button className="bg-[#8B7355] text-white text-[16px] font-semibold px-[32px] h-[48px] rounded-[8px] hover:bg-[#7A6347] transition-colors flex-shrink-0">
+                <button className="w-full md:w-auto bg-[#8B7355] text-white text-[14px] lg:text-[16px] font-semibold px-6 lg:px-[32px] h-[44px] lg:h-[48px] rounded-[8px] hover:bg-[#7A6347] transition-colors flex-shrink-0">
                   Write a Review
                 </button>
               </div>
             </div>
 
-            <div className="space-y-[24px] mb-[32px]">
+            <div className="space-y-5 lg:space-y-[24px] mb-6 lg:mb-[32px]">
               {reviews.map((review, idx) => (
-                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[24px]">
-                  <div className="flex gap-[16px] mb-[16px]">
-                    <img src={review.avatar} alt={review.username} className="w-[48px] h-[48px] rounded-full object-cover flex-shrink-0" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-[8px] mb-[4px]">
-                        <span className="text-[15px] font-medium text-[#1A1A1A]">{review.username}</span>
-                        {review.verified && <div className="bg-[#8B7355] text-white text-[10px] font-normal px-[8px] py-[2px] rounded-full">Verified</div>}
-                        {review.tier && <div className="bg-[#C9A870] text-white text-[10px] font-normal px-[8px] py-[2px] rounded-full">{review.tier}</div>}
+                <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[24px]">
+                  <div className="flex gap-4 lg:gap-[16px] mb-4 lg:mb-[16px]">
+                    <img src={review.avatar} alt={review.username} className="w-[44px] h-[44px] lg:w-[48px] lg:h-[48px] rounded-full object-cover flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-[8px] mb-[4px] flex-wrap">
+                        <span className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A]">{review.username}</span>
+                        {review.verified && <div className="bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[8px] py-[2px] rounded-full">Verified</div>}
+                        {review.tier && <div className="bg-[#C9A870] text-white text-[9px] lg:text-[10px] font-normal px-[8px] py-[2px] rounded-full">{review.tier}</div>}
                       </div>
-                      <div className="flex items-center gap-[12px]">
+                      <div className="flex items-center gap-3 lg:gap-[12px]">
                         <div className="flex gap-[2px]">
-                          {[...Array(5)].map((_, i) => <IoStarSharp key={i} className={`w-[16px] h-[16px] ${i < review.rating ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />)}
+                          {[...Array(5)].map((_, i) => <IoStarSharp key={i} className={`w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] ${i < review.rating ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />)}
                         </div>
-                        <span className="text-[13px] font-light text-[#999999]">{review.date}</span>
+                        <span className="text-[12px] lg:text-[13px] font-light text-[#999999]">{review.date}</span>
                       </div>
                     </div>
                   </div>
-                  <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{review.title}</h4>
-                  <p className="text-[15px] font-normal text-[#3D3D3D] leading-[1.6] mb-[16px]">{review.text}</p>
-                  <div className="flex items-center justify-between pt-[16px] border-t border-[#F5F1EA]">
-                    <div className="flex gap-[12px]">
-                      <div className="bg-[#F5F1EA] text-[#8B7355] text-[12px] font-normal px-[12px] py-[4px] rounded-full">{review.skinType}</div>
-                      <div className="bg-[#F5F1EA] text-[#8B7355] text-[12px] font-normal px-[12px] py-[4px] rounded-full">{review.ageRange}</div>
+                  <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{review.title}</h4>
+                  <p className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#3D3D3D] leading-[1.6] mb-4 lg:mb-[16px]">{review.text}</p>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-4 lg:pt-[16px] border-t border-[#F5F1EA]">
+                    <div className="flex gap-[8px] lg:gap-[12px]">
+                      <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-normal px-[10px] lg:px-[12px] py-[4px] rounded-full">{review.skinType}</div>
+                      <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-normal px-[10px] lg:px-[12px] py-[4px] rounded-full">{review.ageRange}</div>
                     </div>
-                    <div className="flex items-center gap-[16px]">
-                      <span className="text-[13px] font-normal text-[#666666]">Was this helpful?</span>
-                      <button className="text-[13px] font-normal text-[#8B7355] hover:underline">Yes ({review.helpful})</button>
-                      <button className="text-[13px] font-normal text-[#666666] hover:underline">No ({review.notHelpful})</button>
+                    <div className="flex items-center gap-3 lg:gap-[16px]">
+                      <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Was this helpful?</span>
+                      <button className="text-[12px] lg:text-[13px] font-normal text-[#8B7355] hover:underline">Yes ({review.helpful})</button>
+                      <button className="text-[12px] lg:text-[13px] font-normal text-[#666666] hover:underline">No ({review.notHelpful})</button>
                     </div>
                   </div>
                 </div>
@@ -675,39 +675,41 @@ function ProductDetailDesktop() {
           </div>
 
           {/* Related Products */}
-          <div className="mb-[64px]">
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-[32px]">Complete Your Routine</h3>
-            <div className="grid grid-cols-4 gap-[20px]">
+          <div className="mb-10 md:mb-14 lg:mb-[64px]">
+            <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Complete Your Routine</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-[20px]">
               {desktopRelated.map((product, idx) => (
                 <div key={idx} className="cursor-pointer group">
-                  <div className="relative mb-[16px]">
-                    <img src={product.image} alt={product.name} className="w-full h-[320px] object-cover rounded-[8px]" />
-                    <button className="absolute bottom-[12px] right-[12px] w-[40px] h-[40px] bg-[#8B7355] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
-                      <IoBagOutline className="w-[20px] h-[20px] text-white" />
+                  <div className="relative mb-3 lg:mb-[16px]">
+                    <img src={product.image} alt={product.name} className="w-full h-[200px] md:h-[240px] lg:h-[320px] object-cover rounded-[8px]" />
+                    <button className="absolute bottom-[10px] right-[10px] lg:bottom-[12px] lg:right-[12px] w-[36px] h-[36px] lg:w-[40px] lg:h-[40px] bg-[#8B7355] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
+                      <IoBagOutline className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] text-white" />
                     </button>
                   </div>
-                  <div className="text-[12px] font-light italic text-[#8B7355] mb-[4px]">{product.brand}</div>
-                  <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-[4px]">{product.name}</h4>
-                  <div className="flex items-center gap-[6px] mb-[4px]">
+                  <div className="text-[11px] lg:text-[12px] font-light italic text-[#8B7355] mb-[4px]">{product.brand}</div>
+                  <h4 className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-[4px]">{product.name}</h4>
+                  <div className="flex items-center gap-[4px] lg:gap-[6px] mb-[4px]">
                     <div className="flex gap-[2px]">
-                      {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)}
+                      {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px] text-[#C9A870]" />)}
                     </div>
-                    <span className="text-[13px] font-normal text-[#666666]">({product.reviews})</span>
+                    <span className="text-[11px] lg:text-[13px] font-normal text-[#666666]">({product.reviews})</span>
                   </div>
-                  <div className="text-[16px] font-semibold text-[#2B2B2B]">{product.price}</div>
+                  <div className="text-[14px] md:text-[15px] lg:text-[16px] font-semibold text-[#2B2B2B]">{product.price}</div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Trust Section */}
-          <div className="bg-[#FDFBF7] rounded-[12px] p-[32px]">
-            <div className="grid grid-cols-3 gap-[32px]">
+          <div className="bg-[#FDFBF7] rounded-[12px] p-6 md:p-8 lg:p-[32px]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[32px]">
               {trustBadges.map((item, idx) => (
-                <div key={idx} className="text-center">
-                  <item.icon className="w-[28px] h-[28px] text-[#8B7355] mx-auto mb-[12px]" />
-                  <h4 className="text-[15px] font-medium text-[#2B2B2B] mb-[6px]">{item.title}</h4>
-                  <p className="text-[14px] font-light text-[#666666]">{item.desc}</p>
+                <div key={idx} className="flex md:flex-col md:items-center md:text-center items-center gap-4 md:gap-0">
+                  <item.icon className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355] md:mx-auto md:mb-[12px] flex-shrink-0" />
+                  <div>
+                    <h4 className="text-[14px] lg:text-[15px] font-medium text-[#2B2B2B] md:mb-[6px]">{item.title}</h4>
+                    <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light text-[#666666]">{item.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -715,7 +717,7 @@ function ProductDetailDesktop() {
 
         </div>
       </div>
-      <div className="h-[80px]" />
+      <div className="h-[40px] md:h-[60px] lg:h-[80px]" />
     </div>
   )
 }
