@@ -437,43 +437,43 @@ export default function Navbar() {
     )
   }
 
-  // ── Desktop ──────────────────────────────────────────────────────────────────
+  // ── Desktop + Tablet ─────────────────────────────────────────────────────────
   return (
     <>
-      <header className="min-h-[80px] bg-white border-b border-[#E8E3D9] flex items-center justify-between px-[120px] sticky top-0 z-50">
+      <header className="min-h-[64px] md:min-h-[72px] lg:min-h-[80px] bg-white border-b border-[#E8E3D9] flex items-center justify-between px-6 md:px-[40px] lg:px-[120px] sticky top-0 z-50">
         <Link to="/">
-          <div className="font-semibold text-[32px] text-[#1A1A1A] tracking-[3px] font-['Cormorant_Garamond']">
+          <div className="font-semibold text-[22px] md:text-[26px] lg:text-[32px] text-[#1A1A1A] tracking-[3px] font-['Cormorant_Garamond']">
             SHAN LORAY
           </div>
         </Link>
 
-        <nav className="flex items-center gap-[48px]">
+        <nav className="hidden md:flex items-center gap-[24px] lg:gap-[48px]">
           {desktopNavLinks.map((item) => {
             const isActive = location.pathname === item.path
             return (
               <Link key={item.label} to={item.path} className="relative">
-                <span className={`text-[16px] font-['Cormorant_Garamond'] cursor-pointer transition-all duration-300 ${
+                <span className={`text-[13px] md:text-[14px] lg:text-[16px] font-['Cormorant_Garamond'] cursor-pointer transition-all duration-300 ${
                   isActive ? 'font-semibold text-[#C9A870]' : 'font-normal text-[#3D3D3D] hover:text-[#1A1A1A]'
                 }`}>
                   {item.label}
                 </span>
                 {isActive && (
-                  <div className="absolute left-1/2 -translate-x-1/2 w-[40px] h-[2px] bg-[#C9A870] rounded-full mt-1" />
+                  <div className="absolute left-1/2 -translate-x-1/2 w-[32px] lg:w-[40px] h-[2px] bg-[#C9A870] rounded-full mt-1" />
                 )}
               </Link>
             )
           })}
         </nav>
 
-        <div className="flex items-center gap-[28px]">
-          <span className="text-[14px] font-light text-[#3D3D3D] font-['Cormorant_Garamond']">EN / RU</span>
-          <div className="w-[1px] h-4 bg-[#E8E3D9]" />
+        <div className="flex items-center gap-[16px] md:gap-[20px] lg:gap-[28px]">
+          <span className="hidden lg:inline text-[14px] font-light text-[#3D3D3D] font-['Cormorant_Garamond']">EN / RU</span>
+          <div className="hidden lg:block w-[1px] h-4 bg-[#E8E3D9]" />
           <button onClick={() => setSearchOpen(true)}>
-            <IoSearchOutline className="w-[24px] h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
+            <IoSearchOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
           </button>
-          <Link to="/account"><IoPersonOutline className="w-[24px] h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
-          <Link to="/wishlist"><IoHeartOutline className="w-[24px] h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
-          <Link to="/cart"><IoBagOutline className="w-[24px] h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
+          <Link to="/account"><IoPersonOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
+          <Link to="/wishlist"><IoHeartOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
+          <Link to="/cart"><IoBagOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
         </div>
       </header>
 
