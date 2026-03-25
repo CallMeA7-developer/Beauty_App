@@ -720,20 +720,20 @@ function AISkinConsultantMobile() {
   )
 }
 
-// ─── Desktop (untouched) ──────────────────────────────────────────────────────
+// ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function AISkinConsultantDesktop() {
   const consultationMethods = [
-    { image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=360&h=240&fit=crop', badge: 'MOST POPULAR',  badgeColor: '#8B7355', title: 'AI Photo Analysis',        description: 'Instant comprehensive skin assessment using advanced computer vision and dermatological algorithms',        features: ['Medical-grade accuracy', 'Instant results in 60 seconds', 'Detailed skin mapping', 'Personalized recommendations'],           buttonText: 'Start Photo Analysis',   buttonStyle: 'primary' },
-    { image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=360&h=240&fit=crop',   badge: 'EXPERT GUIDANCE', badgeColor: '#688B8D', title: 'Live Expert Consultation', description: 'Real-time video consultation with certified skincare specialists and dermatologists',                            features: ['One-on-one expert guidance', '30–60 minute sessions', 'Personalized treatment plans', 'Follow-up support included'],           buttonText: 'Schedule Consultation',  buttonStyle: 'secondary' },
-    { image: 'https://images.unsplash.com/photo-1611349411198-e26e0d5f4a52?w=360&h=240&fit=crop', badge: 'COMPREHENSIVE',  badgeColor: '#C9A870', title: 'Detailed Questionnaire',  description: 'In-depth lifestyle and skin history assessment for comprehensive understanding',                                    features: ['Thorough skin history', 'Lifestyle factor analysis', 'Environmental impact review', 'Goal-oriented approach'],                  buttonText: 'Take Questionnaire',     buttonStyle: 'secondary' },
+    { image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=360&h=240&fit=crop', badge: 'MOST POPULAR',   badgeColor: '#8B7355', title: 'AI Photo Analysis',        description: 'Instant comprehensive skin assessment using advanced computer vision and dermatological algorithms',  features: ['Medical-grade accuracy', 'Instant results in 60 seconds', 'Detailed skin mapping', 'Personalized recommendations'],       buttonText: 'Start Photo Analysis',  buttonStyle: 'primary'   },
+    { image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=360&h=240&fit=crop',   badge: 'EXPERT GUIDANCE', badgeColor: '#688B8D', title: 'Live Expert Consultation', description: 'Real-time video consultation with certified skincare specialists and dermatologists',                  features: ['One-on-one expert guidance', '30–60 minute sessions', 'Personalized treatment plans', 'Follow-up support included'],    buttonText: 'Schedule Consultation', buttonStyle: 'secondary' },
+    { image: 'https://images.unsplash.com/photo-1611349411198-e26e0d5f4a52?w=360&h=240&fit=crop', badge: 'COMPREHENSIVE',  badgeColor: '#C9A870', title: 'Detailed Questionnaire',  description: 'In-depth lifestyle and skin history assessment for comprehensive understanding',                      features: ['Thorough skin history', 'Lifestyle factor analysis', 'Environmental impact review', 'Goal-oriented approach'],           buttonText: 'Take Questionnaire',    buttonStyle: 'secondary' },
   ]
   const desktopFeatures = [
-    { icon: IoSearchOutline,   title: 'Medical-Grade Accuracy', description: 'AI validated by dermatologists with 98% accuracy',    badge: '98%' },
-    { icon: IoTimeOutline,     title: 'Instant Results',         description: 'Complete analysis in under 60 seconds',               badge: '60s' },
-    { icon: IoAnalyticsOutline,title: 'Comprehensive Analysis',  description: 'Evaluate 12+ skin metrics simultaneously',            badge: '12+' },
-    { icon: IoPersonOutline,   title: 'Expert Validation',       description: 'Results reviewed by certified specialists',           badge: '✓' },
-    { icon: IoTrendingUpOutline,title: 'Progress Tracking',      description: 'Monitor improvements with historical comparison',     badge: '📈' },
-    { icon: IoBulbOutline,     title: 'Personalized Plans',      description: 'Custom routines generated from your unique profile',  badge: '🎯' },
+    { icon: IoSearchOutline,    title: 'Medical-Grade Accuracy', description: 'AI validated by dermatologists with 98% accuracy',   badge: '98%' },
+    { icon: IoTimeOutline,      title: 'Instant Results',         description: 'Complete analysis in under 60 seconds',              badge: '60s' },
+    { icon: IoAnalyticsOutline, title: 'Comprehensive Analysis',  description: 'Evaluate 12+ skin metrics simultaneously',           badge: '12+' },
+    { icon: IoPersonOutline,    title: 'Expert Validation',       description: 'Results reviewed by certified specialists',          badge: '✓'   },
+    { icon: IoTrendingUpOutline,title: 'Progress Tracking',       description: 'Monitor improvements with historical comparison',    badge: '📈'  },
+    { icon: IoBulbOutline,      title: 'Personalized Plans',      description: 'Custom routines generated from your unique profile', badge: '🎯'  },
   ]
   const desktopAnalysis = [
     { image: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=280&h=160&fit=crop', title: 'Skin Type Identification', description: 'Accurately determine your skin type including oily, dry, combination, and sensitive classifications' },
@@ -759,60 +759,62 @@ function AISkinConsultantDesktop() {
   ]
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[12px] h-[12px] text-[#C9A870]" />)
   const desktopTestimonials = [
-    { beforeImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=200&h=280&fit=crop', name: 'Sarah Mitchell',    age: 34, type: 'Premium Consultation', quote: 'The AI analysis was incredibly accurate. My skin has never looked better!',         timeline: 'After 8 weeks' },
-    { beforeImage: 'https://images.unsplash.com/photo-1611349411198-e26e0d5f4a52?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=200&h=280&fit=crop', name: 'Emily Chen',        age: 29, type: 'AI Photo Analysis',    quote: 'Finally found products that actually work for my sensitive skin.',               timeline: 'After 6 weeks' },
-    { beforeImage: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&h=280&fit=crop',   name: 'Jessica Rodriguez', age: 42, type: 'Live Expert Consultation', quote: 'The video consultation with a dermatologist was worth every penny.',            timeline: 'After 12 weeks' },
-    { beforeImage: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200&h=280&fit=crop',   name: 'Amanda Foster',     age: 38, type: 'Platinum Plan',           quote: 'Monthly follow-ups keep me on track. My hyperpigmentation has improved dramatically.', timeline: 'After 10 weeks' },
+    { beforeImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=200&h=280&fit=crop', name: 'Sarah Mitchell',    age: 34, type: 'Premium Consultation',    quote: 'The AI analysis was incredibly accurate. My skin has never looked better!',                      timeline: 'After 8 weeks'  },
+    { beforeImage: 'https://images.unsplash.com/photo-1611349411198-e26e0d5f4a52?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=200&h=280&fit=crop', name: 'Emily Chen',        age: 29, type: 'AI Photo Analysis',       quote: 'Finally found products that actually work for my sensitive skin.',                               timeline: 'After 6 weeks'  },
+    { beforeImage: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&h=280&fit=crop',   name: 'Jessica Rodriguez', age: 42, type: 'Live Expert Consultation', quote: 'The video consultation with a dermatologist was worth every penny.',                              timeline: 'After 12 weeks' },
+    { beforeImage: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200&h=280&fit=crop', afterImage: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200&h=280&fit=crop',   name: 'Amanda Foster',     age: 38, type: 'Platinum Plan',            quote: 'Monthly follow-ups keep me on track. My hyperpigmentation has improved dramatically.',           timeline: 'After 10 weeks' },
   ]
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* Hero */}
-      <div className="min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-[120px]">
-        <div className="w-[650px] relative z-10">
-          <p className="text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">PERSONALIZED AI CONSULTATION</p>
-          <h1 className="text-[72px] font-bold text-[#1A1A1A] leading-[1.05] mb-6">Your Personal Skin Journey Begins Here</h1>
-          <p className="text-[20px] font-normal text-[#666666] mb-8">Expert AI-powered consultation combined with dermatologist insights for comprehensive skin analysis and personalized treatment plans</p>
-          <div className="w-[140px] h-[4px] bg-[#C9A870]" />
+      <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-4 md:px-[60px] lg:px-[120px] py-10 md:py-0">
+        <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
+          <p className="text-[11px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">PERSONALIZED AI CONSULTATION</p>
+          <h1 className="text-[36px] md:text-[52px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-6">Your Personal Skin Journey Begins Here</h1>
+          <p className="text-[13px] md:text-[16px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Expert AI-powered consultation combined with dermatologist insights for comprehensive skin analysis and personalized treatment plans</p>
+          <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
-        <div className="absolute right-[140px] top-1/2 -translate-y-1/2">
+        <div className="hidden lg:block absolute right-[140px] top-1/2 -translate-y-1/2">
           <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop" alt="AI Consultation" className="w-[400px] h-[400px] object-cover rounded-[12px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
 
       {/* Breadcrumb */}
-      <div className="min-h-[48px] bg-[#FDFBF7] px-[120px] flex items-center">
-        <span className="text-[15px] text-[#8B7355] cursor-pointer">Home</span><span className="text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[15px] text-[#8B7355] cursor-pointer">Technology</span><span className="text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[15px] text-[#666666]">AI Skin Consultation</span>
+      <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer whitespace-nowrap">Technology</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666] whitespace-nowrap">AI Skin Consultation</span>
       </div>
 
       {/* Consultation Methods */}
-      <div className="bg-white px-[120px] py-[64px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Complete Skin Consultation Experience</h2>
-        <p className="text-[16px] text-[#666666] text-center mb-[56px]">Choose your preferred consultation method for personalized skincare guidance</p>
-        <div className="grid grid-cols-3 gap-[32px]">
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Complete Skin Consultation Experience</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#666666] text-center mb-10 lg:mb-[56px]">Choose your preferred consultation method for personalized skincare guidance</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-[32px]">
           {consultationMethods.map((method, idx) => (
             <div key={idx} className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
               <div className="relative">
-                <img src={method.image} alt={method.title} className="w-full h-[240px] object-cover" />
+                <img src={method.image} alt={method.title} className="w-full h-[180px] md:h-[200px] lg:h-[240px] object-cover" />
                 <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 rounded-full" style={{ color: method.badgeColor }}>
-                  <span className="text-[11px] font-medium">{method.badge}</span>
+                  <span className="text-[10px] lg:text-[11px] font-medium">{method.badge}</span>
                 </div>
               </div>
-              <div className="p-[32px]">
-                <h3 className="text-[24px] font-medium text-[#1A1A1A] mb-3">{method.title}</h3>
-                <p className="text-[15px] text-[#666666] leading-[1.6] mb-5">{method.description}</p>
-                <div className="flex flex-col gap-2 mb-6">
+              <div className="p-5 md:p-6 lg:p-[32px]">
+                <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-3">{method.title}</h3>
+                <p className="text-[13px] lg:text-[15px] text-[#666666] leading-[1.6] mb-5">{method.description}</p>
+                <div className="flex flex-col gap-2 mb-5 lg:mb-6">
                   {method.features.map((feature, fIdx) => (
                     <div key={fIdx} className="flex items-center gap-2">
-                      <IoCheckmarkCircle className="w-[16px] h-[16px] text-[#8B7355] flex-shrink-0" />
-                      <span className="text-[14px] text-[#3D3D3D]">{feature}</span>
+                      <IoCheckmarkCircle className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] text-[#8B7355] flex-shrink-0" />
+                      <span className="text-[12px] lg:text-[14px] text-[#3D3D3D]">{feature}</span>
                     </div>
                   ))}
                 </div>
-                <button className={`w-full h-[48px] text-[15px] font-medium rounded-[8px] transition-all ${method.buttonStyle === 'primary' ? 'bg-[#8B7355] text-white hover:bg-[#7a6448]' : 'bg-white border-2 border-[#8B7355] text-[#8B7355] hover:bg-[#FDFBF7]'}`}>
+                <button className={`w-full h-[44px] lg:h-[48px] text-[13px] lg:text-[15px] font-medium rounded-[8px] transition-all ${method.buttonStyle === 'primary' ? 'bg-[#8B7355] text-white hover:bg-[#7a6448]' : 'bg-white border-2 border-[#8B7355] text-[#8B7355] hover:bg-[#FDFBF7]'}`}>
                   {method.buttonText}
                 </button>
               </div>
@@ -822,28 +824,28 @@ function AISkinConsultantDesktop() {
       </div>
 
       {/* Upload Interface */}
-      <div className="min-h-[550px] bg-gradient-to-b from-[#F5F1EA] to-white px-[120px] py-[64px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">Begin Your AI Skin Analysis</h2>
+      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Begin Your AI Skin Analysis</h2>
         <div className="max-w-[800px] mx-auto">
-          <div className="border-2 border-dashed border-[#C9A870] rounded-[12px] bg-white flex flex-col items-center justify-center p-[48px] hover:border-[#8B7355] transition-colors">
-            <IoCameraOutline className="w-[80px] h-[80px] text-[#8B7355] mb-6" />
-            <h3 className="text-[24px] font-medium text-[#1A1A1A] mb-4">Upload a clear front-facing photo in natural lighting</h3>
-            <p className="text-[15px] text-[#666666] text-center mb-8">Ensure good lighting and face directly forward for accurate analysis</p>
-            <div className="flex gap-4">
-              <button className="w-[200px] h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Upload Photo</button>
-              <button className="w-[200px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#FDFBF7] transition-colors">Take Live Selfie</button>
+          <div className="border-2 border-dashed border-[#C9A870] rounded-[12px] bg-white flex flex-col items-center justify-center p-8 md:p-10 lg:p-[48px] hover:border-[#8B7355] transition-colors">
+            <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-6" />
+            <h3 className="text-[16px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4 text-center">Upload a clear front-facing photo in natural lighting</h3>
+            <p className="text-[13px] lg:text-[15px] text-[#666666] text-center mb-8">Ensure good lighting and face directly forward for accurate analysis</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button className="w-full sm:w-[180px] lg:w-[200px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Upload Photo</button>
+              <button className="w-full sm:w-[180px] lg:w-[200px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#FDFBF7] transition-colors">Take Live Selfie</button>
             </div>
           </div>
-          <div className="mt-8 grid grid-cols-3 gap-6">
+          <div className="mt-6 lg:mt-8 grid grid-cols-3 gap-4 lg:gap-6">
             {[
-              { icon: IoSunnyOutline,         title: 'Good Lighting',  desc: 'Natural daylight preferred' },
-              { icon: IoPersonCircleOutline,   title: 'Face Forward',   desc: 'Look directly at camera' },
-              { icon: IoSparklesOutline,       title: 'Remove Makeup',  desc: 'Clean, bare skin' },
+              { icon: IoSunnyOutline,       title: 'Good Lighting', desc: 'Natural daylight preferred' },
+              { icon: IoPersonCircleOutline, title: 'Face Forward',  desc: 'Look directly at camera'   },
+              { icon: IoSparklesOutline,     title: 'Remove Makeup', desc: 'Clean, bare skin'           },
             ].map((tip, idx) => (
               <div key={idx} className="flex flex-col items-center text-center">
-                <tip.icon className="w-[32px] h-[32px] text-[#8B7355] mb-3" />
-                <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-1">{tip.title}</h4>
-                <p className="text-[14px] text-[#666666]">{tip.desc}</p>
+                <tip.icon className="w-[24px] h-[24px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-2 lg:mb-3" />
+                <h4 className="text-[13px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{tip.title}</h4>
+                <p className="text-[12px] lg:text-[14px] text-[#666666]">{tip.desc}</p>
               </div>
             ))}
           </div>
@@ -851,32 +853,32 @@ function AISkinConsultantDesktop() {
       </div>
 
       {/* Why Choose AI */}
-      <div className="bg-white px-[120px] py-[64px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">Why Choose AI Consultation</h2>
-        <div className="grid grid-cols-3 gap-[32px]">
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Why Choose AI Consultation</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-[32px]">
           {desktopFeatures.map((feature, idx) => (
-            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[24px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all duration-300">
-              <div className="flex items-start justify-between mb-4">
-                <feature.icon className="w-[32px] h-[32px] text-[#8B7355]" />
-                <span className="text-[20px] font-semibold text-[#8B7355]">{feature.badge}</span>
+            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all duration-300">
+              <div className="flex items-start justify-between mb-3 lg:mb-4">
+                <feature.icon className="w-[26px] h-[26px] lg:w-[32px] lg:h-[32px] text-[#8B7355]" />
+                <span className="text-[16px] lg:text-[20px] font-semibold text-[#8B7355]">{feature.badge}</span>
               </div>
-              <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-2">{feature.title}</h3>
-              <p className="text-[15px] text-[#666666] leading-[1.6]">{feature.description}</p>
+              <h3 className="text-[15px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2">{feature.title}</h3>
+              <p className="text-[13px] lg:text-[15px] text-[#666666] leading-[1.6]">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* What We Analyze */}
-      <div className="bg-[#FDFBF7] px-[120px] py-[64px]">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">What We Analyze</h2>
-        <div className="grid grid-cols-4 gap-[24px]">
+      <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">What We Analyze</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-[24px]">
           {desktopAnalysis.map((cat, idx) => (
             <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all duration-300">
-              <img src={cat.image} alt={cat.title} className="w-full h-[160px] object-cover" />
-              <div className="p-[20px]">
-                <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-2">{cat.title}</h3>
-                <p className="text-[14px] text-[#666666] leading-[1.5]">{cat.description}</p>
+              <img src={cat.image} alt={cat.title} className="w-full h-[120px] md:h-[140px] lg:h-[160px] object-cover" />
+              <div className="p-3 lg:p-[20px]">
+                <h3 className="text-[13px] md:text-[15px] lg:text-[18px] font-medium text-[#1A1A1A] mb-1 lg:mb-2">{cat.title}</h3>
+                <p className="text-[11px] md:text-[12px] lg:text-[14px] text-[#666666] leading-[1.5]">{cat.description}</p>
               </div>
             </div>
           ))}
@@ -884,37 +886,39 @@ function AISkinConsultantDesktop() {
       </div>
 
       {/* Process Steps */}
-      <div className="bg-white px-[120px] py-[64px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">Your Consultation Journey</h2>
-        <div className="flex justify-center gap-[48px]">
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Your Consultation Journey</h2>
+        <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-8 lg:gap-[48px]">
           {desktopProcess.map((step, idx) => (
-            <div key={idx} className="w-[240px] text-center">
-              <div className="flex justify-center mb-4">
-                <img src={step.image} alt={step.title} className="w-[120px] h-[120px] object-cover rounded-full border-4 border-[#E8E3D9]" />
+            <div key={idx} className="flex md:flex-col items-center md:items-center md:text-center gap-4 md:gap-0 md:w-[200px] lg:w-[240px]">
+              <div className="flex justify-center mb-0 md:mb-4 flex-shrink-0">
+                <img src={step.image} alt={step.title} className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] object-cover rounded-full border-4 border-[#E8E3D9]" />
               </div>
-              <div className="flex justify-center mb-3">
-                <div className="w-[48px] h-[48px] bg-[#8B7355] text-white text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div>
+              <div className="flex justify-center mb-0 md:mb-3 flex-shrink-0">
+                <div className="w-[36px] h-[36px] md:w-[40px] md:h-[40px] lg:w-[48px] lg:h-[48px] bg-[#8B7355] text-white text-[18px] md:text-[20px] lg:text-[24px] font-semibold rounded-full flex items-center justify-center">{step.number}</div>
               </div>
-              <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-2">{step.title}</h3>
-              <p className="text-[15px] text-[#666666] leading-[1.6]">{step.description}</p>
+              <div>
+                <h3 className="text-[15px] lg:text-[20px] font-medium text-[#1A1A1A] mb-1 lg:mb-2">{step.title}</h3>
+                <p className="text-[12px] lg:text-[15px] text-[#666666] leading-[1.6]">{step.description}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       {/* Sample Results */}
-      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-[120px] py-[64px]">
-        <h2 className="text-[48px] font-medium text-[#1A1A1A] text-center mb-[56px]">See What You'll Receive</h2>
-        <div className="max-w-[900px] mx-auto bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-[48px]">
-          <div className="text-center mb-10">
-            <div className="text-[80px] font-bold text-[#8B7355] leading-none mb-2">87/100</div>
-            <h3 className="text-[24px] font-medium text-[#1A1A1A] mb-2">Overall Skin Health Score</h3>
-            <p className="text-[16px] text-[#666666]">Excellent condition with minor improvement areas</p>
+      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">See What You'll Receive</h2>
+        <div className="max-w-[900px] mx-auto bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-6 md:p-8 lg:p-[48px]">
+          <div className="text-center mb-8 lg:mb-10">
+            <div className="text-[56px] md:text-[68px] lg:text-[80px] font-bold text-[#8B7355] leading-none mb-2">87/100</div>
+            <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-2">Overall Skin Health Score</h3>
+            <p className="text-[13px] lg:text-[16px] text-[#666666]">Excellent condition with minor improvement areas</p>
           </div>
-          <div className="grid grid-cols-4 gap-8 mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6 lg:gap-8 mb-8 lg:mb-10">
             {metrics.map((metric, idx) => (
               <div key={idx} className="flex flex-col items-center">
-                <div className="relative w-[100px] h-[100px] mb-3">
+                <div className="relative w-[80px] h-[80px] md:w-[90px] md:h-[90px] lg:w-[100px] lg:h-[100px] mb-3">
                   <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="45" fill="none" stroke="#E8E3D9" strokeWidth="8" />
                     <circle cx="50" cy="50" r="45" fill="none" stroke="#8B7355" strokeWidth="8"
@@ -923,37 +927,37 @@ function AISkinConsultantDesktop() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-[18px] font-semibold text-[#1A1A1A]">{metric.value}%</span>
+                    <span className="text-[14px] md:text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A]">{metric.value}%</span>
                   </div>
                 </div>
-                <span className="text-[15px] font-medium text-[#666666]">{metric.label}</span>
+                <span className="text-[12px] md:text-[13px] lg:text-[15px] font-medium text-[#666666]">{metric.label}</span>
               </div>
             ))}
           </div>
-          <button className="w-full h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">View Sample Full Report</button>
+          <button className="w-full h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">View Sample Full Report</button>
         </div>
       </div>
 
       {/* Product Recommendations */}
-      <div className="bg-white px-[120px] py-[64px]">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Matching</h2>
-        <p className="text-[16px] text-[#666666] text-center mb-[56px]">AI-powered recommendations based on your unique skin analysis</p>
-        <div className="grid grid-cols-4 gap-[24px]">
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[22px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Matching</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#666666] text-center mb-10 lg:mb-[56px]">AI-powered recommendations based on your unique skin analysis</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-[24px]">
           {recommendedProducts.map((product, idx) => (
             <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all duration-300">
-              <img src={product.image} alt={product.name} className="w-full h-[240px] object-cover" />
-              <div className="p-[20px]">
-                <p className="text-[13px] font-light italic text-[#8B7355] mb-1">{product.brand}</p>
-                <h3 className="text-[18px] font-medium text-[#1A1A1A] mb-1">{product.name}</h3>
-                <p className="text-[14px] text-[#666666] mb-3">{product.benefit}</p>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[20px] font-semibold text-[#1A1A1A]">{product.price}</span>
-                  <div className="flex items-center gap-1"><Stars /></div>
+              <img src={product.image} alt={product.name} className="w-full h-[160px] md:h-[200px] lg:h-[240px] object-cover" />
+              <div className="p-3 md:p-4 lg:p-[20px]">
+                <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] mb-1">{product.brand}</p>
+                <h3 className="text-[13px] md:text-[15px] lg:text-[18px] font-medium text-[#1A1A1A] mb-1">{product.name}</h3>
+                <p className="text-[12px] lg:text-[14px] text-[#666666] mb-2 lg:mb-3">{product.benefit}</p>
+                <div className="flex items-center justify-between mb-2 lg:mb-3">
+                  <span className="text-[15px] md:text-[17px] lg:text-[20px] font-semibold text-[#1A1A1A]">{product.price}</span>
+                  <div className="flex items-center gap-0.5"><Stars /></div>
                 </div>
-                <div className="px-3 py-1 bg-[#F5F1EA] rounded-[6px] mb-3">
-                  <p className="text-[12px] font-medium text-[#8B7355]">{product.reason}</p>
+                <div className="px-2 lg:px-3 py-1 bg-[#F5F1EA] rounded-[6px] mb-3">
+                  <p className="text-[10px] lg:text-[12px] font-medium text-[#8B7355]">{product.reason}</p>
                 </div>
-                <button className="w-full h-[44px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Add to Routine</button>
+                <button className="w-full h-[38px] lg:h-[44px] bg-[#8B7355] text-white text-[12px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Add to Routine</button>
               </div>
             </div>
           ))}
@@ -961,26 +965,26 @@ function AISkinConsultantDesktop() {
       </div>
 
       {/* Pricing */}
-      <div className="bg-white px-[120px] py-[64px]">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">Choose Your Consultation Plan</h2>
-        <div className="grid grid-cols-3 gap-[32px]">
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[22px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Choose Your Consultation Plan</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-[32px]">
           {pricingPlans.map((plan, idx) => (
-            <div key={idx} className={`bg-white rounded-[16px] border-2 shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-[32px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all ${idx === 1 ? 'border-[#8B7355]' : 'border-[#E8E3D9]'}`}>
-              {plan.badge && <div className="px-4 py-1 bg-[#F5F1EA] text-[#8B7355] text-[11px] font-medium rounded-full inline-block mb-4">{plan.badge}</div>}
-              <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-2">{plan.name}</h3>
-              <div className="mb-6">
-                <span className="text-[48px] font-bold text-[#1A1A1A]">{plan.price}</span>
-                {plan.period && <span className="text-[16px] text-[#666666]">{plan.period}</span>}
+            <div key={idx} className={`bg-white rounded-[16px] border-2 shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[32px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all ${idx === 1 ? 'border-[#8B7355]' : 'border-[#E8E3D9]'}`}>
+              {plan.badge && <div className="px-4 py-1 bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full inline-block mb-4">{plan.badge}</div>}
+              <h3 className="text-[20px] md:text-[22px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-2">{plan.name}</h3>
+              <div className="mb-5 lg:mb-6">
+                <span className="text-[36px] md:text-[40px] lg:text-[48px] font-bold text-[#1A1A1A]">{plan.price}</span>
+                {plan.period && <span className="text-[14px] lg:text-[16px] text-[#666666]">{plan.period}</span>}
               </div>
-              <div className="flex flex-col gap-3 mb-8">
+              <div className="flex flex-col gap-2 lg:gap-3 mb-6 lg:mb-8">
                 {plan.features.map((feature, fIdx) => (
                   <div key={fIdx} className="flex items-center gap-3">
-                    <IoCheckmarkCircle className="w-[18px] h-[18px] text-[#8B7355] flex-shrink-0" />
-                    <span className="text-[15px] text-[#3D3D3D]">{feature}</span>
+                    <IoCheckmarkCircle className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355] flex-shrink-0" />
+                    <span className="text-[13px] lg:text-[15px] text-[#3D3D3D]">{feature}</span>
                   </div>
                 ))}
               </div>
-              <button className={`w-full h-[56px] text-[15px] font-medium rounded-[8px] transition-all ${plan.buttonStyle === 'primary' ? 'bg-[#8B7355] text-white hover:bg-[#7a6448]' : 'bg-white border-2 border-[#8B7355] text-[#8B7355] hover:bg-[#FDFBF7]'}`}>
+              <button className={`w-full h-[48px] lg:h-[56px] text-[13px] lg:text-[15px] font-medium rounded-[8px] transition-all ${plan.buttonStyle === 'primary' ? 'bg-[#8B7355] text-white hover:bg-[#7a6448]' : 'bg-white border-2 border-[#8B7355] text-[#8B7355] hover:bg-[#FDFBF7]'}`}>
                 {plan.buttonText}
               </button>
             </div>
@@ -989,52 +993,52 @@ function AISkinConsultantDesktop() {
       </div>
 
       {/* Privacy */}
-      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-[120px] py-[64px]">
-        <div className="flex flex-col items-center mb-10">
-          <IoShieldCheckmarkOutline className="w-[48px] h-[48px] text-[#8B7355] mb-4" />
-          <h2 className="text-[32px] font-medium text-[#1A1A1A]">Your Privacy is Our Priority</h2>
+      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <div className="flex flex-col items-center mb-8 lg:mb-10">
+          <IoShieldCheckmarkOutline className="w-[36px] h-[36px] lg:w-[48px] lg:h-[48px] text-[#8B7355] mb-4" />
+          <h2 className="text-[20px] md:text-[26px] lg:text-[32px] font-medium text-[#1A1A1A] text-center">Your Privacy is Our Priority</h2>
         </div>
-        <div className="grid grid-cols-3 gap-[48px]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-8 lg:gap-[48px]">
           {[
             { icon: IoLockClosedOutline,      title: 'Encrypted & Secure', desc: 'All data transmitted with military-grade encryption and stored securely' },
-            { icon: IoCheckmarkCircle,        title: 'HIPAA Compliant',    desc: 'Meeting medical privacy standards for health information protection' },
-            { icon: IoShieldCheckmarkOutline, title: 'Never Shared',       desc: 'Your data is never sold or shared with third parties' },
+            { icon: IoCheckmarkCircle,        title: 'HIPAA Compliant',    desc: 'Meeting medical privacy standards for health information protection'    },
+            { icon: IoShieldCheckmarkOutline, title: 'Never Shared',       desc: 'Your data is never sold or shared with third parties'                    },
           ].map((item, idx) => (
             <div key={idx} className="text-center">
-              <item.icon className="w-[32px] h-[32px] text-[#8B7355] mx-auto mb-4" />
-              <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-3">{item.title}</h3>
-              <p className="text-[15px] text-[#666666] leading-[1.6]">{item.desc}</p>
+              <item.icon className="w-[26px] h-[26px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mx-auto mb-3 lg:mb-4" />
+              <h3 className="text-[16px] md:text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2 lg:mb-3">{item.title}</h3>
+              <p className="text-[13px] lg:text-[15px] text-[#666666] leading-[1.6]">{item.desc}</p>
             </div>
           ))}
         </div>
-        <div className="flex justify-center mt-8">
-          <span className="text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">View Privacy Policy</span>
+        <div className="flex justify-center mt-6 lg:mt-8">
+          <span className="text-[13px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">View Privacy Policy</span>
         </div>
       </div>
 
       {/* Testimonials */}
-      <div className="bg-white px-[120px] py-[64px]">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">Real Results from Real Consultations</h2>
-        <div className="grid grid-cols-4 gap-[24px]">
+      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[22px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Real Results from Real Consultations</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-5 lg:gap-[24px]">
           {desktopTestimonials.map((t, idx) => (
             <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition-all duration-300">
               <div className="flex">
-                <img src={t.beforeImage} alt="Before" className="w-1/2 h-[200px] object-cover" />
-                <img src={t.afterImage}  alt="After"  className="w-1/2 h-[200px] object-cover" />
+                <img src={t.beforeImage} alt="Before" className="w-1/2 h-[160px] md:h-[180px] lg:h-[200px] object-cover" />
+                <img src={t.afterImage}  alt="After"  className="w-1/2 h-[160px] md:h-[180px] lg:h-[200px] object-cover" />
               </div>
-              <div className="p-[20px]">
+              <div className="p-4 lg:p-[20px]">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h4 className="text-[16px] font-medium text-[#1A1A1A]">{t.name}</h4>
-                    <p className="text-[13px] text-[#666666]">Age {t.age}</p>
+                    <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A]">{t.name}</h4>
+                    <p className="text-[12px] lg:text-[13px] text-[#666666]">Age {t.age}</p>
                   </div>
                   <div className="flex gap-0.5"><Stars /></div>
                 </div>
                 <div className="px-3 py-1 bg-[#F5F1EA] rounded-[6px] mb-3">
-                  <p className="text-[12px] font-medium text-[#8B7355]">{t.type}</p>
+                  <p className="text-[11px] lg:text-[12px] font-medium text-[#8B7355]">{t.type}</p>
                 </div>
-                <p className="text-[14px] font-light italic text-[#666666] leading-[1.5] mb-3">"{t.quote}"</p>
-                <p className="text-[13px] font-medium text-[#8B7355]">{t.timeline}</p>
+                <p className="text-[12px] lg:text-[14px] font-light italic text-[#666666] leading-[1.5] mb-3">"{t.quote}"</p>
+                <p className="text-[12px] lg:text-[13px] font-medium text-[#8B7355]">{t.timeline}</p>
               </div>
             </div>
           ))}
@@ -1042,18 +1046,18 @@ function AISkinConsultantDesktop() {
       </div>
 
       {/* FAQ */}
-      <div className="bg-[#FDFBF7] px-[120px] py-[64px]">
-        <h2 className="text-[40px] font-medium text-[#1A1A1A] text-center mb-[56px]">Consultation Questions Answered</h2>
+      <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
+        <h2 className="text-[22px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Consultation Questions Answered</h2>
         <div className="max-w-[900px] mx-auto flex flex-col gap-4">
           {faqs.map((faq, idx) => (
-            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] p-[24px]">
-              <div className="flex items-center justify-between cursor-pointer">
-                <h3 className="text-[17px] font-medium text-[#1A1A1A]">{faq.question}</h3>
-                <IoChevronDown className="w-[20px] h-[20px] text-[#8B7355] flex-shrink-0 ml-4" />
+            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] p-4 lg:p-[24px]">
+              <div className="flex items-center justify-between cursor-pointer gap-4">
+                <h3 className="text-[14px] md:text-[15px] lg:text-[17px] font-medium text-[#1A1A1A]">{faq.question}</h3>
+                <IoChevronDown className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0" />
               </div>
               {idx < 2 && (
-                <div className="mt-4 bg-[#F5F1EA] rounded-[8px] p-5">
-                  <p className="text-[15px] text-[#666666] leading-[1.7]">{faq.answer}</p>
+                <div className="mt-4 bg-[#F5F1EA] rounded-[8px] p-4 lg:p-5">
+                  <p className="text-[13px] lg:text-[15px] text-[#666666] leading-[1.7]">{faq.answer}</p>
                 </div>
               )}
             </div>
@@ -1062,12 +1066,12 @@ function AISkinConsultantDesktop() {
       </div>
 
       {/* Final CTA */}
-      <div className="min-h-[180px] bg-gradient-to-b from-[#F5F1EA] to-white flex flex-col items-center justify-center px-[120px]">
-        <h2 className="text-[36px] font-medium text-[#1A1A1A] mb-3">Ready to Transform Your Skin?</h2>
-        <p className="text-[16px] text-[#666666] mb-6">Join thousands who've discovered their perfect skincare routine</p>
-        <div className="flex gap-4">
-          <button className="w-[220px] h-[56px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Start Free Analysis</button>
-          <button className="w-[220px] h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px] hover:bg-[#FDFBF7] transition-colors">Talk to Expert</button>
+      <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-0 lg:min-h-[180px] flex flex-col items-center justify-center">
+        <h2 className="text-[20px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">Ready to Transform Your Skin?</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#666666] mb-5 lg:mb-6 text-center">Join thousands who've discovered their perfect skincare routine</p>
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <button className="w-full sm:w-[200px] lg:w-[220px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Start Free Analysis</button>
+          <button className="w-full sm:w-[200px] lg:w-[220px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#FDFBF7] transition-colors">Talk to Expert</button>
         </div>
       </div>
 
