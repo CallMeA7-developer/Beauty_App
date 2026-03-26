@@ -1,38 +1,32 @@
 import { useState } from 'react'
 import {
-  IoPersonOutline,
-  IoHeartOutline,
-  IoSparkles,
-  IoBagCheckOutline,
-  IoCalendarOutline,
-  IoSettingsOutline,
-  IoStarSharp,
-  IoRibbonOutline,
   IoShieldCheckmarkOutline,
   IoAddOutline,
   IoCreateOutline,
   IoTrashOutline,
   IoCardOutline,
   IoCheckmarkCircle,
+  IoPersonOutline,
+  IoBagCheckOutline,
+  IoHeartOutline,
+  IoSparkles,
+  IoRibbonOutline,
+  IoCalendarOutline,
+  IoStarSharp,
+  IoSettingsOutline,
 } from 'react-icons/io5'
+import { getNavItems, initialPaymentCards } from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function PaymentMethods() {
-  const navigationItems = [
-    { icon: IoPersonOutline,   label: 'Account Dashboard',  active: false, badge: null          },
-    { icon: IoBagCheckOutline, label: 'Order History',       active: false, badge: null          },
-    { icon: IoHeartOutline,    label: 'Wishlist',             active: false, badge: '12'          },
-    { icon: IoSparkles,        label: 'Beauty Profile',       active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline,   label: 'Loyalty Program',      active: false, badge: '2,450'       },
-    { icon: IoCalendarOutline, label: 'My Routines',          active: false, badge: null          },
-    { icon: IoStarSharp,       label: 'Reviews & Ratings',    active: false, badge: null          },
-    { icon: IoSettingsOutline, label: 'Account Settings',     active: true,  badge: null          },
-  ]
+  const navigationItems = getNavItems('settings', NAV_ICONS)
 
-  const [paymentCards, setPaymentCards] = useState([
-    { id: 1, type: 'Visa',       labelColor: 'text-[#1434CB]', labelBg: 'bg-blue-50', cardNumber: '•••• •••• •••• 4532', expiry: '08/2026', cardholder: 'Alexandra Chen', isDefault: true  },
-    { id: 2, type: 'Mastercard', labelColor: 'text-[#EB001B]', labelBg: 'bg-red-50',  cardNumber: '•••• •••• •••• 8791', expiry: '12/2025', cardholder: 'Alexandra Chen', isDefault: false },
-    { id: 3, type: 'Amex',       labelColor: 'text-[#2E77BC]', labelBg: 'bg-blue-50', cardNumber: '•••• •••••• •7003',   expiry: '03/2027', cardholder: 'Alexandra Chen', isDefault: false },
-  ])
+  const [paymentCards, setPaymentCards] = useState(initialPaymentCards)
 
   const setDefault = (id) => setPaymentCards(paymentCards.map(card => ({ ...card, isDefault: card.id === id })))
   const deleteCard = (id) => setPaymentCards(paymentCards.filter(card => card.id !== id))

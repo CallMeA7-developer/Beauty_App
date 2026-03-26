@@ -1,12 +1,4 @@
 import {
-  IoPersonOutline,
-  IoHeartOutline,
-  IoSparkles,
-  IoBagCheckOutline,
-  IoCalendarOutline,
-  IoSettingsOutline,
-  IoStarSharp,
-  IoRibbonOutline,
   IoCheckmarkCircle,
   IoCameraOutline,
   IoCheckmark,
@@ -16,19 +8,25 @@ import {
   IoChevronDown,
   IoLockClosedOutline,
   IoChevronForward,
+  IoPersonOutline,
+  IoBagCheckOutline,
+  IoHeartOutline,
+  IoSparkles,
+  IoRibbonOutline,
+  IoCalendarOutline,
+  IoStarSharp,
+  IoSettingsOutline,
 } from 'react-icons/io5'
+import { getNavItems } from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function EditProfile() {
-  const navigationItems = [
-    { icon: IoPersonOutline,    label: 'Account Dashboard',  active: false, badge: null        },
-    { icon: IoBagCheckOutline,  label: 'Order History',       active: false, badge: null        },
-    { icon: IoHeartOutline,     label: 'Wishlist',             active: false, badge: '12'        },
-    { icon: IoSparkles,         label: 'Beauty Profile',       active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline,    label: 'Loyalty Program',      active: false, badge: '2,450'     },
-    { icon: IoCalendarOutline,  label: 'My Routines',          active: false, badge: null        },
-    { icon: IoStarSharp,        label: 'Reviews & Ratings',    active: false, badge: null        },
-    { icon: IoSettingsOutline,  label: 'Account Settings',     active: true,  badge: null        },
-  ]
+  const navigationItems = getNavItems('settings', NAV_ICONS)
 
   const Toggle = ({ enabled }) => (
     <div className={`w-[44px] h-[26px] lg:w-[48px] lg:h-[28px] ${enabled ? 'bg-[#C9A870]' : 'bg-[#E8E3D9]'} rounded-full flex items-center px-[2px] cursor-pointer flex-shrink-0`}>

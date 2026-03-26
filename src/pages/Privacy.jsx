@@ -1,13 +1,5 @@
 import { useState } from 'react'
 import {
-  IoPersonOutline,
-  IoHeartOutline,
-  IoSparkles,
-  IoBagCheckOutline,
-  IoCalendarOutline,
-  IoSettingsOutline,
-  IoStarSharp,
-  IoRibbonOutline,
   IoShieldCheckmarkOutline,
   IoLockClosedOutline,
   IoTimeOutline,
@@ -15,19 +7,25 @@ import {
   IoWarningOutline,
   IoDocumentTextOutline,
   IoCheckmark,
+  IoPersonOutline,
+  IoBagCheckOutline,
+  IoHeartOutline,
+  IoSparkles,
+  IoRibbonOutline,
+  IoCalendarOutline,
+  IoStarSharp,
+  IoSettingsOutline,
 } from 'react-icons/io5'
+import { getNavItems } from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function Privacy() {
-  const navigationItems = [
-    { icon: IoPersonOutline,   label: 'Account Dashboard',  active: false, badge: null          },
-    { icon: IoBagCheckOutline, label: 'Order History',       active: false, badge: null          },
-    { icon: IoHeartOutline,    label: 'Wishlist',             active: false, badge: '12'          },
-    { icon: IoSparkles,        label: 'Beauty Profile',       active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline,   label: 'Loyalty Program',      active: false, badge: '2,450'       },
-    { icon: IoCalendarOutline, label: 'My Routines',          active: false, badge: null          },
-    { icon: IoStarSharp,       label: 'Reviews & Ratings',    active: false, badge: null          },
-    { icon: IoSettingsOutline, label: 'Account Settings',     active: true,  badge: null          },
-  ]
+  const navigationItems = getNavItems('settings', NAV_ICONS)
 
   const [privacyControls, setPrivacyControls] = useState([
     { id: 'personal-data', title: 'Personal Data Usage',             description: 'Allow Shan Loray to personalize your experience',  enabled: true  },

@@ -1,30 +1,28 @@
 import { useState } from 'react'
 import {
-  IoPersonOutline,
-  IoHeartOutline,
-  IoSparkles,
-  IoBagCheckOutline,
-  IoCalendarOutline,
-  IoSettingsOutline,
-  IoStarSharp,
-  IoRibbonOutline,
   IoNotificationsOutline,
   IoShieldCheckmarkOutline,
   IoChevronDown,
   IoCheckmark,
+  IoPersonOutline,
+  IoBagCheckOutline,
+  IoHeartOutline,
+  IoSparkles,
+  IoRibbonOutline,
+  IoCalendarOutline,
+  IoStarSharp,
+  IoSettingsOutline,
 } from 'react-icons/io5'
+import { getNavItems, newsletterOptions } from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function Notifications() {
-  const navigationItems = [
-    { icon: IoPersonOutline,   label: 'Account Dashboard',  active: false, badge: null          },
-    { icon: IoBagCheckOutline, label: 'Order History',       active: false, badge: null          },
-    { icon: IoHeartOutline,    label: 'Wishlist',             active: false, badge: '12'          },
-    { icon: IoSparkles,        label: 'Beauty Profile',       active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline,   label: 'Loyalty Program',      active: false, badge: '2,450'       },
-    { icon: IoCalendarOutline, label: 'My Routines',          active: false, badge: null          },
-    { icon: IoStarSharp,       label: 'Reviews & Ratings',    active: false, badge: null          },
-    { icon: IoSettingsOutline, label: 'Account Settings',     active: true,  badge: null          },
-  ]
+  const navigationItems = getNavItems('settings', NAV_ICONS)
 
   const [email, setEmail] = useState([
     { id: 'order-updates', title: 'Order Updates',       description: 'Shipping confirmations, delivery notifications, and order status',       enabled: true  },
@@ -78,11 +76,7 @@ export default function Notifications() {
     </div>
   )
 
-  const newsletterOptions = [
-    { value: 'weekly',      label: 'Weekly Digest',       description: 'Curated beauty trends and tips every Monday'    },
-    { value: 'monthly',     label: 'Monthly Magazine',     description: 'In-depth features and seasonal collections'     },
-    { value: 'unsubscribe', label: 'Unsubscribe',          description: 'Opt out of all newsletter communications'       },
-  ]
+  // newsletterOptions imported from ../data/user
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">

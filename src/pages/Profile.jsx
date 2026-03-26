@@ -17,6 +17,7 @@ import {
   IoCardOutline,
   IoStarSharp,
 } from 'react-icons/io5'
+import { currentOrders as recentOrders, getStatusColor as statusColor } from '../data/user'
 
 export default function Profile() {
   const quickActions = [
@@ -55,17 +56,7 @@ export default function Profile() {
     },
   ]
 
-  const recentOrders = [
-    { id: '#SL-47821', date: 'Dec 18, 2024', status: 'In Transit', product: 'Age-Defying Serum',     image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop', price: '$124' },
-    { id: '#SL-47809', date: 'Dec 15, 2024', status: 'Processing',  product: 'Vitamin C Brightening', image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop', price: '$95'  },
-    { id: '#SL-47795', date: 'Dec 5, 2024',  status: 'Delivered',   product: 'Hydrating Essence',     image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop', price: '$78'  },
-  ]
-
-  const statusColor = (status) => {
-    if (status === 'Delivered')  return 'text-green-600 bg-green-50'
-    if (status === 'In Transit') return 'text-blue-600 bg-blue-50'
-    return 'text-yellow-600 bg-yellow-50'
-  }
+  // recentOrders + statusColor imported from ../data/user
 
   return (
     <div className="bg-[#FDFBF7] font-['Cormorant_Garamond'] min-h-screen">

@@ -1,13 +1,5 @@
 import { useState } from 'react'
 import {
-  IoPersonOutline,
-  IoHeartOutline,
-  IoSparkles,
-  IoBagCheckOutline,
-  IoCalendarOutline,
-  IoSettingsOutline,
-  IoStarSharp,
-  IoRibbonOutline,
   IoPhonePortraitOutline,
   IoShieldCheckmarkOutline,
   IoAddOutline,
@@ -16,24 +8,27 @@ import {
   IoTrashOutline,
   IoCheckmarkCircle,
   IoChevronDown,
+  IoPersonOutline,
+  IoBagCheckOutline,
+  IoHeartOutline,
+  IoSparkles,
+  IoRibbonOutline,
+  IoCalendarOutline,
+  IoStarSharp,
+  IoSettingsOutline,
 } from 'react-icons/io5'
+import { getNavItems, initialAddresses } from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function ShippingAddress() {
-  const navigationItems = [
-    { icon: IoPersonOutline,   label: 'Account Dashboard',  active: false, badge: null          },
-    { icon: IoBagCheckOutline, label: 'Order History',       active: false, badge: null          },
-    { icon: IoHeartOutline,    label: 'Wishlist',             active: false, badge: '12'          },
-    { icon: IoSparkles,        label: 'Beauty Profile',       active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline,   label: 'Loyalty Program',      active: false, badge: '2,450'       },
-    { icon: IoCalendarOutline, label: 'My Routines',          active: false, badge: null          },
-    { icon: IoStarSharp,       label: 'Reviews & Ratings',    active: false, badge: null          },
-    { icon: IoSettingsOutline, label: 'Account Settings',     active: true,  badge: null          },
-  ]
+  const navigationItems = getNavItems('settings', NAV_ICONS)
 
-  const [addresses, setAddresses] = useState([
-    { id: 1, label: 'Home Address', isDefault: true,  recipient: 'Alexandra Chen', street: '456 Madison Avenue, Apt 12B', cityStateZip: 'New York, NY 10022', country: 'United States', phone: '+1 (555) 123-4567' },
-    { id: 2, label: 'Office',        isDefault: false, recipient: 'Alexandra Chen', street: '789 Park Avenue, Suite 3400',  cityStateZip: 'New York, NY 10021', country: 'United States', phone: '+1 (555) 987-6543' },
-  ])
+  const [addresses, setAddresses] = useState(initialAddresses)
 
   const [showForm, setShowForm] = useState(false)
 

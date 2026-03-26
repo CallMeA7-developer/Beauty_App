@@ -4,14 +4,14 @@ import {
   IoHeartOutline,
   IoSparkles,
   IoBagCheckOutline,
-  IoDocumentTextOutline,
   IoCalendarOutline,
   IoSettingsOutline,
-  IoChevronForward,
   IoStarSharp,
+  IoRibbonOutline,
+  IoDocumentTextOutline,
+  IoChevronForward,
   IoCheckmarkCircle,
   IoTrendingUp,
-  IoRibbonOutline,
   IoLocationOutline,
   IoCardOutline,
   IoNotificationsOutline,
@@ -20,52 +20,30 @@ import {
   IoReloadOutline,
   IoCreateOutline,
 } from 'react-icons/io5'
+import {
+  getNavItems,
+  currentOrders,
+  orderHistory,
+  dashboardWishlist as wishlistProducts,
+  userRoutines    as routines,
+  userReviews     as reviews,
+  currentUser,
+} from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function AccountDashboard() {
-  const navigationItems = [
-    { icon: IoPersonOutline, label: 'Account Dashboard', active: true, badge: null },
-    { icon: IoBagCheckOutline, label: 'Order History', active: false, badge: null },
-    { icon: IoHeartOutline, label: 'Wishlist', active: false, badge: '12' },
-    { icon: IoSparkles, label: 'Beauty Profile', active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline, label: 'Loyalty Program', active: false, badge: '2,450' },
-    { icon: IoCalendarOutline, label: 'My Routines', active: false, badge: null },
-    { icon: IoStarSharp, label: 'Reviews & Ratings', active: false, badge: null },
-    { icon: IoSettingsOutline, label: 'Account Settings', active: false, badge: null },
-  ]
-
-  const currentOrders = [
-    { orderNumber: '#SL-47821', date: 'Dec 18, 2024', status: 'In Transit', product: 'Age-Defying Serum', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop', quantity: 1, delivery: 'Dec 22, 2024' },
-    { orderNumber: '#SL-47809', date: 'Dec 15, 2024', status: 'Processing', product: 'Vitamin C Brightening', image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=160&h=160&fit=crop', quantity: 2, delivery: 'Dec 24, 2024' },
-  ]
-
-  const orderHistory = [
-    { date: 'Dec 5, 2024', total: '$289', status: 'Delivered' },
-    { date: 'Nov 18, 2024', total: '$156', status: 'Delivered' },
-    { date: 'Oct 28, 2024', total: '$342', status: 'Delivered' },
-  ]
-
-  const wishlistProducts = [
-    { image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=320&h=320&fit=crop', brand: 'Shan Loray', name: 'Hydrating Essence', price: '$78' },
-    { image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=320&h=320&fit=crop', brand: 'Shan Loray', name: 'Night Recovery Cream', price: '$145' },
-    { image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=320&h=320&fit=crop', brand: 'Shan Loray', name: 'Radiance Booster', price: '$98' },
-    { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=320&h=320&fit=crop', brand: 'Shan Loray', name: 'Eye Renewal Complex', price: '$124' },
-  ]
-
-  const routines = [
-    { name: 'Morning Ritual', productCount: 5, lastUsed: 'Today', images: ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop', 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop', 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop'] },
-    { name: 'Evening Care', productCount: 6, lastUsed: 'Yesterday', images: ['https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=80&h=80&fit=crop', 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=80&h=80&fit=crop', 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=80&h=80&fit=crop'] },
-  ]
-
-  const reviews = [
-    { image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop', product: 'Age-Defying Serum', excerpt: 'Absolutely transformed my skin! The texture is luxurious and results are visible within weeks.', date: 'Dec 10, 2024' },
-    { image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop', product: 'Vitamin C Brightening', excerpt: 'Best vitamin C product I have ever used. My complexion is noticeably brighter and more even.', date: 'Nov 28, 2024' },
-  ]
+  const navigationItems = getNavItems('dashboard', NAV_ICONS)
 
   const settingsItems = [
-    { icon: IoLocationOutline, label: 'Shipping Addresses', count: '2 saved' },
-    { icon: IoCardOutline, label: 'Payment Methods', count: '3 cards' },
-    { icon: IoNotificationsOutline, label: 'Notification Preferences', count: null },
-    { icon: IoShieldCheckmarkOutline, label: 'Privacy Settings', count: null },
+    { icon: IoLocationOutline,       label: 'Shipping Addresses',        count: '2 saved' },
+    { icon: IoCardOutline,           label: 'Payment Methods',            count: '3 cards' },
+    { icon: IoNotificationsOutline,  label: 'Notification Preferences',  count: null      },
+    { icon: IoShieldCheckmarkOutline,label: 'Privacy Settings',           count: null      },
   ]
 
   return (

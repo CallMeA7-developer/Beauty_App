@@ -1,13 +1,5 @@
 import {
-  IoPersonOutline,
-  IoHeartOutline,
-  IoSparkles,
-  IoBagCheckOutline,
   IoBagOutline,
-  IoCalendarOutline,
-  IoSettingsOutline,
-  IoStarSharp,
-  IoRibbonOutline,
   IoCheckmark,
   IoLocationOutline,
   IoMailOutline,
@@ -16,37 +8,30 @@ import {
   IoChevronForward,
   IoCopyOutline,
   IoOpenOutline,
+  IoPersonOutline,
+  IoBagCheckOutline,
+  IoHeartOutline,
+  IoSparkles,
+  IoRibbonOutline,
+  IoCalendarOutline,
+  IoStarSharp,
+  IoSettingsOutline,
 } from 'react-icons/io5'
+import {
+  getNavItems,
+  trackingOrders  as recentOrders,
+  deliveryUpdates,
+  trackingStages,
+} from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function OrderTracking() {
-  const navigationItems = [
-    { icon: IoPersonOutline,   label: 'Account Dashboard',  active: false, badge: null          },
-    { icon: IoBagCheckOutline, label: 'Order History',       active: true,  badge: null          },
-    { icon: IoHeartOutline,    label: 'Wishlist',             active: false, badge: '12'          },
-    { icon: IoSparkles,        label: 'Beauty Profile',       active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline,   label: 'Loyalty Program',      active: false, badge: '2,450'       },
-    { icon: IoCalendarOutline, label: 'My Routines',          active: false, badge: null          },
-    { icon: IoStarSharp,       label: 'Reviews & Ratings',    active: false, badge: null          },
-    { icon: IoSettingsOutline, label: 'Account Settings',     active: false, badge: null          },
-  ]
-
-  const recentOrders = [
-    { orderNumber: '#SL-47809', date: 'Dec 15, 2024', status: 'Processing', statusColor: 'bg-[#999999]' },
-    { orderNumber: '#SL-47791', date: 'Dec 10, 2024', status: 'Delivered',  statusColor: 'bg-[#8B7355]' },
-  ]
-
-  const deliveryUpdates = [
-    { time: 'Dec 20, 3:24 PM', description: 'Package in transit to local facility', location: 'Los Angeles, CA' },
-    { time: 'Dec 19, 2:15 PM', description: 'Departed shipping facility',           location: 'Phoenix, AZ'    },
-    { time: 'Dec 18, 5:30 PM', description: 'Order shipped from warehouse',         location: 'Dallas, TX'     },
-  ]
-
-  const trackingStages = [
-    { label: 'Order Confirmed', time: 'Dec 18, 5:15 PM', active: true,  completed: true  },
-    { label: 'Processing',      time: 'Dec 18, 6:30 PM', active: true,  completed: true  },
-    { label: 'In Transit',      time: 'Dec 20, 3:24 PM', active: true,  completed: false },
-    { label: 'Delivered',       time: 'Expected Dec 22', active: false, completed: false },
-  ]
+  const navigationItems = getNavItems('orders', NAV_ICONS)
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">

@@ -1,14 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  IoPersonOutline,
-  IoHeartOutline,
-  IoSparkles,
-  IoBagCheckOutline,
-  IoCalendarOutline,
-  IoSettingsOutline,
-  IoStarSharp,
-  IoRibbonOutline,
   IoLockClosedOutline,
   IoShieldCheckmarkOutline,
   IoEyeOutline,
@@ -16,19 +8,25 @@ import {
   IoTimeOutline,
   IoCheckmarkCircle,
   IoCheckmark,
+  IoPersonOutline,
+  IoBagCheckOutline,
+  IoHeartOutline,
+  IoSparkles,
+  IoRibbonOutline,
+  IoCalendarOutline,
+  IoStarSharp,
+  IoSettingsOutline,
 } from 'react-icons/io5'
+import { getNavItems, securityTips } from '../data/user'
+
+const NAV_ICONS = {
+  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
+  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
+  star: IoStarSharp, settings: IoSettingsOutline,
+}
 
 export default function Password() {
-  const navigationItems = [
-    { icon: IoPersonOutline,   label: 'Account Dashboard',  active: false, badge: null          },
-    { icon: IoBagCheckOutline, label: 'Order History',       active: false, badge: null          },
-    { icon: IoHeartOutline,    label: 'Wishlist',             active: false, badge: '12'          },
-    { icon: IoSparkles,        label: 'Beauty Profile',       active: false, tag: 'Complete Analysis' },
-    { icon: IoRibbonOutline,   label: 'Loyalty Program',      active: false, badge: '2,450'       },
-    { icon: IoCalendarOutline, label: 'My Routines',          active: false, badge: null          },
-    { icon: IoStarSharp,       label: 'Reviews & Ratings',    active: false, badge: null          },
-    { icon: IoSettingsOutline, label: 'Account Settings',     active: true,  badge: null          },
-  ]
+  const navigationItems = getNavItems('settings', NAV_ICONS)
 
   const [current, setCurrent]         = useState('')
   const [newPass, setNewPass]         = useState('')
@@ -53,11 +51,7 @@ export default function Password() {
     ? { label: 'Medium', color: 'text-[#E5A84D]',    bar: 'bg-[#E5A84D]', width: '60%'  }
     : { label: 'Strong', color: 'text-green-600',     bar: 'bg-green-500', width: '100%' }
 
-  const securityTips = [
-    'Use a unique password not used on other sites',
-    'Consider using a password manager for better security',
-    'Enable two-factor authentication for additional protection',
-  ]
+  // securityTips imported from ../data/user
 
   const inputClass = "w-full bg-white border-[1.5px] border-[#E8E3D9] rounded-[8px] px-[16px] h-[48px] lg:h-[56px] text-[14px] lg:text-[15px] font-normal text-[#1A1A1A] outline-none focus:border-[#8B7355] transition-colors pr-[48px]"
 
