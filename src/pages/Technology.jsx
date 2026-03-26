@@ -27,7 +27,7 @@ import {
   technologyTestimonials as testimonials,
   technologyStats,
   journeySteps,
-} from '../data/Technology'
+} from '../Data/Tech'
 
 // ─── Page-specific data ───────────────────────────────────────────────────────
 const coreFeatures = [
