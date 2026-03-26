@@ -23,8 +23,13 @@ import {
   IoDesktopOutline,
   IoStarSharp,
 } from 'react-icons/io5'
+import {
+  technologyTestimonials as testimonials,
+  technologyStats,
+  journeySteps,
+} from '../data/Technology'
 
-// ─── Shared Data ──────────────────────────────────────────────────────────────
+// ─── Page-specific data ───────────────────────────────────────────────────────
 const coreFeatures = [
   { icon: IoHardwareChipOutline, title: 'AI Consultation',        description: 'Intelligent skin analysis powered by advanced AI',         gradient: 'from-[#E8E3F7] to-[#D5CAE8]' },
   { icon: IoCameraOutline,       title: 'AR Try-On',              description: 'Virtual mirror technology for instant previews',            gradient: 'from-[#FFE8F0] to-[#FFDDE8]' },
@@ -46,12 +51,7 @@ const scientificInnovations = [
   { title: 'Clinical Testing',         desc: 'Rigorously tested for safety and efficacy',          gradient: 'from-[#E8F5E9] to-[#D4EDD6]' },
 ]
 
-const journeySteps = [
-  { title: 'Skin Assessment',   desc: 'AI-powered comprehensive analysis' },
-  { title: 'Product Match',     desc: 'Intelligent product recommendations' },
-  { title: 'Routine Building',  desc: 'Custom daily skincare regimen' },
-  { title: 'Progress Tracking', desc: 'Monitor improvements over time' },
-]
+// journeySteps imported from ../data/technology
 
 const mobileBenefits = [
   { icon: IoTimeOutline,       title: 'Save Time',       desc: 'Instant recommendations' },
@@ -60,10 +60,7 @@ const mobileBenefits = [
   { icon: IoSparklesOutline,   title: 'Personalized',    desc: 'Tailored solutions' },
 ]
 
-const testimonials = [
-  { photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop', quote: 'The AI consultation transformed my skincare routine. Results in just 2 weeks!', name: 'Sarah Chen',   tech: 'AI Consultation' },
-  { photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop', quote: 'AR try-on helped me find my perfect shade. Shopping has never been easier.',    name: 'Emma Wilson', tech: 'AR Virtual Mirror' },
-]
+// testimonials imported from ../data/technology as technologyTestimonials
 
 // Desktop data
 const innovationCards = [
@@ -85,10 +82,11 @@ const desktopBenefits = [
   { icon: IoCheckmarkCircleOutline, title: 'Product Matching',      description: 'Perfect product matches for your skin type' },
   { icon: IoRefreshOutline,         title: 'Progress Tracking',     description: 'Monitor your skin improvement over time' },
 ]
+// stats — kept local because it includes icon components
 const stats = [
-  { icon: IoHardwareChipOutline, value: '98% Accuracy',  label: 'AI-Powered Analysis' },
-  { icon: IoTrendingUpOutline,   value: '10M+ Scans',    label: 'Trusted Worldwide' },
-  { icon: IoFlaskOutline,        value: 'Patent-Pending', label: 'Innovative Technology' },
+  { icon: IoHardwareChipOutline, value: '98% Accuracy',   label: 'AI-Powered Analysis'   },
+  { icon: IoTrendingUpOutline,   value: '10M+ Scans',     label: 'Trusted Worldwide'      },
+  { icon: IoFlaskOutline,        value: 'Patent-Pending', label: 'Innovative Technology'  },
 ]
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
