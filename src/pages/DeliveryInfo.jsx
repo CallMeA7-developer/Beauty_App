@@ -7,33 +7,27 @@ import {
   IoShieldCheckmarkOutline,
   IoCardOutline,
 } from 'react-icons/io5'
+import {
+  checkoutCartItems as cartItems,
+  savedAddresses,
+  getCheckoutSteps,
+} from '../data/checkout'
 
 export default function DeliveryInfo() {
-  const cartItems = [
-    { id: 1, brand: 'LA MER',       name: 'Crème de la Mer Moisturizing Cream', quantity: 1, price: 380, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop' },
-    { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum',         quantity: 2, price: 115, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=160&h=160&fit=crop' },
-    { id: 3, brand: 'TOM FORD',     name: 'Black Orchid Eau de Parfum',          quantity: 1, price: 265, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=160&h=160&fit=crop' },
-  ]
+  const steps = getCheckoutSteps(1)
 
   const [selectedAddress, setSelectedAddress] = useState(1)
   const [saveAddress, setSaveAddress]         = useState(false)
   const [giftOption, setGiftOption]           = useState(false)
 
-  const savedAddresses = [
-    { id: 1, label: 'Home',   name: 'Alexandra Chen', address: '2847 Park Avenue, Apt 5B, New York, NY 10016, United States' },
-    { id: 2, label: 'Office', name: 'Alexandra Chen', address: '1250 Broadway, Suite 3600, New York, NY 10001, United States' },
-  ]
+  // savedAddresses imported from ../data/checkout
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const tax      = subtotal * 0.1
   const giftFee  = giftOption ? 12 : 0
   const total    = subtotal + tax + giftFee
 
-  const steps = [
-    { step: 1, label: 'Delivery Information', active: true,  completed: false },
-    { step: 2, label: 'Delivery Method',      active: false, completed: false },
-    { step: 3, label: 'Payment',              active: false, completed: false },
-  ]
+  // steps computed above via getCheckoutSteps(1)
 
   const inputClass = "w-full h-[48px] px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[14px] lg:text-[15px] font-normal text-[#1A1A1A] outline-none focus:border-[#8B7355] transition-colors"
   const labelClass = "text-[13px] lg:text-[14px] font-medium text-[#666666] mb-[8px] block"

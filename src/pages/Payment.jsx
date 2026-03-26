@@ -11,31 +11,27 @@ import {
   IoPhonePortraitOutline,
   IoWalletOutline,
 } from 'react-icons/io5'
+import {
+  checkoutCartItems  as cartItems,
+  savedCards,
+  securityFeatures   as securityFeaturesData,
+  getCheckoutSteps,
+} from '../data/checkout'
+
+const SECURITY_ICONS = {
+  lock: IoLockClosedOutline, shield: IoShieldCheckmarkOutline, check: IoCheckmarkCircle,
+}
+const securityFeatures = securityFeaturesData.map(f => ({ ...f, icon: SECURITY_ICONS[f.iconKey] }))
+
+const paymentMethods = [
+  { id: 1, name: 'Credit / Debit Card', icon: IoCardOutline,         sublabel: 'Visa, Mastercard, Amex, Discover' },
+  { id: 2, name: 'PayPal',              icon: IoLogoPaypal,           sublabel: 'Pay securely with PayPal'          },
+  { id: 3, name: 'Apple Pay',           icon: IoPhonePortraitOutline, sublabel: 'Touch ID or Face ID'               },
+  { id: 4, name: 'Google Pay',          icon: IoWalletOutline,        sublabel: 'Pay with Google'                   },
+]
 
 export default function Payment() {
-  const cartItems = [
-    { id: 1, brand: 'LA MER',       name: 'Crème de la Mer Moisturizing Cream', quantity: 1, price: 380, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop' },
-    { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum',         quantity: 2, price: 115, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=160&h=160&fit=crop' },
-    { id: 3, brand: 'TOM FORD',     name: 'Black Orchid Eau de Parfum',          quantity: 1, price: 265, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=160&h=160&fit=crop' },
-  ]
-
-  const savedCards = [
-    { id: 1, label: 'VISA', labelColor: 'text-[#1434CB]', labelBg: 'bg-blue-50',  last4: '4242', expiry: '12/2025' },
-    { id: 2, label: 'MC',   labelColor: 'text-[#EB001B]', labelBg: 'bg-red-50',   last4: '8888', expiry: '08/2026' },
-  ]
-
-  const paymentMethods = [
-    { id: 1, name: 'Credit / Debit Card', icon: IoCardOutline,          sublabel: 'Visa, Mastercard, Amex, Discover' },
-    { id: 2, name: 'PayPal',              icon: IoLogoPaypal,            sublabel: 'Pay securely with PayPal'          },
-    { id: 3, name: 'Apple Pay',           icon: IoPhonePortraitOutline,  sublabel: 'Touch ID or Face ID'               },
-    { id: 4, name: 'Google Pay',          icon: IoWalletOutline,         sublabel: 'Pay with Google'                   },
-  ]
-
-  const securityFeatures = [
-    { icon: IoLockClosedOutline,       title: '256-bit SSL',       subtitle: 'Secure Connection' },
-    { icon: IoShieldCheckmarkOutline,  title: 'PCI DSS',           subtitle: 'Compliant'         },
-    { icon: IoCheckmarkCircle,         title: '30-Day Guarantee',  subtitle: 'Money-Back'        },
-  ]
+  const steps = getCheckoutSteps(3)
 
   const [selectedCard, setSelectedCard]     = useState(1)
   const [selectedMethod, setSelectedMethod] = useState(1)
@@ -47,11 +43,7 @@ export default function Payment() {
   const tax      = subtotal * 0.1
   const total    = subtotal + tax
 
-  const steps = [
-    { step: 1, label: 'Delivery Information', active: false, completed: true  },
-    { step: 2, label: 'Delivery Method',      active: false, completed: true  },
-    { step: 3, label: 'Payment',              active: true,  completed: false },
-  ]
+  // steps computed above via getCheckoutSteps(3)
 
   const inputClass = "w-full h-[48px] px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[14px] lg:text-[15px] font-normal text-[#1A1A1A] outline-none focus:border-[#8B7355] transition-colors"
   const labelClass = "text-[13px] lg:text-[14px] font-medium text-[#666666] mb-[8px] block"

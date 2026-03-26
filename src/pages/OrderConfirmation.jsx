@@ -8,18 +8,15 @@ import {
   IoGiftOutline,
   IoCardOutline,
 } from 'react-icons/io5'
+import {
+  checkoutCartItemsLarge as orderItems,
+  confirmedOrder,
+  helpLinks,
+} from '../data/checkout'
 
 export default function OrderConfirmation() {
-  const orderItems = [
-    { id: 1, brand: 'LA MER',       name: 'Crème de la Mer Moisturizing Cream', quantity: 1, price: 380, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop' },
-    { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum',         quantity: 2, price: 115, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop' },
-    { id: 3, brand: 'TOM FORD',     name: 'Black Orchid Eau de Parfum',          quantity: 1, price: 265, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=200&h=200&fit=crop' },
-  ]
-
-  const subtotal   = 875.00
-  const tax        = 87.50
-  const total      = 962.50
-  const helpLinks  = ['View Order History', 'Contact Customer Service', 'Return & Exchange Policy']
+  const { subtotal, tax, total } = confirmedOrder
+  // helpLinks imported from ../data/checkout
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">

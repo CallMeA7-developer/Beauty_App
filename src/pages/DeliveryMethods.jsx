@@ -11,20 +11,22 @@ import {
   IoLockClosedOutline,
   IoArrowBackOutline,
 } from 'react-icons/io5'
+import {
+  checkoutCartItems as cartItems,
+  deliveryOptions   as deliveryOptionsData,
+  getCheckoutSteps,
+} from '../data/checkout'
+
+const DELIVERY_ICONS = {
+  car: IoCarOutline, flash: IoFlashOutline,
+  rocket: IoRocketOutline, globe: IoGlobeOutline,
+}
+
+// Attach icon components to each delivery option
+const deliveryOptions = deliveryOptionsData.map(o => ({ ...o, icon: DELIVERY_ICONS[o.iconKey] }))
 
 export default function DeliveryMethods() {
-  const cartItems = [
-    { id: 1, brand: 'LA MER',       name: 'Crème de la Mer Moisturizing Cream', quantity: 1, price: 380, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop' },
-    { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum',         quantity: 2, price: 115, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=160&h=160&fit=crop' },
-    { id: 3, brand: 'TOM FORD',     name: 'Black Orchid Eau de Parfum',          quantity: 1, price: 265, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=160&h=160&fit=crop' },
-  ]
-
-  const deliveryOptions = [
-    { id: 1, icon: IoCarOutline,    title: 'Standard Delivery',   time: '3–5 Business Days',                 arrival: 'Arrives by Friday, Dec 15',          price: 'FREE',       priceValue: 0,  description: 'Free delivery on all orders over $75', priceColor: 'text-green-600'   },
-    { id: 2, icon: IoFlashOutline,  title: 'Express Delivery',    time: '1–2 Business Days',                 arrival: 'Arrives by Tuesday, Dec 12',         price: '$25.00',     priceValue: 25, description: '',                                     priceColor: 'text-[#1A1A1A]'  },
-    { id: 3, icon: IoRocketOutline, title: 'Same-Day Delivery',   time: 'Order by 2:00 PM for same-day',     arrival: 'Arrives today by 9:00 PM',           price: '$45.00',     priceValue: 45, description: 'Available in select locations',        priceColor: 'text-[#1A1A1A]'  },
-    { id: 4, icon: IoGlobeOutline,  title: 'International Shipping', time: '7–14 Business Days',             arrival: 'Estimated delivery varies by country', price: 'From $35.00', priceValue: 35, description: 'View international rates',            priceColor: 'text-[#1A1A1A]'  },
-  ]
+  const steps = getCheckoutSteps(2)
 
   const [selectedOption, setSelectedOption] = useState(1)
 
@@ -33,11 +35,7 @@ export default function DeliveryMethods() {
   const tax      = subtotal * 0.1
   const total    = subtotal + shipping + tax
 
-  const steps = [
-    { step: 1, label: 'Delivery Information', active: false, completed: true  },
-    { step: 2, label: 'Delivery Method',      active: true,  completed: false },
-    { step: 3, label: 'Payment',              active: false, completed: false },
-  ]
+  // steps computed above via getCheckoutSteps(2)
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
