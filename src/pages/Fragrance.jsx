@@ -18,53 +18,24 @@ import {
   IoLogoYoutube,
 } from 'react-icons/io5'
 
-// ─── Shared Data ──────────────────────────────────────────────────────────────
-const fragranceCategories = ['All Fragrances', 'Eau de Parfum', 'Eau de Toilette', 'Body Mist', 'Discovery Sets']
+import {
+  fragranceCategories,
+  fragranceProductsMobile,
+  fragranceFeaturedProduct,
+  fragranceProductsHorizontal,
+  fragranceProductsSquare,
+  fragranceProductsRectangular,
+  filterBrandsFragrance,
+  filterRatingsFragrance,
+  sortOptionsFragrance,
+} from '../data/Products'
+
+// ─── Local filter-only data (fragrance-specific) ──────────────────────────────
 const fragranceFamilies   = ['Floral', 'Woody', 'Citrus', 'Oriental', 'Fresh', 'Spicy']
 const topNotes            = ['Rose', 'Bergamot', 'Jasmine', 'Sandalwood', 'Vanilla', 'Oud']
 const intensityLevels     = ['Light', 'Moderate', 'Strong']
 const productSizes        = ['30ml', '50ml', '100ml', 'Travel Size']
-const sortOptions         = ['Best Selling', 'Newest', 'Price: Low to High', 'Price: High to Low', 'Most Popular']
 
-// Mobile category cards
-const mobileCategoryCards = [
-  { name: 'Eau de Parfum',   count: 18, image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=80&h=80&fit=crop' },
-  { name: 'Eau de Toilette', count: 14, image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=80&h=80&fit=crop' },
-  { name: 'Body Mist',       count: 8,  image: 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=80&h=80&fit=crop' },
-  { name: 'Discovery Sets',  count: 6,  image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=80&h=80&fit=crop' },
-]
-
-// Mobile products
-const mobileProducts = [
-  { name: 'Signature Oud Collection',      description: 'Rare oud & precious florals',      price: '$385', reviews: 412, concentration: 'EDP', image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=400&fit=crop', badge: 'SIGNATURE' },
-  { name: 'Rose Noir Eau de Parfum',        description: 'Rose, amber & patchouli',           price: '$245', reviews: 534, concentration: 'EDP', image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=400&fit=crop' },
-  { name: 'Citrus Garden Eau de Toilette',  description: 'Bergamot, neroli & white musk',     price: '$165', reviews: 298, concentration: 'EDT', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400&h=400&fit=crop' },
-  { name: 'Velvet Jasmine',                 description: 'Floral oriental blend',             price: '$195', reviews: 621, concentration: 'EDP', image: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59d75?w=400&h=400&fit=crop' },
-  { name: 'Amber Woods',                    description: 'Warm woody & spicy',                price: '$225', reviews: 445, concentration: 'EDP', image: 'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400&h=400&fit=crop' },
-  { name: 'Prestige Discovery Collection',  description: 'Six iconic fragrances',             price: '$295', reviews: 203, concentration: 'SET', image: 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=400&h=400&fit=crop', badge: 'LIMITED' },
-]
-
-// Desktop data
-const featuredProduct = {
-  name: 'Signature Oud Collection', description: 'Luxurious blend of rare oud and precious florals',
-  price: '$385', reviews: 412, badge: 'SIGNATURE SCENT', concentration: 'EDP',
-  image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=560&h=560&fit=crop',
-}
-const horizontalProducts = [
-  { name: 'Rose Noir Eau de Parfum',       description: 'Deep rose with hints of amber and patchouli', price: '$245', reviews: 534, concentration: 'EDP', notes: 'Rose, Amber, Patchouli',        sizes: ['30ml','50ml','100ml'], image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=460&h=280&fit=crop' },
-  { name: 'Citrus Garden Eau de Toilette', description: 'Fresh bergamot, neroli, and white musk',       price: '$165', reviews: 298, concentration: 'EDT', notes: 'Bergamot, Neroli, White Musk', sizes: ['30ml','50ml','100ml'], image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=460&h=280&fit=crop' },
-]
-const squareProducts = [
-  { name: 'Velvet Jasmine', family: 'Floral Oriental', price: '$195', reviews: 621, concentration: 'EDP', image: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59d75?w=300&h=300&fit=crop' },
-  { name: 'Amber Woods',    family: 'Woody Spicy',     price: '$225', reviews: 445, concentration: 'EDP', image: 'https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=300&h=300&fit=crop' },
-  { name: 'White Lotus',    family: 'Fresh Floral',    price: '$185', reviews: 789, concentration: 'EDT', image: 'https://images.unsplash.com/photo-1587556930796-7a8ab4e96a17?w=300&h=300&fit=crop' },
-]
-const rectangularProducts = [
-  { name: 'Prestige Discovery Collection', description: 'Experience our six most iconic fragrances in luxurious travel sizes', price: '$295', reviews: 203, badge: 'LIMITED EDITION', image: 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=470&h=400&fit=crop' },
-  { name: 'Dual Essence Set',              description: 'Day and night fragrances paired perfectly — fresh citrus & warm amber', price: '$385', reviews: 167, image: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=470&h=400&fit=crop' },
-]
-
-// ─── Filter Data (fragrance-filter-popup) ────────────────────────────────────
 const filterFragranceTypes  = ['Eau de Parfum', 'Eau de Toilette', 'Body Mist', 'Discovery Sets']
 const filterFamilies        = ['Floral', 'Oriental', 'Woody', 'Fresh', 'Citrus', 'Spicy', 'Aquatic', 'Fruity']
 const filterTopNotes        = ['Rose', 'Bergamot', 'Jasmine', 'Lemon', 'Lavender']
@@ -72,8 +43,21 @@ const filterMiddleNotes     = ['Sandalwood', 'Cedar', 'Vanilla', 'Patchouli']
 const filterBaseNotes       = ['Musk', 'Amber', 'Oakmoss', 'Tonka Bean']
 const filterOccasions       = ['Day Wear', 'Evening', 'Special Occasions']
 const filterIntensityLevels = ['Light', 'Moderate', 'Strong', 'Very Strong', 'Long-Lasting']
-const filterBrands          = ['Shan Loray', 'Maison Lavande', 'Noir Essence', 'Velvet & Oud']
-const filterRatings         = [{ stars: 5, count: 234 }, { stars: 4, count: 456 }, { stars: 3, count: 189 }]
+const filterRatings         = filterRatingsFragrance
+
+// Desktop sidebar uses a simple string list for the category pills
+const fragranceCategoryLabels = ['All Fragrances', 'Eau de Parfum', 'Eau de Toilette', 'Body Mist', 'Discovery Sets']
+
+// Aliases to keep template variable names unchanged
+const mobileCategoryCards  = fragranceCategories
+const mobileProducts       = fragranceProductsMobile
+const featuredProduct      = fragranceFeaturedProduct
+const horizontalProducts   = fragranceProductsHorizontal
+const squareProducts       = fragranceProductsSquare
+const rectangularProducts  = fragranceProductsRectangular
+const filterBrands         = filterBrandsFragrance
+const sortOptions          = sortOptionsFragrance
+// fragranceCategories imported directly above
 
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
@@ -564,7 +548,7 @@ function FragranceDesktop() {
           <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-5 lg:mb-[24px]">REFINE SELECTION</h3>
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
-              {fragranceCategories.map((cat, idx) => (
+              {fragranceCategoryLabels.map((cat, idx) => (
                 <div key={cat}>
                   <div className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'} text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer gap-2 w-full justify-between`}>
                     <span>{cat}</span>

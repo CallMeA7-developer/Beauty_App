@@ -17,79 +17,43 @@ import {
   IoLogoYoutube,
 } from 'react-icons/io5'
 
-// ─── Shared Data ──────────────────────────────────────────────────────────────
-const faceCategories  = ['Foundation', 'Concealer', 'Powder', 'Blush', 'Highlighter']
-const eyesCategories  = ['Eyeshadow', 'Eyeliner', 'Mascara', 'Eyebrow']
-const lipsCategories  = ['Lipstick', 'Lip Gloss', 'Lip Liner', 'Lip Care']
-const finishTypes     = ['Matte', 'Satin', 'Shimmer', 'Glitter']
-const coverageTypes   = ['Sheer', 'Medium', 'Full']
-const skinTones       = ['Fair', 'Light', 'Medium', 'Tan', 'Deep', 'All Tones']
-const sortOptions     = ['Best Selling', 'Newest', 'Price: Low to High', 'Price: High to Low', 'Most Popular', 'Shade Range']
+import {
+  makeupCategories,
+  makeupProductsMobile,
+  makeupFeaturedProduct,
+  makeupProductsHorizontal,
+  makeupProductsSquare,
+  makeupProductsRectangular,
+  makeupShadeColors,
+  filterSkinTypes as importedFilterSkinTypes,
+  filterBrandsMakeup,
+  filterRatingsMakeup,
+  sortOptionsMakeup,
+} from '../data/Products'
 
-const mobileCategoryCards = [
-  { name: 'Face',            count: 24, image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=80&h=80&fit=crop' },
-  { name: 'Eyes',            count: 18, image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=80&h=80&fit=crop' },
-  { name: 'Lips',            count: 16, image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=80&h=80&fit=crop' },
-  { name: 'Sets & Palettes', count: 12, image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=80&h=80&fit=crop' },
-]
-
-const mobileProducts = [
-  { name: 'Velvet Matte Foundation',  description: 'Flawless buildable coverage',    price: '$78', reviews: 542, image: 'https://images.unsplash.com/photo-1625025403725-fb026f06ab3c?w=400&h=400&fit=crop' },
-  { name: 'Luminous Eye Palette',     description: '12 curated shades',              price: '$68', reviews: 487, image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&h=400&fit=crop' },
-  { name: 'Signature Lip Velvet',     description: 'Long-lasting color',             price: '$42', reviews: 629, image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400&h=400&fit=crop' },
-  { name: 'Precision Liquid Liner',   description: 'Ultimate control & intensity',   price: '$32', reviews: 381, image: 'https://images.unsplash.com/photo-1631730486572-226d1f595b68?w=400&h=400&fit=crop' },
-  { name: 'Volume Mascara',           description: 'Dramatic length & curl',         price: '$38', reviews: 456, image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop' },
-  { name: 'Radiant Blush Duo',        description: 'Natural glow & definition',      price: '$48', reviews: 298, image: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&h=400&fit=crop' },
-]
-
-// Desktop data
-const featuredProduct = {
-  name: 'Luxe Velvet Lipstick Collection',
-  description: 'Twelve signature shades in rich, long-lasting formula',
-  price: '$245', reviews: 412,
-  image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=560&h=560&fit=crop',
-  badge: 'BESTSELLER',
-}
-const horizontalProducts = [
-  { name: 'Luminous Foundation',   description: 'Buildable coverage with 24-hour wear', price: '$78',  reviews: 534, image: 'https://images.unsplash.com/photo-1625025403725-fb026f06ab3c?w=460&h=280&fit=crop', shades: ['#F5D4C4','#E8C4B4','#D4A894','#C08874','#A86854','#8E5844'] },
-  { name: 'Nude Eyeshadow Palette', description: 'Ten versatile shades for every look',  price: '$145', reviews: 298, image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=460&h=280&fit=crop', badge: 'NEW' },
-]
-const squareProducts = [
-  { name: 'Silk Touch Concealer', description: 'Full coverage brightening formula',   price: '$52', reviews: 621, image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop', shades: ['#FADCC4','#E8C8B0','#D4A890','#B88868','#9C6848','#7E5438'] },
-  { name: 'Radiant Blush Duo',    description: 'Buildable color with luminous finish', price: '$68', reviews: 445, image: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=300&h=300&fit=crop' },
-  { name: 'Glow Highlighter',     description: 'Multi-dimensional shimmer',            price: '$58', reviews: 789, image: 'https://images.unsplash.com/photo-1515688594390-b649af70d282?w=300&h=300&fit=crop' },
-]
-const rectangularProducts = [
-  { name: 'Complete Makeup Artist Set', description: 'Professional collection with face, eyes, and lips essentials',    price: '$395', reviews: 203, image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=470&h=400&fit=crop', badge: 'LIMITED EDITION' },
-  { name: 'Travel Glam Collection',     description: 'Your complete makeup routine in luxurious travel-friendly sizes', price: '$185', reviews: 167, image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=470&h=400&fit=crop' },
-]
-
-const filterCategories = [
-  { name: 'Face',            count: 24, image: 'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=80&h=80&fit=crop' },
-  { name: 'Eyes',            count: 18, image: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=80&h=80&fit=crop' },
-  { name: 'Lips',            count: 16, image: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=80&h=80&fit=crop' },
-  { name: 'Sets & Palettes', count: 8,  image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=80&h=80&fit=crop' },
-]
-
-const shadeColors = [
-  { name: 'Ivory',    color: '#F5E6D3' },
-  { name: 'Beige',    color: '#E8D4B8' },
-  { name: 'Sand',     color: '#D4BC98' },
-  { name: 'Honey',    color: '#C9A870' },
-  { name: 'Tan',      color: '#B89968' },
-  { name: 'Caramel',  color: '#A07855' },
-  { name: 'Mocha',    color: '#8B7355' },
-  { name: 'Espresso', color: '#6B563F' },
-  { name: 'Rose',     color: '#E8B4B8' },
-  { name: 'Coral',    color: '#F4A896' },
-  { name: 'Berry',    color: '#C45D6F' },
-  { name: 'Wine',     color: '#8B3A52' },
-]
+// ─── Local filter-only data (makeup-specific, not shared) ─────────────────────
+const faceCategories = ['Foundation', 'Concealer', 'Powder', 'Blush', 'Highlighter']
+const eyesCategories = ['Eyeshadow', 'Eyeliner', 'Mascara', 'Eyebrow']
+const lipsCategories = ['Lipstick', 'Lip Gloss', 'Lip Liner', 'Lip Care']
+const finishTypes    = ['Matte', 'Satin', 'Shimmer', 'Glitter']
+const coverageTypes  = ['Sheer', 'Medium', 'Full']
+const skinTones      = ['Fair', 'Light', 'Medium', 'Tan', 'Deep', 'All Tones']
 
 const filterFinishTypes = ['Matte', 'Glossy', 'Satin']
-const filterSkinTypes   = ['All Skin Types', 'Dry', 'Oily', 'Combination', 'Sensitive']
-const filterBrands      = ['Shan Loray', 'Charlotte Tilbury', 'Tom Ford Beauty', 'Chanel', 'Dior', 'La Mer', 'Armani Beauty', 'Guerlain']
-const filterRatings     = [{ stars: 5, count: 234 }, { stars: 4, count: 156 }, { stars: 3, count: 89 }, { stars: 2, count: 45 }, { stars: 1, count: 12 }]
+const filterRatings     = filterRatingsMakeup
+
+// Aliases to keep template variable names unchanged
+const mobileCategoryCards  = makeupCategories
+const mobileProducts       = makeupProductsMobile
+const featuredProduct      = makeupFeaturedProduct
+const horizontalProducts   = makeupProductsHorizontal
+const squareProducts       = makeupProductsSquare
+const rectangularProducts  = makeupProductsRectangular
+const shadeColors          = makeupShadeColors
+const filterCategories     = makeupCategories
+const filterBrands         = filterBrandsMakeup
+const filterSkinTypes      = importedFilterSkinTypes
+const sortOptions          = sortOptionsMakeup
 
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────

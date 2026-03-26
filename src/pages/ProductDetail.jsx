@@ -21,61 +21,21 @@ import {
   IoLogoYoutube,
 } from 'react-icons/io5'
 
-// ─── Shared Data ──────────────────────────────────────────────────────────────
-const thumbnailImages = [
-  'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=64&h=64&fit=crop',
-  'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop',
-  'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=64&h=64&fit=crop',
-  'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop',
-  'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=64&h=64&fit=crop',
-]
+import {
+  productDetailImages     as thumbnailImages,
+  productDetailKeyBenefits as keyBenefits,
+  productDetailApplicationSteps as applicationSteps,
+  productDetailIngredients as keyIngredients,
+  productDetailSizes      as sizeOptions,
+  productDetailReviews    as reviews,
+  productDetailRelated    as relatedProducts,
+} from '../data/Products'
 
-const keyBenefits = [
-  'Deep cleansing without stripping natural oils',
-  'Creates rich, creamy foam for luxurious feel',
-  'Balances and refines skin texture',
-  'Infused with nourishing botanical extracts',
-  'Suitable for all skin types, especially combination',
-  'Dermatologist-tested and pH-balanced',
-]
-
-const applicationSteps = [
-  { step: '1', text: 'Wet your face with lukewarm water',                           timing: 'Morning & Evening' },
-  { step: '2', text: 'Dispense a small amount into palm and work into lather',       timing: null               },
-  { step: '3', text: 'Gently massage onto face in circular motions',                 timing: 'For 60 seconds'   },
-  { step: '4', text: 'Rinse thoroughly and pat dry',                                 timing: null               },
-]
-
-const keyIngredients = [
-  { name: 'Glycerin',          concentration: '3%',   benefit: 'Deeply hydrates and maintains moisture balance'    },
-  { name: 'Green Tea Extract', concentration: '2%',   benefit: 'Powerful antioxidant protection and soothing'      },
-  { name: 'Chamomile',         concentration: '1.5%', benefit: 'Calms and reduces skin irritation'                  },
-  { name: 'Hyaluronic Acid',   concentration: '1%',   benefit: 'Provides lasting hydration and plumpness'          },
-]
-
-const sizeOptions = [
-  { size: '100ml',      price: '$68',  selected: true,  badge: null         },
-  { size: '200ml',      price: '$118', selected: false, badge: 'Best Value' },
-  { size: 'Travel 30ml', price: '$28', selected: false, badge: null         },
-]
-
-const reviews = [
-  { avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop', username: 'Emily S.',  verified: true,  tier: 'Elite Member', rating: 5, date: 'Dec 20, 2024', title: 'Best cleanser I have ever used!',    text: 'This foaming cleanser is absolutely amazing. It removes all my makeup and leaves my skin feeling fresh and clean without any tightness. The foam is so luxurious and a little goes a long way.', helpful: 18, notHelpful: 1, skinType: 'Combination', ageRange: '28-35' },
-  { avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&h=96&fit=crop', username: 'Rachel M.', verified: true,  tier: null,           rating: 5, date: 'Dec 18, 2024', title: 'Gentle yet effective',               text: 'I love how gentle this cleanser is on my sensitive skin. It thoroughly cleanses without causing any irritation. My skin feels balanced and hydrated after every use.',                          helpful: 12, notHelpful: 0, skinType: 'Sensitive',   ageRange: '36-45' },
-  { avatar: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=96&h=96&fit=crop', username: 'Lisa K.',   verified: false, tier: null,           rating: 4, date: 'Dec 15, 2024', title: 'Great product, amazing lather',      text: 'The lather is incredible and it rinses off so easily. My skin looks brighter and feels smoother. Only wish the bottle was a bit larger for the price.',                                       helpful: 8,  notHelpful: 2, skinType: 'Normal',      ageRange: '25-34' },
-]
-
-const relatedProducts = [
-  { image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Gentle Toner',  price: '$58',  rating: 4.8, reviews: 156 },
-  { image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Night Cream',   price: '$98',  rating: 4.9, reviews: 203 },
-  { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Eye Cream',     price: '$85',  rating: 4.7, reviews: 128 },
-  { image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=200&h=240&fit=crop', brand: 'Shan Loray', name: 'Face Mask',     price: '$72',  rating: 4.8, reviews: 184 },
-]
-
+// ─── Local static data (product-specific, not shared) ─────────────────────────
 const trustBadges = [
-  { icon: IoCarOutline,              title: 'Free Shipping',        desc: 'On orders over $100'    },
-  { icon: IoReturnDownBackOutline,   title: '90-Day Returns',       desc: 'Hassle-free refunds'    },
-  { icon: IoShieldCheckmarkOutline,  title: 'Authentic Guarantee',  desc: '100% genuine products'  },
+  { icon: IoCarOutline,             title: 'Free Shipping',       desc: 'On orders over $100'   },
+  { icon: IoReturnDownBackOutline,  title: '90-Day Returns',      desc: 'Hassle-free refunds'   },
+  { icon: IoShieldCheckmarkOutline, title: 'Authentic Guarantee', desc: '100% genuine products' },
 ]
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────

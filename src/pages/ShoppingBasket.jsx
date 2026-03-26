@@ -12,12 +12,10 @@ import {
   IoHeartOutline,
 } from 'react-icons/io5'
 
+import { initialCartItems } from '../data/Products'
+
 export default function ShoppingBasket() {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, brand: 'LA MER',      name: 'Crème de la Mer Moisturizing Cream', size: '60ml',  image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=320&h=320&fit=crop', price: 380, quantity: 1 },
-    { id: 2, brand: 'ESTÉE LAUDER', name: 'Advanced Night Repair Serum',        size: '50ml',  image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=320&h=320&fit=crop', price: 115, quantity: 2 },
-    { id: 3, brand: 'TOM FORD',    name: 'Black Orchid Eau de Parfum',          size: '100ml', image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=320&h=320&fit=crop', price: 265, quantity: 1 },
-  ])
+  const [cartItems, setCartItems] = useState(initialCartItems)
 
   const updateQty = (id, delta) => {
     setCartItems(cartItems.map(item =>

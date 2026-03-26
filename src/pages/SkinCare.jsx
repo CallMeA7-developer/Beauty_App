@@ -17,66 +17,41 @@ import {
   IoLogoYoutube,
 } from 'react-icons/io5'
 
-// ─── Shared Data ──────────────────────────────────────────────────────────────
-const skinTypes    = ['All Types', 'Dry', 'Oily', 'Combination', 'Sensitive', 'Mature']
-const skinConcerns = ['Anti-Aging', 'Hydration', 'Brightening', 'Acne Care', 'Redness Relief', 'Dark Spots', 'Large Pores', 'Fine Lines']
-const ingredients  = ['Retinol', 'Vitamin C', 'Hyaluronic Acid', 'Niacinamide', 'AHA/BHA', 'Ceramides']
-const brandValues  = ['Vegan', 'Cruelty-Free', 'Fragrance-Free', 'Organic']
-const sortOptions  = ['Recommended', 'Best Selling', 'Newest Arrivals', 'Price: Low to High', 'Price: High to Low', 'Highest Rated']
+import {
+  skincareCategories,
+  skincareProductsMobile,
+  skincareProductsLarge,
+  skincareProductsMedium,
+  skincareProductsSquare,
+  skincareProductsRectangular,
+  filterSkinTypes,
+  filterSkinConcerns,
+  filterIngredients,
+  filterBrandsAll,
+  filterRatingsSkincare,
+  sortOptionsSkincare,
+} from '../data/Products'
 
-// Mobile category cards
-const mobileCategoryCards = [
-  { name: 'Cleansers',     count: 12, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop' },
-  { name: 'Serums',        count: 18, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop' },
-  { name: 'Moisturizers',  count: 15, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=80&h=80&fit=crop' },
-  { name: 'Eye Care',      count: 8,  image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=80&h=80&fit=crop' },
-  { name: 'Masks',         count: 10, image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=80&h=80&fit=crop' },
-  { name: 'Sunscreen',     count: 6,  image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop' },
-]
+// ─── Local filter-only data (skincare-specific, not shared) ───────────────────
+const brandValues = ['Vegan', 'Cruelty-Free', 'Fragrance-Free', 'Organic']
 
-// Mobile product grid
-const mobileProducts = [
-  { name: 'Botanical Renewal Serum',  description: 'Advanced age-defying formula',    price: '$185', reviews: 248, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop' },
-  { name: 'Hydrating Face Cleanser',  description: 'Gentle foaming gel cleanser',     price: '$58',  reviews: 312, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop' },
-  { name: 'Supreme Moisture Cream',   description: '24-hour deep hydration',          price: '$165', reviews: 421, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&h=400&fit=crop' },
-  { name: 'Perfecting Eye Cream',     description: 'Reduces fine lines & dark circles', price: '$98', reviews: 287, image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400&h=400&fit=crop' },
-  { name: 'Revitalizing Face Mask',   description: 'Purifying clay treatment',        price: '$72',  reviews: 356, image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=400&fit=crop' },
-  { name: 'Daily SPF Moisturizer',    description: 'Broad spectrum SPF 50',           price: '$65',  reviews: 519, image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&h=400&fit=crop' },
-]
+// These are used in the desktop sidebar filter panel
+const skinTypes    = filterSkinTypes
+const skinConcerns = filterSkinConcerns
+const ingredients  = filterIngredients
 
-// Filter data
-const filterCategories = [
-  { name: 'Cleansers',    count: 12, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop' },
-  { name: 'Serums',       count: 18, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop' },
-  { name: 'Moisturizers', count: 15, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=80&h=80&fit=crop' },
-  { name: 'Eye Care',     count: 8,  image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=80&h=80&fit=crop' },
-  { name: 'Masks',        count: 10, image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=80&h=80&fit=crop' },
-  { name: 'Sunscreen',    count: 6,  image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop' },
-]
-const filterSkinTypes   = ['All Skin Types', 'Dry', 'Oily', 'Combination', 'Sensitive', 'Mature']
-const filterConcerns    = ['Anti-Aging', 'Hydration', 'Brightening', 'Acne Care', 'Redness Relief', 'Dark Spots']
-const filterIngredients = ['Retinol', 'Vitamin C', 'Hyaluronic Acid', 'Niacinamide', 'AHA/BHA', 'Ceramides']
-const filterBrands      = ['Shan Loray', 'La Mer', 'SK-II', 'Tatcha', 'Sunday Riley', 'Drunk Elephant', 'Paula\'s Choice', 'The Ordinary']
-const filterRatings     = [{ stars: 5, count: 312 }, { stars: 4, count: 198 }, { stars: 3, count: 87 }, { stars: 2, count: 34 }, { stars: 1, count: 9 }]
-
-// Desktop data
-const largeProducts = [
-  { name: 'Advanced Retinol Night Serum',  description: 'Time-release formula for smooth, youthful skin', price: '$198', reviews: 412, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=560&h=560&fit=crop' },
-  { name: 'Vitamin C Brightening Complex', description: 'Powerful antioxidant serum for radiant glow',     price: '$165', reviews: 387, image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=940&h=800&fit=crop' },
-]
-const mediumProducts = [
-  { name: 'Hydrating Gel Cleanser',    description: 'Gentle daily cleanser for all skin types', price: '$58',  reviews: 534, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=460&h=280&fit=crop' },
-  { name: 'Peptide Eye Renewal Cream', description: 'Targets fine lines and dark circles',      price: '$145', reviews: 298, image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=460&h=280&fit=crop' },
-]
-const squareProducts = [
-  { name: 'Deep Moisture Face Cream', description: '24-hour hydration therapy',         price: '$128', reviews: 621, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=300&h=300&fit=crop' },
-  { name: 'Illuminating Clay Mask',   description: 'Purifies and brightens complexion', price: '$78',  reviews: 445, image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=300&h=300&fit=crop' },
-  { name: 'Mineral Defense SPF 50',   description: 'Broad spectrum sun protection',     price: '$72',  reviews: 789, image: 'https://images.unsplash.com/photo-1556228852-80a3c31c6d52?w=300&h=300&fit=crop' },
-]
-const rectangularProducts = [
-  { name: 'Complete Skincare Ritual Set', description: 'Four essential steps to luminous skin',        price: '$395', reviews: 203, image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=470&h=400&fit=crop' },
-  { name: 'Travel Essentials Collection', description: 'Your complete routine in travel sizes',        price: '$145', reviews: 167, image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=470&h=400&fit=crop' },
-]
+// Aliases to keep template variable names unchanged
+const mobileCategoryCards  = skincareCategories
+const mobileProducts       = skincareProductsMobile
+const filterCategories     = skincareCategories
+const filterConcerns       = filterSkinConcerns
+const filterBrands         = filterBrandsAll
+const filterRatings        = filterRatingsSkincare
+const sortOptions          = sortOptionsSkincare
+const largeProducts        = skincareProductsLarge
+const mediumProducts       = skincareProductsMedium
+const squareProducts       = skincareProductsSquare
+const rectangularProducts  = skincareProductsRectangular
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function SkinCareMobile() {

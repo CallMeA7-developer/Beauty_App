@@ -35,15 +35,7 @@ import {
   IoLogoTwitter,
 } from 'react-icons/io5'
 
-// ─── Shared Data ──────────────────────────────────────────────────────────────
-const wishlistProducts = [
-  { id: 1, brand: 'LA MER',            name: 'Crème de la Mer Moisturizing Cream',  image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=560&h=560&fit=crop',  rating: 4.9, reviews: 342, originalPrice: 380, currentPrice: 342, stock: 'In Stock'  },
-  { id: 2, brand: 'ESTÉE LAUDER',       name: 'Advanced Night Repair Serum',         image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=560&h=560&fit=crop',  rating: 4.8, reviews: 567, originalPrice: 135, currentPrice: 115, stock: 'In Stock'  },
-  { id: 3, brand: 'DIOR',              name: 'Prestige La Micro-Huile de Rose',      image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=560&h=560&fit=crop',  rating: 4.7, reviews: 289, originalPrice: 425, currentPrice: 425, stock: 'Low Stock' },
-  { id: 4, brand: 'TOM FORD',          name: 'Black Orchid Eau de Parfum',          image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=560&h=560&fit=crop',  rating: 4.9, reviews: 834, originalPrice: 295, currentPrice: 265, stock: 'In Stock'  },
-  { id: 5, brand: 'CHARLOTTE TILBURY', name: 'Magic Cream Moisturizer',             image: 'https://images.unsplash.com/photo-1556228841-a6d4522f2c88?w=560&h=560&fit=crop',  rating: 4.6, reviews: 456, originalPrice: 100, currentPrice: 85,  stock: 'In Stock'  },
-  { id: 6, brand: 'CHANEL',            name: 'Les Beiges Healthy Glow Foundation',  image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=560&h=560&fit=crop',  rating: 4.8, reviews: 721, originalPrice: 68,  currentPrice: 68,  stock: 'In Stock'  },
-]
+import { wishlistProducts } from '../data/Products'
 
 const navigationItems = [
   { icon: IoPersonOutline,   label: 'Account Dashboard', active: false, badge: null },
