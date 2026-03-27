@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import Skincare from './pages/SkinCare'
@@ -34,6 +35,7 @@ import Notifications from './pages/Notifications'
 import Privacy from './pages/Privacy'
 import Password from './pages/Password'
 import SplashScreen from './pages/SplashScreen'
+import Login from './pages/Login'
 
 export default function App() {
   return (
@@ -41,6 +43,9 @@ export default function App() {
       <Routes>
         {/* ── Splash — no Navbar/Footer ── */}
         <Route path="/splash" element={<SplashScreen />} />
+
+        {/* ── Login — no Navbar/Footer ── */}
+        <Route path="/login" element={<Login />} />
 
         {/* ── All other pages — with Navbar + Footer ── */}
         <Route path="/*" element={
@@ -69,24 +74,24 @@ export default function App() {
               <Route path="/advanced-formulations"   element={<AdvancedFormulations />} />
               <Route path="/ai-consultation"         element={<AISkinConsultant />} />
 
-              {/* Account */}
-              <Route path="/account"                 element={<Profile />} />
-              <Route path="/dashboard"               element={<AccountDashboard />} />
-              <Route path="/edit-profile"            element={<EditProfile />} />
+              {/* Account - Protected Routes */}
+              <Route path="/account"                 element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/dashboard"               element={<ProtectedRoute><AccountDashboard /></ProtectedRoute>} />
+              <Route path="/edit-profile"            element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
               <Route path="/order-tracking"          element={<OrderTracking />} />
-              <Route path="/wishlist"                element={<Wishlist />} />
-              <Route path="/shipping-address"        element={<ShippingAddress />} />
+              <Route path="/wishlist"                element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
+              <Route path="/shipping-address"        element={<ProtectedRoute><ShippingAddress /></ProtectedRoute>} />
               <Route path="/edit-address"            element={<EditAddress />} />
-              <Route path="/payment-methods"         element={<PaymentMethods />} />
-              <Route path="/notifications"           element={<Notifications />} />
-              <Route path="/privacy-settings"        element={<Privacy />} />
-              <Route path="/change-password"         element={<Password />} />
+              <Route path="/payment-methods"         element={<ProtectedRoute><PaymentMethods /></ProtectedRoute>} />
+              <Route path="/notifications"           element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+              <Route path="/privacy-settings"        element={<ProtectedRoute><Privacy /></ProtectedRoute>} />
+              <Route path="/change-password"         element={<ProtectedRoute><Password /></ProtectedRoute>} />
 
-              {/* Checkout Flow */}
-              <Route path="/cart"                    element={<ShoppingBasket />} />
+              {/* Checkout Flow - Protected Routes */}
+              <Route path="/cart"                    element={<ProtectedRoute><ShoppingBasket /></ProtectedRoute>} />
               <Route path="/checkout"                element={<DeliveryInfo />} />
               <Route path="/delivery-methods"        element={<DeliveryMethods />} />
-              <Route path="/payment"                 element={<Payment />} />
+              <Route path="/payment"                 element={<ProtectedRoute><Payment /></ProtectedRoute>} />
               <Route path="/order-confirmation"      element={<OrderConfirmation />} />
             </Routes>
             <Footer />

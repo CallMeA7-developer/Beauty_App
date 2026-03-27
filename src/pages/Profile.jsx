@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   IoPersonOutline,
   IoHeartOutline,
@@ -18,8 +18,16 @@ import {
   IoStarSharp,
 } from 'react-icons/io5'
 import { currentOrders as recentOrders, getStatusColor as statusColor } from '../data/user'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Profile() {
+  const navigate = useNavigate()
+  const { signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    await signOut()
+    navigate('/')
+  }
   const quickActions = [
     { icon: IoBagCheckOutline, label: 'Orders',        path: '/orders'         },
     { icon: IoHeartOutline,    label: 'Wishlist',       path: '/wishlist'       },
@@ -156,7 +164,7 @@ export default function Profile() {
 
             {/* Sign Out */}
             <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-4 lg:p-[20px]">
-              <button className="w-full h-[48px] lg:h-[52px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[10px] cursor-pointer hover:border-[#8B7355] group transition-colors">
+              <button onClick={handleSignOut} className="w-full h-[48px] lg:h-[52px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[10px] cursor-pointer hover:border-[#8B7355] group transition-colors">
                 <IoLogOutOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666] group-hover:text-[#8B7355] transition-colors" />
                 <span className="text-[14px] lg:text-[15px] font-medium text-[#666666] group-hover:text-[#8B7355] transition-colors">Sign Out</span>
               </button>
