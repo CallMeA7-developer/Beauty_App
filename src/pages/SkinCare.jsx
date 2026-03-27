@@ -102,19 +102,19 @@ function SkinCareMobile() {
 
     if (selectedSkinTypes.length > 0) {
       filtered = filtered.filter(p =>
-        p.skin_types && p.skin_types.some(type => selectedSkinTypes.includes(type))
+        p.skin_types && selectedSkinTypes.every(type => p.skin_types.includes(type))
       )
     }
 
     if (selectedConcerns.length > 0) {
       filtered = filtered.filter(p =>
-        p.skin_concerns && p.skin_concerns.some(concern => selectedConcerns.includes(concern))
+        p.skin_concerns && selectedConcerns.every(concern => p.skin_concerns.includes(concern))
       )
     }
 
     if (selectedIngredients.length > 0) {
       filtered = filtered.filter(p =>
-        p.ingredients && p.ingredients.some(ingredient => selectedIngredients.includes(ingredient))
+        p.ingredients && selectedIngredients.every(ingredient => p.ingredients.includes(ingredient))
       )
     }
 
@@ -596,19 +596,19 @@ function SkinCareDesktop() {
 
     if (selectedSkinTypes.length > 0) {
       filtered = filtered.filter(p =>
-        p.skin_types && p.skin_types.some(type => selectedSkinTypes.includes(type))
+        p.skin_types && selectedSkinTypes.every(type => p.skin_types.includes(type))
       )
     }
 
     if (selectedConcerns.length > 0) {
       filtered = filtered.filter(p =>
-        p.skin_concerns && p.skin_concerns.some(concern => selectedConcerns.includes(concern))
+        p.skin_concerns && selectedConcerns.every(concern => p.skin_concerns.includes(concern))
       )
     }
 
     if (selectedIngredients.length > 0) {
       filtered = filtered.filter(p =>
-        p.ingredients && p.ingredients.some(ingredient => selectedIngredients.includes(ingredient))
+        p.ingredients && selectedIngredients.every(ingredient => p.ingredients.includes(ingredient))
       )
     }
 
