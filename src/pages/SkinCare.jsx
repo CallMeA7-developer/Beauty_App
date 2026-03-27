@@ -554,6 +554,7 @@ function SkinCareDesktop() {
   const [selectedConcerns, setSelectedConcerns] = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([])
   const [selectedBrands, setSelectedBrands] = useState([])
+  const [selectedRating, setSelectedRating] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
@@ -615,6 +616,10 @@ function SkinCareDesktop() {
       filtered = filtered.filter(p => selectedBrands.includes(p.brand))
     }
 
+    if (selectedRating) {
+      filtered = filtered.filter(p => p.rating >= selectedRating)
+    }
+
     if (activeSort === 'Price: Low to High') {
       filtered.sort((a, b) => a.priceValue - b.priceValue)
     } else if (activeSort === 'Price: High to Low') {
@@ -648,7 +653,7 @@ function SkinCareDesktop() {
     image: skincareCategories.find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop'
   })).sort((a, b) => a.name.localeCompare(b.name))
 
-  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (minPrice || maxPrice ? 1 : 0)
+  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
 
   const products = getFilteredAndSortedProducts()
   const displayedProducts = products.slice(0, displayCount)
