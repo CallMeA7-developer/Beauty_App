@@ -61,8 +61,10 @@ function SkinCareMobile() {
   const [selectedBrands, setSelectedBrands]         = useState([])
   const [selectedRating, setSelectedRating]         = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
 
-  const activeFilters = selectedCategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0)
+  const activeFilters = selectedCategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
 
   useEffect(() => {
     async function fetchProducts() {
@@ -83,8 +85,32 @@ function SkinCareMobile() {
       )
     }
 
+    if (minPrice || maxPrice) {
+      const min = minPrice ? parseFloat(minPrice) : 0
+      const max = maxPrice ? parseFloat(maxPrice) : Infinity
+      filtered = filtered.filter(p => p.priceValue >= min && p.priceValue <= max)
+    }
+
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(p => selectedCategories.includes(p.category))
+    }
+
+    if (selectedSkinTypes.length > 0) {
+      filtered = filtered.filter(p =>
+        p.skin_types && p.skin_types.some(type => selectedSkinTypes.includes(type))
+      )
+    }
+
+    if (selectedConcerns.length > 0) {
+      filtered = filtered.filter(p =>
+        p.skin_concerns && p.skin_concerns.some(concern => selectedConcerns.includes(concern))
+      )
+    }
+
+    if (selectedIngredients.length > 0) {
+      filtered = filtered.filter(p =>
+        p.ingredients && p.ingredients.some(ingredient => selectedIngredients.includes(ingredient))
+      )
     }
 
     if (selectedBrands.length > 0) {
@@ -475,7 +501,7 @@ function SkinCareMobile() {
             {/* Footer */}
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
               <button
-                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null) }}
+                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice('') }}
                 className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]"
               >
                 Clear All
@@ -504,6 +530,8 @@ function SkinCareDesktop() {
   const [selectedIngredients, setSelectedIngredients] = useState([])
   const [selectedBrands, setSelectedBrands] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
 
   useEffect(() => {
@@ -525,8 +553,32 @@ function SkinCareDesktop() {
       )
     }
 
+    if (minPrice || maxPrice) {
+      const min = minPrice ? parseFloat(minPrice) : 0
+      const max = maxPrice ? parseFloat(maxPrice) : Infinity
+      filtered = filtered.filter(p => p.priceValue >= min && p.priceValue <= max)
+    }
+
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(p => selectedCategories.includes(p.category))
+    }
+
+    if (selectedSkinTypes.length > 0) {
+      filtered = filtered.filter(p =>
+        p.skin_types && p.skin_types.some(type => selectedSkinTypes.includes(type))
+      )
+    }
+
+    if (selectedConcerns.length > 0) {
+      filtered = filtered.filter(p =>
+        p.skin_concerns && p.skin_concerns.some(concern => selectedConcerns.includes(concern))
+      )
+    }
+
+    if (selectedIngredients.length > 0) {
+      filtered = filtered.filter(p =>
+        p.ingredients && p.ingredients.some(ingredient => selectedIngredients.includes(ingredient))
+      )
     }
 
     if (selectedBrands.length > 0) {
@@ -614,9 +666,21 @@ function SkinCareDesktop() {
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Price Range</h4>
                 <div className="flex items-center gap-[6px] lg:gap-[8px]">
-                  <input type="text" placeholder="$0"   className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
+                  <input
+                    type="number"
+                    placeholder="$0"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none"
+                  />
                   <span className="text-[13px] lg:text-[14px] text-[#666666]">—</span>
-                  <input type="text" placeholder="$500" className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
+                  <input
+                    type="number"
+                    placeholder="$500"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none"
+                  />
                 </div>
               </div>
               <div>
@@ -683,7 +747,12 @@ function SkinCareDesktop() {
                   })}
                 </div>
               </div>
-              <button className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Apply</button>
+              <button
+                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice('') }}
+                className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors mb-3"
+              >
+                Clear All
+              </button>
             </div>
           </div>
         </div>

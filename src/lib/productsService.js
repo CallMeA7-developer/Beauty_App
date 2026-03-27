@@ -89,9 +89,12 @@ function formatProduct(product) {
   return {
     ...product,
     price: formatPrice(product.price),
-    priceValue: product.price,
+    priceValue: parseFloat(product.price),
     image: product.image_url,
-    reviews: product.reviews_count
+    reviews: product.reviews_count,
+    skin_types: product.skin_types || [],
+    skin_concerns: product.skin_concerns || [],
+    ingredients: product.ingredients || []
   }
 }
 
