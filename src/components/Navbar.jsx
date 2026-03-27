@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   IoMenuOutline,
   IoClose,
@@ -396,11 +396,17 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
 // ─── Main Navbar ──────────────────────────────────────────────────────────────
 export default function Navbar() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { user, signOut } = useAuth()
   const [isMobile, setIsMobile]     = useState(window.innerWidth < 640)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
+
+  const handleLogout = async () => {
+    await signOut()
+    navigate('/')
+  }
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
@@ -428,7 +434,7 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link to="/account"><IoPersonOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
-                <button onClick={signOut}><IoLogOutOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></button>
+                <button onClick={handleLogout}><IoLogOutOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></button>
               </>
             ) : (
               <button onClick={() => setAuthModalOpen(true)}>
@@ -489,7 +495,7 @@ export default function Navbar() {
           {user ? (
             <>
               <Link to="/account"><IoPersonOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
-              <button onClick={signOut}><IoLogOutOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></button>
+              <button onClick={handleLogout}><IoLogOutOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></button>
             </>
           ) : (
             <button onClick={() => setAuthModalOpen(true)}>

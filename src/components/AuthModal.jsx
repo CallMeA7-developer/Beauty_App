@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { IoClose } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function AuthModal({ isOpen, onClose }) {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -9,6 +10,7 @@ export default function AuthModal({ isOpen, onClose }) {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { signIn, signUp } = useAuth()
+  const navigate = useNavigate()
 
   if (!isOpen) return null
 
@@ -28,6 +30,7 @@ export default function AuthModal({ isOpen, onClose }) {
         setEmail('')
         setPassword('')
         onClose()
+        navigate('/account')
       }
     } catch (err) {
       setError('An unexpected error occurred')
