@@ -66,14 +66,12 @@ function ProductDetailMobile({ product }) {
       {/* Product Image Gallery */}
       <div className="bg-white px-5 pt-5">
         <div className="w-full h-[380px] rounded-[8px] overflow-hidden mb-3">
-          <img src={thumbnailImages[activeThumb].replace('w=64&h=64', 'w=440&h=480')} alt="Botanical Foaming Cleanser" className="w-full h-full object-cover" />
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
         </div>
         <div className="flex gap-2 justify-center mb-4">
-          {thumbnailImages.map((img, idx) => (
-            <button key={idx} onClick={() => setActiveThumb(idx)} className={`w-14 h-14 rounded-[8px] overflow-hidden border-2 transition-all ${idx === activeThumb ? 'border-[#8B7355]' : 'border-transparent'}`}>
-              <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
-            </button>
-          ))}
+          <button className="w-14 h-14 rounded-[8px] overflow-hidden border-2 border-[#8B7355]">
+            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          </button>
         </div>
       </div>
 
@@ -453,14 +451,12 @@ function ProductDetailDesktop({ product }) {
             {/* Left — Gallery */}
             <div className="w-full md:w-[320px] lg:w-[580px] flex-shrink-0">
               <div className="w-full h-[360px] md:h-[420px] lg:h-[680px] rounded-[8px] overflow-hidden mb-4 lg:mb-[20px]">
-                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1160&h=1360&fit=crop" alt="Botanical Foaming Cleanser" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                <img src={product.image} alt={product.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="flex gap-[8px] lg:gap-[12px] mb-6 lg:mb-[32px]">
-                {desktopThumbs.map((img, idx) => (
-                  <div key={idx} className={`w-[60px] h-[60px] md:w-[52px] md:h-[52px] lg:w-[106px] lg:h-[106px] rounded-[8px] overflow-hidden cursor-pointer border-2 transition-all ${idx === 0 ? 'border-[#8B7355]' : 'border-transparent hover:border-[#E8E3D9]'}`}>
-                    <img src={img} alt={`Product view ${idx + 1}`} className="w-full h-full object-cover" />
-                  </div>
-                ))}
+                <div className="w-[60px] h-[60px] md:w-[52px] md:h-[52px] lg:w-[106px] lg:h-[106px] rounded-[8px] overflow-hidden cursor-pointer border-2 border-[#8B7355]">
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                </div>
               </div>
               <div className="flex gap-[8px] lg:gap-[12px]">
                 {[
