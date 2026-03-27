@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import {
   IoLeafOutline,
   IoSparkles,
@@ -10,6 +10,7 @@ import {
   IoChevronDown,
   IoShareOutline,
   IoHeartOutline,
+  IoHeart,
   IoAddOutline,
   IoRemoveOutline,
   IoCarOutline,
@@ -33,6 +34,8 @@ import {
 
 import { getProductById } from '../lib/productsService'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 
 // ─── Local static data (product-specific, not shared) ─────────────────────────
 const trustBadges = [
@@ -42,13 +45,106 @@ const trustBadges = [
 ]
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
-function ProductDetailMobile({ product }) {
+function ProductDetailMobile({ product, onOpenAuthModal }) {
+  const navigate = useNavigate()
+  const { user } = useAuth()
   const [selectedSize, setSelectedSize]   = useState('100ml')
   const [quantity, setQuantity]           = useState(1)
   const [activeThumb, setActiveThumb]     = useState(0)
   const [openSection, setOpenSection]     = useState('description')
+  const [isInWishlist, setIsInWishlist]   = useState(false)
+  const [showToast, setShowToast]         = useState(false)
 
   const toggleSection = (id) => setOpenSection(openSection === id ? null : id)
+
+  const getSizePrice = (size) => {
+    const basePrice = product.price
+    if (size === '100ml') return Math.round(basePrice)
+    if (size === '200ml') return Math.round(basePrice * 1.75)
+    if (size === 'Travel 30ml') return Math.round(basePrice * 0.45)
+    return Math.round(basePrice)
+  }
+
+  const displayPrice = getSizePrice(selectedSize)
+
+  useEffect(() => {
+    if (user && product) {
+      checkWishlist()
+    }
+  }, [user, product])
+
+  const checkWishlist = async () => {
+    if (!user) return
+    const { data } = await supabase
+      .from('wishlist')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('product_id', product.id)
+      .maybeSingle()
+    setIsInWishlist(!!data)
+  }
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      onOpenAuthModal()
+      return
+    }
+
+    const { error } = await supabase.from('cart').insert({
+      user_id: user.id,
+      product_id: product.id,
+      quantity: quantity,
+      selected_size: selectedSize,
+      price: displayPrice
+    })
+
+    if (!error) {
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    }
+  }
+
+  const handleBuyNow = async () => {
+    if (!user) {
+      onOpenAuthModal()
+      return
+    }
+
+    await handleAddToCart()
+    navigate('/cart')
+  }
+
+  const handleWishlist = async () => {
+    if (!user) {
+      onOpenAuthModal()
+      return
+    }
+
+    if (isInWishlist) {
+      await supabase
+        .from('wishlist')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('product_id', product.id)
+      setIsInWishlist(false)
+    } else {
+      await supabase.from('wishlist').insert({
+        user_id: user.id,
+        product_id: product.id
+      })
+      setIsInWishlist(true)
+    }
+  }
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
 
   if (!product) {
     return (
@@ -57,8 +153,6 @@ function ProductDetailMobile({ product }) {
       </div>
     )
   }
-
-  const displayPrice = `$${product.price}`
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -93,8 +187,8 @@ function ProductDetailMobile({ product }) {
 
         {/* Price */}
         <div className="mb-4">
-          <div className="text-[26px] font-semibold text-[#1A1A1A]">{displayPrice}</div>
-          <div className="text-[13px] font-light text-[#666666]">or 4 payments of ${(product.price / 4).toFixed(2)}</div>
+          <div className="text-[26px] font-semibold text-[#1A1A1A]">${displayPrice}</div>
+          <div className="text-[13px] font-light text-[#666666]">or 4 interest-free payments of ${(displayPrice / 4).toFixed(2)}</div>
         </div>
 
         {/* Description */}
@@ -115,7 +209,7 @@ function ProductDetailMobile({ product }) {
                 }`}
               >
                 <span>{opt.size}</span>
-                <span className={selectedSize === opt.size ? 'text-white/80' : 'text-[#8B7355]'}>{opt.price}</span>
+                <span className={selectedSize === opt.size ? 'text-white/80' : 'text-[#8B7355]'}>${getSizePrice(opt.size)}</span>
                 {opt.badge && <span className="text-[9px] bg-[#C9A870] text-white px-1.5 py-0.5 rounded-full">{opt.badge}</span>}
               </button>
             ))}
@@ -138,23 +232,30 @@ function ProductDetailMobile({ product }) {
 
         {/* CTA Buttons */}
         <div className="flex flex-col gap-3 mb-4">
-          <button className="w-full h-14 bg-[#8B7355] text-white text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-2">
+          <button onClick={handleAddToCart} className="w-full h-14 bg-[#8B7355] text-white text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-2">
             <IoBagOutline className="w-5 h-5" /> Add to Cart
           </button>
-          <button className="w-full h-14 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[16px] font-semibold rounded-[8px]">
+          <button onClick={handleBuyNow} className="w-full h-14 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[16px] font-semibold rounded-[8px]">
             Buy Now
           </button>
         </div>
 
         {/* Wishlist & Share */}
         <div className="flex items-center gap-6 mb-6">
-          <button className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
-            <IoHeartOutline className="w-[18px] h-[18px]" /> Add to Wishlist
+          <button onClick={handleWishlist} className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
+            {isInWishlist ? <IoHeart className="w-[18px] h-[18px] text-[#8B7355]" /> : <IoHeartOutline className="w-[18px] h-[18px]" />} Add to Wishlist
           </button>
-          <button className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
+          <button onClick={handleShare} className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
             <IoShareOutline className="w-[18px] h-[18px]" /> Share
           </button>
         </div>
+
+        {/* Toast Notification */}
+        {showToast && (
+          <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-[#2B2B2B] text-white px-6 py-3 rounded-[8px] shadow-lg z-50 text-[14px]">
+            Link copied!
+          </div>
+        )}
       </div>
 
       {/* Key Benefits */}
@@ -405,7 +506,14 @@ function ProductDetailMobile({ product }) {
 }
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
-function ProductDetailDesktop({ product }) {
+function ProductDetailDesktop({ product, onOpenAuthModal }) {
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const [selectedSize, setSelectedSize]   = useState('100ml')
+  const [quantity, setQuantity]           = useState(1)
+  const [isInWishlist, setIsInWishlist]   = useState(false)
+  const [showToast, setShowToast]         = useState(false)
+
   const desktopThumbs = [
     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=212&h=212&fit=crop',
     'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=212&h=212&fit=crop',
@@ -421,6 +529,95 @@ function ProductDetailDesktop({ product }) {
     { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=550&h=640&fit=crop',  brand: 'Shan Loray', name: 'Eye Renewal Complex',     price: '$124.00', reviews: 184 },
   ]
 
+  const getSizePrice = (size) => {
+    const basePrice = product.price
+    if (size === '100ml') return Math.round(basePrice)
+    if (size === '200ml') return Math.round(basePrice * 1.75)
+    if (size === 'Travel 30ml') return Math.round(basePrice * 0.45)
+    return Math.round(basePrice)
+  }
+
+  const displayPrice = getSizePrice(selectedSize)
+
+  useEffect(() => {
+    if (user && product) {
+      checkWishlist()
+    }
+  }, [user, product])
+
+  const checkWishlist = async () => {
+    if (!user) return
+    const { data } = await supabase
+      .from('wishlist')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('product_id', product.id)
+      .maybeSingle()
+    setIsInWishlist(!!data)
+  }
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      onOpenAuthModal()
+      return
+    }
+
+    const { error } = await supabase.from('cart').insert({
+      user_id: user.id,
+      product_id: product.id,
+      quantity: quantity,
+      selected_size: selectedSize,
+      price: displayPrice
+    })
+
+    if (!error) {
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    }
+  }
+
+  const handleBuyNow = async () => {
+    if (!user) {
+      onOpenAuthModal()
+      return
+    }
+
+    await handleAddToCart()
+    navigate('/cart')
+  }
+
+  const handleWishlist = async () => {
+    if (!user) {
+      onOpenAuthModal()
+      return
+    }
+
+    if (isInWishlist) {
+      await supabase
+        .from('wishlist')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('product_id', product.id)
+      setIsInWishlist(false)
+    } else {
+      await supabase.from('wishlist').insert({
+        user_id: user.id,
+        product_id: product.id
+      })
+      setIsInWishlist(true)
+    }
+  }
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
+
   if (!product) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -428,8 +625,6 @@ function ProductDetailDesktop({ product }) {
       </div>
     )
   }
-
-  const displayPrice = `$${product.price}`
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -488,8 +683,8 @@ function ProductDetailDesktop({ product }) {
                 <span className="text-[14px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">({product.reviews_count} reviews)</span>
               </div>
               <div className="mb-5 lg:mb-[20px]">
-                <div className="text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">{displayPrice}</div>
-                <div className="text-[13px] lg:text-[14px] font-light text-[#666666]">or 4 interest-free payments of ${(product.price / 4).toFixed(2)}</div>
+                <div className="text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">${displayPrice}</div>
+                <div className="text-[13px] lg:text-[14px] font-light text-[#666666]">or 4 interest-free payments of ${(displayPrice / 4).toFixed(2)}</div>
               </div>
               <p className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#3D3D3D] leading-[1.6] mb-6 lg:mb-[32px]">
                 {product.description}
@@ -500,9 +695,9 @@ function ProductDetailDesktop({ product }) {
                 <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Size</div>
                 <div className="flex gap-[8px] lg:gap-[12px]">
                   {sizeOptions.map((opt, idx) => (
-                    <button key={idx} className={`flex-1 h-[44px] lg:h-[48px] rounded-[8px] text-[12px] md:text-[13px] lg:text-[14px] font-medium cursor-pointer transition-all ${opt.selected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
+                    <button key={idx} onClick={() => setSelectedSize(opt.size)} className={`flex-1 h-[44px] lg:h-[48px] rounded-[8px] text-[12px] md:text-[13px] lg:text-[14px] font-medium cursor-pointer transition-all ${selectedSize === opt.size ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B] hover:border-[#8B7355]'}`}>
                       <div className="flex items-center justify-center gap-[4px] lg:gap-[6px] flex-wrap">
-                        <span>{opt.size} — {opt.price}</span>
+                        <span>{opt.size} — ${getSizePrice(opt.size)}</span>
                         {opt.badge && <span className="text-[9px] lg:text-[10px] bg-[#C9A870] text-white px-[5px] lg:px-[6px] py-[2px] rounded-full">{opt.badge}</span>}
                       </div>
                     </button>
@@ -514,30 +709,37 @@ function ProductDetailDesktop({ product }) {
               <div className="mb-5 lg:mb-[24px]">
                 <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Quantity</div>
                 <div className="flex items-center gap-[12px] w-[130px] lg:w-[140px] h-[44px] lg:h-[48px] border border-[#E8E3D9] rounded-[8px]">
-                  <button className="flex-1 flex items-center justify-center"><IoRemoveOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /></button>
-                  <span className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A]">1</span>
-                  <button className="flex-1 flex items-center justify-center"><IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /></button>
+                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="flex-1 flex items-center justify-center"><IoRemoveOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /></button>
+                  <span className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A]">{quantity}</span>
+                  <button onClick={() => setQuantity(quantity + 1)} className="flex-1 flex items-center justify-center"><IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /></button>
                 </div>
               </div>
 
               {/* CTAs */}
               <div className="flex flex-col gap-3 lg:gap-[16px] mb-4 lg:mb-[20px]">
-                <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] hover:bg-[#7A6347] transition-colors">
+                <button onClick={handleAddToCart} className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-semibold rounded-[8px] flex items-center justify-center gap-[10px] hover:bg-[#7A6347] transition-colors">
                   <IoBagOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" /> Add to Cart
                 </button>
-                <button className="w-full h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] lg:text-[16px] font-semibold rounded-[8px] hover:bg-[#FDFBF7] transition-colors">
+                <button onClick={handleBuyNow} className="w-full h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] lg:text-[16px] font-semibold rounded-[8px] hover:bg-[#FDFBF7] transition-colors">
                   Buy Now
                 </button>
               </div>
 
               <div className="flex items-center gap-6 lg:gap-[32px] mb-6 lg:mb-[32px]">
-                <button className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
-                  <IoHeartOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Add to Wishlist
+                <button onClick={handleWishlist} className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
+                  {isInWishlist ? <IoHeart className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" /> : <IoHeartOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />} Add to Wishlist
                 </button>
-                <button className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
+                <button onClick={handleShare} className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
                   <IoShareOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Share
                 </button>
               </div>
+
+              {/* Toast Notification */}
+              {showToast && (
+                <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-[#2B2B2B] text-white px-6 py-3 rounded-[8px] shadow-lg z-50 text-[14px]">
+                  Link copied!
+                </div>
+              )}
 
               {/* Key Benefits */}
               <div className="bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-5 lg:p-[24px]">
@@ -704,6 +906,7 @@ function ProductDetailDesktop({ product }) {
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function ProductDetail() {
   const { id } = useParams()
+  const { setShowAuthModal } = useAuth()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
@@ -726,9 +929,13 @@ export default function ProductDetail() {
     }
   }, [id])
 
+  const handleOpenAuthModal = () => {
+    setShowAuthModal(true)
+  }
+
   if (loading) {
     return <LoadingSpinner />
   }
 
-  return isMobile ? <ProductDetailMobile product={product} /> : <ProductDetailDesktop product={product} />
+  return isMobile ? <ProductDetailMobile product={product} onOpenAuthModal={handleOpenAuthModal} /> : <ProductDetailDesktop product={product} onOpenAuthModal={handleOpenAuthModal} />
 }
