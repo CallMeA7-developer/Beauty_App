@@ -175,7 +175,7 @@ function FragranceMobile() {
                 {product.badge && (
                   <div className="absolute top-2 left-2 px-2 py-0.5 bg-[#C9A870] text-white text-[9px] font-medium rounded-full">{product.badge}</div>
                 )}
-                <div className="absolute top-2 right-2 px-2 py-0.5 bg-[#F5F1EA] text-[#8B7355] text-[9px] font-medium rounded-full">{product.concentration}</div>
+                <div className="absolute top-2 right-2 px-2 py-0.5 bg-[#F5F1EA] text-[#8B7355] text-[9px] font-medium rounded-full">{product.category}</div>
                 <button className="absolute bottom-2 right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-sm">
                   <IoHeartOutline className="w-3.5 h-3.5 text-[#2B2B2B]" />
                 </button>
@@ -690,7 +690,7 @@ function FragranceDesktop() {
               <div className="p-5 lg:p-[24px]">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px]">Shan Loray</p>
-                  <span className="px-[10px] lg:px-[12px] py-[4px] bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{featuredProduct.concentration}</span>
+                  <span className="px-[10px] lg:px-[12px] py-[4px] bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{featuredProduct.category}</span>
                 </div>
                 <div className="flex items-center gap-[6px]"><Stars /><span className="text-[13px] text-[#999999] ml-1">({featuredProduct.reviews})</span></div>
               </div>
@@ -708,7 +708,7 @@ function FragranceDesktop() {
                   <div className="flex-1 p-4 lg:p-[24px] flex flex-col justify-center min-w-0">
                     <div className="flex items-center justify-between mb-1 lg:mb-2">
                       <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px]">Shan Loray</p>
-                      <span className="px-[10px] lg:px-[12px] py-[4px] bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{product.concentration}</span>
+                      <span className="px-[10px] lg:px-[12px] py-[4px] bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{product.category}</span>
                     </div>
                     <h4 className="text-[15px] md:text-[17px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-1 lg:mb-2">{product.name}</h4>
                     <p className="text-[12px] lg:text-[15px] text-[#999999] mb-1 lg:mb-2 line-clamp-2">{product.description}</p>
@@ -736,7 +736,7 @@ function FragranceDesktop() {
                     <div className="w-[34px] h-[34px] lg:w-[40px] lg:h-[40px] bg-white rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.15)]"><IoHeartOutline className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] text-[#2B2B2B]" /></div>
                     <div className="w-[34px] h-[34px] lg:w-[40px] lg:h-[40px] bg-white rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.15)]"><IoEyeOutline className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] text-[#2B2B2B]" /></div>
                   </div>
-                  <div className="absolute top-[12px] left-[12px] lg:top-[16px] lg:left-[16px] px-[10px] lg:px-[12px] py-[4px] bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{product.concentration}</div>
+                  <div className="absolute top-[12px] left-[12px] lg:top-[16px] lg:left-[16px] px-[10px] lg:px-[12px] py-[4px] bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{product.category}</div>
                 </div>
                 <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">Shan Loray</p>
                 <h4 className="text-[15px] md:text-[17px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-1 lg:mb-2">{product.name}</h4>
