@@ -31,12 +31,10 @@ export async function getProductById(id) {
 }
 
 export async function getSkincareProducts() {
-  const categories = ['Serums', 'Cleansers', 'Moisturizers', 'Eye Care', 'Masks', 'Sunscreen', 'Sets']
-
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .in('category', categories)
+    .eq('category', 'Skincare')
     .order('created_at', { ascending: false })
 
   if (error) {

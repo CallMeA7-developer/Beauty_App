@@ -63,6 +63,7 @@ function SkinCareMobile() {
   const [searchQuery, setSearchQuery] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
+  const [displayCount, setDisplayCount] = useState(30)
 
   const activeFilters = selectedCategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
 
@@ -137,12 +138,11 @@ function SkinCareMobile() {
   }
 
   const products = getFilteredAndSortedProducts()
+  const mobileProducts = products.slice(0, displayCount)
 
   if (loading) {
     return <LoadingSpinner />
   }
-
-  const mobileProducts = products.slice(0, 6)
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -262,9 +262,12 @@ function SkinCareMobile() {
         </div>
         )}
 
-        {products.length > 6 && (
-          <button className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]">
-            Load More
+        {products.length > displayCount && (
+          <button
+            onClick={() => setDisplayCount(prev => prev + 30)}
+            className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]"
+          >
+            Load More ({products.length - displayCount} remaining)
           </button>
         )}
       </div>
@@ -501,12 +504,12 @@ function SkinCareMobile() {
             {/* Footer */}
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
               <button
-                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice('') }}
+                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice(''); setDisplayCount(30) }}
                 className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]"
               >
                 Clear All
               </button>
-              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
+              <button onClick={() => { setShowFilterSheet(false); setDisplayCount(30) }} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
                 Apply Filters ({products.length} items)
               </button>
             </div>
@@ -532,6 +535,7 @@ function SkinCareDesktop() {
   const [searchQuery, setSearchQuery] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
+  const [displayCount, setDisplayCount] = useState(30)
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
 
   useEffect(() => {
@@ -601,15 +605,16 @@ function SkinCareDesktop() {
   }
 
   const products = getFilteredAndSortedProducts()
+  const displayedProducts = products.slice(0, displayCount)
 
   if (loading) {
     return <LoadingSpinner />
   }
 
-  const largeProducts = products.slice(0, 1)
-  const mediumProducts = products.slice(1, 3)
-  const squareProducts = products.slice(3, 6)
-  const rectangularProducts = products.slice(6, 8)
+  const largeProducts = displayedProducts.slice(0, 1)
+  const mediumProducts = displayedProducts.slice(1, 3)
+  const squareProducts = displayedProducts.slice(3, 6)
+  const rectangularProducts = displayedProducts.slice(6, displayCount)
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -748,7 +753,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <button
-                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice('') }}
+                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(30) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors mb-3"
               >
                 Clear All
@@ -899,13 +904,17 @@ function SkinCareDesktop() {
           </div>
           )}
 
-          {/* Pagination */}
-          <div className="flex items-center justify-center gap-[8px] mb-16 lg:mb-[96px]">
-            <button className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] flex items-center justify-center hover:bg-[#F5F1EA] transition-colors"><IoChevronBack className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" /></button>
-            <button className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[6px]">1</button>
-            {[2,3,4].map((n) => <button key={n} className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] text-[14px] lg:text-[15px] font-medium text-[#3D3D3D] hover:border-[#8B7355] hover:text-[#8B7355] transition-colors">{n}</button>)}
-            <button className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] flex items-center justify-center hover:bg-[#F5F1EA] transition-colors"><IoChevronForward className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" /></button>
-          </div>
+          {/* Load More Button */}
+          {products.length > displayCount && (
+            <div className="flex items-center justify-center mb-16 lg:mb-[96px]">
+              <button
+                onClick={() => setDisplayCount(prev => prev + 30)}
+                className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors"
+              >
+                Load More ({products.length - displayCount} remaining)
+              </button>
+            </div>
+          )}
           </>
           )}
         </div>
