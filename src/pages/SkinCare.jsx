@@ -141,8 +141,9 @@ function SkinCareMobile() {
     return filtered
   }
 
-  const products = getFilteredAndSortedProducts()
-  const mobileProducts = products.slice(0, displayCount)
+  if (loading) {
+    return <LoadingSpinner />
+  }
 
   // Generate dynamic subcategory cards from actual products
   const subcategoryCounts = allProducts.reduce((acc, product) => {
@@ -158,9 +159,8 @@ function SkinCareMobile() {
     image: skincareCategories.find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop'
   })).sort((a, b) => a.name.localeCompare(b.name))
 
-  if (loading) {
-    return <LoadingSpinner />
-  }
+  const products = getFilteredAndSortedProducts()
+  const mobileProducts = products.slice(0, displayCount)
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -630,8 +630,9 @@ function SkinCareDesktop() {
     return filtered
   }
 
-  const products = getFilteredAndSortedProducts()
-  const displayedProducts = products.slice(0, displayCount)
+  if (loading) {
+    return <LoadingSpinner />
+  }
 
   // Generate dynamic subcategory cards from actual products
   const subcategoryCounts = allProducts.reduce((acc, product) => {
@@ -649,9 +650,8 @@ function SkinCareDesktop() {
 
   const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (minPrice || maxPrice ? 1 : 0)
 
-  if (loading) {
-    return <LoadingSpinner />
-  }
+  const products = getFilteredAndSortedProducts()
+  const displayedProducts = products.slice(0, displayCount)
 
   const largeProducts = displayedProducts.slice(0, 1)
   const mediumProducts = displayedProducts.slice(1, 3)
