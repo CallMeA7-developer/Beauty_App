@@ -263,7 +263,7 @@ function SkinCareMobile() {
                 </button>
               </div>
               <div className="p-3">
-                <p className="text-[11px] font-light italic text-[#8B7355] mb-1">Shan Loray</p>
+                <p className="text-[11px] font-light italic text-[#8B7355] mb-1">{product.brand}</p>
                 <h4 className="text-[14px] font-semibold text-[#1A1A1A] leading-tight mb-1">{product.name}</h4>
                 <p className="text-[12px] font-normal text-[#999999] mb-2">{product.description}</p>
                 <div className="flex items-center justify-between mb-0.5">
@@ -887,7 +887,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div className="p-5 lg:p-[24px]">
-                <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
+                <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">{largeProducts[0].brand}</p>
                 <div className="flex items-center gap-[6px]"><Stars /><span className="text-[13px] text-[#999999] ml-1">({largeProducts[0].reviews})</span></div>
               </div>
             </Link>
@@ -902,7 +902,7 @@ function SkinCareDesktop() {
                     </div>
                   </div>
                   <div className="flex-1 p-4 lg:p-[24px] flex flex-col justify-center min-w-0">
-                    <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">Shan Loray</p>
+                    <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">{product.brand}</p>
                     <h4 className="text-[15px] md:text-[17px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-1 lg:mb-2">{product.name}</h4>
                     <p className="text-[12px] lg:text-[15px] text-[#999999] mb-2 lg:mb-3 line-clamp-2">{product.description}</p>
                     <p className="text-[16px] md:text-[17px] lg:text-[19px] font-semibold text-[#1A1A1A] mb-2 lg:mb-3">{product.price}</p>
@@ -926,7 +926,7 @@ function SkinCareDesktop() {
                     <div className="w-[34px] h-[34px] lg:w-[40px] lg:h-[40px] bg-white rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.15)]"><IoEyeOutline className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] text-[#2B2B2B]" /></div>
                   </div>
                 </div>
-                <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">Shan Loray</p>
+                <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">{product.brand}</p>
                 <h4 className="text-[15px] md:text-[17px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-1 lg:mb-2">{product.name}</h4>
                 <p className="text-[12px] lg:text-[15px] text-[#999999] mb-1 lg:mb-2">{product.description}</p>
                 <p className="text-[16px] md:text-[17px] lg:text-[19px] font-semibold text-[#1A1A1A] mb-1 lg:mb-2">{product.price}</p>
@@ -948,7 +948,7 @@ function SkinCareDesktop() {
                   </div>
                 </div>
                 <div className="p-4 lg:p-[24px]">
-                  <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">Shan Loray</p>
+                  <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">{product.brand}</p>
                   <h4 className="text-[17px] md:text-[19px] lg:text-[22px] font-medium text-[#2B2B2B] leading-[1.2] mb-1 lg:mb-2">{product.name}</h4>
                   <p className="text-[12px] lg:text-[15px] text-[#999999] mb-2 lg:mb-3">{product.description}</p>
                   <div className="flex items-center justify-between">
