@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import {
   IoStarSharp,
   IoChevronBack,
@@ -153,7 +154,7 @@ function MakeupMobile() {
       <div className="px-4 pb-6">
         <div className="grid grid-cols-2 gap-4">
           {mobileProducts.map((product, idx) => (
-            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden">
+            <Link key={idx} to={`/product/${product.id}`} className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden">
               <div className="relative h-[180px]">
                 <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 <button className="absolute top-2.5 right-2.5 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
@@ -175,7 +176,7 @@ function MakeupMobile() {
                   Add to Bag
                 </button>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -580,7 +581,7 @@ function MakeupDesktop() {
 
           {/* Row 1 — featured + 2 horizontal */}
           <div className="flex flex-col md:flex-row gap-5 mb-10 md:mb-12 lg:mb-[64px]">
-            <div className="w-full md:w-[300px] lg:w-[460px] md:h-[480px] lg:h-[560px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
+            <Link to={`/product/${featuredProduct.id}`} className="w-full md:w-[300px] lg:w-[460px] md:h-[480px] lg:h-[560px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
               <div className="relative w-full h-[260px] md:h-[300px] lg:h-[380px]">
                 <img src={featuredProduct.image} alt={featuredProduct.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute top-[16px] right-[16px] lg:top-[20px] lg:right-[20px] px-[14px] lg:px-[16px] py-[7px] lg:py-[8px] bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium rounded-full">{featuredProduct.badge}</div>
@@ -595,10 +596,10 @@ function MakeupDesktop() {
                 <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
                 <div className="flex items-center gap-[6px]"><Stars /><span className="text-[13px] text-[#999999] ml-1">({featuredProduct.reviews})</span></div>
               </div>
-            </div>
+            </Link>
             <div className="flex-1 flex flex-col gap-4 lg:gap-[20px]">
               {horizontalProducts.map((product, idx) => (
-                <div key={idx} className="w-full h-[160px] md:h-[220px] lg:h-[270px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300 flex">
+                <Link key={idx} to={`/product/${product.id}`} className="w-full h-[160px] md:h-[220px] lg:h-[270px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300 flex">
                   <div className="w-[140px] md:w-[180px] lg:w-[280px] h-full relative overflow-hidden flex-shrink-0">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     {product.badge && <div className="absolute top-[12px] right-[12px] lg:top-[16px] lg:right-[16px] px-[10px] lg:px-[12px] py-[5px] lg:py-[6px] bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium rounded-full">{product.badge}</div>}
@@ -615,7 +616,7 @@ function MakeupDesktop() {
                     <p className="text-[16px] md:text-[17px] lg:text-[19px] font-semibold text-[#1A1A1A] mb-2 lg:mb-3">{product.price}</p>
                     <div className="flex items-center gap-[6px]"><Stars /><span className="text-[12px] lg:text-[13px] text-[#999999] ml-1">({product.reviews})</span></div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -623,7 +624,7 @@ function MakeupDesktop() {
           {/* Row 2 — square products */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-[20px] mb-10 md:mb-12 lg:mb-[64px]">
             {squareProducts.map((product, idx) => (
-              <div key={idx} className="group cursor-pointer">
+              <Link key={idx} to={`/product/${product.id}`} className="group cursor-pointer">
                 <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-3 lg:mb-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-[12px] right-[12px] lg:top-[16px] lg:right-[16px] flex flex-col gap-[6px] lg:gap-[8px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -637,14 +638,14 @@ function MakeupDesktop() {
                 {product.shades && <div className="flex items-center gap-[5px] lg:gap-[6px] mb-1 lg:mb-2 flex-wrap">{product.shades.map((s,i) => <div key={i} className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] rounded-full border border-[#E8E3D9]" style={{backgroundColor:s}} />)}</div>}
                 <p className="text-[16px] md:text-[17px] lg:text-[19px] font-semibold text-[#1A1A1A] mb-1 lg:mb-2">{product.price}</p>
                 <div className="flex items-center gap-[6px]"><Stars /><span className="text-[12px] lg:text-[13px] text-[#999999] ml-1">({product.reviews})</span></div>
-              </div>
+              </Link>
             ))}
           </div>
 
           {/* Row 3 — rectangular products */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-[20px] mb-10 md:mb-12 lg:mb-[64px]">
             {rectangularProducts.map((product, idx) => (
-              <div key={idx} className="w-full bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
+              <Link key={idx} to={`/product/${product.id}`} className="w-full bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
                 <div className="relative w-full h-[200px] md:h-[220px] lg:h-[280px] overflow-hidden">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   {product.badge && <div className="absolute top-[16px] right-[16px] lg:top-[20px] lg:right-[20px] px-[12px] lg:px-[16px] py-[6px] lg:py-[8px] bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium rounded-full">{product.badge}</div>}
@@ -661,7 +662,7 @@ function MakeupDesktop() {
                     <div className="flex items-center gap-[6px]"><Stars /><span className="text-[12px] lg:text-[13px] text-[#999999] ml-1">({product.reviews})</span></div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
