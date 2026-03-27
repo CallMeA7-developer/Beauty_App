@@ -54,7 +54,7 @@ function SkinCareMobile() {
   const [activeSort, setActiveSort]           = useState('Recommended')
   const [showSortSheet, setShowSortSheet]     = useState(false)
   const [showFilterSheet, setShowFilterSheet] = useState(false)
-  const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedSubcategories, setSelectedSubcategories] = useState([])
   const [selectedSkinTypes, setSelectedSkinTypes]   = useState([])
   const [selectedConcerns, setSelectedConcerns]     = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([])
@@ -65,7 +65,7 @@ function SkinCareMobile() {
   const [maxPrice, setMaxPrice] = useState('')
   const [displayCount, setDisplayCount] = useState(30)
 
-  const activeFilters = selectedCategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
+  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
 
   useEffect(() => {
     async function fetchProducts() {
@@ -76,6 +76,10 @@ function SkinCareMobile() {
     }
     fetchProducts()
   }, [])
+
+  useEffect(() => {
+    setDisplayCount(30)
+  }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, selectedRating, minPrice, maxPrice, searchQuery])
 
   const getFilteredAndSortedProducts = () => {
     let filtered = [...allProducts]
@@ -92,8 +96,8 @@ function SkinCareMobile() {
       filtered = filtered.filter(p => p.priceValue >= min && p.priceValue <= max)
     }
 
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter(p => selectedCategories.includes(p.category))
+    if (selectedSubcategories.length > 0) {
+      filtered = filtered.filter(p => selectedSubcategories.includes(p.subcategory))
     }
 
     if (selectedSkinTypes.length > 0) {
@@ -140,6 +144,20 @@ function SkinCareMobile() {
   const products = getFilteredAndSortedProducts()
   const mobileProducts = products.slice(0, displayCount)
 
+  // Generate dynamic subcategory cards from actual products
+  const subcategoryCounts = allProducts.reduce((acc, product) => {
+    if (product.subcategory) {
+      acc[product.subcategory] = (acc[product.subcategory] || 0) + 1
+    }
+    return acc
+  }, {})
+
+  const subcategoryCards = Object.entries(subcategoryCounts).map(([name, count]) => ({
+    name,
+    count,
+    image: skincareCategories.find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop'
+  })).sort((a, b) => a.name.localeCompare(b.name))
+
   if (loading) {
     return <LoadingSpinner />
   }
@@ -167,16 +185,18 @@ function SkinCareMobile() {
         </div>
       </div>
 
-      {/* ── Category Cards ── */}
+      {/* ── Subcategory Cards ── */}
       <div className="bg-white px-4 py-5 overflow-x-auto border-b border-[#E8E3D9]" style={{ scrollbarWidth: 'none' }}>
         <div className="flex gap-3 w-max">
-          {mobileCategoryCards.map((cat) => {
-            const isSelected = selectedCategories.includes(cat.name)
+          {subcategoryCards.map((cat) => {
+            const isSelected = selectedSubcategories.includes(cat.name)
             return (
               <div
                 key={cat.name}
-                onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
-                className={`w-[120px] bg-white border-2 rounded-[12px] p-4 flex flex-col items-center gap-2 cursor-pointer transition-colors ${isSelected ? 'border-[#8B7355]' : 'border-[#E8E3D9] hover:border-[#C9A870]'}`}
+                onClick={() => {
+                  setSelectedSubcategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])
+                }}
+                className={`w-[120px] bg-white border-2 rounded-[12px] p-4 flex flex-col items-center gap-2 cursor-pointer transition-colors ${isSelected ? 'border-[#8B7355] bg-[#F5F1EA]' : 'border-[#E8E3D9] hover:border-[#C9A870]'}`}
               >
                 <div className="w-[60px] h-[60px] rounded-full overflow-hidden bg-[#F9F6F2]">
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
@@ -367,16 +387,18 @@ function SkinCareMobile() {
             {/* Scrollable Content */}
             <div className="overflow-y-auto flex-1">
 
-              {/* Category */}
+              {/* Subcategory */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Product Category</h3>
                 <div className="grid grid-cols-3 gap-3">
-                  {filterCategories.map((cat) => {
-                    const isSelected = selectedCategories.includes(cat.name)
+                  {subcategoryCards.map((cat) => {
+                    const isSelected = selectedSubcategories.includes(cat.name)
                     return (
                       <button
                         key={cat.name}
-                        onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
+                        onClick={() => {
+                          setSelectedSubcategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])
+                        }}
                         className={`rounded-[8px] p-3 flex flex-col items-center gap-2 border-2 transition-colors ${isSelected ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}
                       >
                         <img src={cat.image} alt={cat.name} className="w-[36px] h-[36px] rounded-full object-cover" />
@@ -504,12 +526,12 @@ function SkinCareMobile() {
             {/* Footer */}
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
               <button
-                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice(''); setDisplayCount(30) }}
+                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice('') }}
                 className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]"
               >
                 Clear All
               </button>
-              <button onClick={() => { setShowFilterSheet(false); setDisplayCount(30) }} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
+              <button onClick={() => { setShowFilterSheet(false) }} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
                 Apply Filters ({products.length} items)
               </button>
             </div>
@@ -527,7 +549,7 @@ function SkinCareDesktop() {
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort] = useState('Best Selling')
   const [showSortDropdown, setShowSortDropdown] = useState(false)
-  const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedSubcategories, setSelectedSubcategories] = useState([])
   const [selectedSkinTypes, setSelectedSkinTypes] = useState([])
   const [selectedConcerns, setSelectedConcerns] = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([])
@@ -548,6 +570,10 @@ function SkinCareDesktop() {
     fetchProducts()
   }, [])
 
+  useEffect(() => {
+    setDisplayCount(30)
+  }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, selectedRating, minPrice, maxPrice, searchQuery])
+
   const getFilteredAndSortedProducts = () => {
     let filtered = [...allProducts]
 
@@ -563,8 +589,8 @@ function SkinCareDesktop() {
       filtered = filtered.filter(p => p.priceValue >= min && p.priceValue <= max)
     }
 
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter(p => selectedCategories.includes(p.category))
+    if (selectedSubcategories.length > 0) {
+      filtered = filtered.filter(p => selectedSubcategories.includes(p.subcategory))
     }
 
     if (selectedSkinTypes.length > 0) {
@@ -607,6 +633,22 @@ function SkinCareDesktop() {
   const products = getFilteredAndSortedProducts()
   const displayedProducts = products.slice(0, displayCount)
 
+  // Generate dynamic subcategory cards from actual products
+  const subcategoryCounts = allProducts.reduce((acc, product) => {
+    if (product.subcategory) {
+      acc[product.subcategory] = (acc[product.subcategory] || 0) + 1
+    }
+    return acc
+  }, {})
+
+  const subcategoryCards = Object.entries(subcategoryCounts).map(([name, count]) => ({
+    name,
+    count,
+    image: skincareCategories.find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop'
+  })).sort((a, b) => a.name.localeCompare(b.name))
+
+  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (minPrice || maxPrice ? 1 : 0)
+
   if (loading) {
     return <LoadingSpinner />
   }
@@ -646,23 +688,33 @@ function SkinCareDesktop() {
         {/* Sidebar — hidden on tablet, shown as full width on md+ */}
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-5 lg:mb-[24px]">REFINE SELECTION</h3>
+            <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">REFINE SELECTION</h3>
+              {activeFilters > 0 && (
+                <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">
+                  {activeFilters}
+                </span>
+              )}
+            </div>
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
               <div
-                onClick={() => setSelectedCategories([])}
-                className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedCategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
+                onClick={() => { setSelectedSubcategories([]) }}
+                className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedSubcategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
               >
                 All Skincare
               </div>
-              {skincareCategories.map((cat) => {
-                const isSelected = selectedCategories.includes(cat.name)
+              {subcategoryCards.map((cat) => {
+                const isSelected = selectedSubcategories.includes(cat.name)
                 return (
                   <div
                     key={cat.name}
-                    onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
+                    onClick={() => {
+                      setSelectedSubcategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])
+                      setDisplayCount(30)
+                    }}
                     className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
                   >
-                    {cat.name}
+                    {cat.name} ({cat.count})
                   </div>
                 )
               })}
@@ -753,10 +805,10 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <button
-                onClick={() => { setSelectedCategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(30) }}
+                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(30) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors mb-3"
               >
-                Clear All
+                Clear All Filters
               </button>
             </div>
           </div>
