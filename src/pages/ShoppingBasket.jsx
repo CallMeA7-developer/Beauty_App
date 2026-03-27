@@ -12,7 +12,7 @@ import {
   IoHeartOutline,
 } from 'react-icons/io5'
 
-import { initialCartItems } from '../data/Products'
+import { initialCartItems } from '../data/products'
 
 export default function ShoppingBasket() {
   const [cartItems, setCartItems] = useState(initialCartItems)

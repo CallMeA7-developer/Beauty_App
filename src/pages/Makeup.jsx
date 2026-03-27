@@ -29,7 +29,7 @@ import {
   filterBrandsMakeup,
   filterRatingsMakeup,
   sortOptionsMakeup,
-} from '../data/Products'
+} from '../data/products'
 
 // ─── Local filter-only data (makeup-specific, not shared) ─────────────────────
 const faceCategories = ['Foundation', 'Concealer', 'Powder', 'Blush', 'Highlighter']

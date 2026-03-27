@@ -28,7 +28,7 @@ import {
   filterBrandsFragrance,
   filterRatingsFragrance,
   sortOptionsFragrance,
-} from '../data/Products'
+} from '../data/products'
 
 // ─── Local filter-only data (fragrance-specific) ──────────────────────────────
 const fragranceFamilies   = ['Floral', 'Woody', 'Citrus', 'Oriental', 'Fresh', 'Spicy']

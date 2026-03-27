@@ -30,7 +30,7 @@ import {
   filterBrandsAll,
   filterRatingsSkincare,
   sortOptionsSkincare,
-} from '../data/Products'
+} from '../data/products'
 
 // ─── Local filter-only data (skincare-specific, not shared) ───────────────────
 const brandValues = ['Vegan', 'Cruelty-Free', 'Fragrance-Free', 'Organic']

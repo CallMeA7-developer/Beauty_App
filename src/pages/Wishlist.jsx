@@ -35,7 +35,7 @@ import {
   IoLogoTwitter,
 } from 'react-icons/io5'
 
-import { wishlistProducts } from '../data/Products'
+import { wishlistProducts } from '../data/products'
 
 const navigationItems = [
   { icon: IoPersonOutline,   label: 'Account Dashboard', active: false, badge: null },

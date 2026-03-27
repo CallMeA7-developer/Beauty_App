@@ -29,7 +29,7 @@ import {
   productDetailSizes      as sizeOptions,
   productDetailReviews    as reviews,
   productDetailRelated    as relatedProducts,
-} from '../data/Products'
+} from '../data/products'
 
 // ─── Local static data (product-specific, not shared) ─────────────────────────
 const trustBadges = [
