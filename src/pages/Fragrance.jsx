@@ -20,15 +20,13 @@ import {
 
 import {
   fragranceCategories,
-  fragranceProductsMobile,
-  fragranceFeaturedProduct,
-  fragranceProductsHorizontal,
-  fragranceProductsSquare,
-  fragranceProductsRectangular,
   filterBrandsFragrance,
   filterRatingsFragrance,
   sortOptionsFragrance,
 } from '../data/products'
+
+import { getFragranceProducts, formatProductsForUI } from '../lib/productsService'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Local filter-only data (fragrance-specific) ──────────────────────────────
 const fragranceFamilies   = ['Floral', 'Woody', 'Citrus', 'Oriental', 'Fresh', 'Spicy']
@@ -50,18 +48,14 @@ const fragranceCategoryLabels = ['All Fragrances', 'Eau de Parfum', 'Eau de Toil
 
 // Aliases to keep template variable names unchanged
 const mobileCategoryCards  = fragranceCategories
-const mobileProducts       = fragranceProductsMobile
-const featuredProduct      = fragranceFeaturedProduct
-const horizontalProducts   = fragranceProductsHorizontal
-const squareProducts       = fragranceProductsSquare
-const rectangularProducts  = fragranceProductsRectangular
 const filterBrands         = filterBrandsFragrance
 const sortOptions          = sortOptionsFragrance
-// fragranceCategories imported directly above
 
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function FragranceMobile() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort]           = useState('Best Selling')
   const [showSortSheet, setShowSortSheet]     = useState(false)
   const [showFilterSheet, setShowFilterSheet] = useState(false)
@@ -93,6 +87,30 @@ function FragranceMobile() {
     setSelectedBrands([])
     setSelectedRating(null)
   }
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true)
+      const data = await getFragranceProducts()
+      setProducts(formatProductsForUI(data))
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">No products found</p>
+      </div>
+    )
+  }
+
+  const mobileProducts = products.slice(0, 6)
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -514,7 +532,36 @@ function FragranceMobile() {
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function FragranceDesktop() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true)
+      const data = await getFragranceProducts()
+      setProducts(formatProductsForUI(data))
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">No products found</p>
+      </div>
+    )
+  }
+
+  const featuredProduct = products.find(p => p.id === 'fr-001') || products[0]
+  const horizontalProducts = products.filter(p => ['fr-002', 'fr-003'].includes(p.id))
+  const squareProducts = products.filter(p => ['fr-004', 'fr-005', 'fr-007'].includes(p.id))
+  const rectangularProducts = products.filter(p => ['fr-006', 'fr-008'].includes(p.id))
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">

@@ -19,17 +19,15 @@ import {
 
 import {
   makeupCategories,
-  makeupProductsMobile,
-  makeupFeaturedProduct,
-  makeupProductsHorizontal,
-  makeupProductsSquare,
-  makeupProductsRectangular,
   makeupShadeColors,
   filterSkinTypes as importedFilterSkinTypes,
   filterBrandsMakeup,
   filterRatingsMakeup,
   sortOptionsMakeup,
 } from '../data/products'
+
+import { getMakeupProducts, formatProductsForUI } from '../lib/productsService'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Local filter-only data (makeup-specific, not shared) ─────────────────────
 const faceCategories = ['Foundation', 'Concealer', 'Powder', 'Blush', 'Highlighter']
@@ -44,11 +42,6 @@ const filterRatings     = filterRatingsMakeup
 
 // Aliases to keep template variable names unchanged
 const mobileCategoryCards  = makeupCategories
-const mobileProducts       = makeupProductsMobile
-const featuredProduct      = makeupFeaturedProduct
-const horizontalProducts   = makeupProductsHorizontal
-const squareProducts       = makeupProductsSquare
-const rectangularProducts  = makeupProductsRectangular
 const shadeColors          = makeupShadeColors
 const filterCategories     = makeupCategories
 const filterBrands         = filterBrandsMakeup
@@ -58,6 +51,8 @@ const sortOptions          = sortOptionsMakeup
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function MakeupMobile() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort]           = useState('Best Selling')
   const [showSortSheet, setShowSortSheet]     = useState(false)
   const [showFilterSheet, setShowFilterSheet] = useState(false)
@@ -68,6 +63,30 @@ function MakeupMobile() {
   const [selectedBrands, setSelectedBrands]         = useState(['Shan Loray'])
   const [selectedRating, setSelectedRating]         = useState(null)
   const activeFilters = selectedCategories.length + selectedShades.length + selectedFinish.length
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true)
+      const data = await getMakeupProducts()
+      setProducts(formatProductsForUI(data))
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">No products found</p>
+      </div>
+    )
+  }
+
+  const mobileProducts = products.slice(0, 6)
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -439,7 +458,36 @@ function MakeupMobile() {
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function MakeupDesktop() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true)
+      const data = await getMakeupProducts()
+      setProducts(formatProductsForUI(data))
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">No products found</p>
+      </div>
+    )
+  }
+
+  const featuredProduct = products.find(p => p.id === 'mk-007') || products[0]
+  const horizontalProducts = products.filter(p => ['mk-008', 'mk-009'].includes(p.id))
+  const squareProducts = products.filter(p => ['mk-010', 'mk-011', 'mk-012'].includes(p.id))
+  const rectangularProducts = products.filter(p => ['mk-013', 'mk-014'].includes(p.id))
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">

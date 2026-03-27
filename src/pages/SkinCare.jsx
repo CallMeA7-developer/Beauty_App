@@ -19,11 +19,6 @@ import {
 
 import {
   skincareCategories,
-  skincareProductsMobile,
-  skincareProductsLarge,
-  skincareProductsMedium,
-  skincareProductsSquare,
-  skincareProductsRectangular,
   filterSkinTypes,
   filterSkinConcerns,
   filterIngredients,
@@ -31,6 +26,9 @@ import {
   filterRatingsSkincare,
   sortOptionsSkincare,
 } from '../data/products'
+
+import { getSkincareProducts, formatProductsForUI } from '../lib/productsService'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Local filter-only data (skincare-specific, not shared) ───────────────────
 const brandValues = ['Vegan', 'Cruelty-Free', 'Fragrance-Free', 'Organic']
@@ -42,19 +40,16 @@ const ingredients  = filterIngredients
 
 // Aliases to keep template variable names unchanged
 const mobileCategoryCards  = skincareCategories
-const mobileProducts       = skincareProductsMobile
 const filterCategories     = skincareCategories
 const filterConcerns       = filterSkinConcerns
 const filterBrands         = filterBrandsAll
 const filterRatings        = filterRatingsSkincare
 const sortOptions          = sortOptionsSkincare
-const largeProducts        = skincareProductsLarge
-const mediumProducts       = skincareProductsMedium
-const squareProducts       = skincareProductsSquare
-const rectangularProducts  = skincareProductsRectangular
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function SkinCareMobile() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort]           = useState('Recommended')
   const [showSortSheet, setShowSortSheet]     = useState(false)
   const [showFilterSheet, setShowFilterSheet] = useState(false)
@@ -66,6 +61,30 @@ function SkinCareMobile() {
   const [selectedRating, setSelectedRating]         = useState(null)
 
   const activeFilters = selectedCategories.length + selectedSkinTypes.filter(t => t !== 'All Skin Types').length + selectedBrands.filter(b => b !== 'Shan Loray').length + (selectedRating ? 1 : 0)
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true)
+      const data = await getSkincareProducts()
+      setProducts(formatProductsForUI(data))
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">No products found</p>
+      </div>
+    )
+  }
+
+  const mobileProducts = products.slice(0, 6)
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -414,7 +433,36 @@ function SkinCareMobile() {
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function SkinCareDesktop() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true)
+      const data = await getSkincareProducts()
+      setProducts(formatProductsForUI(data))
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">No products found</p>
+      </div>
+    )
+  }
+
+  const largeProducts = products.filter(p => ['sk-007', 'sk-008'].includes(p.id))
+  const mediumProducts = products.filter(p => ['sk-009', 'sk-010'].includes(p.id))
+  const squareProducts = products.filter(p => ['sk-011', 'sk-012', 'sk-013'].includes(p.id))
+  const rectangularProducts = products.filter(p => ['sk-014', 'sk-015'].includes(p.id))
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import {
   IoLeafOutline,
   IoSparkles,
@@ -31,6 +31,9 @@ import {
   productDetailRelated    as relatedProducts,
 } from '../data/products'
 
+import { getProductById } from '../lib/productsService'
+import LoadingSpinner from '../components/LoadingSpinner'
+
 // ─── Local static data (product-specific, not shared) ─────────────────────────
 const trustBadges = [
   { icon: IoCarOutline,             title: 'Free Shipping',       desc: 'On orders over $100'   },
@@ -39,13 +42,23 @@ const trustBadges = [
 ]
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
-function ProductDetailMobile() {
+function ProductDetailMobile({ product }) {
   const [selectedSize, setSelectedSize]   = useState('100ml')
   const [quantity, setQuantity]           = useState(1)
   const [activeThumb, setActiveThumb]     = useState(0)
   const [openSection, setOpenSection]     = useState('description')
 
   const toggleSection = (id) => setOpenSection(openSection === id ? null : id)
+
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">Product not found</p>
+      </div>
+    )
+  }
+
+  const displayPrice = `$${product.price}`
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -67,28 +80,28 @@ function ProductDetailMobile() {
       {/* Product Info */}
       <div className="bg-white px-5 py-4">
         <div className="mb-2">
-          <span className="text-[13px] font-light italic text-[#8B7355]">Shan Loray</span>
-          <span className="text-[11px] font-light text-[#999999] ml-2">Cleansing Collection</span>
+          <span className="text-[13px] font-light italic text-[#8B7355]">{product.brand}</span>
+          <span className="text-[11px] font-light text-[#999999] ml-2">{product.category}</span>
         </div>
-        <h1 className="text-[26px] font-semibold text-[#1A1A1A] leading-[1.3] mb-3">Botanical Foaming Cleanser</h1>
+        <h1 className="text-[26px] font-semibold text-[#1A1A1A] leading-[1.3] mb-3">{product.name}</h1>
 
         {/* Rating */}
         <div className="flex items-center gap-2 mb-4">
           <div className="flex gap-1">
             {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-4 h-4 text-[#C9A870]" />)}
           </div>
-          <span className="text-[14px] font-normal text-[#8B7355] underline">4.9 (342 reviews)</span>
+          <span className="text-[14px] font-normal text-[#8B7355] underline">{product.rating} ({product.reviews_count} reviews)</span>
         </div>
 
         {/* Price */}
         <div className="mb-4">
-          <div className="text-[26px] font-semibold text-[#1A1A1A]">$68.00</div>
-          <div className="text-[13px] font-light text-[#666666]">or 4 payments of $17.00</div>
+          <div className="text-[26px] font-semibold text-[#1A1A1A]">{displayPrice}</div>
+          <div className="text-[13px] font-light text-[#666666]">or 4 payments of ${(product.price / 4).toFixed(2)}</div>
         </div>
 
         {/* Description */}
         <p className="text-[15px] font-normal text-[#3D3D3D] leading-[1.6] mb-5">
-          A luxurious gel-to-foam cleanser that gently purifies while maintaining skin's natural moisture barrier. Infused with botanical extracts for a refreshing, spa-like cleansing experience.
+          {product.description}
         </p>
 
         {/* Size */}
@@ -394,7 +407,7 @@ function ProductDetailMobile() {
 }
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
-function ProductDetailDesktop() {
+function ProductDetailDesktop({ product }) {
   const desktopThumbs = [
     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=212&h=212&fit=crop',
     'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=212&h=212&fit=crop',
@@ -410,13 +423,23 @@ function ProductDetailDesktop() {
     { image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=550&h=640&fit=crop',  brand: 'Shan Loray', name: 'Eye Renewal Complex',     price: '$124.00', reviews: 184 },
   ]
 
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[16px] text-[#666666]">Product not found</p>
+      </div>
+    )
+  }
+
+  const displayPrice = `$${product.price}`
+
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* Breadcrumb */}
       <div className="px-6 md:px-[60px] lg:px-[120px] py-[20px]">
         <div className="max-w-[1200px] mx-auto text-[12px] md:text-[13px] font-light text-[#666666]">
-          Home / Skincare / Cleansers / Botanical Foaming Cleanser
+          Home / {product.category} / {product.name}
         </div>
       </div>
 
@@ -457,23 +480,23 @@ function ProductDetailDesktop() {
             {/* Right — Info */}
             <div className="flex-1 min-w-0">
               <div className="mb-[8px]">
-                <span className="text-[13px] lg:text-[14px] font-light italic text-[#8B7355]">Shan Loray</span>
-                <span className="text-[11px] lg:text-[12px] font-light text-[#999999] ml-[8px]">Cleansing Collection</span>
+                <span className="text-[13px] lg:text-[14px] font-light italic text-[#8B7355]">{product.brand}</span>
+                <span className="text-[11px] lg:text-[12px] font-light text-[#999999] ml-[8px]">{product.category}</span>
               </div>
-              <h1 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px] leading-[1.3]">Botanical Foaming Cleanser</h1>
+              <h1 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px] leading-[1.3]">{product.name}</h1>
               <div className="flex items-center gap-[8px] mb-5 lg:mb-[24px]">
                 <div className="flex gap-[2px]">
                   {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#C9A870]" />)}
                 </div>
-                <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">4.9</span>
-                <span className="text-[14px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">(342 reviews)</span>
+                <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">{product.rating}</span>
+                <span className="text-[14px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">({product.reviews_count} reviews)</span>
               </div>
               <div className="mb-5 lg:mb-[20px]">
-                <div className="text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">$68.00</div>
-                <div className="text-[13px] lg:text-[14px] font-light text-[#666666]">or 4 interest-free payments of $17.00</div>
+                <div className="text-[26px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-[4px]">{displayPrice}</div>
+                <div className="text-[13px] lg:text-[14px] font-light text-[#666666]">or 4 interest-free payments of ${(product.price / 4).toFixed(2)}</div>
               </div>
               <p className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#3D3D3D] leading-[1.6] mb-6 lg:mb-[32px]">
-                A luxurious gel-to-foam cleanser that gently purifies while maintaining skin's natural moisture barrier. Infused with botanical extracts for a refreshing, spa-like cleansing experience.
+                {product.description}
               </p>
 
               {/* Size */}
@@ -684,6 +707,9 @@ function ProductDetailDesktop() {
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function ProductDetail() {
+  const { id } = useParams()
+  const [product, setProduct] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
@@ -692,5 +718,21 @@ export default function ProductDetail() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  return isMobile ? <ProductDetailMobile /> : <ProductDetailDesktop />
+  useEffect(() => {
+    async function fetchProduct() {
+      setLoading(true)
+      const data = await getProductById(id)
+      setProduct(data)
+      setLoading(false)
+    }
+    if (id) {
+      fetchProduct()
+    }
+  }, [id])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  return isMobile ? <ProductDetailMobile product={product} /> : <ProductDetailDesktop product={product} />
 }
