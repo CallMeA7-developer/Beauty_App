@@ -27,7 +27,7 @@ export async function getProductById(id) {
     return null
   }
 
-  return data
+  return data ? formatProduct(data) : null
 }
 
 export async function getSkincareProducts() {

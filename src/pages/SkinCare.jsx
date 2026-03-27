@@ -49,40 +49,71 @@ const sortOptions          = sortOptionsSkincare
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function SkinCareMobile() {
-  const [products, setProducts] = useState([])
+  const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort]           = useState('Recommended')
   const [showSortSheet, setShowSortSheet]     = useState(false)
   const [showFilterSheet, setShowFilterSheet] = useState(false)
-  const [selectedCategories, setSelectedCategories] = useState(['Serums'])
-  const [selectedSkinTypes, setSelectedSkinTypes]   = useState(['Dry'])
+  const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedSkinTypes, setSelectedSkinTypes]   = useState([])
   const [selectedConcerns, setSelectedConcerns]     = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([])
-  const [selectedBrands, setSelectedBrands]         = useState(['Shan Loray'])
+  const [selectedBrands, setSelectedBrands]         = useState([])
   const [selectedRating, setSelectedRating]         = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const activeFilters = selectedCategories.length + selectedSkinTypes.filter(t => t !== 'All Skin Types').length + selectedBrands.filter(b => b !== 'Shan Loray').length + (selectedRating ? 1 : 0)
+  const activeFilters = selectedCategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0)
 
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true)
       const data = await getSkincareProducts()
-      setProducts(formatProductsForUI(data))
+      setAllProducts(formatProductsForUI(data))
       setLoading(false)
     }
     fetchProducts()
   }, [])
 
-  if (loading) {
-    return <LoadingSpinner />
+  const getFilteredAndSortedProducts = () => {
+    let filtered = [...allProducts]
+
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(p => selectedCategories.includes(p.category))
+    }
+
+    if (selectedBrands.length > 0) {
+      filtered = filtered.filter(p => selectedBrands.includes(p.brand))
+    }
+
+    if (selectedRating) {
+      filtered = filtered.filter(p => p.rating >= selectedRating)
+    }
+
+    if (activeSort === 'Price: Low to High') {
+      filtered.sort((a, b) => a.priceValue - b.priceValue)
+    } else if (activeSort === 'Price: High to Low') {
+      filtered.sort((a, b) => b.priceValue - a.priceValue)
+    } else if (activeSort === 'Best Selling') {
+      filtered.sort((a, b) => b.reviews - a.reviews)
+    } else if (activeSort === 'Newest') {
+      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    } else if (activeSort === 'Top Rated') {
+      filtered.sort((a, b) => b.rating - a.rating)
+    }
+
+    return filtered
   }
 
-  if (products.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-[16px] text-[#666666]">No products found</p>
-      </div>
-    )
+  const products = getFilteredAndSortedProducts()
+
+  if (loading) {
+    return <LoadingSpinner />
   }
 
   const mobileProducts = products.slice(0, 6)
@@ -113,31 +144,50 @@ function SkinCareMobile() {
       {/* ── Category Cards ── */}
       <div className="bg-white px-4 py-5 overflow-x-auto border-b border-[#E8E3D9]" style={{ scrollbarWidth: 'none' }}>
         <div className="flex gap-3 w-max">
-          {mobileCategoryCards.map((cat) => (
-            <div key={cat.name} className="w-[120px] bg-white border border-[#E8E3D9] rounded-[12px] p-4 flex flex-col items-center gap-2 cursor-pointer hover:border-[#C9A870] transition-colors">
-              <div className="w-[60px] h-[60px] rounded-full overflow-hidden bg-[#F9F6F2]">
-                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+          {mobileCategoryCards.map((cat) => {
+            const isSelected = selectedCategories.includes(cat.name)
+            return (
+              <div
+                key={cat.name}
+                onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
+                className={`w-[120px] bg-white border-2 rounded-[12px] p-4 flex flex-col items-center gap-2 cursor-pointer transition-colors ${isSelected ? 'border-[#8B7355]' : 'border-[#E8E3D9] hover:border-[#C9A870]'}`}
+              >
+                <div className="w-[60px] h-[60px] rounded-full overflow-hidden bg-[#F9F6F2]">
+                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[13px] font-medium text-[#1A1A1A] text-center">{cat.name}</span>
+                <span className="text-[11px] font-light text-[#999999]">{cat.count}</span>
               </div>
-              <span className="text-[13px] font-medium text-[#1A1A1A] text-center">{cat.name}</span>
-              <span className="text-[11px] font-light text-[#999999]">{cat.count}</span>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
       {/* ── Toolbar ── */}
       <div className="bg-white px-5 pt-4 pb-3">
+        <div className="w-full h-11 bg-[#F5F1EA] rounded-[8px] px-4 flex items-center mb-3">
+          <IoSearchOutline className="w-[18px] h-[18px] text-[#999999] mr-2 flex-shrink-0" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1 bg-transparent text-[14px] text-[#2B2B2B] outline-none"
+          />
+        </div>
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[13px] font-normal text-[#666666]">Showing 36 products</span>
+          <span className="text-[13px] font-normal text-[#666666]">Showing {products.length} products</span>
           <button
             onClick={() => setShowFilterSheet(true)}
             className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]"
           >
             <IoFunnelOutline className="w-3.5 h-3.5 text-[#8B7355]" />
             Filters
-            <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#8B7355] rounded-full flex items-center justify-center">
-              <span className="text-[10px] font-medium text-white">2</span>
-            </div>
+            {activeFilters > 0 && (
+              <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#8B7355] rounded-full flex items-center justify-center">
+                <span className="text-[10px] font-medium text-white">{activeFilters}</span>
+              </div>
+            )}
           </button>
         </div>
         {/* Sort dropdown */}
@@ -152,7 +202,12 @@ function SkinCareMobile() {
 
       {/* ── Product Grid ── */}
       <div className="px-4 pb-6">
-        <div className="grid grid-cols-2 gap-4">
+        {products.length === 0 ? (
+          <div className="flex items-center justify-center min-h-[300px]">
+            <p className="text-[16px] text-[#666666]">No products found</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4">
           {mobileProducts.map((product, idx) => (
             <Link key={idx} to={`/product/${product.id}`} className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden">
               <div className="relative h-[180px]">
@@ -179,10 +234,13 @@ function SkinCareMobile() {
             </Link>
           ))}
         </div>
+        )}
 
-        <button className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]">
-          Load More
-        </button>
+        {products.length > 6 && (
+          <button className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]">
+            Load More
+          </button>
+        )}
       </div>
 
       {/* ── Newsletter ── */}
@@ -266,9 +324,11 @@ function SkinCareMobile() {
             <div className="min-h-[60px] px-5 flex items-center justify-between border-b border-[#E8E3D9] flex-shrink-0">
               <div className="flex items-center gap-2">
                 <h2 className="text-[22px] font-semibold text-[#1A1A1A]">Filters</h2>
-                <div className="w-[22px] h-[22px] bg-[#C9A870] rounded-full flex items-center justify-center">
-                  <span className="text-[11px] font-semibold text-white">2</span>
-                </div>
+                {activeFilters > 0 && (
+                  <div className="w-[22px] h-[22px] bg-[#C9A870] rounded-full flex items-center justify-center">
+                    <span className="text-[11px] font-semibold text-white">{activeFilters}</span>
+                  </div>
+                )}
               </div>
               <button onClick={() => setShowFilterSheet(false)}>
                 <IoClose className="w-6 h-6 text-[#2B2B2B]" />
@@ -421,7 +481,7 @@ function SkinCareMobile() {
                 Clear All
               </button>
               <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
-                Apply Filters (36 items)
+                Apply Filters ({products.length} items)
               </button>
             </div>
           </div>
@@ -434,36 +494,70 @@ function SkinCareMobile() {
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function SkinCareDesktop() {
-  const [products, setProducts] = useState([])
+  const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [activeSort, setActiveSort] = useState('Best Selling')
+  const [showSortDropdown, setShowSortDropdown] = useState(false)
+  const [selectedCategories, setSelectedCategories] = useState([])
+  const [selectedSkinTypes, setSelectedSkinTypes] = useState([])
+  const [selectedConcerns, setSelectedConcerns] = useState([])
+  const [selectedIngredients, setSelectedIngredients] = useState([])
+  const [selectedBrands, setSelectedBrands] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
 
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true)
       const data = await getSkincareProducts()
-      setProducts(formatProductsForUI(data))
+      setAllProducts(formatProductsForUI(data))
       setLoading(false)
     }
     fetchProducts()
   }, [])
 
+  const getFilteredAndSortedProducts = () => {
+    let filtered = [...allProducts]
+
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(p => selectedCategories.includes(p.category))
+    }
+
+    if (selectedBrands.length > 0) {
+      filtered = filtered.filter(p => selectedBrands.includes(p.brand))
+    }
+
+    if (activeSort === 'Price: Low to High') {
+      filtered.sort((a, b) => a.priceValue - b.priceValue)
+    } else if (activeSort === 'Price: High to Low') {
+      filtered.sort((a, b) => b.priceValue - a.priceValue)
+    } else if (activeSort === 'Best Selling') {
+      filtered.sort((a, b) => b.reviews - a.reviews)
+    } else if (activeSort === 'Newest') {
+      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    } else if (activeSort === 'Top Rated') {
+      filtered.sort((a, b) => b.rating - a.rating)
+    }
+
+    return filtered
+  }
+
+  const products = getFilteredAndSortedProducts()
+
   if (loading) {
     return <LoadingSpinner />
   }
 
-  if (products.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-[16px] text-[#666666]">No products found</p>
-      </div>
-    )
-  }
-
-  const largeProducts = products.filter(p => ['sk-007', 'sk-008'].includes(p.id))
-  const mediumProducts = products.filter(p => ['sk-009', 'sk-010'].includes(p.id))
-  const squareProducts = products.filter(p => ['sk-011', 'sk-012', 'sk-013'].includes(p.id))
-  const rectangularProducts = products.filter(p => ['sk-014', 'sk-015'].includes(p.id))
+  const largeProducts = products.slice(0, 1)
+  const mediumProducts = products.slice(1, 3)
+  const squareProducts = products.slice(3, 6)
+  const rectangularProducts = products.slice(6, 8)
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -497,26 +591,24 @@ function SkinCareDesktop() {
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-5 lg:mb-[24px]">REFINE SELECTION</h3>
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
-              <div className="inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer">All Skincare</div>
-              {[
-                { label: 'Cleansers',    subs: ['Face Wash', 'Cleansing Oil', 'Micellar Water', 'Exfoliators'] },
-                { label: 'Serums',       subs: ['Vitamin C', 'Retinol', 'Hyaluronic Acid', 'Niacinamide', 'Peptides'] },
-                { label: 'Moisturizers', subs: ['Day Cream', 'Night Cream', 'Gel Moisturizer', 'Face Oil'] },
-              ].map(({ label, subs }) => (
-                <div key={label}>
-                  <div className="inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] bg-[#F5F1EA] text-[#3D3D3D] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer gap-2">
-                    <span>{label}</span><IoChevronDown className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px]" />
+              <div
+                onClick={() => setSelectedCategories([])}
+                className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedCategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
+              >
+                All Skincare
+              </div>
+              {skincareCategories.map((cat) => {
+                const isSelected = selectedCategories.includes(cat.name)
+                return (
+                  <div
+                    key={cat.name}
+                    onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
+                    className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
+                  >
+                    {cat.name}
                   </div>
-                  <div className="ml-[20px] lg:ml-[24px] mt-[8px]">
-                    {subs.map((item) => <div key={item} className="inline-block px-[12px] lg:px-[16px] py-[5px] lg:py-[6px] bg-white border border-[#E8E3D9] text-[#666666] text-[12px] lg:text-[13px] rounded-full cursor-pointer mr-1 lg:mr-2 mb-2">{item}</div>)}
-                  </div>
-                </div>
-              ))}
-              {['Eye Care', 'Masks', 'Sunscreen', 'Sets & Routines'].map((cat) => (
-                <div key={cat} className="inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] bg-[#F5F1EA] text-[#3D3D3D] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer gap-2">
-                  <span>{cat}</span><IoChevronDown className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px]" />
-                </div>
-              ))}
+                )
+              })}
             </div>
             <div className="border-t border-[#E8E3D9] pt-5 lg:pt-[24px] space-y-4 lg:space-y-[20px]">
               <div>
@@ -527,19 +619,70 @@ function SkinCareDesktop() {
                   <input type="text" placeholder="$500" className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
                 </div>
               </div>
-              {[{title:'Skin Type',items:skinTypes},{title:'Skin Concerns',items:skinConcerns},{title:'Ingredients',items:ingredients},{title:'Brand Values',items:brandValues}].map(({title,items}) => (
-                <div key={title}>
-                  <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{title}</h4>
-                  <div className="space-y-[6px] lg:space-y-[8px]">
-                    {items.map((item) => (
-                      <label key={item} className="flex items-center gap-[10px] cursor-pointer">
-                        <div className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] border-[#C9A870] rounded-[2px] flex-shrink-0" />
+              <div>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Type</h4>
+                <div className="space-y-[6px] lg:space-y-[8px]">
+                  {skinTypes.map((item) => {
+                    const isChecked = selectedSkinTypes.includes(item)
+                    return (
+                      <label key={item} onClick={() => setSelectedSkinTypes(prev => isChecked ? prev.filter(t => t !== item) : [...prev, item])} className="flex items-center gap-[10px] cursor-pointer">
+                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
+                        </div>
                         <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
                       </label>
-                    ))}
-                  </div>
+                    )
+                  })}
                 </div>
-              ))}
+              </div>
+              <div>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Concerns</h4>
+                <div className="space-y-[6px] lg:space-y-[8px]">
+                  {skinConcerns.map((item) => {
+                    const isChecked = selectedConcerns.includes(item)
+                    return (
+                      <label key={item} onClick={() => setSelectedConcerns(prev => isChecked ? prev.filter(c => c !== item) : [...prev, item])} className="flex items-center gap-[10px] cursor-pointer">
+                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
+                        </div>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                      </label>
+                    )
+                  })}
+                </div>
+              </div>
+              <div>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Ingredients</h4>
+                <div className="space-y-[6px] lg:space-y-[8px]">
+                  {ingredients.map((item) => {
+                    const isChecked = selectedIngredients.includes(item)
+                    return (
+                      <label key={item} onClick={() => setSelectedIngredients(prev => isChecked ? prev.filter(i => i !== item) : [...prev, item])} className="flex items-center gap-[10px] cursor-pointer">
+                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
+                        </div>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                      </label>
+                    )
+                  })}
+                </div>
+              </div>
+              <div>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Brand</h4>
+                <div className="space-y-[6px] lg:space-y-[8px]">
+                  {filterBrands.map((item) => {
+                    const isChecked = selectedBrands.includes(item)
+                    return (
+                      <label key={item} onClick={() => setSelectedBrands(prev => isChecked ? prev.filter(b => b !== item) : [...prev, item])} className="flex items-center gap-[10px] cursor-pointer">
+                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
+                        </div>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                      </label>
+                    )
+                  })}
+                </div>
+              </div>
               <button className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Apply</button>
             </div>
           </div>
@@ -548,19 +691,56 @@ function SkinCareDesktop() {
         {/* Product Grid */}
         <div className="flex-1 min-w-0">
 
+          {/* Search Bar */}
+          <div className="w-full h-[52px] bg-[#F5F1EA] rounded-[8px] px-4 flex items-center mb-6">
+            <IoSearchOutline className="w-[20px] h-[20px] text-[#999999] mr-3 flex-shrink-0" />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 bg-transparent text-[15px] text-[#2B2B2B] outline-none"
+            />
+          </div>
+
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-[48px]">
-            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">Showing 36 of 124 skincare products</span>
+            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">Showing {products.length} skincare products</span>
             <div className="flex items-center gap-3 lg:gap-[16px]">
               <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">Sort by:</span>
-              <button className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all">
-                <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">Best Selling</span>
-                <IoChevronDown className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setShowSortDropdown(!showSortDropdown)}
+                  className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all"
+                >
+                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">{activeSort}</span>
+                  <IoChevronDown className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
+                </button>
+                {showSortDropdown && (
+                  <div className="absolute top-full mt-2 right-0 w-[240px] bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-10">
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => { setActiveSort(option); setShowSortDropdown(false) }}
+                        className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === option ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
+          {products.length === 0 ? (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <p className="text-[16px] text-[#666666]">No products found</p>
+            </div>
+          ) : (
+            <>
           {/* Row 1 — large card + 2 medium cards */}
+          {largeProducts.length > 0 && (
           <div className="flex flex-col md:flex-row gap-5 mb-10 md:mb-12 lg:mb-[64px]">
             <Link to={`/product/${largeProducts[0].id}`} className="w-full md:w-[300px] lg:w-[460px] md:h-[480px] lg:h-[560px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
               <div className="relative w-full h-[260px] md:h-[300px] lg:h-[380px]">
@@ -601,8 +781,10 @@ function SkinCareDesktop() {
               ))}
             </div>
           </div>
+          )}
 
           {/* Row 2 — square products */}
+          {squareProducts.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-[20px] mb-10 md:mb-12 lg:mb-[64px]">
             {squareProducts.map((product, idx) => (
               <Link key={idx} to={`/product/${product.id}`} className="group cursor-pointer">
@@ -621,8 +803,10 @@ function SkinCareDesktop() {
               </Link>
             ))}
           </div>
+          )}
 
           {/* Row 3 — rectangular products */}
+          {rectangularProducts.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-[20px] mb-10 md:mb-12 lg:mb-[64px]">
             {rectangularProducts.map((product, idx) => (
               <Link key={idx} to={`/product/${product.id}`} className="w-full bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
@@ -644,6 +828,7 @@ function SkinCareDesktop() {
               </Link>
             ))}
           </div>
+          )}
 
           {/* Pagination */}
           <div className="flex items-center justify-center gap-[8px] mb-16 lg:mb-[96px]">
@@ -652,6 +837,8 @@ function SkinCareDesktop() {
             {[2,3,4].map((n) => <button key={n} className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] text-[14px] lg:text-[15px] font-medium text-[#3D3D3D] hover:border-[#8B7355] hover:text-[#8B7355] transition-colors">{n}</button>)}
             <button className="w-[40px] h-[40px] lg:w-[44px] lg:h-[44px] border border-[#E8E3D9] rounded-[6px] flex items-center justify-center hover:bg-[#F5F1EA] transition-colors"><IoChevronForward className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" /></button>
           </div>
+          </>
+          )}
         </div>
       </div>
     </div>
