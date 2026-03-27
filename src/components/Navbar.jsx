@@ -21,7 +21,10 @@ import {
   IoBeakerOutline,
   IoAlertCircleOutline,
   IoCloseCircle,
+  IoLogOutOutline,
 } from 'react-icons/io5'
+import { useAuth } from '../contexts/AuthContext'
+import AuthModal from './AuthModal'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
 const desktopNavLinks = [
@@ -393,9 +396,11 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
 // ─── Main Navbar ──────────────────────────────────────────────────────────────
 export default function Navbar() {
   const location = useLocation()
+  const { user, signOut } = useAuth()
   const [isMobile, setIsMobile]     = useState(window.innerWidth < 640)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
@@ -420,7 +425,16 @@ export default function Navbar() {
             <button onClick={() => setSearchOpen(true)}>
               <IoSearchOutline className="w-[22px] h-[22px] text-[#2B2B2B]" />
             </button>
-            <Link to="/account"><IoPersonOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
+            {user ? (
+              <>
+                <Link to="/account"><IoPersonOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
+                <button onClick={signOut}><IoLogOutOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></button>
+              </>
+            ) : (
+              <button onClick={() => setAuthModalOpen(true)}>
+                <IoPersonOutline className="w-[22px] h-[22px] text-[#2B2B2B]" />
+              </button>
+            )}
             <Link to="/wishlist"><IoHeartOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
             <Link to="/cart"><IoBagOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
           </div>
@@ -433,6 +447,7 @@ export default function Navbar() {
         />
 
         <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+        <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
       </>
     )
   }
@@ -471,13 +486,23 @@ export default function Navbar() {
           <button onClick={() => setSearchOpen(true)}>
             <IoSearchOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
           </button>
-          <Link to="/account"><IoPersonOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
+          {user ? (
+            <>
+              <Link to="/account"><IoPersonOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
+              <button onClick={signOut}><IoLogOutOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></button>
+            </>
+          ) : (
+            <button onClick={() => setAuthModalOpen(true)}>
+              <IoPersonOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
+            </button>
+          )}
           <Link to="/wishlist"><IoHeartOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
           <Link to="/cart"><IoBagOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
         </div>
       </header>
 
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </>
   )
 }
