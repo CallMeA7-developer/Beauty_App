@@ -36,12 +36,14 @@ import Privacy from './pages/Privacy'
 import Password from './pages/Password'
 import SplashScreen from './pages/SplashScreen'
 import { useAuth } from './contexts/AuthContext'
+import { CartProvider } from './contexts/CartContext'
 
 export default function App() {
   const { showAuthModal, closeAuthModal } = useAuth()
 
   return (
-    <div>
+    <CartProvider>
+      <div>
       <Routes>
         {/* ── Splash — no Navbar/Footer ── */}
         <Route path="/splash" element={<SplashScreen />} />
@@ -98,7 +100,8 @@ export default function App() {
         } />
       </Routes>
       <AuthModal isOpen={showAuthModal} onClose={closeAuthModal} />
-    </div>
+      </div>
+    </CartProvider>
   )
 }
 

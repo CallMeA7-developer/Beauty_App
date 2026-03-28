@@ -24,8 +24,8 @@ import {
   IoLogOutOutline,
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
 import AuthModal from './AuthModal'
-import { supabase } from '../lib/supabase'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
 const desktopNavLinks = [
@@ -399,29 +399,15 @@ export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const { user, signOut } = useAuth()
+  const { cartCount } = useCart()
   const [isMobile, setIsMobile]     = useState(window.innerWidth < 640)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
-  const [cartCount, setCartCount] = useState(0)
 
   const handleLogout = async () => {
     await signOut()
     navigate('/')
-  }
-
-  const fetchCartCount = async () => {
-    if (!user) {
-      setCartCount(0)
-      return
-    }
-    const { data } = await supabase
-      .from('cart')
-      .select('quantity')
-      .eq('user_id', user.id)
-
-    const total = data?.reduce((sum, item) => sum + item.quantity, 0) || 0
-    setCartCount(total)
   }
 
   useEffect(() => {
@@ -429,26 +415,6 @@ export default function Navbar() {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  useEffect(() => {
-    fetchCartCount()
-
-    const channel = supabase
-      .channel('cart-changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'cart',
-        filter: user ? `user_id=eq.${user.id}` : undefined
-      }, () => {
-        fetchCartCount()
-      })
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [user])
 
   // ── Mobile ───────────────────────────────────────────────────────────────────
   if (isMobile) {

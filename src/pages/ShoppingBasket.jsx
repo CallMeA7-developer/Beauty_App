@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoTrashOutline,
@@ -12,75 +12,31 @@ import {
   IoHeartOutline,
 } from 'react-icons/io5'
 
-import { getCartItems, updateCartItemQuantity, removeFromCart } from '../lib/cartService'
 import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { supabase } from '../lib/supabase'
 
 export default function ShoppingBasket() {
   const { user, loading: authLoading } = useAuth()
+  const { cartItems, loading, updateQuantity, removeFromCart } = useCart()
   const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/collections')
-      return
-    }
-
-    if (user) {
-      loadCartItems()
-
-      const channel = supabase
-        .channel('cart-realtime')
-        .on('postgres_changes', {
-          event: '*',
-          schema: 'public',
-          table: 'cart',
-          filter: `user_id=eq.${user.id}`
-        }, () => {
-          loadCartItems()
-        })
-        .subscribe()
-
-      return () => {
-        supabase.removeChannel(channel)
-      }
     }
   }, [user, authLoading, navigate])
-
-  const loadCartItems = async () => {
-    if (!user) return
-    setLoading(true)
-    const items = await getCartItems(user.id)
-    setCartItems(items)
-    setLoading(false)
-  }
 
   const updateQty = async (id, delta) => {
     const item = cartItems.find(item => item.id === id)
     if (!item) return
 
     const newQuantity = Math.max(1, item.quantity + delta)
-
-    setCartItems(cartItems.map(item =>
-      item.id === id ? { ...item, quantity: newQuantity } : item
-    ))
-
-    const { error } = await updateCartItemQuantity(id, newQuantity)
-    if (error) {
-      await loadCartItems()
-    }
+    await updateQuantity(id, newQuantity)
   }
 
   const removeItem = async (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id))
-
-    const { error } = await removeFromCart(id)
-    if (error) {
-      await loadCartItems()
-    }
+    await removeFromCart(id)
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0)
