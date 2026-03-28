@@ -85,38 +85,83 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
   }
 
   const handleAddToCart = async () => {
+    console.log('🛒 Add to Cart clicked!')
+
     if (!user) {
+      console.log('❌ User not authenticated')
       onOpenAuthModal()
       return
     }
 
-    const { data: existingItem } = await supabase
-      .from('cart')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('product_id', product.id)
-      .eq('selected_size', selectedSize)
-      .maybeSingle()
+    console.log('✅ User authenticated:', user.id)
+    console.log('📦 Product ID:', product?.id)
+    console.log('📏 Selected size:', selectedSize)
+    console.log('🔢 Quantity:', quantity)
+    console.log('💰 Display price:', displayPrice)
 
-    if (existingItem) {
-      await supabase
+    try {
+      const { data: existingItem, error: fetchError } = await supabase
         .from('cart')
-        .update({ quantity: existingItem.quantity + quantity })
-        .eq('id', existingItem.id)
-    } else {
-      await supabase.from('cart').insert({
-        user_id: user.id,
-        product_id: product.id,
-        product_name: product.name,
-        product_image: product.image,
-        quantity: quantity,
-        selected_size: selectedSize,
-        price: displayPrice
-      })
-    }
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('product_id', product.id)
+        .eq('selected_size', selectedSize)
+        .maybeSingle()
 
-    setShowToast(true)
-    setTimeout(() => setShowToast(false), 2000)
+      if (fetchError) {
+        console.error('❌ Error fetching existing cart item:', fetchError)
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000)
+        return
+      }
+
+      console.log('🔍 Existing cart item:', existingItem)
+
+      if (existingItem) {
+        console.log('📝 Updating existing cart item...')
+        const { error: updateError } = await supabase
+          .from('cart')
+          .update({ quantity: existingItem.quantity + quantity })
+          .eq('id', existingItem.id)
+
+        if (updateError) {
+          console.error('❌ Error updating cart:', updateError)
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000)
+          return
+        }
+        console.log('✅ Cart item updated successfully!')
+      } else {
+        console.log('➕ Inserting new cart item...')
+        const insertData = {
+          user_id: user.id,
+          product_id: product.id,
+          product_name: product.name,
+          product_image: product.image,
+          quantity: quantity,
+          selected_size: selectedSize,
+          price: displayPrice
+        }
+        console.log('📤 Insert data:', insertData)
+
+        const { error: insertError } = await supabase.from('cart').insert(insertData)
+
+        if (insertError) {
+          console.error('❌ Error inserting into cart:', insertError)
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000)
+          return
+        }
+        console.log('✅ Cart item inserted successfully!')
+      }
+
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    } catch (err) {
+      console.error('❌ Unexpected error in handleAddToCart:', err)
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000)
+    }
   }
 
   const handleBuyNow = async () => {
@@ -572,38 +617,83 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
   }
 
   const handleAddToCart = async () => {
+    console.log('🛒 Add to Cart clicked!')
+
     if (!user) {
+      console.log('❌ User not authenticated')
       onOpenAuthModal()
       return
     }
 
-    const { data: existingItem } = await supabase
-      .from('cart')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('product_id', product.id)
-      .eq('selected_size', selectedSize)
-      .maybeSingle()
+    console.log('✅ User authenticated:', user.id)
+    console.log('📦 Product ID:', product?.id)
+    console.log('📏 Selected size:', selectedSize)
+    console.log('🔢 Quantity:', quantity)
+    console.log('💰 Display price:', displayPrice)
 
-    if (existingItem) {
-      await supabase
+    try {
+      const { data: existingItem, error: fetchError } = await supabase
         .from('cart')
-        .update({ quantity: existingItem.quantity + quantity })
-        .eq('id', existingItem.id)
-    } else {
-      await supabase.from('cart').insert({
-        user_id: user.id,
-        product_id: product.id,
-        product_name: product.name,
-        product_image: product.image,
-        quantity: quantity,
-        selected_size: selectedSize,
-        price: displayPrice
-      })
-    }
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('product_id', product.id)
+        .eq('selected_size', selectedSize)
+        .maybeSingle()
 
-    setShowToast(true)
-    setTimeout(() => setShowToast(false), 2000)
+      if (fetchError) {
+        console.error('❌ Error fetching existing cart item:', fetchError)
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000)
+        return
+      }
+
+      console.log('🔍 Existing cart item:', existingItem)
+
+      if (existingItem) {
+        console.log('📝 Updating existing cart item...')
+        const { error: updateError } = await supabase
+          .from('cart')
+          .update({ quantity: existingItem.quantity + quantity })
+          .eq('id', existingItem.id)
+
+        if (updateError) {
+          console.error('❌ Error updating cart:', updateError)
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000)
+          return
+        }
+        console.log('✅ Cart item updated successfully!')
+      } else {
+        console.log('➕ Inserting new cart item...')
+        const insertData = {
+          user_id: user.id,
+          product_id: product.id,
+          product_name: product.name,
+          product_image: product.image,
+          quantity: quantity,
+          selected_size: selectedSize,
+          price: displayPrice
+        }
+        console.log('📤 Insert data:', insertData)
+
+        const { error: insertError } = await supabase.from('cart').insert(insertData)
+
+        if (insertError) {
+          console.error('❌ Error inserting into cart:', insertError)
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000)
+          return
+        }
+        console.log('✅ Cart item inserted successfully!')
+      }
+
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    } catch (err) {
+      console.error('❌ Unexpected error in handleAddToCart:', err)
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000)
+    }
   }
 
   const handleBuyNow = async () => {
