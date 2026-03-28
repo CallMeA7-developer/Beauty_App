@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Elements } from '@stripe/react-stripe-js'
 import {
   IoCheckmarkCircle,
   IoLockClosedOutline,
@@ -20,6 +21,8 @@ import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import { useCheckout } from '../contexts/CheckoutContext'
 import LoadingSpinner from '../components/LoadingSpinner'
+import CheckoutForm from '../components/CheckoutForm'
+import stripePromise from '../lib/stripe'
 
 const SECURITY_ICONS = {
   lock: IoLockClosedOutline, shield: IoShieldCheckmarkOutline, check: IoCheckmarkCircle,
@@ -46,6 +49,7 @@ export default function Payment() {
   const [saveCard, setSaveCard]             = useState(false)
   const [agreeTerms, setAgreeTerms]         = useState(false)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -62,6 +66,21 @@ export default function Payment() {
   const tax = subtotal * 0.1
   const total = subtotal + shipping + tax
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(''), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [error])
+
+  const handlePaymentSuccess = (orderId) => {
+    navigate(`/order-confirmation?orderId=${orderId}`)
+  }
+
+  const handlePaymentError = (errorMessage) => {
+    setError(errorMessage)
+  }
+
   if (authLoading || loading) {
     return <LoadingSpinner />
   }
@@ -71,6 +90,12 @@ export default function Payment() {
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
+      {/* Error Toast */}
+      {error && (
+        <div className="fixed top-[80px] left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-4 rounded-[8px] shadow-lg max-w-[400px] w-[90%]">
+          <p className="text-[14px] font-medium">{error}</p>
+        </div>
+      )}
 
       {/* ── Breadcrumb ── */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
@@ -187,45 +212,20 @@ export default function Payment() {
               </div>
             </div>
 
-            {/* Card Details Form */}
-            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h3 className="text-[18px] md:text-[19px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Card Details</h3>
-              <div className="space-y-4 lg:space-y-[16px]">
-                <div>
-                  <label className={labelClass}>Card Number</label>
-                  <input type="text" placeholder="1234 5678 9012 3456" className={inputClass} />
-                </div>
-                <div>
-                  <label className={labelClass}>Cardholder Name</label>
-                  <input type="text" placeholder="Name on card" className={inputClass} />
-                </div>
-                <div className="grid grid-cols-2 gap-4 lg:gap-[16px]">
-                  <div>
-                    <label className={labelClass}>Expiry Date</label>
-                    <input type="text" placeholder="MM/YY" className={inputClass} />
-                  </div>
-                  <div>
-                    <label className={labelClass}>CVV</label>
-                    <div className="relative">
-                      <input type="text" placeholder="123" className={inputClass + ' pr-[44px]'} />
-                      <IoLockClosedOutline className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] text-[#999999] absolute right-[16px] top-1/2 -translate-y-1/2" />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-[12px] pt-[8px]">
-                  <input
-                    type="checkbox"
-                    id="saveCard"
-                    checked={saveCard}
-                    onChange={() => setSaveCard(!saveCard)}
-                    className="w-[18px] h-[18px] cursor-pointer accent-[#8B7355]"
-                  />
-                  <label htmlFor="saveCard" className="text-[13px] lg:text-[14px] font-normal text-[#666666] cursor-pointer">
-                    Save for future purchases
-                  </label>
-                </div>
-              </div>
-            </div>
+            {/* Stripe Card Elements Form */}
+            <Elements stripe={stripePromise}>
+              <CheckoutForm
+                total={total}
+                cartItems={cartItems}
+                subtotal={subtotal}
+                shipping={shipping}
+                tax={tax}
+                checkoutSession={checkoutSession}
+                agreeTerms={agreeTerms}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
+              />
+            </Elements>
 
             {/* Billing Address */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
@@ -337,9 +337,6 @@ export default function Payment() {
 
               {/* CTAs */}
               <div className="space-y-4 lg:space-y-[16px] mb-5 lg:mb-[24px]">
-                <button className={`w-full h-[52px] lg:h-[56px] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer transition-all ${agreeTerms ? 'bg-[#8B7355] hover:bg-[#7a6448]' : 'bg-[#C9A870] cursor-not-allowed'}`}>
-                  Place Order
-                </button>
                 <Link to="/delivery-methods">
                   <button className="w-full flex items-center justify-center gap-[8px] text-[13px] lg:text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
                     <IoArrowBackOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
