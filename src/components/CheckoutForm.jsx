@@ -52,12 +52,14 @@ export default function CheckoutForm({
 
       console.log('Creating payment intent for total:', total)
 
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
       const createIntentResponse = await fetch(
-        '/api/create-payment-intent',
+        `${supabaseUrl}/functions/v1/create-payment-intent`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ amount: total }),
         }
@@ -102,7 +104,7 @@ export default function CheckoutForm({
 
       if (paymentIntent.status === 'succeeded') {
         const confirmResponse = await fetch(
-          '/api/confirm-payment',
+          `${supabaseUrl}/functions/v1/confirm-payment`,
           {
             method: 'POST',
             headers: {
