@@ -89,6 +89,37 @@ Deno.serve(async (req: Request) => {
       )
     }
 
+    // Validate that we have the secret key, not the publishable key
+    if (stripeSecretKey.startsWith('pk_')) {
+      const errorMsg = "STRIPE_SECRET_KEY is set to a publishable key (pk_). It must be a secret key (sk_)"
+      console.error(errorMsg)
+      return new Response(
+        JSON.stringify({ error: errorMsg }),
+        {
+          status: 500,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    }
+
+    if (!stripeSecretKey.startsWith('sk_')) {
+      const errorMsg = "STRIPE_SECRET_KEY does not start with 'sk_'. Please check the environment configuration"
+      console.error(errorMsg)
+      return new Response(
+        JSON.stringify({ error: errorMsg }),
+        {
+          status: 500,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    }
+
     if (!amount || amount <= 0) {
       const errorMsg = "Invalid amount"
       console.error(errorMsg, "- amount:", amount)
