@@ -70,6 +70,9 @@ Deno.serve(async (req: Request) => {
 
     console.log("Stripe key exists:", !!stripeSecretKey)
     console.log("Stripe key prefix:", stripeSecretKey?.substring(0, 7))
+    console.log("Stripe key length:", stripeSecretKey?.length)
+    console.log("Is secret key (starts with sk_)?", stripeSecretKey?.startsWith('sk_'))
+    console.log("Is publishable key (starts with pk_)?", stripeSecretKey?.startsWith('pk_'))
 
     if (!stripeSecretKey) {
       const errorMsg = "STRIPE_SECRET_KEY not configured in environment"
