@@ -138,6 +138,7 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
           product_id: product.id,
           product_name: product.name,
           product_image: product.image,
+          brand: product.brand || 'Shan Loray',
           quantity: quantity,
           selected_size: selectedSize,
           price: displayPrice
@@ -670,6 +671,7 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
           product_id: product.id,
           product_name: product.name,
           product_image: product.image,
+          brand: product.brand || 'Shan Loray',
           quantity: quantity,
           selected_size: selectedSize,
           price: displayPrice

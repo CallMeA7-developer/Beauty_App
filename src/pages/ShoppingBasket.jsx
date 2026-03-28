@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   IoTrashOutline,
   IoCarOutline,
@@ -12,22 +12,62 @@ import {
   IoHeartOutline,
 } from 'react-icons/io5'
 
-import { initialCartItems } from '../data/products'
+import { getCartItems, updateCartItemQuantity, removeFromCart } from '../lib/cartService'
+import { useAuth } from '../contexts/AuthContext'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function ShoppingBasket() {
-  const [cartItems, setCartItems] = useState(initialCartItems)
+  const { user, loading: authLoading } = useAuth()
+  const navigate = useNavigate()
+  const [cartItems, setCartItems] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const updateQty = (id, delta) => {
-    setCartItems(cartItems.map(item =>
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ))
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/collections')
+      return
+    }
+
+    if (user) {
+      loadCartItems()
+    }
+  }, [user, authLoading, navigate])
+
+  const loadCartItems = async () => {
+    setLoading(true)
+    const items = await getCartItems(user.id)
+    setCartItems(items)
+    setLoading(false)
   }
 
-  const removeItem = (id) => setCartItems(cartItems.filter(item => item.id !== id))
+  const updateQty = async (id, delta) => {
+    const item = cartItems.find(item => item.id === id)
+    if (!item) return
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const tax      = subtotal * 0.1
-  const total    = subtotal + tax
+    const newQuantity = Math.max(1, item.quantity + delta)
+
+    const { error } = await updateCartItemQuantity(id, newQuantity)
+    if (!error) {
+      setCartItems(cartItems.map(item =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      ))
+    }
+  }
+
+  const removeItem = async (id) => {
+    const { error } = await removeFromCart(id)
+    if (!error) {
+      setCartItems(cartItems.filter(item => item.id !== id))
+    }
+  }
+
+  const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0)
+  const tax = subtotal * 0.1
+  const total = subtotal + tax
+
+  if (authLoading || loading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -70,16 +110,16 @@ export default function ShoppingBasket() {
 
                       {/* Image */}
                       <div className="w-[100px] h-[100px] md:w-[130px] md:h-[130px] lg:w-[160px] lg:h-[160px] rounded-[8px] overflow-hidden flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                        <img src={item.product_image} alt={item.product_name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                       </div>
 
                       {/* Details */}
                       <div className="flex-1 flex flex-col justify-between min-w-0">
                         <div>
                           <div className="text-[12px] lg:text-[13px] font-medium text-[#8B7355] mb-[4px]">{item.brand}</div>
-                          <h3 className="text-[15px] md:text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[4px] leading-tight">{item.name}</h3>
-                          <div className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-3 lg:mb-[16px]">{item.size}</div>
-                          <div className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A]">${item.price}</div>
+                          <h3 className="text-[15px] md:text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[4px] leading-tight">{item.product_name}</h3>
+                          <div className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-3 lg:mb-[16px]">{item.selected_size}</div>
+                          <div className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A]">${parseFloat(item.price).toFixed(2)}</div>
                         </div>
                         {/* Quantity + Wishlist */}
                         <div className="flex items-center gap-3 lg:gap-[20px] mt-3 lg:mt-0 flex-wrap">
@@ -165,10 +205,10 @@ export default function ShoppingBasket() {
                 {cartItems.map(item => (
                   <div key={item.id} className="flex justify-between items-start gap-3">
                     <div className="min-w-0">
-                      <div className="text-[13px] lg:text-[14px] font-normal text-[#2B2B2B] line-clamp-2">{item.name}</div>
+                      <div className="text-[13px] lg:text-[14px] font-normal text-[#2B2B2B] line-clamp-2">{item.product_name}</div>
                       <div className="text-[12px] lg:text-[13px] font-light text-[#999999]">Qty: {item.quantity}</div>
                     </div>
-                    <span className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] flex-shrink-0">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] flex-shrink-0">${(parseFloat(item.price) * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
