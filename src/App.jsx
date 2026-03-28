@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import AuthModal from './components/AuthModal'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import Skincare from './pages/SkinCare'
@@ -34,8 +35,11 @@ import Notifications from './pages/Notifications'
 import Privacy from './pages/Privacy'
 import Password from './pages/Password'
 import SplashScreen from './pages/SplashScreen'
+import { useAuth } from './contexts/AuthContext'
 
 export default function App() {
+  const { showAuthModal, closeAuthModal } = useAuth()
+
   return (
     <div>
       <Routes>
@@ -93,6 +97,7 @@ export default function App() {
           </>
         } />
       </Routes>
+      <AuthModal isOpen={showAuthModal} onClose={closeAuthModal} />
     </div>
   )
 }

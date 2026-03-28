@@ -30,7 +30,6 @@ export default function AuthModal({ isOpen, onClose }) {
         setEmail('')
         setPassword('')
         onClose()
-        navigate('/account')
       }
     } catch (err) {
       setError('An unexpected error occurred')

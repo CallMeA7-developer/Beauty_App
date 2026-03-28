@@ -1026,7 +1026,7 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function ProductDetail() {
   const { id } = useParams()
-  const { setShowAuthModal } = useAuth()
+  const { openAuthModal } = useAuth()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
@@ -1050,7 +1050,7 @@ export default function ProductDetail() {
   }, [id])
 
   const handleOpenAuthModal = () => {
-    setShowAuthModal(true)
+    openAuthModal(window.location.pathname)
   }
 
   if (loading) {
