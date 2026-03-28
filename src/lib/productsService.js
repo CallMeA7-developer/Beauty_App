@@ -79,15 +79,10 @@ export async function getFragranceProducts() {
   return data || []
 }
 
-function formatPrice(price) {
-  return `$${price}`
-}
-
 function formatProduct(product) {
   return {
     ...product,
-    price: formatPrice(product.price),
-    priceValue: parseFloat(product.price),
+    price: parseFloat(product.price),
     image: product.image_url,
     reviews: product.reviews_count,
     skin_types: product.skin_types || [],

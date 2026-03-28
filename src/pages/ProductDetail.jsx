@@ -58,7 +58,7 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
   const toggleSection = (id) => setOpenSection(openSection === id ? null : id)
 
   const getSizePrice = (size) => {
-    const basePrice = product.price
+    const basePrice = parseFloat(product.price)
     if (size === '100ml') return Math.round(basePrice)
     if (size === '200ml') return Math.round(basePrice * 1.75)
     if (size === 'Travel 30ml') return Math.round(basePrice * 0.45)
@@ -530,7 +530,7 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
   ]
 
   const getSizePrice = (size) => {
-    const basePrice = product.price
+    const basePrice = parseFloat(product.price)
     if (size === '100ml') return Math.round(basePrice)
     if (size === '200ml') return Math.round(basePrice * 1.75)
     if (size === 'Travel 30ml') return Math.round(basePrice * 0.45)
