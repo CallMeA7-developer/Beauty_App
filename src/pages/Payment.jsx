@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Elements } from '@stripe/react-stripe-js'
 import {
   IoCheckmarkCircle,
   IoLockClosedOutline,
@@ -21,8 +20,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import { useCheckout } from '../contexts/CheckoutContext'
 import LoadingSpinner from '../components/LoadingSpinner'
-import CheckoutForm from '../components/CheckoutForm'
-import stripePromise from '../lib/stripe'
+import { supabase } from '../lib/supabase'
 
 const SECURITY_ICONS = {
   lock: IoLockClosedOutline, shield: IoShieldCheckmarkOutline, check: IoCheckmarkCircle,
@@ -49,6 +47,7 @@ export default function Payment() {
   const [saveCard, setSaveCard]             = useState(false)
   const [agreeTerms, setAgreeTerms]         = useState(false)
   const [loading, setLoading] = useState(true)
+  const [processing, setProcessing] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -73,12 +72,60 @@ export default function Payment() {
     }
   }, [error])
 
-  const handlePaymentSuccess = (orderId) => {
-    navigate(`/order-confirmation?orderId=${orderId}`)
-  }
+  const handlePlaceOrder = async () => {
+    if (!agreeTerms || !user) {
+      setError('Please agree to terms and ensure you are logged in')
+      return
+    }
 
-  const handlePaymentError = (errorMessage) => {
-    setError(errorMessage)
+    setProcessing(true)
+    setError('')
+
+    try {
+      const { data: order, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          items: cartItems.map(item => ({
+            product_id: item.product_id,
+            product_name: item.product_name,
+            brand: item.brand,
+            price: item.price,
+            quantity: item.quantity,
+            product_image: item.product_image,
+          })),
+          subtotal,
+          shipping,
+          tax,
+          total,
+          shipping_address: checkoutSession.selectedAddress || {},
+          delivery_method: checkoutSession.deliveryMethod || '',
+          payment_status: 'pending',
+          payment_intent_id: null,
+        })
+        .select()
+        .single()
+
+      if (orderError) {
+        throw orderError
+      }
+
+      const { error: deleteError } = await supabase
+        .from('cart')
+        .delete()
+        .eq('user_id', user.id)
+
+      if (deleteError) {
+        console.error('Error clearing cart:', deleteError)
+      }
+
+      navigate(`/order-confirmation?orderId=${order.id}`)
+    } catch (error) {
+      console.error('Order creation error:', error)
+      setError(error.message || 'Failed to create order')
+    } finally {
+      setProcessing(false)
+    }
   }
 
   if (authLoading || loading) {
@@ -212,20 +259,28 @@ export default function Payment() {
               </div>
             </div>
 
-            {/* Stripe Card Elements Form */}
-            <Elements stripe={stripePromise}>
-              <CheckoutForm
-                total={total}
-                cartItems={cartItems}
-                subtotal={subtotal}
-                shipping={shipping}
-                tax={tax}
-                checkoutSession={checkoutSession}
-                agreeTerms={agreeTerms}
-                onSuccess={handlePaymentSuccess}
-                onError={handlePaymentError}
-              />
-            </Elements>
+            {/* Place Order Button */}
+            <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
+              <button
+                onClick={handlePlaceOrder}
+                disabled={!agreeTerms || processing}
+                className={`w-full h-[52px] lg:h-[56px] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer transition-all ${
+                  agreeTerms && !processing ? 'bg-[#8B7355] hover:bg-[#7a6448]' : 'bg-[#C9A870] cursor-not-allowed'
+                }`}
+              >
+                {processing ? (
+                  <span className="flex items-center justify-center gap-[8px]">
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </span>
+                ) : (
+                  'Place Order'
+                )}
+              </button>
+            </div>
 
             {/* Billing Address */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
