@@ -15,6 +15,7 @@ import {
 import { getCartItems, updateCartItemQuantity, removeFromCart } from '../lib/cartService'
 import { useAuth } from '../contexts/AuthContext'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { supabase } from '../lib/supabase'
 
 export default function ShoppingBasket() {
   const { user, loading: authLoading } = useAuth()
@@ -30,10 +31,27 @@ export default function ShoppingBasket() {
 
     if (user) {
       loadCartItems()
+
+      const channel = supabase
+        .channel('cart-realtime')
+        .on('postgres_changes', {
+          event: '*',
+          schema: 'public',
+          table: 'cart',
+          filter: `user_id=eq.${user.id}`
+        }, () => {
+          loadCartItems()
+        })
+        .subscribe()
+
+      return () => {
+        supabase.removeChannel(channel)
+      }
     }
   }, [user, authLoading, navigate])
 
   const loadCartItems = async () => {
+    if (!user) return
     setLoading(true)
     const items = await getCartItems(user.id)
     setCartItems(items)
@@ -46,18 +64,22 @@ export default function ShoppingBasket() {
 
     const newQuantity = Math.max(1, item.quantity + delta)
 
+    setCartItems(cartItems.map(item =>
+      item.id === id ? { ...item, quantity: newQuantity } : item
+    ))
+
     const { error } = await updateCartItemQuantity(id, newQuantity)
-    if (!error) {
-      setCartItems(cartItems.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      ))
+    if (error) {
+      await loadCartItems()
     }
   }
 
   const removeItem = async (id) => {
+    setCartItems(cartItems.filter(item => item.id !== id))
+
     const { error } = await removeFromCart(id)
-    if (!error) {
-      setCartItems(cartItems.filter(item => item.id !== id))
+    if (error) {
+      await loadCartItems()
     }
   }
 
