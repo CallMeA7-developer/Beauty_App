@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
   IoLockClosedOutline,
@@ -12,11 +12,14 @@ import {
   IoWalletOutline,
 } from 'react-icons/io5'
 import {
-  checkoutCartItems  as cartItems,
   savedCards,
   securityFeatures   as securityFeaturesData,
   getCheckoutSteps,
 } from '../data/checkout'
+import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
+import { useCheckout } from '../contexts/CheckoutContext'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const SECURITY_ICONS = {
   lock: IoLockClosedOutline, shield: IoShieldCheckmarkOutline, check: IoCheckmarkCircle,
@@ -31,6 +34,10 @@ const paymentMethods = [
 ]
 
 export default function Payment() {
+  const navigate = useNavigate()
+  const { user, loading: authLoading } = useAuth()
+  const { cartItems } = useCart()
+  const { checkoutSession } = useCheckout()
   const steps = getCheckoutSteps(3)
 
   const [selectedCard, setSelectedCard]     = useState(1)
@@ -38,12 +45,26 @@ export default function Payment() {
   const [sameAddress, setSameAddress]       = useState(true)
   const [saveCard, setSaveCard]             = useState(false)
   const [agreeTerms, setAgreeTerms]         = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const tax      = subtotal * 0.1
-  const total    = subtotal + tax
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/collections')
+      return
+    }
+    if (user) {
+      setLoading(false)
+    }
+  }, [user, authLoading, navigate])
 
-  // steps computed above via getCheckoutSteps(3)
+  const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0)
+  const shipping = checkoutSession.deliveryCost || 0
+  const tax = subtotal * 0.1
+  const total = subtotal + shipping + tax
+
+  if (authLoading || loading) {
+    return <LoadingSpinner />
+  }
 
   const inputClass = "w-full h-[48px] px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[14px] lg:text-[15px] font-normal text-[#1A1A1A] outline-none focus:border-[#8B7355] transition-colors"
   const labelClass = "text-[13px] lg:text-[14px] font-medium text-[#666666] mb-[8px] block"
@@ -257,12 +278,12 @@ export default function Payment() {
                 {cartItems.map((item, index) => (
                   <div key={item.id}>
                     <div className="flex gap-3 lg:gap-[16px]">
-                      <img src={item.image} alt={item.name} className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded-[8px] object-cover flex-shrink-0" />
+                      <img src={item.product_image} alt={item.product_name} className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded-[8px] object-cover flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <div className="text-[11px] lg:text-[12px] font-medium text-[#8B7355] mb-[2px]">{item.brand}</div>
-                        <div className="text-[13px] lg:text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px] line-clamp-2">{item.name}</div>
-                        <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{item.quantity} × ${item.price}</div>
-                        <div className="text-[13px] lg:text-[14px] font-semibold text-[#1A1A1A]">${(item.price * item.quantity).toFixed(2)}</div>
+                        <div className="text-[13px] lg:text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px] line-clamp-2">{item.product_name}</div>
+                        <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{item.quantity} × ${parseFloat(item.price).toFixed(2)}</div>
+                        <div className="text-[13px] lg:text-[14px] font-semibold text-[#1A1A1A]">${(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
                       </div>
                     </div>
                     {index < cartItems.length - 1 && <div className="h-[1px] bg-[#E8E3D9] mt-4 lg:mt-[16px]" />}
@@ -278,7 +299,9 @@ export default function Payment() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Shipping</span>
-                  <span className="text-[14px] lg:text-[16px] font-normal text-green-600">FREE</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">
+                    {shipping === 0 ? <span className="text-green-600">FREE</span> : `$${shipping.toFixed(2)}`}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Estimated Tax</span>
