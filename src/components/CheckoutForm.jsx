@@ -69,7 +69,9 @@ export default function CheckoutForm({
       if (!createIntentResponse.ok) {
         const errorData = await createIntentResponse.json()
         console.error('Payment intent error:', errorData)
-        throw new Error(errorData.error || errorData.details || 'Failed to create payment intent')
+        const errorMessage = errorData.error || errorData.details || 'Failed to create payment intent'
+        const fullError = errorData.type ? `${errorMessage} (${errorData.type})` : errorMessage
+        throw new Error(fullError)
       }
 
       const { clientSecret, error: intentError } = await createIntentResponse.json()

@@ -16,15 +16,37 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
+    const { amount } = await req.json()
+
+    console.log('createPaymentIntent called with amount:', amount)
+
     const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY")
 
-    console.log("STRIPE_SECRET_KEY exists:", !!stripeSecretKey)
+    console.log("Stripe key exists:", !!stripeSecretKey)
+    console.log("Stripe key prefix:", stripeSecretKey?.substring(0, 7))
 
     if (!stripeSecretKey) {
+      const errorMsg = "STRIPE_SECRET_KEY not configured in environment"
+      console.error(errorMsg)
       return new Response(
-        JSON.stringify({ error: "STRIPE_SECRET_KEY not configured in environment" }),
+        JSON.stringify({ error: errorMsg }),
         {
           status: 500,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    }
+
+    if (!amount || amount <= 0) {
+      const errorMsg = "Invalid amount"
+      console.error(errorMsg, "- amount:", amount)
+      return new Response(
+        JSON.stringify({ error: errorMsg }),
+        {
+          status: 400,
           headers: {
             ...corsHeaders,
             "Content-Type": "application/json",
@@ -37,22 +59,8 @@ Deno.serve(async (req: Request) => {
       apiVersion: "2024-12-18.acacia",
     })
 
-    const { amount } = await req.json()
-
     console.log("Creating payment intent for amount:", amount)
-
-    if (!amount || amount <= 0) {
-      return new Response(
-        JSON.stringify({ error: "Invalid amount" }),
-        {
-          status: 400,
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-    }
+    console.log("Amount in cents:", Math.round(amount * 100))
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100),
@@ -62,7 +70,7 @@ Deno.serve(async (req: Request) => {
       },
     })
 
-    console.log("Payment intent created:", paymentIntent.id)
+    console.log("Payment intent created successfully:", paymentIntent.id)
     console.log("Client secret exists:", !!paymentIntent.client_secret)
 
     return new Response(
@@ -75,14 +83,20 @@ Deno.serve(async (req: Request) => {
       }
     )
   } catch (error) {
+    console.error("===== STRIPE ERROR =====")
     console.error("Error creating payment intent:", error)
     console.error("Error message:", error.message)
+    console.error("Error type:", error.type)
+    console.error("Error code:", error.code)
     console.error("Error stack:", error.stack)
+    console.error("========================")
 
     return new Response(
       JSON.stringify({
         error: error.message || "Failed to create payment intent",
-        details: error.toString()
+        details: error.toString(),
+        type: error.type,
+        code: error.code
       }),
       {
         status: 500,
