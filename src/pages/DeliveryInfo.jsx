@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
   IoAddOutline,
@@ -7,27 +7,128 @@ import {
   IoShieldCheckmarkOutline,
   IoCardOutline,
 } from 'react-icons/io5'
-import {
-  checkoutCartItems as cartItems,
-  savedAddresses,
-  getCheckoutSteps,
-} from '../data/checkout'
+import { getCheckoutSteps } from '../data/checkout'
+import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
+import { supabase } from '../lib/supabase'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function DeliveryInfo() {
+  const navigate = useNavigate()
+  const { user, loading: authLoading } = useAuth()
+  const { cartItems } = useCart()
   const steps = getCheckoutSteps(1)
 
-  const [selectedAddress, setSelectedAddress] = useState(1)
-  const [saveAddress, setSaveAddress]         = useState(false)
-  const [giftOption, setGiftOption]           = useState(false)
+  const [addresses, setAddresses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [selectedAddress, setSelectedAddress] = useState(null)
+  const [showAddressForm, setShowAddressForm] = useState(false)
+  const [giftOption, setGiftOption] = useState(false)
 
-  // savedAddresses imported from ../data/checkout
+  const [formData, setFormData] = useState({
+    label: 'Home',
+    full_name: '',
+    phone: '',
+    street: '',
+    city: '',
+    state: '',
+    postal_code: '',
+    country: 'United States',
+    is_default: false
+  })
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const tax      = subtotal * 0.1
-  const giftFee  = giftOption ? 12 : 0
-  const total    = subtotal + tax + giftFee
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/collections')
+      return
+    }
+    if (user) {
+      fetchAddresses()
+    }
+  }, [user, authLoading, navigate])
 
-  // steps computed above via getCheckoutSteps(1)
+  const fetchAddresses = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('addresses')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('is_default', { ascending: false })
+      .order('created_at', { ascending: false })
+
+    if (!error && data) {
+      setAddresses(data)
+      if (data.length > 0) {
+        const defaultAddr = data.find(addr => addr.is_default) || data[0]
+        setSelectedAddress(defaultAddr.id)
+      } else {
+        setShowAddressForm(true)
+      }
+    }
+    setLoading(false)
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }))
+  }
+
+  const handleSaveAddress = async () => {
+    if (!formData.full_name || !formData.phone || !formData.street || !formData.city || !formData.state || !formData.postal_code) {
+      alert('Please fill in all required fields')
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('addresses')
+      .insert({
+        user_id: user.id,
+        ...formData
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error saving address:', error)
+      alert('Failed to save address')
+      return
+    }
+
+    setAddresses([data, ...addresses])
+    setSelectedAddress(data.id)
+    setShowAddressForm(false)
+    setFormData({
+      label: 'Home',
+      full_name: '',
+      phone: '',
+      street: '',
+      city: '',
+      state: '',
+      postal_code: '',
+      country: 'United States',
+      is_default: false
+    })
+  }
+
+  const handleContinue = () => {
+    if (!selectedAddress) {
+      alert('Please select or add a delivery address')
+      return
+    }
+    navigate('/delivery-methods')
+  }
+
+  const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0)
+  const tax = subtotal * 0.1
+  const giftFee = giftOption ? 12 : 0
+  const total = subtotal + tax + giftFee
+
+  if (authLoading || loading) {
+    return <LoadingSpinner />
+  }
 
   const inputClass = "w-full h-[48px] px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[14px] lg:text-[15px] font-normal text-[#1A1A1A] outline-none focus:border-[#8B7355] transition-colors"
   const labelClass = "text-[13px] lg:text-[14px] font-medium text-[#666666] mb-[8px] block"
@@ -82,104 +183,183 @@ export default function DeliveryInfo() {
               <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Delivery Information</h2>
 
               {/* Saved Addresses */}
-              <div className="mb-6 lg:mb-[32px]">
-                <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">Saved Addresses</div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px] mb-4 lg:mb-[16px]">
-                  {savedAddresses.map((addr) => (
-                    <div
-                      key={addr.id}
-                      onClick={() => setSelectedAddress(addr.id)}
-                      className={`bg-[#FDFBF7] rounded-[8px] p-4 lg:p-[20px] cursor-pointer transition-all ${
-                        selectedAddress === addr.id ? 'border-[2px] border-[#8B7355]' : 'border border-[#E8E3D9] hover:border-[#C9A870]'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3 lg:gap-[12px]">
-                        <div className={`w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] rounded-full border-[2px] flex items-center justify-center mt-[2px] flex-shrink-0 ${
-                          selectedAddress === addr.id ? 'border-[#8B7355]' : 'border-[#E8E3D9]'
-                        }`}>
-                          {selectedAddress === addr.id && <div className="w-[8px] h-[8px] lg:w-[10px] lg:h-[10px] rounded-full bg-[#8B7355]" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-[13px] lg:text-[14px] font-medium text-[#8B7355] mb-[6px] lg:mb-[8px]">{addr.label}</div>
-                          <div className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{addr.name}</div>
-                          <div className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-3 lg:mb-[12px]">{addr.address}</div>
-                          <span className="text-[12px] lg:text-[13px] font-medium text-[#8B7355] cursor-pointer hover:underline">Edit</span>
+              {addresses.length > 0 && (
+                <div className="mb-6 lg:mb-[32px]">
+                  <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">Saved Addresses</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px] mb-4 lg:mb-[16px]">
+                    {addresses.map((addr) => (
+                      <div
+                        key={addr.id}
+                        onClick={() => setSelectedAddress(addr.id)}
+                        className={`bg-[#FDFBF7] rounded-[8px] p-4 lg:p-[20px] cursor-pointer transition-all ${
+                          selectedAddress === addr.id ? 'border-[2px] border-[#8B7355]' : 'border border-[#E8E3D9] hover:border-[#C9A870]'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3 lg:gap-[12px]">
+                          <div className={`w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] rounded-full border-[2px] flex items-center justify-center mt-[2px] flex-shrink-0 ${
+                            selectedAddress === addr.id ? 'border-[#8B7355]' : 'border-[#E8E3D9]'
+                          }`}>
+                            {selectedAddress === addr.id && <div className="w-[8px] h-[8px] lg:w-[10px] lg:h-[10px] rounded-full bg-[#8B7355]" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[13px] lg:text-[14px] font-medium text-[#8B7355] mb-[6px] lg:mb-[8px]">{addr.label}</div>
+                            <div className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{addr.full_name}</div>
+                            <div className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-3 lg:mb-[12px]">
+                              {addr.street}, {addr.city}, {addr.state} {addr.postal_code}
+                            </div>
+                            <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{addr.phone}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setShowAddressForm(!showAddressForm)}
+                    className="w-full h-[44px] lg:h-[48px] border-[1.5px] border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[8px] cursor-pointer hover:border-[#8B7355] transition-colors"
+                  >
+                    <IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
+                    <span className="text-[14px] lg:text-[15px] font-medium text-[#666666]">Add New Address</span>
+                  </button>
                 </div>
-                <button className="w-full h-[44px] lg:h-[48px] border-[1.5px] border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[8px] cursor-pointer hover:border-[#8B7355] transition-colors">
-                  <IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[14px] lg:text-[15px] font-medium text-[#666666]">Add New Address</span>
-                </button>
-              </div>
+              )}
 
               {/* New Address Form */}
-              <div className="mb-5 lg:mb-[24px]">
-                <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">Or Enter New Address</div>
-                <div className="space-y-4 lg:space-y-[16px]">
-                  <div>
-                    <label className={labelClass}>Full Name</label>
-                    <input type="text" placeholder="Enter your full name" className={inputClass} />
+              {showAddressForm && (
+                <div className="mb-5 lg:mb-[24px]">
+                  <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">
+                    {addresses.length > 0 ? 'Add New Address' : 'Enter Delivery Address'}
                   </div>
-                  <div>
-                    <label className={labelClass}>Email Address</label>
-                    <input type="email" placeholder="Enter your email" className={inputClass} />
-                  </div>
-                  <div>
-                    <label className={labelClass}>Phone Number</label>
-                    <input type="tel" placeholder="Enter your phone number" className={inputClass} />
-                  </div>
-                  <div>
-                    <label className={labelClass}>Street Address</label>
-                    <input type="text" placeholder="Enter street address" className={inputClass} />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px]">
+                  <div className="space-y-4 lg:space-y-[16px]">
                     <div>
-                      <label className={labelClass}>Apartment / Suite</label>
-                      <input type="text" placeholder="Apt, Suite, etc." className={inputClass} />
+                      <label className={labelClass}>Address Label</label>
+                      <select
+                        name="label"
+                        value={formData.label}
+                        onChange={handleInputChange}
+                        className={inputClass + ' cursor-pointer appearance-none'}
+                      >
+                        <option>Home</option>
+                        <option>Work</option>
+                        <option>Office</option>
+                        <option>Other</option>
+                      </select>
                     </div>
                     <div>
-                      <label className={labelClass}>City</label>
-                      <input type="text" placeholder="City" className={inputClass} />
+                      <label className={labelClass}>Full Name</label>
+                      <input
+                        type="text"
+                        name="full_name"
+                        value={formData.full_name}
+                        onChange={handleInputChange}
+                        placeholder="Enter your full name"
+                        className={inputClass}
+                      />
                     </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px]">
                     <div>
-                      <label className={labelClass}>State / Province</label>
-                      <input type="text" placeholder="State/Province" className={inputClass} />
+                      <label className={labelClass}>Phone Number</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder="Enter your phone number"
+                        className={inputClass}
+                      />
                     </div>
                     <div>
-                      <label className={labelClass}>Postal Code</label>
-                      <input type="text" placeholder="Postal Code" className={inputClass} />
+                      <label className={labelClass}>Street Address</label>
+                      <input
+                        type="text"
+                        name="street"
+                        value={formData.street}
+                        onChange={handleInputChange}
+                        placeholder="Street address, apartment, suite, etc."
+                        className={inputClass}
+                      />
                     </div>
-                  </div>
-                  <div>
-                    <label className={labelClass}>Country</label>
-                    <select className={inputClass + ' cursor-pointer appearance-none'}>
-                      <option>United States</option>
-                      <option>Canada</option>
-                      <option>United Kingdom</option>
-                      <option>Australia</option>
-                      <option>United Arab Emirates</option>
-                      <option>Russia</option>
-                    </select>
-                  </div>
-                  <div className="flex items-center gap-[12px] pt-[8px]">
-                    <input
-                      type="checkbox"
-                      id="saveAddress"
-                      checked={saveAddress}
-                      onChange={() => setSaveAddress(!saveAddress)}
-                      className="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-[#E8E3D9] cursor-pointer accent-[#8B7355]"
-                    />
-                    <label htmlFor="saveAddress" className="text-[13px] lg:text-[14px] font-normal text-[#666666] cursor-pointer">
-                      Save this address for future orders
-                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px]">
+                      <div>
+                        <label className={labelClass}>City</label>
+                        <input
+                          type="text"
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          placeholder="City"
+                          className={inputClass}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelClass}>State / Province</label>
+                        <input
+                          type="text"
+                          name="state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                          placeholder="State/Province"
+                          className={inputClass}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px]">
+                      <div>
+                        <label className={labelClass}>Postal Code</label>
+                        <input
+                          type="text"
+                          name="postal_code"
+                          value={formData.postal_code}
+                          onChange={handleInputChange}
+                          placeholder="Postal Code"
+                          className={inputClass}
+                        />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Country</label>
+                        <select
+                          name="country"
+                          value={formData.country}
+                          onChange={handleInputChange}
+                          className={inputClass + ' cursor-pointer appearance-none'}
+                        >
+                          <option>United States</option>
+                          <option>Canada</option>
+                          <option>United Kingdom</option>
+                          <option>Australia</option>
+                          <option>United Arab Emirates</option>
+                          <option>Russia</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-[12px] pt-[8px]">
+                      <input
+                        type="checkbox"
+                        id="is_default"
+                        name="is_default"
+                        checked={formData.is_default}
+                        onChange={handleInputChange}
+                        className="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-[#E8E3D9] cursor-pointer accent-[#8B7355]"
+                      />
+                      <label htmlFor="is_default" className="text-[13px] lg:text-[14px] font-normal text-[#666666] cursor-pointer">
+                        Set as default address
+                      </label>
+                    </div>
+                    <button
+                      onClick={handleSaveAddress}
+                      className="w-full h-[48px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors"
+                    >
+                      Save Address
+                    </button>
+                    {addresses.length > 0 && (
+                      <button
+                        onClick={() => setShowAddressForm(false)}
+                        className="w-full text-[13px] lg:text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    )}
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Step 2 — Collapsed */}
@@ -219,12 +399,12 @@ export default function DeliveryInfo() {
                 {cartItems.map((item, index) => (
                   <div key={item.id}>
                     <div className="flex gap-3 lg:gap-[16px]">
-                      <img src={item.image} alt={item.name} className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded-[8px] object-cover flex-shrink-0" />
+                      <img src={item.product_image} alt={item.product_name} className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded-[8px] object-cover flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <div className="text-[11px] lg:text-[12px] font-medium text-[#8B7355] mb-[2px]">{item.brand}</div>
-                        <div className="text-[13px] lg:text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px] line-clamp-2">{item.name}</div>
-                        <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{item.quantity} × ${item.price}</div>
-                        <div className="text-[13px] lg:text-[14px] font-semibold text-[#1A1A1A]">${(item.price * item.quantity).toFixed(2)}</div>
+                        <div className="text-[13px] lg:text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px] line-clamp-2">{item.product_name}</div>
+                        <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{item.quantity} × ${parseFloat(item.price).toFixed(2)}</div>
+                        <div className="text-[13px] lg:text-[14px] font-semibold text-[#1A1A1A]">${(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
                       </div>
                     </div>
                     {index < cartItems.length - 1 && <div className="h-[1px] bg-[#E8E3D9] mt-4 lg:mt-[16px]" />}
@@ -282,7 +462,10 @@ export default function DeliveryInfo() {
 
               {/* CTAs */}
               <div className="space-y-4 lg:space-y-[16px] mb-5 lg:mb-[24px]">
-                <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                <button
+                  onClick={handleContinue}
+                  className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors"
+                >
                   Continue to Delivery Method
                 </button>
                 <Link to="/cart">
