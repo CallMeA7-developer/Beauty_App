@@ -1,18 +1,49 @@
-import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.VITE_SUPABASE_ANON_KEY
-)
+export default async function handler(req) {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    })
+  }
 
-export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   try {
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    const token = authHeader.replace('Bearer ', '')
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    const body = await req.json()
     const {
       paymentIntentId,
       items,
@@ -22,26 +53,16 @@ export default async function handler(req, res) {
       total,
       shippingAddress,
       deliveryMethod,
-    } = req.body
+    } = body
 
-    const authHeader = req.headers.authorization
-    if (!authHeader) {
-      return res.status(401).json({ error: 'Not authenticated' })
+    if (!paymentIntentId || !items || !total) {
+      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
     }
 
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-
-    if (authError || !user) {
-      return res.status(401).json({ error: 'Invalid authentication' })
-    }
-
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
-
-    if (paymentIntent.status !== 'succeeded') {
-      return res.status(400).json({ error: 'Payment not completed' })
-    }
-
+    // Create order in database
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .insert({
@@ -53,31 +74,39 @@ export default async function handler(req, res) {
         total,
         shipping_address: shippingAddress,
         delivery_method: deliveryMethod,
+        payment_status: 'paid',
         payment_intent_id: paymentIntentId,
-        status: 'confirmed',
       })
       .select()
       .single()
 
     if (orderError) {
       console.error('Order creation error:', orderError)
-      return res.status(500).json({ error: 'Failed to create order' })
+      throw orderError
     }
 
-    const { error: cartError } = await supabase
+    // Clear user's cart
+    const { error: deleteError } = await supabase
       .from('cart')
       .delete()
       .eq('user_id', user.id)
 
-    if (cartError) {
-      console.error('Cart clear error:', cartError)
+    if (deleteError) {
+      console.error('Error clearing cart:', deleteError)
     }
 
-    res.status(200).json({ orderId: order.id })
+    console.log('Order created successfully:', order.id)
+
+    return new Response(JSON.stringify({ success: true, orderId: order.id }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    })
+
   } catch (error) {
-    console.error('Payment confirmation error:', error)
-    res.status(500).json({
-      error: error.message || 'Failed to confirm payment',
+    console.error('Confirm payment error:', error.message)
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
     })
   }
 }
