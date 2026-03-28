@@ -10,6 +10,7 @@ import {
 import { getCheckoutSteps } from '../data/checkout'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
+import { useCheckout } from '../contexts/CheckoutContext'
 import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
@@ -17,6 +18,7 @@ export default function DeliveryInfo() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
   const { cartItems } = useCart()
+  const { updateCheckoutSession } = useCheckout()
   const steps = getCheckoutSteps(1)
 
   const [addresses, setAddresses] = useState([])
@@ -118,6 +120,13 @@ export default function DeliveryInfo() {
       alert('Please select or add a delivery address')
       return
     }
+
+    const addressData = addresses.find(addr => addr.id === selectedAddress)
+
+    updateCheckoutSession({
+      selectedAddress: addressData
+    })
+
     navigate('/delivery-methods')
   }
 

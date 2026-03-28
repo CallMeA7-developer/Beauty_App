@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
   IoCarOutline,
@@ -12,30 +12,64 @@ import {
   IoArrowBackOutline,
 } from 'react-icons/io5'
 import {
-  checkoutCartItems as cartItems,
-  deliveryOptions   as deliveryOptionsData,
+  deliveryOptions as deliveryOptionsData,
   getCheckoutSteps,
 } from '../data/checkout'
+import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
+import { useCheckout } from '../contexts/CheckoutContext'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const DELIVERY_ICONS = {
   car: IoCarOutline, flash: IoFlashOutline,
   rocket: IoRocketOutline, globe: IoGlobeOutline,
 }
 
-// Attach icon components to each delivery option
 const deliveryOptions = deliveryOptionsData.map(o => ({ ...o, icon: DELIVERY_ICONS[o.iconKey] }))
 
 export default function DeliveryMethods() {
+  const navigate = useNavigate()
+  const { user, loading: authLoading } = useAuth()
+  const { cartItems } = useCart()
+  const { checkoutSession, updateCheckoutSession } = useCheckout()
   const steps = getCheckoutSteps(2)
 
-  const [selectedOption, setSelectedOption] = useState(1)
+  const [selectedOption, setSelectedOption] = useState(checkoutSession.selectedDeliveryMethod || 1)
+  const [loading, setLoading] = useState(true)
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/collections')
+      return
+    }
+    if (user) {
+      setLoading(false)
+    }
+  }, [user, authLoading, navigate])
+
+  const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0)
   const shipping = deliveryOptions.find(o => o.id === selectedOption)?.priceValue ?? 0
-  const tax      = subtotal * 0.1
-  const total    = subtotal + shipping + tax
+  const tax = subtotal * 0.1
+  const total = subtotal + shipping + tax
 
-  // steps computed above via getCheckoutSteps(2)
+  const handleContinue = () => {
+    const selectedDeliveryOption = deliveryOptions.find(o => o.id === selectedOption)
+
+    updateCheckoutSession({
+      selectedDeliveryMethod: selectedOption,
+      deliveryCost: shipping,
+      cartItems: cartItems,
+      subtotal: subtotal,
+      tax: tax,
+      total: total
+    })
+
+    navigate('/payment')
+  }
+
+  if (authLoading || loading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -181,12 +215,12 @@ export default function DeliveryMethods() {
                 {cartItems.map((item, index) => (
                   <div key={item.id}>
                     <div className="flex gap-3 lg:gap-[16px]">
-                      <img src={item.image} alt={item.name} className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded-[8px] object-cover flex-shrink-0" />
+                      <img src={item.product_image} alt={item.product_name} className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded-[8px] object-cover flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <div className="text-[11px] lg:text-[12px] font-medium text-[#8B7355] mb-[2px]">{item.brand}</div>
-                        <div className="text-[13px] lg:text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px] line-clamp-2">{item.name}</div>
-                        <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{item.quantity} × ${item.price}</div>
-                        <div className="text-[13px] lg:text-[14px] font-semibold text-[#1A1A1A]">${(item.price * item.quantity).toFixed(2)}</div>
+                        <div className="text-[13px] lg:text-[14px] font-normal text-[#1A1A1A] leading-[1.4] mb-[6px] line-clamp-2">{item.product_name}</div>
+                        <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{item.quantity} × ${parseFloat(item.price).toFixed(2)}</div>
+                        <div className="text-[13px] lg:text-[14px] font-semibold text-[#1A1A1A]">${(parseFloat(item.price) * item.quantity).toFixed(2)}</div>
                       </div>
                     </div>
                     {index < cartItems.length - 1 && <div className="h-[1px] bg-[#E8E3D9] mt-4 lg:mt-[16px]" />}
@@ -229,11 +263,12 @@ export default function DeliveryMethods() {
 
               {/* CTAs */}
               <div className="space-y-4 lg:space-y-[16px] mb-5 lg:mb-[24px]">
-                <Link to="/payment">
-                  <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                    Continue to Payment
-                  </button>
-                </Link>
+                <button
+                  onClick={handleContinue}
+                  className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors"
+                >
+                  Continue to Payment
+                </button>
                 <Link to="/checkout">
                   <button className="w-full flex items-center justify-center gap-[8px] text-[13px] lg:text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
                     <IoArrowBackOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
