@@ -75,8 +75,15 @@ Deno.serve(async (req: Request) => {
       }
     )
   } catch (error) {
+    console.error("Error creating payment intent:", error)
+    console.error("Error message:", error.message)
+    console.error("Error stack:", error.stack)
+
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({
+        error: error.message || "Failed to create payment intent",
+        details: error.toString()
+      }),
       {
         status: 500,
         headers: {

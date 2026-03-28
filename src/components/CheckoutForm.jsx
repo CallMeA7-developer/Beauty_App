@@ -50,6 +50,8 @@ export default function CheckoutForm({
         throw new Error('Not authenticated')
       }
 
+      console.log('Creating payment intent for total:', total)
+
       const createIntentResponse = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-payment-intent`,
         {
@@ -62,9 +64,12 @@ export default function CheckoutForm({
         }
       )
 
+      console.log('Create intent response status:', createIntentResponse.status)
+
       if (!createIntentResponse.ok) {
         const errorData = await createIntentResponse.json()
-        throw new Error(errorData.error || 'Failed to create payment intent')
+        console.error('Payment intent error:', errorData)
+        throw new Error(errorData.error || errorData.details || 'Failed to create payment intent')
       }
 
       const { clientSecret, error: intentError } = await createIntentResponse.json()
