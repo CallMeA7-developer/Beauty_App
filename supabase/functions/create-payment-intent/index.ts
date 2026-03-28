@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import Stripe from "npm:stripe@17.5.0"
+import { createClient } from "jsr:@supabase/supabase-js@2"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,6 +17,51 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
+    // Verify JWT token
+    const authHeader = req.headers.get('Authorization')
+    console.log('Auth header present:', !!authHeader)
+
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Missing authorization header" }),
+        {
+          status: 401,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    }
+
+    const token = authHeader.replace('Bearer ', '')
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: { Authorization: authHeader },
+      },
+    })
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+
+    if (authError || !user) {
+      console.error('Auth error:', authError)
+      return new Response(
+        JSON.stringify({ error: "Invalid or expired token" }),
+        {
+          status: 401,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+    }
+
+    console.log('User authenticated:', user.id)
+
     const { amount } = await req.json()
 
     console.log('createPaymentIntent called with amount:', amount)
