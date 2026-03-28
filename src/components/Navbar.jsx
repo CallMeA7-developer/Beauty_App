@@ -25,6 +25,7 @@ import {
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './AuthModal'
+import { supabase } from '../lib/supabase'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
 const desktopNavLinks = [
@@ -402,10 +403,25 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
 
   const handleLogout = async () => {
     await signOut()
     navigate('/')
+  }
+
+  const fetchCartCount = async () => {
+    if (!user) {
+      setCartCount(0)
+      return
+    }
+    const { data } = await supabase
+      .from('cart')
+      .select('quantity')
+      .eq('user_id', user.id)
+
+    const total = data?.reduce((sum, item) => sum + item.quantity, 0) || 0
+    setCartCount(total)
   }
 
   useEffect(() => {
@@ -413,6 +429,26 @@ export default function Navbar() {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  useEffect(() => {
+    fetchCartCount()
+
+    const channel = supabase
+      .channel('cart-changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'cart',
+        filter: user ? `user_id=eq.${user.id}` : undefined
+      }, () => {
+        fetchCartCount()
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [user])
 
   // ── Mobile ───────────────────────────────────────────────────────────────────
   if (isMobile) {
@@ -442,7 +478,14 @@ export default function Navbar() {
               </button>
             )}
             <Link to="/wishlist"><IoHeartOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
-            <Link to="/cart"><IoBagOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
+            <Link to="/cart" className="relative">
+              <IoBagOutline className="w-[22px] h-[22px] text-[#2B2B2B]" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#C9A870] text-white text-[10px] font-semibold rounded-full w-[16px] h-[16px] flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </div>
         </header>
 
@@ -503,7 +546,14 @@ export default function Navbar() {
             </button>
           )}
           <Link to="/wishlist"><IoHeartOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
-          <Link to="/cart"><IoBagOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
+          <Link to="/cart" className="relative">
+            <IoBagOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-[#C9A870] text-white text-[10px] font-semibold rounded-full w-[18px] h-[18px] flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </Link>
         </div>
       </header>
 

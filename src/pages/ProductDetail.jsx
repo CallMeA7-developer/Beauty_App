@@ -90,18 +90,33 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
       return
     }
 
-    const { error } = await supabase.from('cart').insert({
-      user_id: user.id,
-      product_id: product.id,
-      quantity: quantity,
-      selected_size: selectedSize,
-      price: displayPrice
-    })
+    const { data: existingItem } = await supabase
+      .from('cart')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('product_id', product.id)
+      .eq('selected_size', selectedSize)
+      .maybeSingle()
 
-    if (!error) {
-      setShowToast(true)
-      setTimeout(() => setShowToast(false), 2000)
+    if (existingItem) {
+      await supabase
+        .from('cart')
+        .update({ quantity: existingItem.quantity + quantity })
+        .eq('id', existingItem.id)
+    } else {
+      await supabase.from('cart').insert({
+        user_id: user.id,
+        product_id: product.id,
+        product_name: product.name,
+        product_image: product.image,
+        quantity: quantity,
+        selected_size: selectedSize,
+        price: displayPrice
+      })
     }
+
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), 2000)
   }
 
   const handleBuyNow = async () => {
@@ -562,18 +577,33 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
       return
     }
 
-    const { error } = await supabase.from('cart').insert({
-      user_id: user.id,
-      product_id: product.id,
-      quantity: quantity,
-      selected_size: selectedSize,
-      price: displayPrice
-    })
+    const { data: existingItem } = await supabase
+      .from('cart')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('product_id', product.id)
+      .eq('selected_size', selectedSize)
+      .maybeSingle()
 
-    if (!error) {
-      setShowToast(true)
-      setTimeout(() => setShowToast(false), 2000)
+    if (existingItem) {
+      await supabase
+        .from('cart')
+        .update({ quantity: existingItem.quantity + quantity })
+        .eq('id', existingItem.id)
+    } else {
+      await supabase.from('cart').insert({
+        user_id: user.id,
+        product_id: product.id,
+        product_name: product.name,
+        product_image: product.image,
+        quantity: quantity,
+        selected_size: selectedSize,
+        price: displayPrice
+      })
     }
+
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), 2000)
   }
 
   const handleBuyNow = async () => {
