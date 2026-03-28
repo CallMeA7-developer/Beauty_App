@@ -17,8 +17,20 @@ Deno.serve(async (req: Request) => {
 
   try {
     const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY")
+
+    console.log("STRIPE_SECRET_KEY exists:", !!stripeSecretKey)
+
     if (!stripeSecretKey) {
-      throw new Error("STRIPE_SECRET_KEY not configured")
+      return new Response(
+        JSON.stringify({ error: "STRIPE_SECRET_KEY not configured in environment" }),
+        {
+          status: 500,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
+        }
+      )
     }
 
     const stripe = new Stripe(stripeSecretKey, {
@@ -26,6 +38,8 @@ Deno.serve(async (req: Request) => {
     })
 
     const { amount } = await req.json()
+
+    console.log("Creating payment intent for amount:", amount)
 
     if (!amount || amount <= 0) {
       return new Response(
@@ -47,6 +61,9 @@ Deno.serve(async (req: Request) => {
         enabled: true,
       },
     })
+
+    console.log("Payment intent created:", paymentIntent.id)
+    console.log("Client secret exists:", !!paymentIntent.client_secret)
 
     return new Response(
       JSON.stringify({ clientSecret: paymentIntent.client_secret }),

@@ -62,11 +62,24 @@ export default function CheckoutForm({
         }
       )
 
+      if (!createIntentResponse.ok) {
+        const errorData = await createIntentResponse.json()
+        throw new Error(errorData.error || 'Failed to create payment intent')
+      }
+
       const { clientSecret, error: intentError } = await createIntentResponse.json()
+
+      console.log('Payment Intent Response:', { clientSecret, intentError })
 
       if (intentError) {
         throw new Error(intentError)
       }
+
+      if (!clientSecret) {
+        throw new Error('Failed to receive payment client secret from server')
+      }
+
+      console.log('Client Secret received:', clientSecret)
 
       const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
         clientSecret,
