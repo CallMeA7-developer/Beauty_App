@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { useSearchParams, Link } from 'react-router-dom'
 import {
   IoBagOutline,
   IoCheckmark,
@@ -17,12 +19,10 @@ import {
   IoStarSharp,
   IoSettingsOutline,
 } from 'react-icons/io5'
-import {
-  getNavItems,
-  trackingOrders  as recentOrders,
-  deliveryUpdates,
-  trackingStages,
-} from '../data/user'
+import { getNavItems } from '../data/user'
+import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../lib/supabase'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const NAV_ICONS = {
   person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
@@ -31,7 +31,219 @@ const NAV_ICONS = {
 }
 
 export default function OrderTracking() {
+  const [searchParams] = useSearchParams()
+  const { user } = useAuth()
+  const [order, setOrder] = useState(null)
+  const [recentOrders, setRecentOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const navigationItems = getNavItems('orders', NAV_ICONS)
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!user) {
+        setError('Please log in to view your orders')
+        setLoading(false)
+        return
+      }
+
+      try {
+        const orderId = searchParams.get('orderId')
+
+        let mainOrderQuery = supabase
+          .from('orders')
+          .select('*')
+          .eq('user_id', user.id)
+
+        if (orderId) {
+          mainOrderQuery = mainOrderQuery.eq('id', orderId)
+        } else {
+          mainOrderQuery = mainOrderQuery.order('created_at', { ascending: false }).limit(1)
+        }
+
+        const { data: mainOrder, error: mainOrderError } = await mainOrderQuery.maybeSingle()
+
+        if (mainOrderError) throw mainOrderError
+
+        if (!mainOrder) {
+          setError('No order found')
+          setLoading(false)
+          return
+        }
+
+        setOrder(mainOrder)
+
+        const { data: recentOrdersData, error: recentOrdersError } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(3)
+
+        if (recentOrdersError) throw recentOrdersError
+
+        setRecentOrders(recentOrdersData || [])
+      } catch (err) {
+        console.error('Error fetching orders:', err)
+        setError('Failed to load orders')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchOrders()
+  }, [user, searchParams])
+
+  const calculateDeliveryDate = (createdAt, deliveryMethod) => {
+    const orderDate = new Date(createdAt)
+    let minDays, maxDays
+
+    if (deliveryMethod?.toLowerCase().includes('express')) {
+      minDays = 1
+      maxDays = 2
+    } else if (deliveryMethod?.toLowerCase().includes('same-day')) {
+      minDays = 0
+      maxDays = 0
+    } else {
+      minDays = 3
+      maxDays = 5
+    }
+
+    const addBusinessDays = (date, days) => {
+      const result = new Date(date)
+      let addedDays = 0
+      while (addedDays < days) {
+        result.setDate(result.getDate() + 1)
+        const dayOfWeek = result.getDay()
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+          addedDays++
+        }
+      }
+      return result
+    }
+
+    const deliveryDate = addBusinessDays(orderDate, maxDays)
+    return deliveryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  const getTrackingStages = (createdAt, deliveryMethod) => {
+    const now = new Date()
+    const orderDate = new Date(createdAt)
+    const oneHourLater = new Date(orderDate.getTime() + 60 * 60 * 1000)
+
+    const deliveryDate = new Date(orderDate)
+    let daysToAdd = 5
+
+    if (deliveryMethod?.toLowerCase().includes('express')) {
+      daysToAdd = 2
+    } else if (deliveryMethod?.toLowerCase().includes('same-day')) {
+      daysToAdd = 0
+    }
+
+    let addedDays = 0
+    while (addedDays < daysToAdd) {
+      deliveryDate.setDate(deliveryDate.getDate() + 1)
+      const dayOfWeek = deliveryDate.getDay()
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        addedDays++
+      }
+    }
+
+    const isProcessing = now >= oneHourLater
+    const isInTransit = isProcessing
+    const isDelivered = now >= deliveryDate
+
+    const formatTime = (date) => {
+      return date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      })
+    }
+
+    return [
+      {
+        label: 'Order Confirmed',
+        time: formatTime(orderDate),
+        completed: true,
+        active: false
+      },
+      {
+        label: 'Processing',
+        time: formatTime(oneHourLater),
+        completed: isProcessing,
+        active: !isProcessing
+      },
+      {
+        label: 'In Transit',
+        time: isInTransit ? formatTime(oneHourLater) : 'Pending',
+        completed: isDelivered,
+        active: isInTransit && !isDelivered
+      },
+      {
+        label: 'Delivered',
+        time: isDelivered ? formatTime(deliveryDate) : formatTime(deliveryDate),
+        completed: isDelivered,
+        active: false
+      }
+    ]
+  }
+
+  const getOrderStatus = (createdAt, deliveryMethod) => {
+    const now = new Date()
+    const orderDate = new Date(createdAt)
+    const oneHourLater = new Date(orderDate.getTime() + 60 * 60 * 1000)
+
+    const deliveryDate = new Date(orderDate)
+    let daysToAdd = 5
+
+    if (deliveryMethod?.toLowerCase().includes('express')) {
+      daysToAdd = 2
+    } else if (deliveryMethod?.toLowerCase().includes('same-day')) {
+      daysToAdd = 0
+    }
+
+    let addedDays = 0
+    while (addedDays < daysToAdd) {
+      deliveryDate.setDate(deliveryDate.getDate() + 1)
+      const dayOfWeek = deliveryDate.getDay()
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        addedDays++
+      }
+    }
+
+    if (now >= deliveryDate) return 'Delivered'
+    if (now >= oneHourLater) return 'In Transit'
+    return 'Processing'
+  }
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (error || !order) {
+    return (
+      <div className="bg-white font-['Cormorant_Garamond'] min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-[18px] text-[#666666] mb-6">{error || 'Order not found'}</p>
+          <Link to="/collections">
+            <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+              Continue Shopping
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const orderItems = order.items || []
+  const shippingAddress = order.shipping_address || {}
+  const deliveryMethod = order.delivery_method || 'Standard Delivery'
+  const estimatedDelivery = calculateDeliveryDate(order.created_at, deliveryMethod)
+  const trackingStages = getTrackingStages(order.created_at, deliveryMethod)
+  const orderStatus = getOrderStatus(order.created_at, deliveryMethod)
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -109,8 +321,10 @@ export default function OrderTracking() {
             {/* Order Status Timeline */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[40px] mb-5 lg:mb-[24px]">
               <div className="mb-5 lg:mb-[32px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-[4px]">#SL-47821</h3>
-                <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">Placed on Dec 18, 2024</p>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-[4px]">#{order.id.slice(0, 8).toUpperCase()}</h3>
+                <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">
+                  Placed on {new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </p>
               </div>
 
               {/* Progress Bar — horizontal on md+, vertical on mobile */}
@@ -166,20 +380,25 @@ export default function OrderTracking() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-[32px] mb-5 lg:mb-[24px]">
                 <div>
                   <div className="mb-4 lg:mb-[20px]">
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Tracking Number</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Order ID</div>
                     <div className="flex items-center gap-[8px]">
-                      <span className="text-[13px] md:text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">1Z999AA10123456784</span>
-                      <IoCopyOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355] cursor-pointer hover:text-[#7a6448] transition-colors flex-shrink-0" />
+                      <span className="text-[13px] md:text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">{order.id}</span>
+                      <IoCopyOutline
+                        className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355] cursor-pointer hover:text-[#7a6448] transition-colors flex-shrink-0"
+                        onClick={() => navigator.clipboard.writeText(order.id)}
+                      />
                     </div>
                   </div>
                   <div className="mb-4 lg:mb-[20px]">
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Carrier</div>
-                    <div className="text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">UPS Ground</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Delivery Method</div>
+                    <div className="text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">{deliveryMethod}</div>
                   </div>
                   <div>
                     <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Status</div>
-                    <div className="bg-[#C9A870] text-white text-[12px] lg:text-[13px] font-medium px-[10px] lg:px-[12px] py-[5px] lg:py-[6px] rounded-full inline-block">
-                      In Transit
+                    <div className={`text-white text-[12px] lg:text-[13px] font-medium px-[10px] lg:px-[12px] py-[5px] lg:py-[6px] rounded-full inline-block ${
+                      orderStatus === 'Delivered' ? 'bg-green-600' : 'bg-[#C9A870]'
+                    }`}>
+                      {orderStatus}
                     </div>
                   </div>
                 </div>
@@ -188,7 +407,7 @@ export default function OrderTracking() {
                     <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Estimated Delivery</div>
                     <div className="flex items-center gap-[8px]">
                       <IoCalendarOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
-                      <span className="text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">Dec 22, 2024</span>
+                      <span className="text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">{estimatedDelivery}</span>
                     </div>
                   </div>
                   <div>
@@ -196,37 +415,42 @@ export default function OrderTracking() {
                     <div className="flex items-start gap-[8px]">
                       <IoLocationOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355] mt-[2px] flex-shrink-0" />
                       <div className="text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] leading-[1.6]">
-                        Alexandra Chen<br />
-                        456 Luxury Avenue, Suite 1200<br />
-                        Los Angeles, CA 90210
+                        {shippingAddress.name || 'N/A'}<br />
+                        {shippingAddress.street || 'N/A'}<br />
+                        {shippingAddress.city && shippingAddress.state && shippingAddress.zip
+                          ? `${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zip}`
+                          : 'N/A'}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <button className="flex items-center gap-[8px] border border-[#8B7355] text-[#8B7355] text-[13px] lg:text-[14px] font-medium px-5 lg:px-[24px] py-[9px] lg:py-[10px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
-                <IoOpenOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
-                Track with Carrier
-              </button>
             </div>
 
             {/* Order Items */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
               <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[24px]">Order Items</h3>
-              <div className="flex items-center gap-4 lg:gap-[20px]">
-                <img
-                  src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop"
-                  alt="Age-Defying Serum"
-                  className="w-[72px] h-[72px] md:w-[88px] md:h-[88px] lg:w-[100px] lg:h-[100px] object-cover rounded-[8px] flex-shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="text-[11px] lg:text-[12px] font-light italic text-[#8B7355] mb-[4px]">Shan Loray</div>
-                  <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">Age-Defying Serum</h4>
-                  <div className="flex items-center gap-4 lg:gap-[24px]">
-                    <span className="text-[13px] lg:text-[14px] font-normal text-[#666666]">Qty: 1</span>
-                    <span className="text-[15px] lg:text-[16px] font-semibold text-[#2B2B2B]">$156.00</span>
+              <div className="space-y-4 lg:space-y-[20px]">
+                {orderItems.map((item, index) => (
+                  <div key={index}>
+                    <div className="flex items-center gap-4 lg:gap-[20px]">
+                      <img
+                        src={item.product_image}
+                        alt={item.product_name}
+                        className="w-[72px] h-[72px] md:w-[88px] md:h-[88px] lg:w-[100px] lg:h-[100px] object-cover rounded-[8px] flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[11px] lg:text-[12px] font-light italic text-[#8B7355] mb-[4px]">{item.brand}</div>
+                        <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{item.product_name}</h4>
+                        <div className="flex items-center gap-4 lg:gap-[24px]">
+                          <span className="text-[13px] lg:text-[14px] font-normal text-[#666666]">Qty: {item.quantity}</span>
+                          <span className="text-[15px] lg:text-[16px] font-semibold text-[#2B2B2B]">${(parseFloat(item.price) * item.quantity).toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    {index < orderItems.length - 1 && <div className="h-[1px] bg-[#E8E3D9] mt-4 lg:mt-[20px]" />}
                   </div>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -234,20 +458,25 @@ export default function OrderTracking() {
             <div className="bg-[#FDFBF7] rounded-[12px] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
               <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Recent Updates</h3>
               <div className="space-y-5 lg:space-y-[24px]">
-                {deliveryUpdates.map((update, index) => (
+                {trackingStages.filter(stage => stage.completed || stage.active).reverse().map((stage, index, arr) => (
                   <div key={index} className="flex gap-3 lg:gap-[16px]">
                     <div className="flex flex-col items-center">
                       <div className="w-[28px] h-[28px] lg:w-[32px] lg:h-[32px] bg-white rounded-full flex items-center justify-center border-2 border-[#8B7355] flex-shrink-0">
                         <IoLocationOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] text-[#8B7355]" />
                       </div>
-                      {index < deliveryUpdates.length - 1 && (
+                      {index < arr.length - 1 && (
                         <div className="w-[2px] flex-1 min-h-[32px] bg-[#E8E3D9] my-[6px] lg:my-[8px]" />
                       )}
                     </div>
                     <div className="flex-1 pb-[8px]">
-                      <div className="text-[11px] lg:text-[13px] font-normal text-[#666666] mb-[4px]">{update.time}</div>
-                      <div className="text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] mb-[4px]">{update.description}</div>
-                      <div className="text-[11px] lg:text-[13px] font-light text-[#999999]">{update.location}</div>
+                      <div className="text-[11px] lg:text-[13px] font-normal text-[#666666] mb-[4px]">{stage.time}</div>
+                      <div className="text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] mb-[4px]">{stage.label}</div>
+                      <div className="text-[11px] lg:text-[13px] font-light text-[#999999]">
+                        {stage.label === 'Order Confirmed' && 'Your order has been received and confirmed'}
+                        {stage.label === 'Processing' && 'Your order is being prepared for shipment'}
+                        {stage.label === 'In Transit' && 'Your order is on its way'}
+                        {stage.label === 'Delivered' && 'Your order has been delivered'}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -281,27 +510,40 @@ export default function OrderTracking() {
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px]">
               <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[24px]">Your Recent Orders</h3>
               <div className="space-y-[12px] lg:space-y-[16px] mb-4 lg:mb-[20px]">
-                {recentOrders.map((order) => (
-                  <div key={order.orderNumber} className="flex items-center justify-between py-3 lg:py-[16px] border-b border-[#F5F1EA]">
-                    <div>
-                      <div className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] mb-[4px]">{order.orderNumber}</div>
-                      <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{order.date}</div>
-                    </div>
-                    <div className="flex items-center gap-3 lg:gap-[16px]">
-                      <div className={`${order.statusColor} text-white text-[11px] lg:text-[12px] font-medium px-[10px] lg:px-[12px] py-[4px] rounded-full`}>
-                        {order.status}
+                {recentOrders.map((recentOrder) => {
+                  const status = getOrderStatus(recentOrder.created_at, recentOrder.delivery_method)
+                  const statusColor = status === 'Delivered' ? 'bg-green-600' : 'bg-[#C9A870]'
+
+                  return (
+                    <div key={recentOrder.id} className="flex items-center justify-between py-3 lg:py-[16px] border-b border-[#F5F1EA]">
+                      <div>
+                        <div className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] mb-[4px]">
+                          #{recentOrder.id.slice(0, 8).toUpperCase()}
+                        </div>
+                        <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">
+                          {new Date(recentOrder.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </div>
                       </div>
-                      <button className="border border-[#8B7355] text-[#8B7355] text-[12px] lg:text-[14px] font-medium px-3 lg:px-[16px] py-[5px] lg:py-[6px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
-                        Track
-                      </button>
+                      <div className="flex items-center gap-3 lg:gap-[16px]">
+                        <div className={`${statusColor} text-white text-[11px] lg:text-[12px] font-medium px-[10px] lg:px-[12px] py-[4px] rounded-full`}>
+                          {status}
+                        </div>
+                        <Link to={`/order-tracking?orderId=${recentOrder.id}`}>
+                          <button className="border border-[#8B7355] text-[#8B7355] text-[12px] lg:text-[14px] font-medium px-3 lg:px-[16px] py-[5px] lg:py-[6px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
+                            Track
+                          </button>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
-              <button className="w-full text-[13px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer flex items-center justify-center gap-[6px] hover:underline">
-                View All Orders
-                <IoChevronForward className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
-              </button>
+              <Link to="/dashboard">
+                <button className="w-full text-[13px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer flex items-center justify-center gap-[6px] hover:underline">
+                  View All Orders
+                  <IoChevronForward className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
+                </button>
+              </Link>
             </div>
 
           </div>
