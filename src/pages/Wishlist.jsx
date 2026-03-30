@@ -35,12 +35,15 @@ import {
   IoLogoTwitter,
 } from 'react-icons/io5'
 
-import { wishlistProducts } from '../data/products'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const navigationItems = [
   { icon: IoPersonOutline,   label: 'Account Dashboard', active: false, badge: null },
   { icon: IoBagCheckOutline, label: 'Order History',     active: false, badge: null },
-  { icon: IoHeartOutline,    label: 'Wishlist',          active: true,  badge: '12' },
+  { icon: IoHeartOutline,    label: 'Wishlist',          active: true,  badge: null },
   { icon: IoSparkles,        label: 'Beauty Profile',    active: false, tag: 'Complete Analysis' },
   { icon: IoRibbonOutline,   label: 'Loyalty Program',   active: false, badge: '2,450' },
   { icon: IoCalendarOutline, label: 'My Routines',       active: false, badge: null },
@@ -340,10 +343,100 @@ function ShareModal({ isOpen, onClose }) {
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function WishlistMobile() {
+  const { user } = useAuth()
+  const { addToCart } = useCart()
   const [sortOpen, setSortOpen]         = useState(false)
   const [filterOpen, setFilterOpen]     = useState(false)
   const [shareOpen, setShareOpen]       = useState(false)
   const [selectedSort, setSelectedSort] = useState('Newest Arrivals')
+  const [wishlistItems, setWishlistItems] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (user) {
+      fetchWishlist()
+    } else {
+      setLoading(false)
+    }
+  }, [user])
+
+  const fetchWishlist = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('wishlist')
+        .select(`
+          id,
+          product_id,
+          created_at,
+          products (
+            id,
+            name,
+            brand,
+            price,
+            image,
+            category,
+            rating,
+            reviews_count
+          )
+        `)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      setWishlistItems(data || [])
+    } catch (err) {
+      console.error('Error fetching wishlist:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRemove = async (wishlistId) => {
+    try {
+      const { error } = await supabase
+        .from('wishlist')
+        .delete()
+        .eq('id', wishlistId)
+
+      if (error) throw error
+
+      setWishlistItems(wishlistItems.filter(item => item.id !== wishlistId))
+    } catch (err) {
+      console.error('Error removing from wishlist:', err)
+    }
+  }
+
+  const handleAddToBag = async (product) => {
+    await addToCart(
+      product.id,
+      product.name,
+      product.image,
+      product.brand || 'Shan Loray',
+      '100ml',
+      parseFloat(product.price),
+      1
+    )
+  }
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (!user) {
+    return (
+      <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex items-center justify-center">
+        <div className="text-center px-5">
+          <p className="text-[18px] text-[#666666] mb-6">Please log in to view your wishlist</p>
+          <Link to="/">
+            <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px]">
+              Go Home
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full min-h-screen bg-[#FDFBF7] font-['Cormorant_Garamond'] flex flex-col">
@@ -364,7 +457,7 @@ function WishlistMobile() {
       {/* Title */}
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] px-6 py-6 flex-shrink-0">
         <h1 className="text-[32px] font-semibold text-[#1A1A1A] mb-1">My Wishlist</h1>
-        <p className="text-[16px] font-normal text-[#666666]">12 saved treasures</p>
+        <p className="text-[16px] font-normal text-[#666666]">{wishlistItems.length} saved {wishlistItems.length === 1 ? 'treasure' : 'treasures'}</p>
       </div>
 
       {/* Filter & Sort Bar */}
@@ -381,43 +474,57 @@ function WishlistMobile() {
       </div>
 
       {/* Product List */}
-      <div className="flex-1 px-5 py-5 space-y-5">
-        {wishlistProducts.map((product) => (
-          <div key={product.id} className="bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-4">
-            <div className="relative w-full h-[280px] rounded-lg overflow-hidden mb-4">
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-              <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] flex items-center justify-center">
-                <IoHeart className="w-5 h-5 text-[#C84848]" />
-              </div>
-              {product.stock === 'Low Stock' && (
-                <div className="absolute top-3 left-3 bg-[#E5A84D] text-white text-[11px] font-medium px-3 py-1 rounded-full">Low Stock</div>
-              )}
-            </div>
-            <div className="mb-4">
-              <div className="text-[12px] font-medium text-[#8B7355] tracking-[1px] uppercase mb-2">{product.brand}</div>
-              <h3 className="text-[17px] font-semibold text-[#1A1A1A] leading-[1.3] mb-2 line-clamp-2">{product.name}</h3>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex items-center gap-0.5">
-                  {[1,2,3,4,5].map((s) => <IoStarSharp key={s} className="w-[13px] h-[13px] text-[#C9A870]" />)}
-                </div>
-                <span className="text-[13px] text-[#999]">({product.reviews})</span>
-              </div>
-              <div className="flex items-center gap-2 mb-2">
-                {product.originalPrice !== product.currentPrice && (
-                  <span className="text-[15px] text-[#999] line-through">${product.originalPrice}</span>
-                )}
-                <span className="text-[22px] font-semibold text-[#1A1A1A]">${product.currentPrice}</span>
-              </div>
-              <div className={`inline-block px-2.5 py-1 rounded text-[12px] font-medium ${product.stock === 'In Stock' ? 'bg-[#F0F8F0] text-[#7BA85D]' : 'bg-[#FFF4E6] text-[#E5A84D]'}`}>
-                {product.stock}
-              </div>
-            </div>
-            <div className="space-y-3">
-              <button className="w-full h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-lg">Add to Bag</button>
-              <button className="w-full text-[15px] font-medium text-[#C84848] underline">Remove</button>
-            </div>
+      <div className="flex-1 px-5 py-5">
+        {wishlistItems.length === 0 ? (
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center px-5">
+            <IoHeartOutline className="w-24 h-24 text-[#E8E3D9] mb-4" />
+            <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-2">Your wishlist is empty</h3>
+            <p className="text-[16px] text-[#666666] mb-6">Start adding products you love</p>
+            <Link to="/collections">
+              <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px]">
+                Explore Products
+              </button>
+            </Link>
           </div>
-        ))}
+        ) : (
+          <div className="space-y-5">
+            {wishlistItems.map((item) => {
+              const product = item.products
+              return (
+                <div key={item.id} className="bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-4">
+                  <Link to={`/product/${product.id}`}>
+                    <div className="relative w-full h-[280px] rounded-lg overflow-hidden mb-4">
+                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] flex items-center justify-center">
+                        <IoHeart className="w-5 h-5 text-[#C9A870]" />
+                      </div>
+                    </div>
+                  </Link>
+                  <div className="mb-4">
+                    <div className="text-[12px] font-medium text-[#8B7355] tracking-[1px] uppercase mb-2">{product.brand}</div>
+                    <h3 className="text-[17px] font-semibold text-[#1A1A1A] leading-[1.3] mb-2 line-clamp-2">{product.name}</h3>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-0.5">
+                        {[1,2,3,4,5].map((s) => <IoStarSharp key={s} className={`w-[13px] h-[13px] ${s <= product.rating ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />)}
+                      </div>
+                      <span className="text-[13px] text-[#999]">({product.reviews_count})</span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-[22px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
+                    </div>
+                    <div className="inline-block px-2.5 py-1 rounded text-[12px] font-medium bg-[#F0F8F0] text-[#7BA85D]">
+                      In Stock
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <button onClick={() => handleAddToBag(product)} className="w-full h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-lg">Add to Bag</button>
+                    <button onClick={() => handleRemove(item.id)} className="w-full text-[15px] font-medium text-[#C84848] underline">Remove</button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       {/* Quick Actions */}

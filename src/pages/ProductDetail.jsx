@@ -20,6 +20,10 @@ import {
   IoLogoFacebook,
   IoLogoPinterest,
   IoLogoYoutube,
+  IoLogoWhatsapp,
+  IoLogoTwitter,
+  IoCopyOutline,
+  IoClose,
 } from 'react-icons/io5'
 
 import {
@@ -45,6 +49,97 @@ const trustBadges = [
   { icon: IoShieldCheckmarkOutline, title: 'Authentic Guarantee', desc: '100% genuine products' },
 ]
 
+// ─── ShareModal Component ─────────────────────────────────────────────────────
+function ShareModal({ isOpen, onClose, productName, productUrl }) {
+  const [copied, setCopied] = useState(false)
+
+  if (!isOpen) return null
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(productUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
+
+  const shareOptions = [
+    {
+      name: 'WhatsApp',
+      icon: IoLogoWhatsapp,
+      color: 'bg-[#25D366]',
+      action: () => window.open(`https://wa.me/?text=Check out this product: ${productUrl}`, '_blank')
+    },
+    {
+      name: 'Instagram',
+      icon: IoLogoInstagram,
+      color: 'bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737]',
+      action: handleCopyLink
+    },
+    {
+      name: 'Facebook',
+      icon: IoLogoFacebook,
+      color: 'bg-[#1877F2]',
+      action: () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`, '_blank')
+    },
+    {
+      name: 'Twitter/X',
+      icon: IoLogoTwitter,
+      color: 'bg-[#1DA1F2]',
+      action: () => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(productName)}`, '_blank')
+    }
+  ]
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-[12px] w-full max-w-[400px] p-6 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-[#666666] hover:text-[#1A1A1A] transition-colors"
+        >
+          <IoClose className="w-6 h-6" />
+        </button>
+
+        <h3 className="text-[22px] font-semibold text-[#1A1A1A] mb-2">Share Product</h3>
+        <p className="text-[14px] text-[#666666] mb-6">Share this product with your friends</p>
+
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {shareOptions.map((option) => (
+            <button
+              key={option.name}
+              onClick={option.action}
+              className="flex items-center gap-3 p-4 rounded-[8px] border border-[#E8E3D9] hover:border-[#8B7355] transition-all"
+            >
+              <div className={`w-10 h-10 ${option.color} rounded-full flex items-center justify-center flex-shrink-0`}>
+                <option.icon className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-[14px] font-medium text-[#1A1A1A]">{option.name}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="border-t border-[#E8E3D9] pt-4">
+          <button
+            onClick={handleCopyLink}
+            className="w-full flex items-center justify-center gap-2 h-12 bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors"
+          >
+            <IoCopyOutline className="w-5 h-5" />
+            {copied ? 'Copied!' : 'Copy Link'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function ProductDetailMobile({ product, onOpenAuthModal }) {
   const navigate = useNavigate()
@@ -56,6 +151,7 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
   const [openSection, setOpenSection]     = useState('description')
   const [isInWishlist, setIsInWishlist]   = useState(false)
   const [showToast, setShowToast]         = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
 
   const toggleSection = (id) => setOpenSection(openSection === id ? null : id)
 
@@ -140,14 +236,8 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
     }
   }
 
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href)
-      setShowToast(true)
-      setTimeout(() => setShowToast(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy:', err)
-    }
+  const handleShare = () => {
+    setShowShareModal(true)
   }
 
   if (!product) {
@@ -257,9 +347,17 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
         {/* Toast Notification */}
         {showToast && (
           <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-[#2B2B2B] text-white px-6 py-3 rounded-[8px] shadow-lg z-50 text-[14px]">
-            Link copied!
+            Added to cart!
           </div>
         )}
+
+        {/* Share Modal */}
+        <ShareModal
+          isOpen={showShareModal}
+          onClose={() => setShowShareModal(false)}
+          productName={product.name}
+          productUrl={window.location.href}
+        />
       </div>
 
       {/* Key Benefits */}
@@ -518,6 +616,7 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
   const [quantity, setQuantity]           = useState(1)
   const [isInWishlist, setIsInWishlist]   = useState(false)
   const [showToast, setShowToast]         = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
 
   const desktopThumbs = [
     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=212&h=212&fit=crop',
@@ -615,14 +714,8 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
     }
   }
 
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href)
-      setShowToast(true)
-      setTimeout(() => setShowToast(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy:', err)
-    }
+  const handleShare = () => {
+    setShowShareModal(true)
   }
 
   if (!product) {
@@ -744,9 +837,17 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
               {/* Toast Notification */}
               {showToast && (
                 <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-[#2B2B2B] text-white px-6 py-3 rounded-[8px] shadow-lg z-50 text-[14px]">
-                  Link copied!
+                  Added to cart!
                 </div>
               )}
+
+              {/* Share Modal */}
+              <ShareModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                productName={product.name}
+                productUrl={window.location.href}
+              />
 
               {/* Key Benefits */}
               <div className="bg-gradient-to-b from-[#FDFBF7] to-white rounded-[12px] p-5 lg:p-[24px]">

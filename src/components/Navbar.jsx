@@ -25,6 +25,7 @@ import {
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
+import { supabase } from '../lib/supabase'
 import AuthModal from './AuthModal'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
@@ -404,6 +405,7 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [wishlistCount, setWishlistCount] = useState(0)
 
   const handleLogout = async () => {
     await signOut()
@@ -415,6 +417,43 @@ export default function Navbar() {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  useEffect(() => {
+    const fetchWishlistCount = async () => {
+      if (!user) {
+        setWishlistCount(0)
+        return
+      }
+
+      try {
+        const { count, error } = await supabase
+          .from('wishlist')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+
+        if (error) throw error
+        setWishlistCount(count || 0)
+      } catch (err) {
+        console.error('Error fetching wishlist count:', err)
+      }
+    }
+
+    fetchWishlistCount()
+
+    const channel = supabase
+      .channel('wishlist-changes')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'wishlist', filter: `user_id=eq.${user?.id}` },
+        () => {
+          fetchWishlistCount()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [user])
 
   // ── Mobile ───────────────────────────────────────────────────────────────────
   if (isMobile) {
@@ -443,7 +482,14 @@ export default function Navbar() {
                 <IoPersonOutline className="w-[22px] h-[22px] text-[#2B2B2B]" />
               </button>
             )}
-            <Link to="/wishlist"><IoHeartOutline className="w-[22px] h-[22px] text-[#2B2B2B]" /></Link>
+            <Link to="/wishlist" className="relative">
+              <IoHeartOutline className="w-[22px] h-[22px] text-[#2B2B2B]" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#C9A870] text-white text-[10px] font-semibold rounded-full w-[16px] h-[16px] flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
             <Link to="/cart" className="relative">
               <IoBagOutline className="w-[22px] h-[22px] text-[#2B2B2B]" />
               {cartCount > 0 && (
@@ -511,7 +557,14 @@ export default function Navbar() {
               <IoPersonOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
             </button>
           )}
-          <Link to="/wishlist"><IoHeartOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" /></Link>
+          <Link to="/wishlist" className="relative">
+            <IoHeartOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-[#C9A870] text-white text-[10px] font-semibold rounded-full w-[18px] h-[18px] flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
+          </Link>
           <Link to="/cart" className="relative">
             <IoBagOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
             {cartCount > 0 && (
