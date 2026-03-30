@@ -38,14 +38,16 @@ import SplashScreen from './pages/SplashScreen'
 import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
+import { WishlistProvider } from './contexts/WishlistContext'
 
 export default function App() {
   const { showAuthModal, closeAuthModal } = useAuth()
 
   return (
     <CartProvider>
-      <CheckoutProvider>
-        <div>
+      <WishlistProvider>
+        <CheckoutProvider>
+          <div>
       <Routes>
         {/* ── Splash — no Navbar/Footer ── */}
         <Route path="/splash" element={<SplashScreen />} />
@@ -102,8 +104,9 @@ export default function App() {
         } />
       </Routes>
       <AuthModal isOpen={showAuthModal} onClose={closeAuthModal} />
-        </div>
-      </CheckoutProvider>
+          </div>
+        </CheckoutProvider>
+      </WishlistProvider>
     </CartProvider>
   )
 }

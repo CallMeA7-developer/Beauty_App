@@ -38,9 +38,9 @@ import {
 
 import { getProductById } from '../lib/productsService'
 import LoadingSpinner from '../components/LoadingSpinner'
-import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
+import { useWishlist } from '../contexts/WishlistContext'
 
 // ─── Local static data (product-specific, not shared) ─────────────────────────
 const trustBadges = [
@@ -145,11 +145,11 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { addToCart } = useCart()
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist()
   const [selectedSize, setSelectedSize]   = useState('100ml')
   const [quantity, setQuantity]           = useState(1)
   const [activeThumb, setActiveThumb]     = useState(0)
   const [openSection, setOpenSection]     = useState('description')
-  const [isInWishlist, setIsInWishlist]   = useState(false)
   const [showToast, setShowToast]         = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
 
@@ -164,23 +164,6 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
   }
 
   const displayPrice = getSizePrice(selectedSize)
-
-  useEffect(() => {
-    if (user && product) {
-      checkWishlist()
-    }
-  }, [user, product])
-
-  const checkWishlist = async () => {
-    if (!user) return
-    const { data } = await supabase
-      .from('wishlist')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('product_id', product.id)
-      .maybeSingle()
-    setIsInWishlist(!!data)
-  }
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -220,19 +203,10 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
       return
     }
 
-    if (isInWishlist) {
-      await supabase
-        .from('wishlist')
-        .delete()
-        .eq('user_id', user.id)
-        .eq('product_id', product.id)
-      setIsInWishlist(false)
+    if (isInWishlist(product.id)) {
+      await removeFromWishlist(product.id)
     } else {
-      await supabase.from('wishlist').insert({
-        user_id: user.id,
-        product_id: product.id
-      })
-      setIsInWishlist(true)
+      await addToWishlist(product.id)
     }
   }
 
@@ -337,7 +311,7 @@ function ProductDetailMobile({ product, onOpenAuthModal }) {
         {/* Wishlist & Share */}
         <div className="flex items-center gap-6 mb-6">
           <button onClick={handleWishlist} className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
-            {isInWishlist ? <IoHeart className="w-[18px] h-[18px] text-[#8B7355]" /> : <IoHeartOutline className="w-[18px] h-[18px]" />} Add to Wishlist
+            {isInWishlist(product.id) ? <IoHeart className="w-[18px] h-[18px] text-[#C9A870]" /> : <IoHeartOutline className="w-[18px] h-[18px]" />} Add to Wishlist
           </button>
           <button onClick={handleShare} className="flex items-center gap-2 text-[15px] font-normal text-[#666666]">
             <IoShareOutline className="w-[18px] h-[18px]" /> Share
@@ -612,9 +586,9 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { addToCart } = useCart()
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist()
   const [selectedSize, setSelectedSize]   = useState('100ml')
   const [quantity, setQuantity]           = useState(1)
-  const [isInWishlist, setIsInWishlist]   = useState(false)
   const [showToast, setShowToast]         = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
 
@@ -642,23 +616,6 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
   }
 
   const displayPrice = getSizePrice(selectedSize)
-
-  useEffect(() => {
-    if (user && product) {
-      checkWishlist()
-    }
-  }, [user, product])
-
-  const checkWishlist = async () => {
-    if (!user) return
-    const { data } = await supabase
-      .from('wishlist')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('product_id', product.id)
-      .maybeSingle()
-    setIsInWishlist(!!data)
-  }
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -698,19 +655,10 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
       return
     }
 
-    if (isInWishlist) {
-      await supabase
-        .from('wishlist')
-        .delete()
-        .eq('user_id', user.id)
-        .eq('product_id', product.id)
-      setIsInWishlist(false)
+    if (isInWishlist(product.id)) {
+      await removeFromWishlist(product.id)
     } else {
-      await supabase.from('wishlist').insert({
-        user_id: user.id,
-        product_id: product.id
-      })
-      setIsInWishlist(true)
+      await addToWishlist(product.id)
     }
   }
 
@@ -827,7 +775,7 @@ function ProductDetailDesktop({ product, onOpenAuthModal }) {
 
               <div className="flex items-center gap-6 lg:gap-[32px] mb-6 lg:mb-[32px]">
                 <button onClick={handleWishlist} className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
-                  {isInWishlist ? <IoHeart className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" /> : <IoHeartOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />} Add to Wishlist
+                  {isInWishlist(product.id) ? <IoHeart className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#C9A870]" /> : <IoHeartOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />} Add to Wishlist
                 </button>
                 <button onClick={handleShare} className="flex items-center gap-[8px] text-[13px] lg:text-[15px] font-normal text-[#666666] hover:text-[#8B7355] transition-colors">
                   <IoShareOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Share

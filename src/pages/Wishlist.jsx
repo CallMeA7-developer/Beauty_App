@@ -35,9 +35,9 @@ import {
   IoLogoTwitter,
 } from 'react-icons/io5'
 
-import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
+import { useWishlist } from '../contexts/WishlistContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 const navigationItems = [
@@ -345,66 +345,14 @@ function ShareModal({ isOpen, onClose }) {
 function WishlistMobile() {
   const { user } = useAuth()
   const { addToCart } = useCart()
+  const { wishlistItems, wishlistCount, loading, removeFromWishlist } = useWishlist()
   const [sortOpen, setSortOpen]         = useState(false)
   const [filterOpen, setFilterOpen]     = useState(false)
   const [shareOpen, setShareOpen]       = useState(false)
   const [selectedSort, setSelectedSort] = useState('Newest Arrivals')
-  const [wishlistItems, setWishlistItems] = useState([])
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (user) {
-      fetchWishlist()
-    } else {
-      setLoading(false)
-    }
-  }, [user])
-
-  const fetchWishlist = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('wishlist')
-        .select(`
-          id,
-          product_id,
-          created_at,
-          products (
-            id,
-            name,
-            brand,
-            price,
-            image,
-            category,
-            rating,
-            reviews_count
-          )
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-
-      setWishlistItems(data || [])
-    } catch (err) {
-      console.error('Error fetching wishlist:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleRemove = async (wishlistId) => {
-    try {
-      const { error } = await supabase
-        .from('wishlist')
-        .delete()
-        .eq('id', wishlistId)
-
-      if (error) throw error
-
-      setWishlistItems(wishlistItems.filter(item => item.id !== wishlistId))
-    } catch (err) {
-      console.error('Error removing from wishlist:', err)
-    }
+  const handleRemove = async (productId) => {
+    await removeFromWishlist(productId)
   }
 
   const handleAddToBag = async (product) => {
@@ -457,7 +405,7 @@ function WishlistMobile() {
       {/* Title */}
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] px-6 py-6 flex-shrink-0">
         <h1 className="text-[32px] font-semibold text-[#1A1A1A] mb-1">My Wishlist</h1>
-        <p className="text-[16px] font-normal text-[#666666]">{wishlistItems.length} saved {wishlistItems.length === 1 ? 'treasure' : 'treasures'}</p>
+        <p className="text-[16px] font-normal text-[#666666]">{wishlistCount} saved {wishlistCount === 1 ? 'treasure' : 'treasures'}</p>
       </div>
 
       {/* Filter & Sort Bar */}
@@ -518,7 +466,7 @@ function WishlistMobile() {
                   </div>
                   <div className="space-y-3">
                     <button onClick={() => handleAddToBag(product)} className="w-full h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-lg">Add to Bag</button>
-                    <button onClick={() => handleRemove(item.id)} className="w-full text-[15px] font-medium text-[#C84848] underline">Remove</button>
+                    <button onClick={() => handleRemove(product.id)} className="w-full text-[15px] font-medium text-[#C84848] underline">Remove</button>
                   </div>
                 </div>
               )
@@ -564,6 +512,45 @@ function WishlistMobile() {
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function WishlistDesktop() {
+  const { user } = useAuth()
+  const { addToCart } = useCart()
+  const { wishlistItems, wishlistCount, loading, removeFromWishlist } = useWishlist()
+
+  const handleRemove = async (productId) => {
+    await removeFromWishlist(productId)
+  }
+
+  const handleAddToBag = async (product) => {
+    await addToCart(
+      product.id,
+      product.name,
+      product.image,
+      product.brand || 'Shan Loray',
+      '100ml',
+      parseFloat(product.price),
+      1
+    )
+  }
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (!user) {
+    return (
+      <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex items-center justify-center">
+        <div className="text-center px-5">
+          <p className="text-[18px] text-[#666666] mb-6">Please log in to view your wishlist</p>
+          <Link to="/">
+            <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px]">
+              Go Home
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
@@ -580,7 +567,7 @@ function WishlistDesktop() {
       <div className="min-h-[100px] md:min-h-[120px] lg:min-h-[140px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-6 md:px-[60px] lg:px-[120px]">
         <div className="max-w-[1200px] w-full">
           <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold text-[#1A1A1A]">My Wishlist</h1>
-          <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">12 saved items awaiting your attention</p>
+          <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">{wishlistCount} saved {wishlistCount === 1 ? 'item' : 'items'} awaiting your attention</p>
         </div>
       </div>
 
@@ -654,39 +641,54 @@ function WishlistDesktop() {
             </div>
 
             {/* Product Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-[24px] mb-5 lg:mb-[24px]">
-              {wishlistProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-4 lg:p-[20px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300">
-                  <div className="relative w-full h-[220px] md:h-[240px] lg:h-[280px] rounded-[8px] overflow-hidden mb-4 lg:mb-[16px] group">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <button className="absolute top-[12px] right-[12px] w-[34px] h-[34px] lg:w-[36px] lg:h-[36px] rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center">
-                      <IoHeart className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C84848]" />
-                    </button>
-                    {product.stock === 'Low Stock' && <div className="absolute top-[12px] left-[12px] bg-[#E5A84D] text-white text-[10px] lg:text-[11px] font-medium px-[10px] py-[4px] rounded-full">Low Stock</div>}
-                  </div>
-                  <div className="mb-4 lg:mb-[16px]">
-                    <div className="text-[12px] lg:text-[13px] font-medium text-[#8B7355] mb-[4px]">{product.brand}</div>
-                    <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[8px] leading-[1.3]">{product.name}</h3>
-                    <div className="flex items-center gap-[8px] mb-[8px]">
-                      <div className="flex items-center gap-[2px]">{[1,2,3,4,5].map((s) => <IoStarSharp key={s} className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px] text-[#C9A870]" />)}</div>
-                      <span className="text-[12px] lg:text-[13px] text-[#999999]">({product.reviews})</span>
+            {wishlistItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+                <IoHeartOutline className="w-32 h-32 text-[#E8E3D9] mb-6" />
+                <h3 className="text-[28px] font-semibold text-[#1A1A1A] mb-3">Your wishlist is empty</h3>
+                <p className="text-[16px] text-[#666666] mb-6">Start adding products you love</p>
+                <Link to="/collections">
+                  <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px]">
+                    Explore Products
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-[24px] mb-5 lg:mb-[24px]">
+                {wishlistItems.map((item) => {
+                  const product = item.products
+                  return (
+                    <div key={item.id} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-4 lg:p-[20px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300">
+                      <Link to={`/product/${product.id}`}>
+                        <div className="relative w-full h-[220px] md:h-[240px] lg:h-[280px] rounded-[8px] overflow-hidden mb-4 lg:mb-[16px] group">
+                          <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <button className="absolute top-[12px] right-[12px] w-[34px] h-[34px] lg:w-[36px] lg:h-[36px] rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center">
+                            <IoHeart className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
+                          </button>
+                        </div>
+                      </Link>
+                      <div className="mb-4 lg:mb-[16px]">
+                        <div className="text-[12px] lg:text-[13px] font-medium text-[#8B7355] mb-[4px]">{product.brand}</div>
+                        <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[8px] leading-[1.3]">{product.name}</h3>
+                        <div className="flex items-center gap-[8px] mb-[8px]">
+                          <div className="flex items-center gap-[2px]">{[1,2,3,4,5].map((s) => <IoStarSharp key={s} className={`w-[13px] h-[13px] lg:w-[14px] lg:h-[14px] ${s <= product.rating ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />)}</div>
+                          <span className="text-[12px] lg:text-[13px] text-[#999999]">({product.reviews_count})</span>
+                        </div>
+                        <div className="flex items-center gap-[8px] mb-[8px] flex-wrap">
+                          <span className="text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
+                        </div>
+                    <div className="inline-block px-[10px] lg:px-[12px] py-[4px] rounded-[4px] text-[11px] lg:text-[12px] font-medium bg-[#F0F8F0] text-[#7BA85D]">In Stock</div>
+                      </div>
+                      <div className="space-y-3 lg:space-y-[12px]">
+                        <button onClick={() => handleAddToBag(product)} className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[16px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
+                          <IoBagOutline className="w-[17px] h-[17px] lg:w-[18px] lg:h-[18px]" />Add to Cart
+                        </button>
+                        <button onClick={() => handleRemove(product.id)} className="w-full text-[13px] lg:text-[14px] font-medium text-[#C84848] underline">Remove</button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-[8px] mb-[8px] flex-wrap">
-                      {product.originalPrice !== product.currentPrice && <span className="text-[14px] lg:text-[16px] text-[#999999] line-through">${product.originalPrice}</span>}
-                      <span className="text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">${product.currentPrice}</span>
-                      {product.originalPrice !== product.currentPrice && <span className="text-[12px] lg:text-[13px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Save ${product.originalPrice - product.currentPrice}</span>}
-                    </div>
-                    <div className={`inline-block px-[10px] lg:px-[12px] py-[4px] rounded-[4px] text-[11px] lg:text-[12px] font-medium ${product.stock === 'In Stock' ? 'bg-[#F0F8F0] text-[#7BA85D]' : 'bg-[#FFF4E6] text-[#E5A84D]'}`}>{product.stock}</div>
-                  </div>
-                  <div className="space-y-3 lg:space-y-[12px]">
-                    <button className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[16px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
-                      <IoBagOutline className="w-[17px] h-[17px] lg:w-[18px] lg:h-[18px]" />Add to Cart
-                    </button>
-                    <button className="w-full text-[13px] lg:text-[14px] font-medium text-[#C84848] underline">Remove</button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  )
+                })}
+              </div>
+            )}
 
             {/* Bottom Actions */}
             <div className="bg-[#F5F1EA] rounded-[12px] p-4 lg:p-[24px] flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 lg:mb-[32px]">

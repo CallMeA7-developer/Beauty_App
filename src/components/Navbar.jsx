@@ -25,7 +25,7 @@ import {
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
-import { supabase } from '../lib/supabase'
+import { useWishlist } from '../contexts/WishlistContext'
 import AuthModal from './AuthModal'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
@@ -401,11 +401,11 @@ export default function Navbar() {
   const navigate = useNavigate()
   const { user, signOut } = useAuth()
   const { cartCount } = useCart()
+  const { wishlistCount } = useWishlist()
   const [isMobile, setIsMobile]     = useState(window.innerWidth < 640)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
-  const [wishlistCount, setWishlistCount] = useState(0)
 
   const handleLogout = async () => {
     await signOut()
@@ -417,43 +417,6 @@ export default function Navbar() {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  useEffect(() => {
-    const fetchWishlistCount = async () => {
-      if (!user) {
-        setWishlistCount(0)
-        return
-      }
-
-      try {
-        const { count, error } = await supabase
-          .from('wishlist')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-
-        if (error) throw error
-        setWishlistCount(count || 0)
-      } catch (err) {
-        console.error('Error fetching wishlist count:', err)
-      }
-    }
-
-    fetchWishlistCount()
-
-    const channel = supabase
-      .channel('wishlist-changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'wishlist', filter: `user_id=eq.${user?.id}` },
-        () => {
-          fetchWishlistCount()
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [user])
 
   // ── Mobile ───────────────────────────────────────────────────────────────────
   if (isMobile) {
