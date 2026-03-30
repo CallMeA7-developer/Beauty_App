@@ -442,7 +442,7 @@ function WishlistMobile() {
                 <div key={item.id} className="bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-4">
                   <Link to={`/product/${product.id}`}>
                     <div className="relative w-full h-[280px] rounded-lg overflow-hidden mb-4">
-                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                       <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] flex items-center justify-center">
                         <IoHeart className="w-5 h-5 text-[#C9A870]" />
                       </div>

@@ -35,7 +35,7 @@ export function WishlistProvider({ children }) {
             name,
             brand,
             price,
-            image,
+            image_url,
             category,
             rating,
             reviews_count
@@ -74,7 +74,7 @@ export function WishlistProvider({ children }) {
             name,
             brand,
             price,
-            image,
+            image_url,
             category,
             rating,
             reviews_count
