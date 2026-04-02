@@ -77,9 +77,16 @@ function getFilteredAndSorted(allProducts, {
     filtered = filtered.filter(p => selectedCoverage.includes(p.coverage))
   }
   if (selectedSkinTones && selectedSkinTones.length > 0) {
-    filtered = filtered.filter(p =>
-      selectedSkinTones.includes(p.skin_tone) || p.skin_tone === 'All Tones'
-    )
+    console.log('Selected skin tones:', selectedSkinTones)
+    console.log('Before filter count:', filtered.length)
+    filtered = filtered.filter(p => {
+      const matches = selectedSkinTones.includes(p.skin_tone)
+      if (!matches) {
+        console.log('Filtered out:', p.name, 'has skin_tone:', p.skin_tone)
+      }
+      return matches
+    })
+    console.log('After filter count:', filtered.length)
   }
 
   if (activeSort === 'Price: Low to High')  filtered.sort((a, b) => a.priceValue - b.priceValue)
@@ -444,7 +451,9 @@ function MakeupDesktop() {
       setLoading(true)
       const data = await getMakeupProducts()
       const formattedProducts = formatProductsForUI(data)
-      console.log('Product skin tones:', formattedProducts.map(p => p.skin_tone))
+      console.log('Sample skin tones:', formattedProducts.slice(0, 5).map(p => ({ name: p.name, skin_tone: p.skin_tone })))
+      console.log('Type of first skin_tone:', typeof formattedProducts[0]?.skin_tone)
+      console.log('Is array?:', Array.isArray(formattedProducts[0]?.skin_tone))
       setAllProducts(formattedProducts)
       setLoading(false)
     }
