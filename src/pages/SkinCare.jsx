@@ -78,8 +78,7 @@ function SkinCareMobile() {
   }, [])
 
   useEffect(() => {
-    setDisplayCount(30
-                   )
+    setDisplayCount(12)
   }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, selectedRating, minPrice, maxPrice, searchQuery])
 
   const getFilteredAndSortedProducts = () => {
@@ -285,7 +284,7 @@ function SkinCareMobile() {
 
         {products.length > displayCount && (
           <button
-            onClick={() => setDisplayCount(prev => prev + 30)}
+            onClick={() => setDisplayCount(prev => prev + 12)}
             className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]"
           >
             Load More ({products.length - displayCount} remaining)
