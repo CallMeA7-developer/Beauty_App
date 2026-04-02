@@ -46,7 +46,8 @@ const shadeColors     = makeupShadeColors
 // Shared filter + sort logic
 function getFilteredAndSorted(allProducts, {
   selectedCategories, selectedSkinTypes, selectedBrands,
-  selectedRating, minPrice, maxPrice, activeSort
+  selectedRating, minPrice, maxPrice, activeSort,
+  selectedFinish, selectedCoverage, selectedSkinTones
 }) {
   let filtered = [...allProducts]
 
@@ -68,6 +69,15 @@ function getFilteredAndSorted(allProducts, {
   }
   if (selectedRating) {
     filtered = filtered.filter(p => parseFloat(p.rating) >= selectedRating)
+  }
+  if (selectedFinish && selectedFinish.length > 0) {
+    filtered = filtered.filter(p => selectedFinish.includes(p.finish))
+  }
+  if (selectedCoverage && selectedCoverage.length > 0) {
+    filtered = filtered.filter(p => selectedCoverage.includes(p.coverage))
+  }
+  if (selectedSkinTones && selectedSkinTones.length > 0) {
+    filtered = filtered.filter(p => selectedSkinTones.includes(p.skin_tone))
   }
 
   if (activeSort === 'Price: Low to High')  filtered.sort((a, b) => a.priceValue - b.priceValue)
@@ -442,7 +452,7 @@ function MakeupDesktop() {
   if (loading) return <LoadingSpinner />
 
   const activeFilters = selectedCategories.length + selectedFinish.length + selectedCoverage.length + selectedSkinTones.length + selectedBrands.length + (minPrice || maxPrice ? 1 : 0)
-  const products = getFilteredAndSorted(allProducts, { selectedCategories, selectedSkinTypes: [], selectedBrands, selectedRating: null, minPrice, maxPrice, activeSort })
+  const products = getFilteredAndSorted(allProducts, { selectedCategories, selectedSkinTypes: [], selectedBrands, selectedRating: null, minPrice, maxPrice, activeSort, selectedFinish, selectedCoverage, selectedSkinTones })
   const displayedProducts   = products.slice(0, displayCount)
   const largeProducts       = displayedProducts.slice(0, 1)
   const mediumProducts      = displayedProducts.slice(1, 3)

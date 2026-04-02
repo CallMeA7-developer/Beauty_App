@@ -87,7 +87,10 @@ function formatProduct(product) {
     reviews: product.reviews_count,
     skin_types: product.skin_types || [],
     skin_concerns: product.skin_concerns || [],
-    ingredients: product.ingredients || []
+    ingredients: product.ingredients || [],
+    finish: product.finish,
+    coverage: product.coverage,
+    skin_tone: product.skin_tone
   }
 }
 
