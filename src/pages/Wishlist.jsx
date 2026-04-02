@@ -36,19 +36,20 @@ import {
 } from 'react-icons/io5'
 
 import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../lib/supabase'
 import { useCart } from '../contexts/CartContext'
 import { useWishlist } from '../contexts/WishlistContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 const navigationItems = [
-  { icon: IoPersonOutline,   label: 'Account Dashboard', active: false, badge: null },
-  { icon: IoBagCheckOutline, label: 'Order History',     active: false, badge: null },
-  { icon: IoHeartOutline,    label: 'Wishlist',          active: true,  badge: null },
-  { icon: IoSparkles,        label: 'Beauty Profile',    active: false, tag: 'Complete Analysis' },
-  { icon: IoRibbonOutline,   label: 'Loyalty Program',   active: false, badge: '2,450' },
-  { icon: IoCalendarOutline, label: 'My Routines',       active: false, badge: null },
-  { icon: IoStarSharp,       label: 'Reviews & Ratings', active: false, badge: null },
-  { icon: IoSettingsOutline, label: 'Account Settings',  active: false, badge: null },
+  { icon: IoPersonOutline,   label: 'Account Dashboard', path: '/dashboard',        active: false, badge: null },
+  { icon: IoBagCheckOutline, label: 'Order History',     path: '/order-tracking',   active: false, badge: null },
+  { icon: IoHeartOutline,    label: 'Wishlist',          path: '/wishlist',         active: true,  badge: null },
+  { icon: IoSparkles,        label: 'Beauty Profile',    path: '/skin-analysis',    active: false, tag: 'Complete Analysis' },
+  { icon: IoRibbonOutline,   label: 'Loyalty Program',   path: '/account',          active: false, badge: null },
+  { icon: IoCalendarOutline, label: 'My Routines',       path: '/beauty-journey',   active: false, badge: null },
+  { icon: IoStarSharp,       label: 'Reviews & Ratings', path: '/account',          active: false, badge: null },
+  { icon: IoSettingsOutline, label: 'Account Settings',  path: '/privacy-settings', active: false, badge: null },
 ]
 
 const sortOptions = [
@@ -515,6 +516,42 @@ function WishlistDesktop() {
   const { user } = useAuth()
   const { addToCart } = useCart()
   const { wishlistItems, wishlistCount, loading, removeFromWishlist } = useWishlist()
+  const [totalOrders, setTotalOrders] = useState(0)
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0)
+  const [reviewsCount, setReviewsCount] = useState(0)
+
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
+  const userEmail = user?.email || ''
+  const userAvatar = user?.user_metadata?.avatar_url
+  const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!user) return
+      try {
+        const { createClient } = await import('@supabase/supabase-js')
+        const { supabase } = await import('../lib/supabase')
+
+        const { data: orders } = await supabase
+          .from('orders')
+          .select('total_amount')
+          .eq('user_id', user.id)
+        
+        setTotalOrders(orders?.length || 0)
+        const points = orders?.reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0) || 0
+        setLoyaltyPoints(Math.floor(points))
+
+        const { data: reviews } = await supabase
+          .from('reviews')
+          .select('id')
+          .eq('user_id', user.id)
+        setReviewsCount(reviews?.length || 0)
+      } catch (err) {
+        console.error('Error fetching stats:', err)
+      }
+    }
+    fetchStats()
+  }, [user])
 
   const handleRemove = async (productId) => {
     await removeFromWishlist(productId)
@@ -581,12 +618,21 @@ function WishlistDesktop() {
             {/* User Card */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[28px] mb-5 lg:mb-[24px]">
               <div className="flex flex-col items-center">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&h=240&fit=crop" alt="User Avatar" className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-4 lg:mb-[16px]" />
-                <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">Alexandra Chen</h2>
-                <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[14px] lg:px-[16px] py-[5px] lg:py-[6px] rounded-full mb-4 lg:mb-[16px]">Elite Member</div>
+                {userAvatar ? (
+                  <img src={userAvatar} alt="User Avatar" className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-4 lg:mb-[16px]" />
+                ) : (
+                  <div className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] border-[3px] border-[#C9A870] mb-4 lg:mb-[16px] flex items-center justify-center">
+                    <span className="text-[28px] md:text-[32px] lg:text-[36px] font-bold text-white">{userInitials}</span>
+                  </div>
+                )}
+                <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">{userName}</h2>
+                <p className="text-[13px] lg:text-[14px] text-[#666666] mb-3">{userEmail}</p>
+                <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[14px] lg:px-[16px] py-[5px] lg:py-[6px] rounded-full mb-4 lg:mb-[16px]">
+                  {loyaltyPoints >= 3000 ? 'Gold Member' : loyaltyPoints >= 2000 ? 'Elite Member' : 'Member'}
+                </div>
                 <div className="flex items-center gap-[8px]">
                   <IoSparkles className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
-                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">2,450 Points</span>
+                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} Points</span>
                 </div>
               </div>
             </div>
@@ -594,21 +640,23 @@ function WishlistDesktop() {
             {/* Navigation */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[8px] mb-5 lg:mb-[24px]">
               {navigationItems.map((item) => (
-                <div key={item.label} className={`flex items-center justify-between h-[48px] lg:h-[56px] px-3 lg:px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
-                  <div className="flex items-center gap-3 lg:gap-[16px]">
-                    <item.icon className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
-                    <span className={`text-[13px] lg:text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
+                <Link key={item.label} to={item.path}>
+                  <div className={`flex items-center justify-between h-[48px] lg:h-[56px] px-3 lg:px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
+                    <div className="flex items-center gap-3 lg:gap-[16px]">
+                      <item.icon className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
+                      <span className={`text-[13px] lg:text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
+                    </div>
+                    {item.badge ? <div className="bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium px-[7px] lg:px-[8px] py-[2px] rounded-full">{item.badge}</div>
+                      : item.tag ? <div className="hidden md:block bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[7px] lg:px-[8px] py-[2px] rounded-[4px]">{item.tag}</div> : null}
                   </div>
-                  {item.badge ? <div className="bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium px-[7px] lg:px-[8px] py-[2px] rounded-full">{item.badge}</div>
-                    : item.tag ? <div className="hidden md:block bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[7px] lg:px-[8px] py-[2px] rounded-[4px]">{item.tag}</div> : null}
-                </div>
+                </Link>
               ))}
             </div>
 
             {/* Stats */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[24px]">
               <div className="grid grid-cols-3 gap-3 lg:gap-[16px]">
-                {[{ label: 'Total Orders', value: '24' }, { label: 'Wishlist Items', value: '12' }, { label: 'Reviews Written', value: '8' }].map((stat) => (
+                {[{ label: 'Total Orders', value: totalOrders }, { label: 'Wishlist Items', value: wishlistCount }, { label: 'Reviews Written', value: reviewsCount }].map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{stat.value}</div>
                     <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{stat.label}</div>
