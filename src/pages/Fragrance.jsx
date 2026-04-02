@@ -47,7 +47,8 @@ const sortOptions   = sortOptionsFragrance || ['Best Selling', 'Newest', 'Price:
 // ── Shared filter + sort logic ────────────────────────────────────────────────
 function getFilteredAndSorted(allProducts, {
   selectedTypes, selectedFamilies, selectedBrands,
-  selectedRating, minPrice, maxPrice, activeSort
+  selectedRating, minPrice, maxPrice, activeSort,
+  selectedTopNotes, selectedIntensity, selectedSizes
 }) {
   let filtered = [...allProducts]
 
@@ -63,6 +64,17 @@ function getFilteredAndSorted(allProducts, {
     filtered = filtered.filter(p =>
       p.fragrance_family && selectedFamilies.some(f => p.fragrance_family.includes(f))
     )
+  }
+  if (selectedTopNotes && selectedTopNotes.length > 0) {
+    filtered = filtered.filter(p =>
+      p.top_notes && selectedTopNotes.some(n => p.top_notes.includes(n))
+    )
+  }
+  if (selectedIntensity && selectedIntensity.length > 0) {
+    filtered = filtered.filter(p => selectedIntensity.includes(p.intensity))
+  }
+  if (selectedSizes && selectedSizes.length > 0) {
+    filtered = filtered.filter(p => selectedSizes.includes(p.size))
   }
   if (selectedBrands.length > 0) {
     filtered = filtered.filter(p => selectedBrands.includes(p.brand))
@@ -128,11 +140,11 @@ function FragranceMobile() {
     fetchProducts()
   }, [])
 
-  useEffect(() => { setDisplayCount(10) }, [selectedTypes, selectedFamilies, selectedBrands, selectedRating, minPrice, maxPrice])
+  useEffect(() => { setDisplayCount(10) }, [selectedTypes, selectedFamilies, selectedTopNotes, selectedBrands, selectedRating, minPrice, maxPrice])
 
   if (loading) return <LoadingSpinner />
 
-  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedBrands, selectedRating, minPrice, maxPrice, activeSort })
+  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedTopNotes, selectedIntensity: [intensityLevel].filter(Boolean), selectedSizes: [], selectedBrands, selectedRating, minPrice, maxPrice, activeSort })
   const mobileProducts = products.slice(0, displayCount)
 
   const subcategoryCounts = allProducts.reduce((acc, p) => { if (p.subcategory) acc[p.subcategory] = (acc[p.subcategory] || 0) + 1; return acc }, {})
@@ -466,6 +478,9 @@ function FragranceDesktop() {
   const [showSortDropdown, setShowSortDropdown] = useState(false)
   const [selectedTypes, setSelectedTypes]         = useState([])
   const [selectedFamilies, setSelectedFamilies]   = useState([])
+  const [selectedTopNotes, setSelectedTopNotes]   = useState([])
+  const [selectedIntensity, setSelectedIntensity] = useState([])
+  const [selectedSizes, setSelectedSizes]         = useState([])
   const [selectedBrands, setSelectedBrands]       = useState([])
   const [selectedRating, setSelectedRating]       = useState(null)
   const [minPrice, setMinPrice] = useState('')
@@ -490,12 +505,12 @@ function FragranceDesktop() {
     fetchProducts()
   }, [])
 
-  useEffect(() => { setDisplayCount(10) }, [selectedTypes, selectedFamilies, selectedBrands, selectedRating, minPrice, maxPrice, activeSort])
+  useEffect(() => { setDisplayCount(10) }, [selectedTypes, selectedFamilies, selectedTopNotes, selectedIntensity, selectedSizes, selectedBrands, selectedRating, minPrice, maxPrice, activeSort])
 
   if (loading) return <LoadingSpinner />
 
-  const activeFilters = selectedTypes.length + selectedFamilies.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
-  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedBrands, selectedRating, minPrice, maxPrice, activeSort })
+  const activeFilters = selectedTypes.length + selectedFamilies.length + selectedTopNotes.length + selectedIntensity.length + selectedSizes.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
+  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedTopNotes, selectedIntensity, selectedSizes, selectedBrands, selectedRating, minPrice, maxPrice, activeSort })
   const displayedProducts   = products.slice(0, displayCount)
   const largeProducts       = displayedProducts.slice(0, 1)
   const mediumProducts      = displayedProducts.slice(1, 3)
@@ -585,12 +600,17 @@ function FragranceDesktop() {
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Top Notes</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
-                  {topNotes.map((item) => (
-                    <label key={item} className="flex items-center gap-[10px] cursor-pointer">
-                      <div className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] border-[#C9A870] rounded-[2px] flex-shrink-0" />
-                      <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
-                    </label>
-                  ))}
+                  {topNotes.map((item) => {
+                    const isChecked = selectedTopNotes.includes(item)
+                    return (
+                      <label key={item} onClick={() => setSelectedTopNotes(prev => isChecked ? prev.filter(n => n !== item) : [...prev, item])} className="flex items-center gap-[10px] cursor-pointer">
+                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
+                        </div>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                      </label>
+                    )
+                  })}
                 </div>
               </div>
 
@@ -598,12 +618,17 @@ function FragranceDesktop() {
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Intensity</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
-                  {intensityLevels.map((level) => (
-                    <label key={level} className="flex items-center gap-[10px] cursor-pointer">
-                      <div className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] border-[#C9A870] rounded-full flex-shrink-0" />
-                      <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{level}</span>
-                    </label>
-                  ))}
+                  {intensityLevels.map((level) => {
+                    const isChecked = selectedIntensity.includes(level)
+                    return (
+                      <label key={level} onClick={() => setSelectedIntensity(prev => isChecked ? prev.filter(i => i !== level) : [...prev, level])} className="flex items-center gap-[10px] cursor-pointer">
+                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-full flex items-center justify-center flex-shrink-0 ${isChecked ? 'border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <div className="w-[7px] h-[7px] bg-[#C9A870] rounded-full" />}
+                        </div>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{level}</span>
+                      </label>
+                    )
+                  })}
                 </div>
               </div>
 
@@ -611,16 +636,21 @@ function FragranceDesktop() {
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Size</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
-                  {productSizes.map((size) => (
-                    <label key={size} className="flex items-center gap-[10px] cursor-pointer">
-                      <div className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] border-[#C9A870] rounded-[2px] flex-shrink-0" />
-                      <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{size}</span>
-                    </label>
-                  ))}
+                  {productSizes.map((size) => {
+                    const isChecked = selectedSizes.includes(size)
+                    return (
+                      <label key={size} onClick={() => setSelectedSizes(prev => isChecked ? prev.filter(s => s !== size) : [...prev, size])} className="flex items-center gap-[10px] cursor-pointer">
+                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
+                        </div>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{size}</span>
+                      </label>
+                    )
+                  })}
                 </div>
               </div>
 
-              <button onClick={() => { setSelectedTypes([]); setSelectedFamilies([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
+              <button onClick={() => { setSelectedTypes([]); setSelectedFamilies([]); setSelectedTopNotes([]); setSelectedIntensity([]); setSelectedSizes([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                 Clear All Filters
               </button>

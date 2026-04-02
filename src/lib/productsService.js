@@ -61,12 +61,10 @@ export async function getMakeupProducts() {
 }
 
 export async function getFragranceProducts() {
-  const categories = ['Eau de Parfum', 'Eau de Toilette', 'Discovery Sets']
-
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .in('category', categories)
+    .eq('category', 'Fragrance')
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -90,7 +88,11 @@ function formatProduct(product) {
     ingredients: product.ingredients || [],
     finish: product.finish,
     coverage: product.coverage,
-    skin_tone: product.skin_tone
+    skin_tone: product.skin_tone,
+    fragrance_family: product.fragrance_family,
+    top_notes: product.top_notes,
+    intensity: product.intensity,
+    size: product.size
   }
 }
 
