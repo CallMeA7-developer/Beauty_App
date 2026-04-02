@@ -77,7 +77,9 @@ function getFilteredAndSorted(allProducts, {
     filtered = filtered.filter(p => selectedCoverage.includes(p.coverage))
   }
   if (selectedSkinTones && selectedSkinTones.length > 0) {
-    filtered = filtered.filter(p => selectedSkinTones.includes(p.skin_tone))
+    filtered = filtered.filter(p =>
+      selectedSkinTones.includes(p.skin_tone) || p.skin_tone === 'All Tones'
+    )
   }
 
   if (activeSort === 'Price: Low to High')  filtered.sort((a, b) => a.priceValue - b.priceValue)
@@ -441,7 +443,9 @@ function MakeupDesktop() {
     async function fetchProducts() {
       setLoading(true)
       const data = await getMakeupProducts()
-      setAllProducts(formatProductsForUI(data))
+      const formattedProducts = formatProductsForUI(data)
+      console.log('Product skin tones:', formattedProducts.map(p => p.skin_tone))
+      setAllProducts(formattedProducts)
       setLoading(false)
     }
     fetchProducts()
