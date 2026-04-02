@@ -78,7 +78,7 @@ function SkinCareMobile() {
   }, [])
 
   useEffect(() => {
-    setDisplayCount(12
+    setDisplayCount(30
                    )
   }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, selectedRating, minPrice, maxPrice, searchQuery])
 
