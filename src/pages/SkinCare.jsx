@@ -63,7 +63,7 @@ function SkinCareMobile() {
   const [searchQuery, setSearchQuery] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
-  const [displayCount, setDisplayCount] = useState(30)
+  const [displayCount, setDisplayCount] = useState(10)
 
   const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
 
@@ -78,7 +78,7 @@ function SkinCareMobile() {
   }, [])
 
   useEffect(() => {
-    setDisplayCount(12)
+    setDisplayCount(10)
   }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, selectedRating, minPrice, maxPrice, searchQuery])
 
   const getFilteredAndSortedProducts = () => {
@@ -284,7 +284,7 @@ function SkinCareMobile() {
 
         {products.length > displayCount && (
           <button
-            onClick={() => setDisplayCount(prev => prev + 12)}
+            onClick={() => setDisplayCount(prev => prev + 10)}
             className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]"
           >
             Load More ({products.length - displayCount} remaining)
@@ -564,7 +564,7 @@ function SkinCareDesktop() {
   const [searchQuery, setSearchQuery] = useState('')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
-  const [displayCount, setDisplayCount] = useState(30)
+  const [displayCount, setDisplayCount] = useState(10)
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
 
   useEffect(() => {
@@ -578,7 +578,7 @@ function SkinCareDesktop() {
   }, [])
 
   useEffect(() => {
-    setDisplayCount(30)
+    setDisplayCount(10)
   }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, selectedRating, minPrice, maxPrice, searchQuery])
 
   const getFilteredAndSortedProducts = () => {
@@ -721,7 +721,7 @@ function SkinCareDesktop() {
                     key={cat.name}
                     onClick={() => {
                       setSelectedSubcategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])
-                      setDisplayCount(30)
+                      setDisplayCount(10)
                     }}
                     className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
                   >
@@ -816,7 +816,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <button
-                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(30) }}
+                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors mb-3"
               >
                 Clear All Filters
@@ -971,7 +971,7 @@ function SkinCareDesktop() {
           {products.length > displayCount && (
             <div className="flex items-center justify-center mb-16 lg:mb-[96px]">
               <button
-                onClick={() => setDisplayCount(prev => prev + 30)}
+                onClick={() => setDisplayCount(prev => prev + 10)}
                 className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors"
               >
                 Load More ({products.length - displayCount} remaining)
