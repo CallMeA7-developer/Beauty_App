@@ -135,7 +135,7 @@ function SkinCareMobile() {
     } else if (activeSort === 'Newest') {
       filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     } else if (activeSort === 'Top Rated') {
-      filtered.sort((a, b) => b.rating - a.rating)
+      filtered.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
     }
 
     return filtered
@@ -414,18 +414,24 @@ function SkinCareMobile() {
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[16px] font-medium text-[#2B2B2B]">Price Range</h3>
-                  <span className="text-[14px] font-medium text-[#8B7355]">$0 – $200</span>
+                  <span className="text-[14px] font-medium text-[#8B7355]">${minPrice || 0} – ${maxPrice || 500}</span>
                 </div>
-                <div className="relative pt-2 pb-6">
-                  <div className="h-[4px] bg-[#E8E3D9] rounded-full relative">
-                    <div className="absolute left-0 h-full w-[70%] bg-[#C9A870] rounded-full" />
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[22px] h-[22px] bg-white border-2 border-[#8B7355] rounded-full shadow-sm" />
-                    <div className="absolute left-[70%] top-1/2 -translate-y-1/2 w-[22px] h-[22px] bg-white border-2 border-[#8B7355] rounded-full shadow-sm" />
-                  </div>
-                  <div className="flex justify-between mt-3">
-                    <span className="text-[12px] text-[#666666]">$0</span>
-                    <span className="text-[12px] text-[#666666]">$300</span>
-                  </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none"
+                  />
+                  <span className="text-[14px] text-[#666666]">—</span>
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none"
+                  />
                 </div>
               </div>
 
@@ -629,7 +635,7 @@ function SkinCareDesktop() {
     } else if (activeSort === 'Newest') {
       filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     } else if (activeSort === 'Top Rated') {
-      filtered.sort((a, b) => b.rating - a.rating)
+      filtered.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
     }
 
     return filtered

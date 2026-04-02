@@ -80,9 +80,11 @@ export async function getFragranceProducts() {
 }
 
 function formatProduct(product) {
+  const priceValue = parseFloat(product.price)
   return {
     ...product,
-    price: parseFloat(product.price),
+    price: `$${priceValue.toFixed(2)}`,
+    priceValue: priceValue,
     image: product.image_url,
     reviews: product.reviews_count,
     skin_types: product.skin_types || [],
