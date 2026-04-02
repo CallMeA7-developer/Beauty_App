@@ -38,11 +38,11 @@ const filterMiddleNotes     = ['Sandalwood', 'Cedar', 'Vanilla', 'Patchouli']
 const filterBaseNotes       = ['Musk', 'Amber', 'Oakmoss', 'Tonka Bean']
 const filterOccasions       = ['Day Wear', 'Evening', 'Special Occasions']
 const filterIntensityLevels = ['Light', 'Moderate', 'Strong', 'Very Strong', 'Long-Lasting']
-const filterRatings         = filterRatingsFragrance
+const filterRatings         = filterRatingsFragrance || []
 const fragranceCategoryLabels = ['All Fragrances', 'Eau de Parfum', 'Eau de Toilette', 'Body Mist', 'Discovery Sets']
 
-const filterBrands  = filterBrandsFragrance
-const sortOptions   = sortOptionsFragrance
+const filterBrands  = filterBrandsFragrance || []
+const sortOptions   = sortOptionsFragrance || ['Best Selling', 'Newest', 'Price: Low to High', 'Price: High to Low']
 
 // ── Shared filter + sort logic ────────────────────────────────────────────────
 function getFilteredAndSorted(allProducts, {
@@ -115,9 +115,15 @@ function FragranceMobile() {
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true)
-      const data = await getFragranceProducts()
-      setAllProducts(formatProductsForUI(data))
-      setLoading(false)
+      try {
+        const data = await getFragranceProducts()
+        setAllProducts(formatProductsForUI(data))
+      } catch (error) {
+        console.error('Error fetching fragrance products:', error)
+        setAllProducts([])
+      } finally {
+        setLoading(false)
+      }
     }
     fetchProducts()
   }, [])
@@ -132,7 +138,7 @@ function FragranceMobile() {
   const subcategoryCounts = allProducts.reduce((acc, p) => { if (p.subcategory) acc[p.subcategory] = (acc[p.subcategory] || 0) + 1; return acc }, {})
   const subcategoryCards = Object.entries(subcategoryCounts).map(([name, count]) => ({
     name, count,
-    image: fragranceCategories.find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=80&h=80&fit=crop'
+    image: (fragranceCategories || []).find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=80&h=80&fit=crop'
   })).sort((a, b) => a.name.localeCompare(b.name))
 
   return (
@@ -471,9 +477,15 @@ function FragranceDesktop() {
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true)
-      const data = await getFragranceProducts()
-      setAllProducts(formatProductsForUI(data))
-      setLoading(false)
+      try {
+        const data = await getFragranceProducts()
+        setAllProducts(formatProductsForUI(data))
+      } catch (error) {
+        console.error('Error fetching fragrance products:', error)
+        setAllProducts([])
+      } finally {
+        setLoading(false)
+      }
     }
     fetchProducts()
   }, [])
