@@ -46,12 +46,10 @@ export async function getSkincareProducts() {
 }
 
 export async function getMakeupProducts() {
-  const categories = ['Face', 'Eyes', 'Lips', 'Sets']
-
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .in('category', categories)
+    .eq('category', 'Makeup')
     .order('created_at', { ascending: false })
 
   if (error) {
