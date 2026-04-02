@@ -18,26 +18,24 @@ import {
   IoCalendarOutline,
   IoStarSharp,
   IoSettingsOutline,
+  IoDocumentTextOutline,
+  IoCardOutline,
 } from 'react-icons/io5'
-import { getNavItems } from '../data/user'
 import { useAuth } from '../contexts/AuthContext'
+import { useWishlist } from '../contexts/WishlistContext'
 import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
-
-const NAV_ICONS = {
-  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
-  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
-  star: IoStarSharp, settings: IoSettingsOutline,
-}
 
 export default function OrderTracking() {
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { wishlistItems } = useWishlist()
   const [order, setOrder] = useState(null)
   const [recentOrders, setRecentOrders] = useState([])
+  const [allOrders, setAllOrders] = useState([])
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const navigationItems = getNavItems('orders', NAV_ICONS)
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -50,20 +48,25 @@ export default function OrderTracking() {
       try {
         const orderId = searchParams.get('orderId')
 
-        let mainOrderQuery = supabase
+        const { data: allOrdersData, error: allOrdersError } = await supabase
           .from('orders')
           .select('*')
           .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
 
+        if (allOrdersError) throw allOrdersError
+
+        setAllOrders(allOrdersData || [])
+
+        const totalPoints = allOrdersData?.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0) || 0
+        setLoyaltyPoints(Math.floor(totalPoints))
+
+        let mainOrder
         if (orderId) {
-          mainOrderQuery = mainOrderQuery.eq('id', orderId)
+          mainOrder = allOrdersData?.find(o => o.id === orderId)
         } else {
-          mainOrderQuery = mainOrderQuery.order('created_at', { ascending: false }).limit(1)
+          mainOrder = allOrdersData?.[0]
         }
-
-        const { data: mainOrder, error: mainOrderError } = await mainOrderQuery.maybeSingle()
-
-        if (mainOrderError) throw mainOrderError
 
         if (!mainOrder) {
           setError('No order found')
@@ -73,16 +76,8 @@ export default function OrderTracking() {
 
         setOrder(mainOrder)
 
-        const { data: recentOrdersData, error: recentOrdersError } = await supabase
-          .from('orders')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(3)
-
-        if (recentOrdersError) throw recentOrdersError
-
-        setRecentOrders(recentOrdersData || [])
+        const recentOrdersData = allOrdersData?.slice(0, 3) || []
+        setRecentOrders(recentOrdersData)
       } catch (err) {
         console.error('Error fetching orders:', err)
         setError('Failed to load orders')
@@ -245,6 +240,30 @@ export default function OrderTracking() {
   const trackingStages = getTrackingStages(order.created_at, deliveryMethod)
   const orderStatus = getOrderStatus(order.created_at, deliveryMethod)
 
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
+  const userEmail = user?.email || ''
+  const userAvatar = user?.user_metadata?.avatar_url
+  const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+  const wishlistCount = wishlistItems?.length || 0
+
+  const totalOrders = allOrders.length
+  const inTransit = allOrders.filter(o => {
+    const status = getOrderStatus(o.created_at, o.delivery_method)
+    return status === 'Processing' || status === 'In Transit'
+  }).length
+  const delivered = allOrders.filter(o => {
+    const status = getOrderStatus(o.created_at, o.delivery_method)
+    return status === 'Delivered'
+  }).length
+
+  const navigationItems = [
+    { icon: IoPersonOutline, label: 'Account Dashboard', path: '/dashboard', active: false },
+    { icon: IoBagCheckOutline, label: 'Order History', path: '/order-tracking', active: true },
+    { icon: IoHeartOutline, label: 'My Wishlist', path: '/wishlist', active: false, badge: wishlistCount > 0 ? `${wishlistCount}` : null },
+    { icon: IoLocationOutline, label: 'Shipping Addresses', path: '/shipping-address', active: false },
+    { icon: IoCardOutline, label: 'Payment Methods', path: '/payment-methods', active: false },
+  ]
+
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
@@ -269,18 +288,25 @@ export default function OrderTracking() {
             {/* Profile Card */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[28px] mb-5 lg:mb-[24px]">
               <div className="flex flex-col items-center">
-                <img
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&h=240&fit=crop"
-                  alt="User Avatar"
-                  className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-4 lg:mb-[16px]"
-                />
-                <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">Alexandra Chen</h2>
+                {userAvatar ? (
+                  <img
+                    src={userAvatar}
+                    alt="User Avatar"
+                    className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-4 lg:mb-[16px]"
+                  />
+                ) : (
+                  <div className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] border-[3px] border-[#C9A870] mb-4 lg:mb-[16px] flex items-center justify-center">
+                    <span className="text-[32px] md:text-[36px] lg:text-[42px] font-bold text-white">{userInitials}</span>
+                  </div>
+                )}
+                <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">{userName}</h2>
+                <p className="text-[13px] lg:text-[14px] text-[#666666] mb-3">{userEmail}</p>
                 <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[14px] lg:px-[16px] py-[5px] lg:py-[6px] rounded-full mb-4 lg:mb-[16px]">
-                  Elite Member
+                  {loyaltyPoints >= 3000 ? 'Gold Member' : loyaltyPoints >= 2000 ? 'Elite Member' : 'Member'}
                 </div>
                 <div className="flex items-center gap-[8px]">
                   <IoSparkles className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
-                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">2,450 Points</span>
+                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} Points</span>
                 </div>
               </div>
             </div>
@@ -288,29 +314,35 @@ export default function OrderTracking() {
             {/* Nav Menu */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[8px] mb-5 lg:mb-[24px]">
               {navigationItems.map((item) => (
-                <div key={item.label} className={`flex items-center justify-between h-[48px] lg:h-[56px] px-3 lg:px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
-                  <div className="flex items-center gap-3 lg:gap-[16px]">
-                    <item.icon className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
-                    <span className={`text-[13px] lg:text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
+                <Link key={item.label} to={item.path}>
+                  <div className={`flex items-center justify-between h-[48px] lg:h-[56px] px-3 lg:px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
+                    <div className="flex items-center gap-3 lg:gap-[16px]">
+                      <item.icon className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
+                      <span className={`text-[13px] lg:text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
+                    </div>
+                    {item.badge ? (
+                      <div className="bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium px-[7px] lg:px-[8px] py-[2px] rounded-full">{item.badge}</div>
+                    ) : null}
                   </div>
-                  {item.badge ? (
-                    <div className="bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium px-[7px] lg:px-[8px] py-[2px] rounded-full">{item.badge}</div>
-                  ) : item.tag ? (
-                    <div className="hidden md:block bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[7px] lg:px-[8px] py-[2px] rounded-[4px]">{item.tag}</div>
-                  ) : null}
-                </div>
+                </Link>
               ))}
             </div>
 
             {/* Quick Stats */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[24px]">
               <div className="grid grid-cols-3 gap-3 lg:gap-[16px]">
-                {[{ label: 'Total Orders', value: '24' }, { label: 'In Transit', value: '2' }, { label: 'Delivered', value: '22' }].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{stat.value}</div>
-                    <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{stat.label}</div>
-                  </div>
-                ))}
+                <div className="text-center">
+                  <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{totalOrders}</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Total Orders</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{inTransit}</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">In Transit</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{delivered}</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Delivered</div>
+                </div>
               </div>
             </div>
           </div>
