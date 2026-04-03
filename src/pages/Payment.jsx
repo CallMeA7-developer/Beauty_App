@@ -26,7 +26,7 @@ const securityFeatures = securityFeaturesData.map(f => ({ ...f, icon: SECURITY_I
 
 export default function Payment() {
   const navigate = useNavigate()
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading: authLoading, openAuthModal } = useAuth()
   const { cartItems } = useCart()
   const { checkoutSession } = useCheckout()
   const steps = getCheckoutSteps(3)
@@ -143,8 +143,18 @@ export default function Payment() {
   }, [error])
 
   const handlePlaceOrder = async () => {
-    if (!agreeTerms || !user) {
-      setError('Please agree to terms and ensure you are logged in')
+    if (!agreeTerms) {
+      setError('Please agree to the Terms & Conditions to continue')
+      return
+    }
+
+    if (!user) {
+      openAuthModal()
+      return
+    }
+
+    if (!cartItems || cartItems.length === 0) {
+      navigate('/cart')
       return
     }
 
@@ -174,10 +184,11 @@ export default function Payment() {
           subtotal,
           shipping,
           tax,
-          total,
+          total: total,
           shipping_address: checkoutSession.selectedAddress || {},
           delivery_method: checkoutSession.deliveryMethod || '',
           payment_status: 'pending',
+          status: 'processing',
           payment_intent_id: null,
           payment_method: {
             card_brand: selectedCardData?.card_brand,
@@ -203,7 +214,7 @@ export default function Payment() {
       navigate(`/order-confirmation?orderId=${order.id}`)
     } catch (error) {
       console.error('Order creation error:', error)
-      setError(error.message || 'Failed to create order')
+      setError('Something went wrong. Please try again.')
     } finally {
       setProcessing(false)
     }
