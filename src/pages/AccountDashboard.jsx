@@ -509,22 +509,28 @@ export default function AccountDashboard() {
               </div>
               {displayWishlist.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-[16px]">
-                  {displayWishlist.map((item) => (
-                    <Link key={item.id} to={`/product/${item.product_id}`}>
-                      <div className="cursor-pointer group">
-                        <div className="relative mb-3 lg:mb-[12px]">
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-full h-[130px] md:h-[140px] lg:h-[160px] object-cover rounded-[8px] group-hover:scale-105 transition-transform duration-300"
-                          />
+                  {displayWishlist.map((item) => {
+                    const price = parseFloat(item.products?.price)
+                    const displayPrice = isNaN(price) ? 'N/A' : `$${price.toFixed(2)}`
+                    const imageUrl = item.products?.img_url || item.products?.image_url || item.products?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop'
+
+                    return (
+                      <Link key={item.id} to={`/product/${item.product_id}`}>
+                        <div className="cursor-pointer group">
+                          <div className="relative mb-3 lg:mb-[12px]">
+                            <img
+                              src={imageUrl}
+                              alt={item.products?.name || 'Product'}
+                              className="w-full h-[130px] md:h-[140px] lg:h-[160px] object-cover rounded-[8px] group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="text-[11px] lg:text-[12px] font-light italic text-[#8B7355] mb-[4px]">{item.products?.brand || 'Shan Loray'}</div>
+                          <div className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] mb-[4px] line-clamp-2">{item.products?.name || 'Product'}</div>
+                          <div className="text-[14px] lg:text-[16px] font-semibold text-[#2B2B2B]">{displayPrice}</div>
                         </div>
-                        <div className="text-[11px] lg:text-[12px] font-light italic text-[#8B7355] mb-[4px]">{item.brand}</div>
-                        <div className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] mb-[4px] line-clamp-2">{item.name}</div>
-                        <div className="text-[14px] lg:text-[16px] font-semibold text-[#2B2B2B]">${parseFloat(item.price).toFixed(2)}</div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-[40px]">
