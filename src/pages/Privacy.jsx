@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import {
   IoShieldCheckmarkOutline,
   IoLockClosedOutline,
@@ -15,17 +16,76 @@ import {
   IoCalendarOutline,
   IoStarSharp,
   IoSettingsOutline,
+  IoNotificationsOutline,
+  IoLocationOutline,
+  IoCardOutline,
+  IoBodyOutline,
+  IoBookOutline,
+  IoRocketOutline,
 } from 'react-icons/io5'
-import { getNavItems } from '../data/user'
-
-const NAV_ICONS = {
-  person: IoPersonOutline, bag: IoBagCheckOutline, heart: IoHeartOutline,
-  sparkles: IoSparkles, ribbon: IoRibbonOutline, calendar: IoCalendarOutline,
-  star: IoStarSharp, settings: IoSettingsOutline,
-}
+import { useAuth } from '../contexts/AuthContext'
+import { useWishlist } from '../contexts/WishlistContext'
+import { supabase } from '../lib/supabase'
 
 export default function Privacy() {
-  const navigationItems = getNavItems('settings', NAV_ICONS)
+  const { user } = useAuth()
+  const { wishlistItems } = useWishlist()
+
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0)
+  const [totalOrders, setTotalOrders] = useState(0)
+  const [reviewsWritten, setReviewsWritten] = useState(0)
+
+  useEffect(() => {
+    if (user) {
+      fetchUserStats()
+    }
+  }, [user])
+
+  const fetchUserStats = async () => {
+    const { data: orders } = await supabase
+      .from('orders')
+      .select('total')
+      .eq('user_id', user.id)
+
+    if (orders) {
+      setTotalOrders(orders.length)
+      const points = orders.reduce((sum, order) => sum + Math.floor(order.total), 0)
+      setLoyaltyPoints(points)
+    }
+
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select('id')
+      .eq('user_id', user.id)
+
+    if (reviews) {
+      setReviewsWritten(reviews.length)
+    }
+  }
+
+  const getMembershipTier = (points) => {
+    if (points >= 5000) return 'Gold Member'
+    if (points >= 2000) return 'Elite Member'
+    return 'Member'
+  }
+
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Guest'
+  const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+  const membershipTier = getMembershipTier(loyaltyPoints)
+
+  const navigationItems = [
+    { label: 'Account Dashboard', icon: IoPersonOutline, path: '/dashboard', active: false },
+    { label: 'Order History', icon: IoBagCheckOutline, path: '/order-tracking', active: false },
+    { label: 'My Wishlist', icon: IoHeartOutline, path: '/wishlist', active: false, badge: wishlistItems.length > 0 ? wishlistItems.length : null },
+    { label: 'Shipping Addresses', icon: IoLocationOutline, path: '/shipping-address', active: false },
+    { label: 'Payment Methods', icon: IoCardOutline, path: '/payment-methods', active: false },
+    { label: 'Beauty Profile', icon: IoBodyOutline, path: '/skin-analysis', active: false },
+    { label: 'Loyalty Program', icon: IoSparkles, path: '/account', active: false },
+    { label: 'My Routines', icon: IoBookOutline, path: '/beauty-journey', active: false },
+    { label: 'Reviews & Ratings', icon: IoStarSharp, path: '/dashboard', active: false },
+    { label: 'Account Settings', icon: IoSettingsOutline, path: '/privacy-settings', active: true },
+    { label: 'Notifications', icon: IoNotificationsOutline, path: '/notifications', active: false },
+  ]
 
   const [privacyControls, setPrivacyControls] = useState([
     { id: 'personal-data', title: 'Personal Data Usage',             description: 'Allow Shan Loray to personalize your experience',  enabled: true  },
@@ -80,18 +140,24 @@ export default function Privacy() {
             {/* Profile Card */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[28px] mb-5 lg:mb-[24px]">
               <div className="flex flex-col items-center">
-                <img
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&h=240&fit=crop"
-                  alt="User Avatar"
-                  className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-4 lg:mb-[16px]"
-                />
-                <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">Alexandra Chen</h2>
+                {user?.user_metadata?.avatar_url ? (
+                  <img
+                    src={user.user_metadata.avatar_url}
+                    alt="User Avatar"
+                    className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full object-cover border-[3px] border-[#C9A870] mb-4 lg:mb-[16px]"
+                  />
+                ) : (
+                  <div className="w-[90px] h-[90px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-full bg-[#C9A870] border-[3px] border-[#C9A870] mb-4 lg:mb-[16px] flex items-center justify-center">
+                    <span className="text-[32px] md:text-[36px] lg:text-[40px] font-semibold text-white">{userInitials}</span>
+                  </div>
+                )}
+                <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">{userName}</h2>
                 <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[14px] lg:px-[16px] py-[5px] lg:py-[6px] rounded-full mb-4 lg:mb-[16px]">
-                  Elite Member
+                  {membershipTier}
                 </div>
                 <div className="flex items-center gap-[8px]">
                   <IoSparkles className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
-                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">2,450 Points</span>
+                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} Points</span>
                 </div>
               </div>
             </div>
@@ -99,7 +165,7 @@ export default function Privacy() {
             {/* Nav Menu */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-[8px] mb-5 lg:mb-[24px]">
               {navigationItems.map((item) => (
-                <div key={item.label} className={`flex items-center justify-between h-[48px] lg:h-[56px] px-3 lg:px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
+                <Link key={item.label} to={item.path} className={`flex items-center justify-between h-[48px] lg:h-[56px] px-3 lg:px-[20px] rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
                   <div className="flex items-center gap-3 lg:gap-[16px]">
                     <item.icon className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
                     <span className={`text-[13px] lg:text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
@@ -109,19 +175,25 @@ export default function Privacy() {
                   ) : item.tag ? (
                     <div className="hidden md:block bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[7px] lg:px-[8px] py-[2px] rounded-[4px]">{item.tag}</div>
                   ) : null}
-                </div>
+                </Link>
               ))}
             </div>
 
             {/* Quick Stats */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[24px]">
               <div className="grid grid-cols-3 gap-3 lg:gap-[16px]">
-                {[{ label: 'Total Orders', value: '24' }, { label: 'Wishlist Items', value: '12' }, { label: 'Reviews Written', value: '8' }].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{stat.value}</div>
-                    <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{stat.label}</div>
-                  </div>
-                ))}
+                <div className="text-center">
+                  <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{totalOrders}</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Total Orders</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{wishlistItems.length}</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Wishlist Items</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{reviewsWritten}</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Reviews Written</div>
+                </div>
               </div>
             </div>
           </div>
