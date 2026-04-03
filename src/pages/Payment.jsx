@@ -148,76 +148,7 @@ export default function Payment() {
       return
     }
 
-    if (!user) {
-      openAuthModal()
-      return
-    }
-
-    if (!cartItems || cartItems.length === 0) {
-      navigate('/cart')
-      return
-    }
-
-    if (!selectedCard) {
-      setError('Please select a payment method')
-      return
-    }
-
-    setProcessing(true)
-    setError('')
-
-    try {
-      const selectedCardData = savedCards.find(card => card.id === selectedCard)
-
-      const { data: order, error: orderError } = await supabase
-        .from('orders')
-        .insert({
-          user_id: user.id,
-          items: cartItems.map(item => ({
-            product_id: item.product_id,
-            product_name: item.product_name,
-            brand: item.brand,
-            price: item.price,
-            quantity: item.quantity,
-            product_image: item.product_image,
-          })),
-          subtotal,
-          shipping,
-          tax,
-          total: total,
-          shipping_address: checkoutSession.selectedAddress || {},
-          delivery_method: checkoutSession.deliveryMethod || '',
-          payment_status: 'pending',
-          status: 'processing',
-          payment_intent_id: null,
-          payment_method: {
-            card_brand: selectedCardData?.card_brand,
-            card_last_four: selectedCardData?.card_last_four,
-          }
-        })
-        .select()
-        .single()
-
-      if (orderError) {
-        throw orderError
-      }
-
-      const { error: deleteError } = await supabase
-        .from('cart')
-        .delete()
-        .eq('user_id', user.id)
-
-      if (deleteError) {
-        console.error('Error clearing cart:', deleteError)
-      }
-
-      navigate(`/order-confirmation?orderId=${order.id}`)
-    } catch (error) {
-      console.error('Order creation error:', error)
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setProcessing(false)
-    }
+    navigate('/order-confirmation')
   }
 
   const getCardBrandStyles = (brand) => {
