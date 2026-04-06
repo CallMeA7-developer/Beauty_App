@@ -61,31 +61,37 @@ export default function SkinAnalysis() {
     setError(null)
 
     try {
-      const response = await fetch('/api/analyze-skin', {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+        },
         body: JSON.stringify({
-          skinType: selectedSkinType,
-          concern: selectedConcern,
-          age: selectedAge,
-          specificConcerns: selectedSpecificConcerns.join(', '),
-          routine: selectedRoutine,
-          sunExposure: sunExposure
+          model: 'gpt-4o-mini',
+          max_tokens: 800,
+          temperature: 0.5,
+          messages: [
+            {
+              role: 'system',
+              content: 'Skin analysis AI. JSON only. No markdown. No extra text.'
+            },
+            {
+              role: 'user',
+              content: `SkinType=${selectedSkinType} Concern=${selectedConcern} Age=${selectedAge||'Unknown'} Issues=${selectedSpecificConcerns.join(',')||'None'} Routine=${selectedRoutine} Sun=${sunExposure}. JSON: {"skinScore":85,"skinLabel":"Healthy Skin","summary":"summary here","hydration":92,"texture":78,"clarity":88,"toneEvenness":81,"cards":[{"title":"Skin Analysis","description":"desc","badge":"Confirmed"},{"title":"Hydration","description":"desc","badge":"Good"},{"title":"Texture","description":"desc","badge":"Fair"},{"title":"Pigmentation","description":"desc","badge":"Mild"},{"title":"Fine Lines","description":"desc","badge":"Early"},{"title":"Problem Areas","description":"desc","badge":"Monitor"}],"morning":["Gentle Cleanser","Vitamin C Serum","Moisturizer","Sunscreen"],"evening":["Makeup Remover","Toner","Retinol Serum","Night Cream"],"targeted":["Eye Cream","Dark Spot Corrector","Pore Minimizer"]}`
+            }
+          ]
         })
       })
 
-      if (!response.ok) {
-        const err = await response.json()
-        throw new Error(err.error || 'Server error')
-      }
+      if (!response.ok) throw new Error('API error: ' + response.status)
 
-      const result = await response.json()
+      const data = await response.json()
+      const content = data.choices[0].message.content.trim()
+      const result = JSON.parse(content)
       setAnalysisResult(result)
-
       await fetchRecommendedProducts(result)
-
       if (user) await saveAnalysisToDatabase(result)
-
       setTimeout(() => {
         document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' })
       }, 300)
