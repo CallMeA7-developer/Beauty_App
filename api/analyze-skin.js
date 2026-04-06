@@ -1,18 +1,14 @@
-export default async (request, context) => {
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' })
+  }
+
   try {
-    const body = await request.json()
-    const { skinType, concern, age, specificConcerns, routine, sunExposure } = body
+    const { skinType, concern, age, specificConcerns, routine, sunExposure } = req.body
 
     const apiKey = process.env.VITE_OPENAI_API_KEY || process.env.OPENAI_API_KEY
 
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'API key not configured' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      })
-    }
-
-    const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,34 +21,22 @@ export default async (request, context) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a skin analysis AI. Respond with valid JSON only, no extra text.'
+            content: 'You are a skin analysis AI for Shan Loray luxury beauty brand. Respond with valid JSON only, no extra text, no markdown.'
           },
           {
             role: 'user',
-            content: `Skin: ${skinType}, Concern: ${concern}, Age: ${age || 'Unknown'}, Issues: ${specificConcerns || 'None'}, Routine: ${routine}, Sun: ${sunExposure}. Return JSON: {"skinScore":85,"summary":"2 sentence summary","metrics":{"hydration":80,"texture":75,"clarity":85,"toneEvenness":80,"firmness":78,"radiance":76},"analysisCards":[{"title":"Skin Type","description":"description","badge":"Confirmed"},{"title":"Main Concern","description":"description","badge":"Priority"},{"title":"Hydration","description":"description","badge":"Focus"},{"title":"Recommendations","description":"description","badge":"Action"}],"morningRoutine":[{"step":1,"productType":"Cleanser","reason":"reason"},{"step":2,"productType":"Serum","reason":"reason"},{"step":3,"productType":"Moisturizer","reason":"reason"},{"step":4,"productType":"Sunscreen","reason":"reason"}],"eveningRoutine":[{"step":1,"productType":"Makeup Remover","reason":"reason"},{"step":2,"productType":"Treatment","reason":"reason"},{"step":3,"productType":"Night Cream","reason":"reason"}],"targetedTreatments":[{"productType":"Eye Cream","reason":"reason"},{"productType":"Mask","reason":"reason"}],"keyIngredients":["Hyaluronic Acid","Vitamin C"],"avoidIngredients":["Alcohol","Fragrance"]}`
+            content: `Analyze: SkinType=${skinType}, Concern=${concern}, Age=${age||'Unknown'}, Issues=${specificConcerns||'None'}, Routine=${routine}, Sun=${sunExposure}. Return ONLY this JSON: {"skinScore":85,"skinLabel":"Healthy Skin","summary":"Your skin shows...","hydration":92,"texture":78,"clarity":88,"toneEvenness":81,"cards":[{"title":"${skinType} Skin","description":"detailed description based on skin type","badge":"Confirmed"},{"title":"Hydration Levels","description":"hydration analysis","badge":"Good"},{"title":"Texture & Smoothness","description":"texture analysis","badge":"Fair"},{"title":"Pigmentation","description":"pigmentation analysis","badge":"Mild"},{"title":"Fine Lines & Wrinkles","description":"aging analysis","badge":"Early"},{"title":"Problem Areas","description":"problem areas based on concerns","badge":"Monitor"}],"morning":["Gentle Cleanser","Vitamin C Serum","Moisturizer","SPF 50 Sunscreen"],"evening":["Makeup Remover","Exfoliating Toner","Retinol Serum","Night Cream"],"targeted":["Eye Cream","Dark Spot Corrector","Pore Minimizer"]}`
           }
         ]
       })
     })
 
-    if (!openAIResponse.ok) {
-      const errorData = await openAIResponse.json()
-      return new Response(JSON.stringify({ error: errorData.error?.message || 'OpenAI error' }), {
-        status: openAIResponse.status,
-        headers: { 'Content-Type': 'application/json' }
-      })
-    }
-
-    const data = await openAIResponse.json()
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    })
-
+    const data = await response.json()
+    const content = data.choices[0].message.content
+    const result = JSON.parse(content)
+    res.status(200).json(result)
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    })
+    console.error('Error:', error)
+    res.status(500).json({ error: error.message })
   }
 }

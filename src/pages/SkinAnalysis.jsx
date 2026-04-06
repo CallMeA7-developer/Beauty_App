@@ -11,12 +11,14 @@ import {
   IoStarSharp,
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
+import { useCart } from '../contexts/CartContext'
 import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function SkinAnalysis() {
   const location = useLocation()
   const { user } = useAuth()
+  const { addItem } = useCart()
 
   const [selectedConcern, setSelectedConcern] = useState(null)
   const [selectedSkinType, setSelectedSkinType] = useState(null)
@@ -66,28 +68,26 @@ export default function SkinAnalysis() {
           skinType: selectedSkinType,
           concern: selectedConcern,
           age: selectedAge,
-          specificConcerns: selectedSpecificConcerns.join(','),
+          specificConcerns: selectedSpecificConcerns.join(', '),
           routine: selectedRoutine,
           sunExposure: sunExposure
         })
       })
 
       if (!response.ok) {
-        throw new Error('Failed to get analysis from server')
+        const err = await response.json()
+        throw new Error(err.error || 'Server error')
       }
 
-      const data = await response.json()
-      const result = JSON.parse(data.choices[0].message.content)
+      const result = await response.json()
       setAnalysisResult(result)
 
       await fetchRecommendedProducts(result)
 
-      if (user) {
-        await saveAnalysisToDatabase(result)
-      }
+      if (user) await saveAnalysisToDatabase(result)
 
       setTimeout(() => {
-        document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' })
       }, 300)
 
     } catch (err) {
@@ -99,43 +99,44 @@ export default function SkinAnalysis() {
   }
 
   const fetchRecommendedProducts = async (result) => {
-    const fetchProductsByType = async (productType) => {
+    const fetchByName = async (productName) => {
       const { data } = await supabase
         .from('products')
         .select('*')
-        .or(`name.ilike.%${productType}%,description.ilike.%${productType}%`)
+        .ilike('name', `%${productName.split(' ')[0]}%`)
         .limit(1)
         .maybeSingle()
       return data
     }
 
-    const morningProds = await Promise.all(result.morningRoutine.map(item => fetchProductsByType(item.productType)))
-    const eveningProds = await Promise.all(result.eveningRoutine.map(item => fetchProductsByType(item.productType)))
-    const targetedProds = await Promise.all(result.targetedTreatments.map(item => fetchProductsByType(item.productType)))
+    const morning = await Promise.all(result.morning.map(fetchByName))
+    const evening = await Promise.all(result.evening.map(fetchByName))
+    const targeted = await Promise.all(result.targeted.map(fetchByName))
 
     setRecommendedProducts({
-      morning: morningProds.filter(Boolean),
-      evening: eveningProds.filter(Boolean),
-      targeted: targetedProds.filter(Boolean)
+      morning: morning.filter(Boolean),
+      evening: evening.filter(Boolean),
+      targeted: targeted.filter(Boolean)
     })
   }
 
   const saveAnalysisToDatabase = async (result) => {
     try {
-      await supabase.from('skin_analysis').insert({
+      await supabase.from('skin_analysis').upsert({
         user_id: user.id,
         skin_score: result.skinScore,
         summary: result.summary,
-        metrics: result.metrics,
-        analysis_cards: result.analysisCards,
-        morning_routine: result.morningRoutine,
-        evening_routine: result.eveningRoutine,
-        targeted_treatments: result.targetedTreatments,
-        key_ingredients: result.keyIngredients,
-        avoid_ingredients: result.avoidIngredients
+        metrics: {
+          hydration: result.hydration,
+          texture: result.texture,
+          clarity: result.clarity,
+          toneEvenness: result.toneEvenness
+        },
+        analysis_cards: result.cards,
+        created_at: new Date().toISOString()
       })
     } catch (err) {
-      console.error('Failed to save analysis:', err)
+      console.error('Failed to save:', err)
     }
   }
 
@@ -162,24 +163,30 @@ export default function SkinAnalysis() {
 
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)
 
-  const ProductCard = ({ product }) => (
-    <div className="bg-white rounded-[8px] overflow-hidden border border-[#E8E3D9]">
-      <img src={product.img_url || product.image_url || product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
-      <div className="p-4 md:p-5 lg:p-6">
-        <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] mb-2">{product.brand || 'Shan Loray'}</p>
-        <h4 className="text-[14px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
-        <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-3">{product.description?.slice(0, 60)}...</p>
-        <p className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">${parseFloat(product.price).toFixed(2)}</p>
-        <div className="flex items-center gap-1 mb-4">
-          <Stars />
-          <span className="text-[11px] lg:text-[12px] font-normal text-[#999999] ml-1">({product.review_count || 0})</span>
+  const ProductCard = ({ product }) => {
+    const handleAddToCart = () => {
+      addItem(product)
+    }
+
+    return (
+      <div className="bg-white rounded-[8px] overflow-hidden border border-[#E8E3D9]">
+        <img src={product.img_url || product.image_url || product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
+        <div className="p-4 md:p-5 lg:p-6">
+          <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] mb-2">{product.brand || 'Shan Loray'}</p>
+          <h4 className="text-[14px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
+          <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-3">{product.description?.slice(0, 60)}...</p>
+          <p className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">${parseFloat(product.price).toFixed(2)}</p>
+          <div className="flex items-center gap-1 mb-4">
+            <Stars />
+            <span className="text-[11px] lg:text-[12px] font-normal text-[#999999] ml-1">({product.review_count || 0})</span>
+          </div>
+          <button onClick={handleAddToCart} className="w-full h-[42px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+            Add to Cart
+          </button>
         </div>
-        <button className="w-full h-[42px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-          Add to Cart
-        </button>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -360,19 +367,22 @@ export default function SkinAnalysis() {
           <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-8 lg:p-[40px] mb-8 lg:mb-10">
             <div className="text-center mb-6 lg:mb-8">
               <div className="text-[48px] md:text-[56px] lg:text-[64px] font-bold text-[#8B7355] mb-2">{analysisResult.skinScore}/100</div>
-              <h3 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2">
-                {analysisResult.skinScore >= 80 ? 'Excellent Skin' : analysisResult.skinScore >= 60 ? 'Good Skin' : 'Needs Attention'}
-              </h3>
+              <h3 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2">{analysisResult.skinLabel}</h3>
               <p className="text-[13px] lg:text-[16px] font-normal text-[#666666] max-w-[600px] mx-auto">{analysisResult.summary}</p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-              {Object.entries(analysisResult.metrics).map(([key, value]) => (
-                <div key={key} className="flex flex-col items-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+              {[
+                { label: 'Hydration', value: analysisResult.hydration },
+                { label: 'Texture', value: analysisResult.texture },
+                { label: 'Clarity', value: analysisResult.clarity },
+                { label: 'Tone Evenness', value: analysisResult.toneEvenness },
+              ].map((stat) => (
+                <div key={stat.label} className="flex flex-col items-center">
                   <IoWaterOutline className="w-[24px] h-[24px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-2" />
-                  <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-1 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                  <span className="text-[24px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-2">{value}%</span>
+                  <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-1">{stat.label}</span>
+                  <span className="text-[24px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-2">{stat.value}%</span>
                   <div className="w-full h-[7px] lg:h-[8px] bg-[#E8E3D9] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#8B7355] rounded-full transition-all duration-500" style={{ width: `${value}%` }} />
+                    <div className="h-full bg-[#8B7355] rounded-full" style={{ width: `${stat.value}%` }} />
                   </div>
                 </div>
               ))}
@@ -381,7 +391,7 @@ export default function SkinAnalysis() {
 
           {/* Analysis Cards */}
           <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-8 mb-8 lg:mb-10">
-            {analysisResult.analysisCards.map((card, idx) => (
+            {analysisResult.cards.map((card, idx) => (
               <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
                 <div className="flex items-start justify-between mb-3">
                   <IoSparklesOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355]" />
@@ -391,26 +401,6 @@ export default function SkinAnalysis() {
                 <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.6]">{card.description}</p>
               </div>
             ))}
-          </div>
-
-          {/* Key Ingredients */}
-          <div className="max-w-[1200px] mx-auto mb-8">
-            <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[32px] mb-6">
-              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Key Ingredients for Your Skin</h3>
-              <div className="flex flex-wrap gap-2">
-                {analysisResult.keyIngredients.map((ingredient, idx) => (
-                  <span key={idx} className="px-4 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">{ingredient}</span>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[32px]">
-              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Ingredients to Avoid</h3>
-              <div className="flex flex-wrap gap-2">
-                {analysisResult.avoidIngredients.map((ingredient, idx) => (
-                  <span key={idx} className="px-4 py-2 bg-red-100 text-red-600 text-[13px] lg:text-[14px] font-medium rounded-full">{ingredient}</span>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -426,19 +416,18 @@ export default function SkinAnalysis() {
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
             <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Morning Protection Routine</h3>
             <div className="space-y-4 mb-6">
-              {analysisResult.morningRoutine.map((item, idx) => (
+              {analysisResult.morning.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">{item.step}</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">{idx + 1}</div>
                   <div className="flex-1">
-                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
-                    <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item}</h4>
                   </div>
                 </div>
               ))}
             </div>
             {recommendedProducts.morning.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-                {recommendedProducts.morning.map((product) => <ProductCard key={product.id} product={product} />)}
+                {recommendedProducts.morning.slice(0, 4).map((product) => <ProductCard key={product.id} product={product} />)}
               </div>
             )}
           </div>
@@ -448,19 +437,18 @@ export default function SkinAnalysis() {
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
             <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Evening Repair Routine</h3>
             <div className="space-y-4 mb-6">
-              {analysisResult.eveningRoutine.map((item, idx) => (
+              {analysisResult.evening.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">{item.step}</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">{idx + 1}</div>
                   <div className="flex-1">
-                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
-                    <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item}</h4>
                   </div>
                 </div>
               ))}
             </div>
             {recommendedProducts.evening.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-                {recommendedProducts.evening.map((product) => <ProductCard key={product.id} product={product} />)}
+                {recommendedProducts.evening.slice(0, 4).map((product) => <ProductCard key={product.id} product={product} />)}
               </div>
             )}
           </div>
@@ -470,20 +458,33 @@ export default function SkinAnalysis() {
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
             <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Specialized Treatments</h3>
             <div className="space-y-4 mb-6">
-              {analysisResult.targetedTreatments.map((item, idx) => (
+              {analysisResult.targeted.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
                   <div className="flex-1">
-                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
-                    <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item}</h4>
                   </div>
                 </div>
               ))}
             </div>
             {recommendedProducts.targeted.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
-                {recommendedProducts.targeted.map((product) => <ProductCard key={product.id} product={product} />)}
+                {recommendedProducts.targeted.slice(0, 3).map((product) => <ProductCard key={product.id} product={product} />)}
               </div>
             )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => alert('ok mommy you can have your result now')}
+              className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+              View Complete Routine
+            </button>
+            <button
+              onClick={() => alert('ok mommy let me add it to your profile')}
+              className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+              Save to My Profile
+            </button>
           </div>
         </div>
       )}
