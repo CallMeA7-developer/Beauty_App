@@ -61,8 +61,14 @@ export default function SkinAnalysis() {
     setError(null)
 
     try {
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY
+      // OpenAI API key - loaded from environment
+      const apiKey = window.__OPENAI_KEY__ || import.meta.env.VITE_OPENAI_API_KEY
 
+      if (!apiKey) {
+        setError('API key not configured. Please contact support.')
+        setLoading(false)
+        return
+      }
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
