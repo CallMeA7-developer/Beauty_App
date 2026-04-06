@@ -61,7 +61,7 @@ export default function SkinAnalysis() {
     setError(null)
 
     try {
-      const apiKey = import.meta.env.VITE_OPENAI_KEY
+      const apiKey = import.meta.env.VITE_OPENAI_API_KEY
         || import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY // just for testing
 
       console.log('Key found:', !!apiKey, Object.keys(import.meta.env))
