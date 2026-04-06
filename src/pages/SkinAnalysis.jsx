@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   IoChevronDown,
@@ -10,9 +10,24 @@ import {
   IoSparklesOutline,
   IoStarSharp,
 } from 'react-icons/io5'
+import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../lib/supabase'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function SkinAnalysis() {
   const location = useLocation()
+  const { user } = useAuth()
+
+  const [selectedConcern, setSelectedConcern] = useState(null)
+  const [selectedSkinType, setSelectedSkinType] = useState(null)
+  const [selectedAge, setSelectedAge] = useState(null)
+  const [selectedSpecificConcerns, setSelectedSpecificConcerns] = useState([])
+  const [selectedRoutine, setSelectedRoutine] = useState('Moderate')
+  const [sunExposure, setSunExposure] = useState('Moderate')
+  const [loading, setLoading] = useState(false)
+  const [analysisResult, setAnalysisResult] = useState(null)
+  const [error, setError] = useState(null)
+  const [recommendedProducts, setRecommendedProducts] = useState({ morning: [], evening: [], targeted: [] })
 
   useEffect(() => {
     if (location.hash) {
@@ -25,6 +40,158 @@ export default function SkinAnalysis() {
   const skinTypes = ['Oily', 'Dry', 'Combination', 'Sensitive', 'Normal']
   const ageRanges = ['18-25', '26-35', '36-45', '46-55', '55+']
   const specificConcerns = ['Fine Lines', 'Wrinkles', 'Large Pores', 'Dark Circles', 'Uneven Tone', 'Hyperpigmentation', 'Redness', 'Blemishes', 'Texture', 'Dullness', 'Firmness', 'Hydration']
+
+  const toggleSpecificConcern = (concern) => {
+    setSelectedSpecificConcerns(prev =>
+      prev.includes(concern)
+        ? prev.filter(c => c !== concern)
+        : [...prev, concern]
+    )
+  }
+
+  const analyzeSkinn = async () => {
+    if (!selectedSkinType || !selectedConcern) {
+      setError('Please select your skin type and primary concern')
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a professional skin analysis AI for Shan Loray luxury beauty brand. Always respond with valid JSON only, no extra text.'
+            },
+            {
+              role: 'user',
+              content: `Analyze this skin profile and return ONLY a JSON object:
+        - Skin Type: ${selectedSkinType}
+        - Primary Concern: ${selectedConcern}
+        - Age Range: ${selectedAge || 'Not specified'}
+        - Specific Concerns: ${selectedSpecificConcerns.join(', ') || 'None'}
+        - Current Routine: ${selectedRoutine}
+        - Sun Exposure: ${sunExposure}
+
+        Return this exact JSON structure:
+        {
+          "skinScore": number 0-100,
+          "summary": "personalized summary",
+          "metrics": {
+            "hydration": number 0-100,
+            "texture": number 0-100,
+            "clarity": number 0-100,
+            "toneEvenness": number 0-100,
+            "firmness": number 0-100,
+            "radiance": number 0-100
+          },
+          "analysisCards": [
+            {"title": "string", "description": "string", "badge": "string"}
+          ],
+          "morningRoutine": [
+            {"step": number, "productType": "string", "reason": "string"}
+          ],
+          "eveningRoutine": [
+            {"step": number, "productType": "string", "reason": "string"}
+          ],
+          "targetedTreatments": [
+            {"productType": "string", "reason": "string"}
+          ],
+          "keyIngredients": ["string"],
+          "avoidIngredients": ["string"]
+        }`
+            }
+          ],
+          temperature: 0.7
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to get analysis from OpenAI')
+      }
+
+      const data = await response.json()
+      const result = JSON.parse(data.choices[0].message.content)
+      setAnalysisResult(result)
+
+      await fetchRecommendedProducts(result)
+
+      if (user) {
+        await saveAnalysisToDatabase(result)
+      }
+
+      setTimeout(() => {
+        document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 300)
+
+    } catch (err) {
+      console.error('Analysis error:', err)
+      setError('Failed to analyze skin. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchRecommendedProducts = async (result) => {
+    const fetchProductsByType = async (productType) => {
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .or(`name.ilike.%${productType}%,description.ilike.%${productType}%`)
+        .limit(1)
+        .maybeSingle()
+
+      return data
+    }
+
+    const morningProds = await Promise.all(
+      result.morningRoutine.map(item => fetchProductsByType(item.productType))
+    )
+
+    const eveningProds = await Promise.all(
+      result.eveningRoutine.map(item => fetchProductsByType(item.productType))
+    )
+
+    const targetedProds = await Promise.all(
+      result.targetedTreatments.map(item => fetchProductsByType(item.productType))
+    )
+
+    setRecommendedProducts({
+      morning: morningProds.filter(Boolean),
+      evening: eveningProds.filter(Boolean),
+      targeted: targetedProds.filter(Boolean)
+    })
+  }
+
+  const saveAnalysisToDatabase = async (result) => {
+    try {
+      await supabase
+        .from('skin_analysis')
+        .insert({
+          user_id: user.id,
+          skin_score: result.skinScore,
+          summary: result.summary,
+          metrics: result.metrics,
+          analysis_cards: result.analysisCards,
+          morning_routine: result.morningRoutine,
+          evening_routine: result.eveningRoutine,
+          targeted_treatments: result.targetedTreatments,
+          key_ingredients: result.keyIngredients,
+          avoid_ingredients: result.avoidIngredients
+        })
+    } catch (err) {
+      console.error('Failed to save analysis:', err)
+    }
+  }
 
   const guidelines = [
     { icon: IoSunnyOutline, title: 'Good Lighting', desc: 'Natural daylight preferred' },
@@ -87,15 +254,15 @@ export default function SkinAnalysis() {
 
   const ProductCard = ({ product }) => (
     <div className="bg-white rounded-[8px] overflow-hidden border border-[#E8E3D9]">
-      <img src={product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
+      <img src={product.image_url || product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
       <div className="p-4 md:p-5 lg:p-6">
-        <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] mb-2">Shan Loray</p>
+        <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] mb-2">{product.brand || 'Shan Loray'}</p>
         <h4 className="text-[14px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
-        <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-3">{product.benefit}</p>
-        <p className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.price}</p>
+        <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-3">{product.benefit || product.description?.slice(0, 50) + '...'}</p>
+        <p className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">${product.price}</p>
         <div className="flex items-center gap-1 mb-4">
           <Stars />
-          <span className="text-[11px] lg:text-[12px] font-normal text-[#999999] ml-1">({product.reviews})</span>
+          <span className="text-[11px] lg:text-[12px] font-normal text-[#999999] ml-1">({product.reviews_count || product.reviews || 0})</span>
         </div>
         <button className="w-full h-[42px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
           Add to Cart
@@ -176,13 +343,30 @@ export default function SkinAnalysis() {
         <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Tell Us About Your Skin</h2>
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Help us understand your unique skin concerns for personalized recommendations</p>
 
+        {error && (
+          <div className="max-w-[1200px] mx-auto mb-6 p-4 bg-red-50 border border-red-200 rounded-[8px] text-red-600 text-[14px]">
+            {error}
+          </div>
+        )}
+
+        {loading && (
+          <div className="max-w-[1200px] mx-auto mb-6 p-6 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex flex-col items-center">
+            <LoadingSpinner />
+            <p className="text-[16px] text-[#8B7355] mt-4">Analyzing your skin...</p>
+          </div>
+        )}
+
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-8 mb-10 lg:mb-12">
           {/* Primary Concern */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Primary Skin Concern</h3>
             <div className="grid grid-cols-2 gap-3">
-              {skinConcerns.map((concern, idx) => (
-                <button key={concern} className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+              {skinConcerns.map((concern) => (
+                <button
+                  key={concern}
+                  onClick={() => setSelectedConcern(concern)}
+                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedConcern === concern ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
+                >
                   {concern}
                 </button>
               ))}
@@ -193,8 +377,12 @@ export default function SkinAnalysis() {
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Skin Type</h3>
             <div className="grid grid-cols-3 gap-3">
-              {skinTypes.map((type, idx) => (
-                <button key={type} className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${idx === 2 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+              {skinTypes.map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setSelectedSkinType(type)}
+                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedSkinType === type ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
+                >
                   {type}
                 </button>
               ))}
@@ -204,24 +392,31 @@ export default function SkinAnalysis() {
           {/* Current Routine */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Current Routine</h3>
-            <div className="w-full h-[48px] lg:h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between px-5 cursor-pointer">
-              <span className="text-[13px] lg:text-[15px] font-normal text-[#2B2B2B]">Moderate (4-6 products)</span>
-              <IoChevronDown className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355]" />
-            </div>
+            <select
+              value={selectedRoutine}
+              onChange={(e) => setSelectedRoutine(e.target.value)}
+              className="w-full h-[48px] lg:h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] px-5 text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] cursor-pointer outline-none"
+            >
+              <option>Minimal (1-3 products)</option>
+              <option>Moderate (4-6 products)</option>
+              <option>Extensive (7+ products)</option>
+            </select>
           </div>
 
           {/* Sun Exposure */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Sun Exposure</h3>
             <div className="pt-4">
-              <div className="relative w-full h-[8px] bg-[#E8E3D9] rounded-full mb-4">
-                <div className="absolute left-0 top-0 h-full w-[60%] bg-[#8B7355] rounded-full" />
-                <div className="absolute left-[60%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-[#8B7355] rounded-full border-4 border-white shadow-md" />
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Minimal</span>
-                <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Moderate</span>
-                <span className="text-[12px] lg:text-[13px] font-normal text-[#666666]">High</span>
+              <div className="flex gap-3">
+                {['Minimal', 'Moderate', 'High'].map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => setSunExposure(level)}
+                    className={`flex-1 h-[44px] text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${sunExposure === level ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
+                  >
+                    {level}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -230,8 +425,12 @@ export default function SkinAnalysis() {
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Age Range</h3>
             <div className="grid grid-cols-3 gap-3">
-              {ageRanges.map((range, idx) => (
-                <button key={range} className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${idx === 1 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+              {ageRanges.map((range) => (
+                <button
+                  key={range}
+                  onClick={() => setSelectedAge(range)}
+                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedAge === range ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
+                >
                   {range}
                 </button>
               ))}
@@ -242,10 +441,10 @@ export default function SkinAnalysis() {
           <div className="md:col-span-2 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Specific Concerns</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {specificConcerns.map((concern, idx) => (
-                <label key={concern} className="flex items-center gap-3 cursor-pointer">
-                  <div className={`w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] border-2 rounded-[2px] flex items-center justify-center flex-shrink-0 ${[0, 4, 8].includes(idx) ? 'border-[#8B7355] bg-[#8B7355]' : 'border-[#C9A870]'}`}>
-                    {[0, 4, 8].includes(idx) && <IoCheckmarkCircle className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px] text-white" />}
+              {specificConcerns.map((concern) => (
+                <label key={concern} className="flex items-center gap-3 cursor-pointer" onClick={() => toggleSpecificConcern(concern)}>
+                  <div className={`w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] border-2 rounded-[2px] flex items-center justify-center flex-shrink-0 ${selectedSpecificConcerns.includes(concern) ? 'border-[#8B7355] bg-[#8B7355]' : 'border-[#C9A870]'}`}>
+                    {selectedSpecificConcerns.includes(concern) && <IoCheckmarkCircle className="w-[12px] h-[12px] lg:w-[14px] lg:h-[14px] text-white" />}
                   </div>
                   <span className="text-[13px] lg:text-[14px] font-normal text-[#3D3D3D]">{concern}</span>
                 </label>
@@ -255,99 +454,189 @@ export default function SkinAnalysis() {
         </div>
 
         <div className="flex justify-center">
-          <button className="w-full sm:w-[200px] lg:w-[240px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-            Analyze My Skin
+          <button
+            onClick={analyzeSkinn}
+            disabled={loading}
+            className="w-full sm:w-[200px] lg:w-[240px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Analyzing...' : 'Analyze My Skin'}
           </button>
         </div>
+
+        {!user && analysisResult && (
+          <div className="max-w-[1200px] mx-auto mt-6 p-4 bg-[#F5F1EA] rounded-[12px] text-center">
+            <p className="text-[14px] text-[#666666]">
+              <span className="font-medium text-[#8B7355]">Save your results</span> — Sign in to save your analysis
+            </p>
+          </div>
+        )}
       </div>
 
       {/* ── Analysis Results ── */}
-      <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
-        <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">Your Skin Analysis Results</h2>
-        <div className="flex justify-center mb-8 lg:mb-12">
-          <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">
-            <IoCheckmarkCircle className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
-            Analysis Complete
+      {analysisResult && (
+        <div id="results-section" className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
+          <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">Your Skin Analysis Results</h2>
+          <div className="flex justify-center mb-8 lg:mb-12">
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">
+              <IoCheckmarkCircle className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
+              Analysis Complete
+            </div>
           </div>
-        </div>
 
-        {/* Score Dashboard */}
-        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-8 lg:p-[40px] mb-8 lg:mb-10">
-          <div className="text-center mb-6 lg:mb-8">
-            <div className="text-[48px] md:text-[56px] lg:text-[64px] font-bold text-[#8B7355] mb-2">85/100</div>
-            <h3 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2">Healthy Skin</h3>
-            <p className="text-[13px] lg:text-[16px] font-normal text-[#666666] max-w-[600px] mx-auto">Your skin shows excellent hydration and balanced oil production</p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-            {quickStats.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center">
-                <IoWaterOutline className="w-[24px] h-[24px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-2" />
-                <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-1">{stat.label}</span>
-                <span className="text-[24px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-2">{stat.value}</span>
-                <div className="w-full h-[7px] lg:h-[8px] bg-[#E8E3D9] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#8B7355] rounded-full" style={{ width: stat.value }} />
+          {/* Score Dashboard */}
+          <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-8 lg:p-[40px] mb-8 lg:mb-10">
+            <div className="text-center mb-6 lg:mb-8">
+              <div className="text-[48px] md:text-[56px] lg:text-[64px] font-bold text-[#8B7355] mb-2">{analysisResult.skinScore}/100</div>
+              <h3 className="text-[17px] lg:text-[20px] font-medium text-[#1A1A1A] mb-2">
+                {analysisResult.skinScore >= 80 ? 'Excellent Skin' : analysisResult.skinScore >= 60 ? 'Good Skin' : 'Needs Attention'}
+              </h3>
+              <p className="text-[13px] lg:text-[16px] font-normal text-[#666666] max-w-[600px] mx-auto">{analysisResult.summary}</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+              {Object.entries(analysisResult.metrics).map(([key, value]) => (
+                <div key={key} className="flex flex-col items-center">
+                  <IoWaterOutline className="w-[24px] h-[24px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-2" />
+                  <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-1 capitalize">
+                    {key.replace(/([A-Z])/g, ' $1').trim()}
+                  </span>
+                  <span className="text-[24px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-2">{value}%</span>
+                  <div className="w-full h-[7px] lg:h-[8px] bg-[#E8E3D9] rounded-full overflow-hidden">
+                    <div className="h-full bg-[#8B7355] rounded-full transition-all duration-500" style={{ width: `${value}%` }} />
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Analysis Cards */}
+          <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-8 mb-8 lg:mb-10">
+            {analysisResult.analysisCards.map((card, idx) => (
+              <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
+                <div className="flex items-start justify-between mb-3">
+                  <IoSparklesOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355]" />
+                  {card.badge && <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{card.badge}</span>}
+                </div>
+                <h4 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-3">{card.title}</h4>
+                <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.6]">{card.description}</p>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Analysis Cards */}
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-8">
-          {analysisCards.map((card, idx) => (
-            <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
-              <div className="flex items-start justify-between mb-3">
-                <IoSparklesOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355]" />
-                {card.badge && <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{card.badge}</span>}
+          {/* Key Ingredients */}
+          <div className="max-w-[1200px] mx-auto mb-8">
+            <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[32px] mb-6">
+              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Key Ingredients for Your Skin</h3>
+              <div className="flex flex-wrap gap-2">
+                {analysisResult.keyIngredients.map((ingredient, idx) => (
+                  <span key={idx} className="px-4 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">
+                    {ingredient}
+                  </span>
+                ))}
               </div>
-              <h4 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-3">{card.title}</h4>
-              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.6]">{card.desc}</p>
             </div>
-          ))}
+
+            <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[32px]">
+              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Ingredients to Avoid</h3>
+              <div className="flex flex-wrap gap-2">
+                {analysisResult.avoidIngredients.map((ingredient, idx) => (
+                  <span key={idx} className="px-4 py-2 bg-red-100 text-red-600 text-[13px] lg:text-[14px] font-medium rounded-full">
+                    {ingredient}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Product Recommendations ── */}
-      <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
-        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Curated specifically for your skin analysis results</p>
+      {analysisResult && (
+        <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
+          <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
+          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Curated specifically for your skin analysis results</p>
 
-        {/* Morning Routine */}
-        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
-          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
-          <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Morning Protection Routine</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-            {morningProducts.map((product) => <ProductCard key={product.name} product={product} />)}
+          {/* Morning Routine */}
+          <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
+            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Morning Protection Routine</h3>
+            <div className="space-y-4 mb-6">
+              {analysisResult.morningRoutine.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">
+                    {item.step}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
+                    <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
+              {recommendedProducts.morning.length > 0 ? (
+                recommendedProducts.morning.map((product) => <ProductCard key={product.id} product={product} />)
+              ) : (
+                <div className="col-span-2 md:col-span-4 text-center py-8 text-[#666666]">
+                  Loading recommended products...
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Evening Routine */}
+          <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
+            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Evening Repair Routine</h3>
+            <div className="space-y-4 mb-6">
+              {analysisResult.eveningRoutine.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">
+                    {item.step}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
+                    <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
+              {recommendedProducts.evening.length > 0 ? (
+                recommendedProducts.evening.map((product) => <ProductCard key={product.id} product={product} />)
+              ) : (
+                <div className="col-span-2 md:col-span-4 text-center py-8 text-[#666666]">
+                  Loading recommended products...
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Targeted Treatments */}
+          <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
+            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Specialized Treatments</h3>
+            <div className="space-y-4 mb-6">
+              {analysisResult.targetedTreatments.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
+                  <div className="flex-1">
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
+                    <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
+              {recommendedProducts.targeted.length > 0 ? (
+                recommendedProducts.targeted.map((product) => <ProductCard key={product.id} product={product} />)
+              ) : (
+                <div className="col-span-1 sm:col-span-3 text-center py-8 text-[#666666]">
+                  Loading recommended products...
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
-        {/* Evening Routine */}
-        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
-          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
-          <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Evening Repair Routine</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-            {eveningProducts.map((product) => <ProductCard key={product.name} product={product} />)}
-          </div>
-        </div>
-
-        {/* Targeted Treatments */}
-        <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
-          <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
-          <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Specialized Treatments</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
-            {targetedProducts.map((product) => <ProductCard key={product.name} product={product} />)}
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <button className="w-full sm:w-[200px] h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-            View Complete Routine
-          </button>
-          <button className="w-full sm:w-[200px] h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-            Save to My Profile
-          </button>
-        </div>
-      </div>
+      )}
 
       {/* ── Progress Tracking ── */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
