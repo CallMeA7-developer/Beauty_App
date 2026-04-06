@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
   IoFlaskOutline,
@@ -19,8 +19,10 @@ import {
 } from 'react-icons/io5'
 
 export default function AdvancedFormulations() {
-
-  const location = useLocation()
+  const location  = useLocation()
+  const navigate  = useNavigate()
+  const [showPdfPopup, setShowPdfPopup] = useState(false)
+  const [pdfTitle, setPdfTitle]         = useState('')
   useEffect(() => {
     if (location.hash) {
       const el = document.getElementById(location.hash.replace('#', ''))
@@ -71,9 +73,9 @@ export default function AdvancedFormulations() {
   ]
 
   const heroProducts = [
-    { name: 'Age-Defying Serum', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300&h=360&fit=crop', keyActives: 'Peptide Matrix 4%, Bio-Retinol 3%', technology: 'Micro-Encapsulation System' },
-    { name: 'Collagen Renewal Cream', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&h=360&fit=crop', keyActives: 'Marine Collagen 5%, Hyaluronic Acid 2%', technology: 'Triple-Layer Delivery' },
-    { name: 'Radiance Brightening Essence', image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=300&h=360&fit=crop', keyActives: 'Vitamin C 15%, Niacinamide 5%', technology: 'Liposomal Encapsulation' },
+    { name: 'Age-Defying Serum', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300&h=360&fit=crop', keyActives: 'Peptide Matrix 4%, Bio-Retinol 3%', technology: 'Micro-Encapsulation System', path: '/skincare' },
+    { name: 'Collagen Renewal Cream', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&h=360&fit=crop', keyActives: 'Marine Collagen 5%, Hyaluronic Acid 2%', technology: 'Triple-Layer Delivery', path: '/skincare' },
+    { name: 'Radiance Brightening Essence', image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=300&h=360&fit=crop', keyActives: 'Vitamin C 15%, Niacinamide 5%', technology: 'Liposomal Encapsulation', path: '/skincare' },
   ]
 
   const timelineMilestones = [
@@ -93,9 +95,9 @@ export default function AdvancedFormulations() {
   ]
 
   const relatedPages = [
-    { title: 'Virtual Try-On', desc: 'Experience products with AR technology', image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=380&h=280&fit=crop' },
-    { title: 'Skin Analysis', desc: 'AI-powered skin assessment tool', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=380&h=280&fit=crop' },
-    { title: 'Beauty Journey', desc: 'Track your personalized skincare progress', image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=380&h=280&fit=crop' },
+    { title: 'Virtual Try-On', desc: 'Experience products with AR technology', image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=380&h=280&fit=crop', path: '/virtual-tryon' },
+    { title: 'Skin Analysis', desc: 'AI-powered skin assessment tool', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=380&h=280&fit=crop', path: '/skin-analysis' },
+    { title: 'Beauty Journey', desc: 'Track your personalized skincare progress', image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=380&h=280&fit=crop', path: '/beauty-journey' },
   ]
 
   const sourcingItems = [
@@ -306,7 +308,9 @@ export default function AdvancedFormulations() {
                   <p className="text-[12px] lg:text-[14px] font-light italic text-[#8B7355] mb-2 lg:mb-3">{pub.journal} • {pub.date}</p>
                   <p className="text-[13px] lg:text-[15px] font-normal text-[#666666]">{pub.findings}</p>
                 </div>
-                <button className="flex items-center gap-2 px-4 lg:px-5 h-[40px] lg:h-[44px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors flex-shrink-0">
+                <button
+                  onClick={() => { setPdfTitle(pub.title); setShowPdfPopup(true) }}
+                  className="flex items-center gap-2 px-4 lg:px-5 h-[40px] lg:h-[44px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors flex-shrink-0">
                   <IoDownloadOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
                   Download
                 </button>
@@ -353,7 +357,9 @@ export default function AdvancedFormulations() {
                   <p className="text-[11px] lg:text-[13px] font-medium text-[#666666] mb-1">Technology</p>
                   <p className="text-[13px] lg:text-[15px] font-normal text-[#8B7355]">{product.technology}</p>
                 </div>
-                <button className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
+                <button
+                  onClick={() => navigate(product.path)}
+                  className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
                   Learn More <IoChevronForward className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
                 </button>
               </div>
@@ -413,19 +419,41 @@ export default function AdvancedFormulations() {
         <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Explore More Technology</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-[32px]">
           {relatedPages.map((page) => (
-            <div key={page.title} className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
-              <img src={page.image} alt={page.title} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
-              <div className="p-4 md:p-5 lg:p-[28px]">
-                <h3 className="text-[16px] md:text-[18px] lg:text-[22px] font-semibold text-[#1A1A1A] mb-2">{page.title}</h3>
-                <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-4 lg:mb-5">{page.desc}</p>
-                <div className="flex items-center gap-2 text-[#8B7355] text-[13px] lg:text-[15px] font-medium">
-                  Explore <IoChevronForward className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
+            <Link key={page.title} to={page.path}>
+              <div className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
+                <img src={page.image} alt={page.title} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
+                <div className="p-4 md:p-5 lg:p-[28px]">
+                  <h3 className="text-[16px] md:text-[18px] lg:text-[22px] font-semibold text-[#1A1A1A] mb-2">{page.title}</h3>
+                  <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-4 lg:mb-5">{page.desc}</p>
+                  <div className="flex items-center gap-2 text-[#8B7355] text-[13px] lg:text-[15px] font-medium">
+                    Explore <IoChevronForward className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
+
+      {/* ── PDF Popup Modal ── */}
+      {showPdfPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setShowPdfPopup(false)} />
+          <div className="relative bg-white rounded-[16px] shadow-[0_16px_64px_rgba(0,0,0,0.15)] p-6 lg:p-[40px] max-w-[480px] w-full">
+            <div className="flex items-center justify-center w-[64px] h-[64px] bg-[#F5F1EA] rounded-full mx-auto mb-5">
+              <IoDownloadOutline className="w-[28px] h-[28px] text-[#8B7355]" />
+            </div>
+            <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A] text-center mb-3">Read the PDF</h3>
+            <p className="text-[14px] lg:text-[15px] font-normal text-[#666666] text-center mb-2 leading-[1.6]">{pdfTitle}</p>
+            <p className="text-[13px] font-light text-[#999999] text-center mb-6">This publication is available for reading. PDF download will be available soon.</p>
+            <button
+              onClick={() => setShowPdfPopup(false)}
+              className="w-full h-[48px] lg:h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── Newsletter ── */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-0 lg:min-h-[200px] flex flex-col items-center justify-center">
