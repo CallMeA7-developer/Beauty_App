@@ -61,7 +61,6 @@ export default function SkinAnalysis() {
     setError(null)
 
     try {
-      // OpenAI API key - loaded from environment
       const apiKey = window.__OPENAI_KEY__ || import.meta.env.VITE_OPENAI_API_KEY
 
       if (!apiKey) {
@@ -78,16 +77,43 @@ export default function SkinAnalysis() {
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
-          max_tokens: 800,
-          temperature: 0.5,
+          max_tokens: 1200,
+          temperature: 0.8,
           messages: [
             {
               role: 'system',
-              content: 'Skin analysis AI. JSON only. No markdown. No extra text.'
+              content: 'You are a professional skin analysis AI. You MUST generate unique, personalized scores every time based on the user inputs. Never return the same numbers. Respond with valid JSON only — no markdown, no backticks, no extra text.'
             },
             {
               role: 'user',
-              content: `SkinType=${selectedSkinType} Concern=${selectedConcern} Age=${selectedAge||'Unknown'} Issues=${selectedSpecificConcerns.join(',')||'None'} Routine=${selectedRoutine} Sun=${sunExposure}. JSON: {"skinScore":85,"skinLabel":"Healthy Skin","summary":"summary here","hydration":92,"texture":78,"clarity":88,"toneEvenness":81,"cards":[{"title":"Skin Analysis","description":"desc","badge":"Confirmed"},{"title":"Hydration","description":"desc","badge":"Good"},{"title":"Texture","description":"desc","badge":"Fair"},{"title":"Pigmentation","description":"desc","badge":"Mild"},{"title":"Fine Lines","description":"desc","badge":"Early"},{"title":"Problem Areas","description":"desc","badge":"Monitor"}],"morning":["Gentle Cleanser","Vitamin C Serum","Moisturizer","Sunscreen"],"evening":["Makeup Remover","Toner","Retinol Serum","Night Cream"],"targeted":["Eye Cream","Dark Spot Corrector","Pore Minimizer"]}`
+              content: `Analyze this user's skin and return a fully personalized result. The scores must reflect their actual profile — do NOT use generic or repeated numbers.
+
+User Profile:
+- Skin Type: ${selectedSkinType}
+- Primary Concern: ${selectedConcern}
+- Age Range: ${selectedAge || 'Unknown'}
+- Specific Issues: ${selectedSpecificConcerns.join(', ') || 'None'}
+- Current Routine: ${selectedRoutine}
+- Sun Exposure: ${sunExposure}
+
+Scoring rules:
+- Oily skin → lower clarity (50–70), lower texture (55–72)
+- Dry skin → lower hydration (40–65)
+- Acne concern → lower clarity (45–65), lower toneEvenness (50–68)
+- Aging concern → lower texture (50–70), lower toneEvenness (55–72)
+- Sensitivity → lower clarity (55–72)
+- Dark Spots → lower toneEvenness (45–65)
+- High sun exposure → lower toneEvenness and clarity by 5–10 points
+- Minimal routine → reduce all scores by 5–8 points
+- Extensive routine → increase all scores by 5–8 points
+- Age 46+ → reduce texture and firmness scores
+- skinScore = average of all 4 metrics rounded
+
+All card descriptions and summaries must be specific to the user's skin type, concern, age, and issues.
+Morning and evening routine products must match the user's skin concern and type.
+
+Return ONLY this JSON structure with real calculated values (no placeholder zeros):
+{"skinScore":75,"skinLabel":"Good Skin","summary":"Personalized summary here based on their profile","hydration":72,"texture":68,"clarity":65,"toneEvenness":70,"cards":[{"title":"Skin Analysis","description":"Detailed finding specific to their skin type and concern","badge":"Confirmed"},{"title":"Hydration Level","description":"Specific hydration insight based on their skin type","badge":"Good"},{"title":"Texture & Pores","description":"Texture insight based on their concern","badge":"Fair"},{"title":"Pigmentation","description":"Pigmentation finding based on their concern","badge":"Mild"},{"title":"Fine Lines & Aging","description":"Aging insight based on their age range","badge":"Early"},{"title":"Problem Areas","description":"Key problem areas specific to their inputs","badge":"Monitor"}],"morning":["Product 1 for their skin type","Product 2","Product 3","Product 4"],"evening":["Evening product 1","Evening product 2","Evening product 3","Evening product 4"],"targeted":["Targeted treatment 1","Targeted treatment 2","Targeted treatment 3"]}`
             }
           ]
         })
@@ -97,7 +123,11 @@ export default function SkinAnalysis() {
 
       const data = await response.json()
       const content = data.choices[0].message.content.trim()
-      const result = JSON.parse(content)
+
+      // Strip markdown backticks if model accidentally adds them
+      const cleaned = content.replace(/```json|```/g, '').trim()
+      const result = JSON.parse(cleaned)
+
       setAnalysisResult(result)
       await fetchRecommendedProducts(result)
       if (user) await saveAnalysisToDatabase(result)
