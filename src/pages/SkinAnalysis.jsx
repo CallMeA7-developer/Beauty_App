@@ -58,12 +58,20 @@ export default function SkinAnalysis() {
     setLoading(true)
     setError(null)
 
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY
+
+    if (!apiKey) {
+      setError('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to environment variables.')
+      setLoading(false)
+      return
+    }
+
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           model: 'gpt-4',
@@ -116,7 +124,11 @@ export default function SkinAnalysis() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to get analysis from OpenAI')
+        const errorData = await response.json().catch(() => ({}))
+        if (response.status === 401) {
+          throw new Error('Invalid OpenAI API key. Please check your VITE_OPENAI_API_KEY environment variable.')
+        }
+        throw new Error(errorData.error?.message || 'Failed to get analysis from OpenAI')
       }
 
       const data = await response.json()
