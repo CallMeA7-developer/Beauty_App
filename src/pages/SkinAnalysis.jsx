@@ -58,53 +58,22 @@ export default function SkinAnalysis() {
     setLoading(true)
     setError(null)
 
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY
-
-    console.log('All env vars:', Object.keys(import.meta.env))
-    console.log('OpenAI key exists:', !!import.meta.env.VITE_OPENAI_API_KEY)
-
-    if (!apiKey) {
-      setError('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to environment variables.')
-      setLoading(false)
-      return
-    }
-
     try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000)
-
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('/api/analyze-skin', {
         method: 'POST',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          max_tokens: 1000,
-          temperature: 0.5,
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a skin analysis AI. Respond with valid JSON only, no extra text.'
-            },
-            {
-              role: 'user',
-              content: `Skin: ${selectedSkinType}, Concern: ${selectedConcern}, Age: ${selectedAge || 'Unknown'}, Issues: ${selectedSpecificConcerns.join(',') || 'None'}, Routine: ${selectedRoutine}, Sun: ${sunExposure}. Return ONLY this JSON structure: {"skinScore":85,"summary":"2 sentence summary","metrics":{"hydration":80,"texture":75,"clarity":85,"toneEvenness":80,"firmness":78,"radiance":76},"analysisCards":[{"title":"Skin Type","description":"description","badge":"Confirmed"},{"title":"Main Concern","description":"description","badge":"Priority"},{"title":"Hydration","description":"description","badge":"Focus"},{"title":"Recommendations","description":"description","badge":"Action"}],"morningRoutine":[{"step":1,"productType":"Cleanser","reason":"reason"},{"step":2,"productType":"Serum","reason":"reason"},{"step":3,"productType":"Moisturizer","reason":"reason"},{"step":4,"productType":"Sunscreen","reason":"reason"}],"eveningRoutine":[{"step":1,"productType":"Makeup Remover","reason":"reason"},{"step":2,"productType":"Treatment","reason":"reason"},{"step":3,"productType":"Night Cream","reason":"reason"}],"targetedTreatments":[{"productType":"Eye Cream","reason":"reason"},{"productType":"Mask","reason":"reason"}],"keyIngredients":["Hyaluronic Acid","Vitamin C"],"avoidIngredients":["Alcohol","Fragrance"]}`
-            }
-          ]
+          skinType: selectedSkinType,
+          concern: selectedConcern,
+          age: selectedAge,
+          specificConcerns: selectedSpecificConcerns.join(','),
+          routine: selectedRoutine,
+          sunExposure: sunExposure
         })
       })
 
-      clearTimeout(timeoutId)
-
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        if (response.status === 401) {
-          throw new Error('Invalid OpenAI API key.')
-        }
-        throw new Error(errorData.error?.message || 'Failed to get analysis from OpenAI')
+        throw new Error('Failed to get analysis from server')
       }
 
       const data = await response.json()
@@ -123,11 +92,7 @@ export default function SkinAnalysis() {
 
     } catch (err) {
       console.error('Analysis error:', err)
-      if (err.name === 'AbortError') {
-        setError('Analysis timed out. Please try again.')
-      } else {
-        setError('Failed to analyze skin. Please try again.')
-      }
+      setError('Failed to analyze skin. Please try again.')
     } finally {
       setLoading(false)
     }
