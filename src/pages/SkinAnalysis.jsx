@@ -59,6 +59,14 @@ export default function SkinAnalysis() {
     setError(null)
 
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY
+      || process.env.VITE_OPENAI_API_KEY
+      || process.env.OPENAI_API_KEY
+
+    console.log('API Key exists:', !!apiKey)
+    console.log('API Key prefix:', apiKey?.substring(0, 7))
+    console.log('import.meta.env.VITE_OPENAI_API_KEY:', !!import.meta.env.VITE_OPENAI_API_KEY)
+    console.log('process.env.VITE_OPENAI_API_KEY:', !!process.env.VITE_OPENAI_API_KEY)
+    console.log('process.env.OPENAI_API_KEY:', !!process.env.OPENAI_API_KEY)
 
     if (!apiKey) {
       setError('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to environment variables.')
