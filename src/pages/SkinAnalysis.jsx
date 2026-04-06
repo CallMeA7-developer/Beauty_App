@@ -59,14 +59,7 @@ export default function SkinAnalysis() {
     setError(null)
 
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY
-      || process.env.VITE_OPENAI_API_KEY
-      || process.env.OPENAI_API_KEY
-
-    console.log('API Key exists:', !!apiKey)
-    console.log('API Key prefix:', apiKey?.substring(0, 7))
-    console.log('import.meta.env.VITE_OPENAI_API_KEY:', !!import.meta.env.VITE_OPENAI_API_KEY)
-    console.log('process.env.VITE_OPENAI_API_KEY:', !!process.env.VITE_OPENAI_API_KEY)
-    console.log('process.env.OPENAI_API_KEY:', !!process.env.OPENAI_API_KEY)
+      || import.meta.env.OPENAI_API_KEY
 
     if (!apiKey) {
       setError('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to environment variables.')
@@ -75,66 +68,39 @@ export default function SkinAnalysis() {
     }
 
     try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000)
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: 'gpt-4',
+          model: 'gpt-4o-mini',
+          max_tokens: 1000,
+          temperature: 0.5,
           messages: [
             {
               role: 'system',
-              content: 'You are a professional skin analysis AI for Shan Loray luxury beauty brand. Always respond with valid JSON only, no extra text.'
+              content: 'You are a skin analysis AI. Respond with valid JSON only, no extra text.'
             },
             {
               role: 'user',
-              content: `Analyze this skin profile and return ONLY a JSON object:
-        - Skin Type: ${selectedSkinType}
-        - Primary Concern: ${selectedConcern}
-        - Age Range: ${selectedAge || 'Not specified'}
-        - Specific Concerns: ${selectedSpecificConcerns.join(', ') || 'None'}
-        - Current Routine: ${selectedRoutine}
-        - Sun Exposure: ${sunExposure}
-
-        Return this exact JSON structure:
-        {
-          "skinScore": number 0-100,
-          "summary": "personalized summary",
-          "metrics": {
-            "hydration": number 0-100,
-            "texture": number 0-100,
-            "clarity": number 0-100,
-            "toneEvenness": number 0-100,
-            "firmness": number 0-100,
-            "radiance": number 0-100
-          },
-          "analysisCards": [
-            {"title": "string", "description": "string", "badge": "string"}
-          ],
-          "morningRoutine": [
-            {"step": number, "productType": "string", "reason": "string"}
-          ],
-          "eveningRoutine": [
-            {"step": number, "productType": "string", "reason": "string"}
-          ],
-          "targetedTreatments": [
-            {"productType": "string", "reason": "string"}
-          ],
-          "keyIngredients": ["string"],
-          "avoidIngredients": ["string"]
-        }`
+              content: `Skin: ${selectedSkinType}, Concern: ${selectedConcern}, Age: ${selectedAge || 'Unknown'}, Issues: ${selectedSpecificConcerns.join(',') || 'None'}, Routine: ${selectedRoutine}, Sun: ${sunExposure}. Return ONLY this JSON structure: {"skinScore":85,"summary":"2 sentence summary","metrics":{"hydration":80,"texture":75,"clarity":85,"toneEvenness":80,"firmness":78,"radiance":76},"analysisCards":[{"title":"Skin Type","description":"description","badge":"Confirmed"},{"title":"Main Concern","description":"description","badge":"Priority"},{"title":"Hydration","description":"description","badge":"Focus"},{"title":"Recommendations","description":"description","badge":"Action"}],"morningRoutine":[{"step":1,"productType":"Cleanser","reason":"reason"},{"step":2,"productType":"Serum","reason":"reason"},{"step":3,"productType":"Moisturizer","reason":"reason"},{"step":4,"productType":"Sunscreen","reason":"reason"}],"eveningRoutine":[{"step":1,"productType":"Makeup Remover","reason":"reason"},{"step":2,"productType":"Treatment","reason":"reason"},{"step":3,"productType":"Night Cream","reason":"reason"}],"targetedTreatments":[{"productType":"Eye Cream","reason":"reason"},{"productType":"Mask","reason":"reason"}],"keyIngredients":["Hyaluronic Acid","Vitamin C"],"avoidIngredients":["Alcohol","Fragrance"]}`
             }
-          ],
-          temperature: 0.7
+          ]
         })
       })
+
+      clearTimeout(timeoutId)
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         if (response.status === 401) {
-          throw new Error('Invalid OpenAI API key. Please check your VITE_OPENAI_API_KEY environment variable.')
+          throw new Error('Invalid OpenAI API key.')
         }
         throw new Error(errorData.error?.message || 'Failed to get analysis from OpenAI')
       }
@@ -155,7 +121,11 @@ export default function SkinAnalysis() {
 
     } catch (err) {
       console.error('Analysis error:', err)
-      setError('Failed to analyze skin. Please try again.')
+      if (err.name === 'AbortError') {
+        setError('Analysis timed out. Please try again.')
+      } else {
+        setError('Failed to analyze skin. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -169,21 +139,12 @@ export default function SkinAnalysis() {
         .or(`name.ilike.%${productType}%,description.ilike.%${productType}%`)
         .limit(1)
         .maybeSingle()
-
       return data
     }
 
-    const morningProds = await Promise.all(
-      result.morningRoutine.map(item => fetchProductsByType(item.productType))
-    )
-
-    const eveningProds = await Promise.all(
-      result.eveningRoutine.map(item => fetchProductsByType(item.productType))
-    )
-
-    const targetedProds = await Promise.all(
-      result.targetedTreatments.map(item => fetchProductsByType(item.productType))
-    )
+    const morningProds = await Promise.all(result.morningRoutine.map(item => fetchProductsByType(item.productType)))
+    const eveningProds = await Promise.all(result.eveningRoutine.map(item => fetchProductsByType(item.productType)))
+    const targetedProds = await Promise.all(result.targetedTreatments.map(item => fetchProductsByType(item.productType)))
 
     setRecommendedProducts({
       morning: morningProds.filter(Boolean),
@@ -194,20 +155,18 @@ export default function SkinAnalysis() {
 
   const saveAnalysisToDatabase = async (result) => {
     try {
-      await supabase
-        .from('skin_analysis')
-        .insert({
-          user_id: user.id,
-          skin_score: result.skinScore,
-          summary: result.summary,
-          metrics: result.metrics,
-          analysis_cards: result.analysisCards,
-          morning_routine: result.morningRoutine,
-          evening_routine: result.eveningRoutine,
-          targeted_treatments: result.targetedTreatments,
-          key_ingredients: result.keyIngredients,
-          avoid_ingredients: result.avoidIngredients
-        })
+      await supabase.from('skin_analysis').insert({
+        user_id: user.id,
+        skin_score: result.skinScore,
+        summary: result.summary,
+        metrics: result.metrics,
+        analysis_cards: result.analysisCards,
+        morning_routine: result.morningRoutine,
+        evening_routine: result.eveningRoutine,
+        targeted_treatments: result.targetedTreatments,
+        key_ingredients: result.keyIngredients,
+        avoid_ingredients: result.avoidIngredients
+      })
     } catch (err) {
       console.error('Failed to save analysis:', err)
     }
@@ -217,42 +176,6 @@ export default function SkinAnalysis() {
     { icon: IoSunnyOutline, title: 'Good Lighting', desc: 'Natural daylight preferred' },
     { icon: IoPersonCircleOutline, title: 'Face Forward', desc: 'Look directly at camera' },
     { icon: IoSparklesOutline, title: 'Remove Makeup', desc: 'Clean, bare skin' },
-  ]
-
-  const quickStats = [
-    { label: 'Hydration', value: '92%' },
-    { label: 'Texture', value: '78%' },
-    { label: 'Clarity', value: '88%' },
-    { label: 'Tone Evenness', value: '81%' },
-  ]
-
-  const analysisCards = [
-    { title: 'Combination Skin', desc: 'T-zone shows moderate oiliness while cheek areas tend toward dryness. Balanced care recommended for optimal results.', badge: 'Confirmed' },
-    { title: 'Hydration Levels', desc: 'Excellent moisture retention detected. Continue current hydration routine with lightweight serums.' },
-    { title: 'Texture & Smoothness', desc: 'Minimal pore visibility with good overall texture. Occasional exfoliation will maintain smoothness.' },
-    { title: 'Pigmentation', desc: 'Mild uneven tone detected in cheek areas. Vitamin C treatments recommended for brightening.' },
-    { title: 'Fine Lines & Wrinkles', desc: 'Early signs around eye area. Preventive care with retinol and SPF strongly advised.' },
-    { title: 'Problem Areas', desc: 'Slight redness in T-zone. Consider calming ingredients like niacinamide and centella.' },
-  ]
-
-  const morningProducts = [
-    { name: 'Gentle Cleanser', benefit: 'Purifying & balancing', price: '$58', reviews: 342, image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=280&h=280&fit=crop' },
-    { name: 'Vitamin C Serum', benefit: 'Brightening & protection', price: '$125', reviews: 521, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=280&h=280&fit=crop' },
-    { name: 'Hydrating Moisturizer', benefit: 'Deep moisture lock', price: '$89', reviews: 467, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=280&h=280&fit=crop' },
-    { name: 'SPF 50 Sunscreen', benefit: 'Broad spectrum defense', price: '$72', reviews: 789, image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=280&h=280&fit=crop' },
-  ]
-
-  const eveningProducts = [
-    { name: 'Makeup Remover', benefit: 'Gentle cleansing oil', price: '$54', reviews: 398, image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=280&h=280&fit=crop' },
-    { name: 'Exfoliating Toner', benefit: 'Refining & smoothing', price: '$68', reviews: 456, image: 'https://images.unsplash.com/photo-1620916297073-ff5f6c60c5b3?w=280&h=280&fit=crop' },
-    { name: 'Retinol Treatment', benefit: 'Anti-aging powerhouse', price: '$145', reviews: 634, image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=280&h=280&fit=crop' },
-    { name: 'Night Cream', benefit: 'Intensive repair', price: '$98', reviews: 523, image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=280&h=280&fit=crop' },
-  ]
-
-  const targetedProducts = [
-    { name: 'Eye Cream', benefit: 'Reduces dark circles', price: '$82', reviews: 412, image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=280&h=280&fit=crop' },
-    { name: 'Dark Spot Corrector', benefit: 'Brightening treatment', price: '$115', reviews: 367, image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=280&h=280&fit=crop' },
-    { name: 'Pore Minimizer', benefit: 'Refining serum', price: '$95', reviews: 289, image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=280&h=280&fit=crop' },
   ]
 
   const timelinePoints = [
@@ -274,15 +197,15 @@ export default function SkinAnalysis() {
 
   const ProductCard = ({ product }) => (
     <div className="bg-white rounded-[8px] overflow-hidden border border-[#E8E3D9]">
-      <img src={product.image_url || product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
+      <img src={product.img_url || product.image_url || product.image} alt={product.name} className="w-full h-[180px] md:h-[220px] lg:h-[280px] object-cover" />
       <div className="p-4 md:p-5 lg:p-6">
         <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] mb-2">{product.brand || 'Shan Loray'}</p>
         <h4 className="text-[14px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-2">{product.name}</h4>
-        <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-3">{product.benefit || product.description?.slice(0, 50) + '...'}</p>
-        <p className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">${product.price}</p>
+        <p className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-3">{product.description?.slice(0, 60)}...</p>
+        <p className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">${parseFloat(product.price).toFixed(2)}</p>
         <div className="flex items-center gap-1 mb-4">
           <Stars />
-          <span className="text-[11px] lg:text-[12px] font-normal text-[#999999] ml-1">({product.reviews_count || product.reviews || 0})</span>
+          <span className="text-[11px] lg:text-[12px] font-normal text-[#999999] ml-1">({product.review_count || 0})</span>
         </div>
         <button className="w-full h-[42px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
           Add to Cart
@@ -294,50 +217,41 @@ export default function SkinAnalysis() {
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
         <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
           <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
           <h1 className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">Discover Your Skin's True Potential</h1>
-          <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Advanced AI technology analyzes your skin in 60 seconds with medical-grade precision</p>
+          <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Advanced AI technology analyzes your skin in seconds with medical-grade precision</p>
           <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
-          <img
-            src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=400&fit=crop"
-            alt="Skin Analysis Technology"
-            className="w-[400px] h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]"
-          />
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=400&fit=crop" alt="Skin Analysis" className="w-[400px] h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
 
-      {/* ── Breadcrumb ── */}
-      <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span>
+      {/* Breadcrumb */}
+      <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center">
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Technology</span>
-        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">Skin Analysis</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">Technology</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Skin Analysis</span>
       </div>
 
-      {/* ── Upload Section ── */}
+      {/* Upload Section */}
       <div id="upload-section" className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
         <div className="max-w-[1200px] mx-auto">
           <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
-          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Upload a clear, front-facing photo in natural lighting for accurate results</p>
-
+          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Upload a clear photo or use our questionnaire below</p>
           <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
             <div className="min-h-[280px] md:min-h-[340px] lg:min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center px-4 py-8 lg:py-0">
               <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-4" />
               <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Upload Your Photo</h3>
               <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 text-center">Drag and drop your photo here or click to browse</p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                  Upload Photo
-                </button>
-                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-                  Take Selfie
-                </button>
+                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Upload Photo</button>
+                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">Take Selfie</button>
               </div>
             </div>
             <div className="p-5 md:p-6 lg:p-[32px] grid grid-cols-3 gap-4 lg:gap-6">
@@ -350,43 +264,34 @@ export default function SkinAnalysis() {
               ))}
             </div>
           </div>
-
-          <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto mt-6 lg:mt-8 bg-[#F5F1EA] rounded-[12px] flex flex-col items-center justify-center py-5 px-6">
-            <p className="text-[14px] lg:text-[16px] font-normal text-[#666666] mb-2">Don't have a photo ready?</p>
-            <span className="text-[14px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer underline">Take our skin questionnaire instead</span>
-          </div>
         </div>
       </div>
 
-      {/* ── Questionnaire ── */}
+      {/* Questionnaire */}
       <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
         <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Tell Us About Your Skin</h2>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Help us understand your unique skin concerns for personalized recommendations</p>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Help us understand your unique skin concerns</p>
 
         {error && (
-          <div className="max-w-[1200px] mx-auto mb-6 p-4 bg-red-50 border border-red-200 rounded-[8px] text-red-600 text-[14px]">
-            {error}
-          </div>
+          <div className="max-w-[1200px] mx-auto mb-6 p-4 bg-red-50 border border-red-200 rounded-[8px] text-red-600 text-[14px]">{error}</div>
         )}
 
         {loading && (
           <div className="max-w-[1200px] mx-auto mb-6 p-6 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex flex-col items-center">
             <LoadingSpinner />
-            <p className="text-[16px] text-[#8B7355] mt-4">Analyzing your skin...</p>
+            <p className="text-[16px] text-[#8B7355] mt-4">Analyzing your skin... This may take a few seconds</p>
           </div>
         )}
 
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 lg:gap-8 mb-10 lg:mb-12">
+
           {/* Primary Concern */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Primary Skin Concern</h3>
             <div className="grid grid-cols-2 gap-3">
               {skinConcerns.map((concern) => (
-                <button
-                  key={concern}
-                  onClick={() => setSelectedConcern(concern)}
-                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedConcern === concern ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
-                >
+                <button key={concern} onClick={() => setSelectedConcern(concern)}
+                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedConcern === concern ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
                   {concern}
                 </button>
               ))}
@@ -398,11 +303,8 @@ export default function SkinAnalysis() {
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Skin Type</h3>
             <div className="grid grid-cols-3 gap-3">
               {skinTypes.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setSelectedSkinType(type)}
-                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedSkinType === type ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
-                >
+                <button key={type} onClick={() => setSelectedSkinType(type)}
+                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedSkinType === type ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
                   {type}
                 </button>
               ))}
@@ -412,11 +314,8 @@ export default function SkinAnalysis() {
           {/* Current Routine */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Current Routine</h3>
-            <select
-              value={selectedRoutine}
-              onChange={(e) => setSelectedRoutine(e.target.value)}
-              className="w-full h-[48px] lg:h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] px-5 text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] cursor-pointer outline-none"
-            >
+            <select value={selectedRoutine} onChange={(e) => setSelectedRoutine(e.target.value)}
+              className="w-full h-[48px] lg:h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] px-5 text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] cursor-pointer outline-none">
               <option>Minimal (1-3 products)</option>
               <option>Moderate (4-6 products)</option>
               <option>Extensive (7+ products)</option>
@@ -426,18 +325,13 @@ export default function SkinAnalysis() {
           {/* Sun Exposure */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Sun Exposure</h3>
-            <div className="pt-4">
-              <div className="flex gap-3">
-                {['Minimal', 'Moderate', 'High'].map((level) => (
-                  <button
-                    key={level}
-                    onClick={() => setSunExposure(level)}
-                    className={`flex-1 h-[44px] text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${sunExposure === level ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
-                  >
-                    {level}
-                  </button>
-                ))}
-              </div>
+            <div className="flex gap-3">
+              {['Minimal', 'Moderate', 'High'].map((level) => (
+                <button key={level} onClick={() => setSunExposure(level)}
+                  className={`flex-1 h-[44px] text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${sunExposure === level ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
+                  {level}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -446,11 +340,8 @@ export default function SkinAnalysis() {
             <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Age Range</h3>
             <div className="grid grid-cols-3 gap-3">
               {ageRanges.map((range) => (
-                <button
-                  key={range}
-                  onClick={() => setSelectedAge(range)}
-                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedAge === range ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}
-                >
+                <button key={range} onClick={() => setSelectedAge(range)}
+                  className={`h-[44px] lg:h-[48px] px-4 text-[13px] lg:text-[14px] rounded-[8px] transition-colors ${selectedAge === range ? 'bg-[#C9A870] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#e8e3d9]'}`}>
                   {range}
                 </button>
               ))}
@@ -474,25 +365,20 @@ export default function SkinAnalysis() {
         </div>
 
         <div className="flex justify-center">
-          <button
-            onClick={analyzeSkinn}
-            disabled={loading}
-            className="w-full sm:w-[200px] lg:w-[240px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+          <button onClick={analyzeSkinn} disabled={loading}
+            className="w-full sm:w-[200px] lg:w-[240px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             {loading ? 'Analyzing...' : 'Analyze My Skin'}
           </button>
         </div>
 
         {!user && analysisResult && (
           <div className="max-w-[1200px] mx-auto mt-6 p-4 bg-[#F5F1EA] rounded-[12px] text-center">
-            <p className="text-[14px] text-[#666666]">
-              <span className="font-medium text-[#8B7355]">Save your results</span> — Sign in to save your analysis
-            </p>
+            <p className="text-[14px] text-[#666666]"><span className="font-medium text-[#8B7355]">Save your results</span> — Sign in to save your analysis</p>
           </div>
         )}
       </div>
 
-      {/* ── Analysis Results ── */}
+      {/* Analysis Results */}
       {analysisResult && (
         <div id="results-section" className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
           <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">Your Skin Analysis Results</h2>
@@ -516,9 +402,7 @@ export default function SkinAnalysis() {
               {Object.entries(analysisResult.metrics).map(([key, value]) => (
                 <div key={key} className="flex flex-col items-center">
                   <IoWaterOutline className="w-[24px] h-[24px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-2" />
-                  <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-1 capitalize">
-                    {key.replace(/([A-Z])/g, ' $1').trim()}
-                  </span>
+                  <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-1 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                   <span className="text-[24px] md:text-[28px] lg:text-[32px] font-semibold text-[#1A1A1A] mb-2">{value}%</span>
                   <div className="w-full h-[7px] lg:h-[8px] bg-[#E8E3D9] rounded-full overflow-hidden">
                     <div className="h-full bg-[#8B7355] rounded-full transition-all duration-500" style={{ width: `${value}%` }} />
@@ -548,20 +432,15 @@ export default function SkinAnalysis() {
               <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Key Ingredients for Your Skin</h3>
               <div className="flex flex-wrap gap-2">
                 {analysisResult.keyIngredients.map((ingredient, idx) => (
-                  <span key={idx} className="px-4 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">
-                    {ingredient}
-                  </span>
+                  <span key={idx} className="px-4 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">{ingredient}</span>
                 ))}
               </div>
             </div>
-
             <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[32px]">
               <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Ingredients to Avoid</h3>
               <div className="flex flex-wrap gap-2">
                 {analysisResult.avoidIngredients.map((ingredient, idx) => (
-                  <span key={idx} className="px-4 py-2 bg-red-100 text-red-600 text-[13px] lg:text-[14px] font-medium rounded-full">
-                    {ingredient}
-                  </span>
+                  <span key={idx} className="px-4 py-2 bg-red-100 text-red-600 text-[13px] lg:text-[14px] font-medium rounded-full">{ingredient}</span>
                 ))}
               </div>
             </div>
@@ -569,7 +448,7 @@ export default function SkinAnalysis() {
         </div>
       )}
 
-      {/* ── Product Recommendations ── */}
+      {/* Product Recommendations */}
       {analysisResult && (
         <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
           <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
@@ -582,9 +461,7 @@ export default function SkinAnalysis() {
             <div className="space-y-4 mb-6">
               {analysisResult.morningRoutine.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">
-                    {item.step}
-                  </div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">{item.step}</div>
                   <div className="flex-1">
                     <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
                     <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
@@ -592,15 +469,11 @@ export default function SkinAnalysis() {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-              {recommendedProducts.morning.length > 0 ? (
-                recommendedProducts.morning.map((product) => <ProductCard key={product.id} product={product} />)
-              ) : (
-                <div className="col-span-2 md:col-span-4 text-center py-8 text-[#666666]">
-                  Loading recommended products...
-                </div>
-              )}
-            </div>
+            {recommendedProducts.morning.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
+                {recommendedProducts.morning.map((product) => <ProductCard key={product.id} product={product} />)}
+              </div>
+            )}
           </div>
 
           {/* Evening Routine */}
@@ -610,9 +483,7 @@ export default function SkinAnalysis() {
             <div className="space-y-4 mb-6">
               {analysisResult.eveningRoutine.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-4 p-4 bg-[#F5F1EA] rounded-[8px]">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">
-                    {item.step}
-                  </div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#8B7355] text-white rounded-full flex items-center justify-center font-semibold">{item.step}</div>
                   <div className="flex-1">
                     <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{item.productType}</h4>
                     <p className="text-[13px] lg:text-[14px] text-[#666666]">{item.reason}</p>
@@ -620,15 +491,11 @@ export default function SkinAnalysis() {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-              {recommendedProducts.evening.length > 0 ? (
-                recommendedProducts.evening.map((product) => <ProductCard key={product.id} product={product} />)
-              ) : (
-                <div className="col-span-2 md:col-span-4 text-center py-8 text-[#666666]">
-                  Loading recommended products...
-                </div>
-              )}
-            </div>
+            {recommendedProducts.evening.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
+                {recommendedProducts.evening.map((product) => <ProductCard key={product.id} product={product} />)}
+              </div>
+            )}
           </div>
 
           {/* Targeted Treatments */}
@@ -645,20 +512,16 @@ export default function SkinAnalysis() {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
-              {recommendedProducts.targeted.length > 0 ? (
-                recommendedProducts.targeted.map((product) => <ProductCard key={product.id} product={product} />)
-              ) : (
-                <div className="col-span-1 sm:col-span-3 text-center py-8 text-[#666666]">
-                  Loading recommended products...
-                </div>
-              )}
-            </div>
+            {recommendedProducts.targeted.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
+                {recommendedProducts.targeted.map((product) => <ProductCard key={product.id} product={product} />)}
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* ── Progress Tracking ── */}
+      {/* Progress Tracking */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
         <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-4 lg:mb-6">Track Your Skin Journey</h2>
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">Monitor improvements with regular skin analysis</p>
@@ -671,39 +534,12 @@ export default function SkinAnalysis() {
                 <div className="text-[12px] lg:text-[14px] font-normal text-[#666666]">{point.date}</div>
               </div>
             ))}
-            <button className="w-full sm:w-[180px] h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-              Schedule Next Analysis
-            </button>
+            <button className="w-full sm:w-[180px] h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Schedule Next Analysis</button>
           </div>
         </div>
       </div>
 
-      {/* ── Expert Consultation ── */}
-      <div className="bg-[#F5F1EA] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-8 lg:gap-[64px]">
-          <div className="w-full md:w-auto md:flex-1 lg:w-[600px] lg:flex-none">
-            <h2 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Want Expert Guidance?</h2>
-            <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] leading-[1.6] mb-6 lg:mb-8">Book a complimentary virtual consultation with our skincare specialists to discuss your results and personalized routine</p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="w-full sm:w-[180px] lg:w-[200px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                Book Consultation
-              </button>
-              <button className="w-full sm:w-[180px] lg:w-[200px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-white/80 transition-colors">
-                Chat with Expert
-              </button>
-            </div>
-          </div>
-          <div className="w-full md:flex-1">
-            <img
-              src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=520&h=280&fit=crop"
-              alt="Expert Consultant"
-              className="w-full h-[200px] md:h-[240px] lg:h-[280px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* ── FAQ ── */}
+      {/* FAQ */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
         <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Frequently Asked Questions</h2>
         <div className="max-w-[900px] mx-auto space-y-4">
@@ -723,15 +559,13 @@ export default function SkinAnalysis() {
         </div>
       </div>
 
-      {/* ── Newsletter CTA ── */}
+      {/* Newsletter */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-0 lg:min-h-[180px] flex flex-col items-center justify-center">
         <h3 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">Stay Updated on Skin Health</h3>
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-5 lg:mb-6 text-center">Get personalized skincare tips and exclusive offers</p>
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
           <input type="email" placeholder="Enter your email" className="w-full sm:w-[280px] lg:w-[360px] h-[48px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-            Subscribe
-          </button>
+          <button className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
         </div>
       </div>
 
