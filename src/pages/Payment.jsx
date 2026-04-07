@@ -148,7 +148,54 @@ export default function Payment() {
       return
     }
 
-    navigate('/order-confirmation')
+    if (!selectedCard) {
+      setError('Please select a payment method')
+      return
+    }
+
+    setProcessing(true)
+    setError('')
+
+    try {
+      const orderItems = cartItems.map(item => ({
+        product_id: item.product_id,
+        product_name: item.product_name,
+        product_image: item.product_image,
+        brand: item.brand,
+        price: parseFloat(item.price),
+        quantity: item.quantity,
+      }))
+
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          items: orderItems,
+          subtotal: subtotal,
+          shipping: shipping,
+          tax: tax,
+          total: total,
+          status: 'confirmed',
+          payment_status: 'paid',
+          shipping_address: checkoutSession.selectedAddress,
+          delivery_method: checkoutSession.selectedDeliveryMethod || 'Standard Delivery',
+        })
+        .select()
+        .single()
+
+      if (orderError) throw orderError
+
+      await supabase
+        .from('cart')
+        .delete()
+        .eq('user_id', user.id)
+
+      navigate(`/order-confirmation?orderId=${orderData.id}`)
+    } catch (err) {
+      console.error('Error placing order:', err)
+      setError('Failed to place order. Please try again.')
+      setProcessing(false)
+    }
   }
 
   const getCardBrandStyles = (brand) => {
