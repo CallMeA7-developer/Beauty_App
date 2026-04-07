@@ -34,6 +34,7 @@ export default function SkinAnalysis() {
   const [recommendedProducts, setRecommendedProducts] = useState({ morning: [], evening: [], targeted: [] })
   const [openFaq, setOpenFaq] = useState(null)
   const [savedSuccess, setSavedSuccess] = useState(false)
+  const [savedJourney, setSavedJourney] = useState(null)
 
   useEffect(() => {
     if (location.hash) {
@@ -44,9 +45,25 @@ export default function SkinAnalysis() {
 
   useEffect(() => {
     if (user) {
-      loadSavedAnalysis()
+      loadSavedJourney()
     }
   }, [user])
+
+  const loadSavedJourney = async () => {
+    try {
+      const { data } = await supabase
+        .from('skin_analysis')
+        .select('skin_score, skin_label, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (data) setSavedJourney(data)
+    } catch (err) {
+      console.error('Error loading journey:', err)
+    }
+  }
 
   const loadSavedAnalysis = async () => {
     try {
@@ -374,6 +391,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         created_at: new Date().toISOString(),
       }, { onConflict: 'user_id' })
       setSavedSuccess(true)
+      await loadSavedJourney()
     } catch (err) {
       console.error('Save error:', err)
       alert('Failed to save. Please try again.')
@@ -740,15 +758,23 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">Monitor improvements with regular skin analysis</p>
 
         <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-6 lg:p-[40px]">
-          {analysisResult ? (
+          {analysisResult || savedJourney ? (
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <div className="flex flex-col items-center flex-shrink-0">
                 <div className="w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] rounded-[12px] bg-[#C9A870] flex items-center justify-center mb-4">
                   <IoSparklesOutline className="w-[40px] h-[40px] lg:w-[52px] lg:h-[52px] text-white" />
                 </div>
-                <div className="text-[26px] lg:text-[32px] font-bold text-[#8B7355] mb-1">{analysisResult.skinScore}/100</div>
-                <div className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-2">{analysisDate ? formatDate(analysisDate) : ''}</div>
-                <div className="px-3 py-1 bg-[#F5F1EA] rounded-full text-[11px] lg:text-[12px] text-[#8B7355] font-medium">{analysisResult.skinLabel}</div>
+                <div className="text-[26px] lg:text-[32px] font-bold text-[#8B7355] mb-1">
+                  {analysisResult ? analysisResult.skinScore : savedJourney.skin_score}/100
+                </div>
+                <div className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-2">
+                  {analysisResult
+                    ? (analysisDate ? formatDate(analysisDate) : '')
+                    : formatDate(new Date(savedJourney.created_at))}
+                </div>
+                <div className="px-3 py-1 bg-[#F5F1EA] rounded-full text-[11px] lg:text-[12px] text-[#8B7355] font-medium">
+                  {analysisResult ? analysisResult.skinLabel : savedJourney.skin_label}
+                </div>
               </div>
               <div className="flex-1 text-center sm:text-left">
                 <p className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] mb-3">Your Latest Analysis is Saved!</p>
