@@ -18,7 +18,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 export default function SkinAnalysis() {
   const location = useLocation()
   const { user } = useAuth()
-  const { addItem } = useCart()
+  const { addToCart } = useCart()
 
   const [selectedConcern, setSelectedConcern] = useState(null)
   const [selectedSkinType, setSelectedSkinType] = useState(null)
@@ -324,7 +324,15 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           <span className="text-[11px] font-normal text-[#999999] ml-1">({product.review_count || 0})</span>
         </div>
         <button
-          onClick={() => addItem(product)}
+          onClick={() => addToCart(
+            product.id,
+            product.name,
+            product.img_url || product.image_url,
+            product.brand || 'Shan Loray',
+            product.size || '',
+            product.price,
+            1
+          )}
           className="w-full h-[40px] lg:h-[44px] bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors"
         >
           Add to Cart
