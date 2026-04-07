@@ -33,6 +33,7 @@ export default function SkinAnalysis() {
   const [error, setError] = useState(null)
   const [recommendedProducts, setRecommendedProducts] = useState({ morning: [], evening: [], targeted: [] })
   const [openFaq, setOpenFaq] = useState(null)
+  const [savedSuccess, setSavedSuccess] = useState(false)
 
   useEffect(() => {
     if (location.hash) {
@@ -62,6 +63,7 @@ export default function SkinAnalysis() {
 
     setLoading(true)
     setError(null)
+    setSavedSuccess(false)
 
     try {
       const apiKey = window.__OPENAI_KEY__ || import.meta.env.VITE_OPENAI_API_KEY
@@ -313,8 +315,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         targeted_product_ids: recommendedProducts.targeted.map(p => p.id),
         created_at: new Date().toISOString(),
       }, { onConflict: 'user_id' })
-      alert('Your analysis has been saved to your profile!')
-      navigate('/beauty-journey')
+      setSavedSuccess(true)
     } catch (err) {
       console.error('Save error:', err)
       alert('Failed to save. Please try again.')
@@ -652,6 +653,12 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
               </p>
             )}
           </div>
+
+          {savedSuccess && (
+            <div className="max-w-[1200px] mx-auto mb-4 p-4 bg-[#F5F1EA] border border-[#C9A870] rounded-[8px] text-center">
+              <p className="text-[14px] lg:text-[15px] font-medium text-[#8B7355]">✓ Analysis saved to your profile successfully!</p>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row gap-4 justify-center">
