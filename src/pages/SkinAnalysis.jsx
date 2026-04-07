@@ -42,6 +42,64 @@ export default function SkinAnalysis() {
     }
   }, [location])
 
+  useEffect(() => {
+    if (user) {
+      loadSavedAnalysis()
+    }
+  }, [user])
+
+  const loadSavedAnalysis = async () => {
+    try {
+      const { data } = await supabase
+        .from('skin_analysis')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (!data) return
+
+      setAnalysisResult({
+        skinScore: data.skin_score,
+        skinLabel: data.skin_label,
+        summary: data.summary,
+        hydration: data.metrics?.hydration,
+        texture: data.metrics?.texture,
+        clarity: data.metrics?.clarity,
+        toneEvenness: data.metrics?.toneEvenness,
+        cards: data.analysis_cards || [],
+        morning: [],
+        evening: [],
+        targeted: [],
+      })
+      setAnalysisDate(new Date(data.created_at))
+      setSelectedSkinType(data.selected_skin_type || null)
+      setSelectedConcern(data.selected_concern || null)
+      setSelectedSpecificConcerns(data.selected_specific_concerns || [])
+
+      const fetchByIds = async (ids) => {
+        if (!ids || ids.length === 0) return []
+        const { data: products } = await supabase
+          .from('products')
+          .select('*')
+          .in('id', ids)
+        return products || []
+      }
+
+      const [morning, evening, targeted] = await Promise.all([
+        fetchByIds(data.morning_product_ids),
+        fetchByIds(data.evening_product_ids),
+        fetchByIds(data.targeted_product_ids),
+      ])
+
+      setRecommendedProducts({ morning, evening, targeted })
+
+    } catch (err) {
+      console.error('Error loading saved analysis:', err)
+    }
+  }
+
   const skinConcerns = ['Acne', 'Aging', 'Dryness', 'Oiliness', 'Sensitivity', 'Dark Spots']
   const skinTypes = ['Oily', 'Dry', 'Combination', 'Sensitive', 'Normal']
   const ageRanges = ['18-25', '26-35', '36-45', '46-55', '55+']
