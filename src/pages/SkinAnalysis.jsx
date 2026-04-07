@@ -145,24 +145,122 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
   }
 
   const fetchRecommendedProducts = async (result) => {
-    const fetchByName = async (productName) => {
-      const { data } = await supabase
-        .from('products')
-        .select('*')
-        .ilike('name', `%${productName.split(' ')[0]}%`)
-        .limit(1)
-        .maybeSingle()
-      return data
+    const usedProductIds = new Set()
+
+    // Mappings
+    const concernMap = {
+      'Acne': 'Acne Care',
+      'Aging': 'Anti-Aging',
+      'Dryness': 'Hydration',
+      'Oiliness': 'Acne Care',
+      'Sensitivity': 'Redness Relief',
+      'Dark Spots': 'Dark Spots'
     }
 
-    const morning = await Promise.all(result.morning.map(fetchByName))
-    const evening = await Promise.all(result.evening.map(fetchByName))
-    const targeted = await Promise.all(result.targeted.map(fetchByName))
+    const skinTypeMap = {
+      'Oily': 'Oily',
+      'Dry': 'Dry',
+      'Combination': 'Combination',
+      'Sensitive': 'Sensitive',
+      'Normal': 'Mature'
+    }
+
+    const mappedConcern = concernMap[selectedConcern]
+    const mappedSkinType = skinTypeMap[selectedSkinType]
+
+    // Helper to shuffle array
+    const shuffle = (arr) => arr.sort(() => Math.random() - 0.5)
+
+    // Helper to pick unique products
+    const pickUnique = (products, count) => {
+      const filtered = products.filter(p => !usedProductIds.has(p.id))
+      const shuffled = shuffle(filtered)
+      const picked = shuffled.slice(0, count)
+      picked.forEach(p => usedProductIds.add(p.id))
+      return picked
+    }
+
+    // Step 1 & 2: Fetch products with AND logic (concern AND skin type)
+    let { data: productsAnd } = await supabase
+      .from('products')
+      .select('*')
+      .eq('category', 'SkinCare')
+      .contains('skin_concerns', [mappedConcern])
+      .contains('skin_types', [mappedSkinType])
+
+    if (!productsAnd) productsAnd = []
+
+    let step1Products = []
+    let step2Products = []
+
+    if (productsAnd.length >= 8) {
+      // Enough products with AND logic
+      const shuffled = shuffle([...productsAnd])
+      step1Products = pickUnique(shuffled, 4)
+      step2Products = pickUnique(shuffled, 4)
+    } else {
+      // Fall back to OR logic
+      let { data: productsOr } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', 'SkinCare')
+        .or(`skin_concerns.cs.{${mappedConcern}},skin_types.cs.{${mappedSkinType}}`)
+
+      if (!productsOr) productsOr = []
+      const allProducts = [...new Map([...productsAnd, ...productsOr].map(p => [p.id, p])).values()]
+      const shuffled = shuffle(allProducts)
+      step1Products = pickUnique(shuffled, 4)
+      step2Products = pickUnique(shuffled, 4)
+    }
+
+    // Step 3: Targeted products based on selected specific concerns
+    const specificConcernMapping = {
+      'Fine Lines': { skinTypes: ['Mature', 'Dry'], concerns: ['Anti-Aging'], ingredients: ['Retinol', 'Hyaluronic Acid'] },
+      'Wrinkles': { skinTypes: ['Mature', 'Dry'], concerns: ['Anti-Aging'], ingredients: ['Retinol', 'Hyaluronic Acid'] },
+      'Large Pores': { skinTypes: ['Oily', 'Combination'], concerns: ['Acne Care'], ingredients: ['Niacinamide', 'AHA/BHA'] },
+      'Dark Circles': { skinTypes: ['Dry', 'Mature'], concerns: ['Hydration', 'Brightness'], ingredients: ['Vitamin C', 'Hyaluronic Acid'] },
+      'Uneven Tone': { skinTypes: ['Combination', 'Mature'], concerns: ['Brightness', 'Dark Spots'], ingredients: ['Vitamin C', 'Niacinamide'] },
+      'Hyperpigmentation': { skinTypes: ['Combination', 'Mature'], concerns: ['Dark Spots', 'Brightness'], ingredients: ['Vitamin C', 'Niacinamide'] },
+      'Redness': { skinTypes: ['Sensitive', 'Dry'], concerns: ['Redness Relief'], ingredients: ['Ceramides', 'Niacinamide'] },
+      'Blemishes': { skinTypes: ['Oily', 'Combination'], concerns: ['Acne Care'], ingredients: ['AHA/BHA', 'Niacinamide'] },
+      'Texture': { skinTypes: ['Oily', 'Combination', 'Mature'], concerns: ['Acne Care', 'Anti-Aging', 'Brightness'], ingredients: ['AHA/BHA', 'Retinol', 'Niacinamide'] },
+      'Dullness': { skinTypes: ['Dry', 'Mature'], concerns: ['Brightness', 'Hydration'], ingredients: ['Vitamin C', 'Hyaluronic Acid'] },
+      'Firmness': { skinTypes: ['Mature'], concerns: ['Anti-Aging'], ingredients: ['Retinol', 'Hyaluronic Acid'] },
+      'Hydration': { skinTypes: ['Dry', 'Sensitive', 'Mature'], concerns: ['Hydration'], ingredients: ['Hyaluronic Acid', 'Ceramides'] }
+    }
+
+    const targetedProducts = []
+
+    for (const concern of selectedSpecificConcerns) {
+      const mapping = specificConcernMapping[concern]
+      if (!mapping) continue
+
+      // Build query: skin_types overlap AND (concerns OR ingredients OR)
+      const { data: targetedData } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', 'SkinCare')
+        .overlaps('skin_types', mapping.skinTypes)
+
+      if (!targetedData || targetedData.length === 0) continue
+
+      // Filter by concerns OR ingredients
+      const filtered = targetedData.filter(p => {
+        const hasConcern = p.skin_concerns?.some(c => mapping.concerns.includes(c))
+        const hasIngredient = p.ingredients?.some(i => mapping.ingredients.includes(i))
+        return hasConcern || hasIngredient
+      })
+
+      if (filtered.length > 0) {
+        const picked = pickUnique(filtered, 1)
+        if (picked.length > 0) targetedProducts.push(picked[0])
+      }
+    }
 
     setRecommendedProducts({
-      morning: morning.filter(Boolean),
-      evening: evening.filter(Boolean),
-      targeted: targeted.filter(Boolean)
+      morning: step1Products,
+      evening: step2Products,
+      targeted: targetedProducts
     })
   }
 
