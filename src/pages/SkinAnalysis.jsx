@@ -144,7 +144,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     }
   }
 
-  const fetchRecommendedProducts = async () => {
+  const fetchRecommendedProducts = async (result) => {
     const usedProductIds = new Set()
 
     // Mappings
@@ -165,8 +165,10 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       'Normal': 'Mature'
     }
 
-    const mappedConcern = concernMap[selectedConcern]
-    const mappedSkinType = skinTypeMap[selectedSkinType]
+    const mappedConcern = concernMap[selectedConcern] || 'Acne Care'
+    const mappedSkinType = skinTypeMap[selectedSkinType] || 'Oily'
+
+    console.log('mappedConcern:', mappedConcern, 'mappedSkinType:', mappedSkinType, 'specificConcerns:', selectedSpecificConcerns)
 
     // FIX 1: shuffle always returns a NEW array — never mutates original
     const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5)
@@ -184,7 +186,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     let { data: productsAnd } = await supabase
       .from('products')
       .select('*')
-      .eq('category', 'SkinCare')
+      .ilike('category', 'skincare')
       .contains('skin_concerns', [mappedConcern])
       .contains('skin_types', [mappedSkinType])
 
@@ -200,7 +202,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       let { data: productsOr } = await supabase
         .from('products')
         .select('*')
-        .eq('category', 'SkinCare')
+        .ilike('category', 'skincare')
         .or(`skin_concerns.cs.{${mappedConcern}},skin_types.cs.{${mappedSkinType}}`)
 
       if (!productsOr) productsOr = []
@@ -239,7 +241,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       const { data: targetedData } = await supabase
         .from('products')
         .select('*')
-        .eq('category', 'SkinCare')
+        .ilike('category', 'skincare')
         .overlaps('skin_types', mapping.skinTypes)
 
       if (!targetedData || targetedData.length === 0) continue
