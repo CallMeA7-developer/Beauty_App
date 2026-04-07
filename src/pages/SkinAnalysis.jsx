@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   IoChevronDown,
   IoCameraOutline,
@@ -17,6 +17,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function SkinAnalysis() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { user } = useAuth()
   const { addToCart } = useCart()
 
@@ -283,6 +284,40 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       })
     } catch (err) {
       console.error('Failed to save:', err)
+    }
+  }
+
+  const saveToProfile = async () => {
+    if (!user) {
+      alert('Please sign in to save your analysis')
+      return
+    }
+    try {
+      await supabase.from('skin_analysis').upsert({
+        user_id: user.id,
+        skin_score: analysisResult.skinScore,
+        skin_label: analysisResult.skinLabel,
+        summary: analysisResult.summary,
+        metrics: {
+          hydration: analysisResult.hydration,
+          texture: analysisResult.texture,
+          clarity: analysisResult.clarity,
+          toneEvenness: analysisResult.toneEvenness,
+        },
+        analysis_cards: analysisResult.cards,
+        selected_skin_type: selectedSkinType,
+        selected_concern: selectedConcern,
+        selected_specific_concerns: selectedSpecificConcerns,
+        morning_product_ids: recommendedProducts.morning.map(p => p.id),
+        evening_product_ids: recommendedProducts.evening.map(p => p.id),
+        targeted_product_ids: recommendedProducts.targeted.map(p => p.id),
+        created_at: new Date().toISOString(),
+      }, { onConflict: 'user_id' })
+      alert('Your analysis has been saved to your profile!')
+      navigate('/beauty-journey')
+    } catch (err) {
+      console.error('Save error:', err)
+      alert('Failed to save. Please try again.')
     }
   }
 
@@ -621,12 +656,12 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           {/* Action Buttons */}
           <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => alert('ok mommy you can have your result now')}
+              onClick={() => navigate('/beauty-journey')}
               className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
               View Complete Routine
             </button>
             <button
-              onClick={() => alert('ok mommy let me add it to your profile')}
+              onClick={saveToProfile}
               className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
               Save to My Profile
             </button>

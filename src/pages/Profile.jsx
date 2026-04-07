@@ -30,6 +30,7 @@ export default function Profile() {
 
   const [recentOrders, setRecentOrders] = useState([])
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
+  const [skinAnalysis, setSkinAnalysis] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -60,6 +61,16 @@ export default function Profile() {
 
       const totalPoints = allOrders?.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0) || 0
       setLoyaltyPoints(Math.floor(totalPoints))
+
+      const { data: skinData } = await supabase
+        .from('skin_analysis')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      setSkinAnalysis(skinData)
     } catch (error) {
       console.error('Error fetching user data:', error)
     } finally {
@@ -247,17 +258,91 @@ export default function Profile() {
             <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-6">
                 <h2 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A]">Skin Health Overview</h2>
+                {skinAnalysis && (
+                  <Link to="/skin-analysis">
+                    <button className="px-4 lg:px-5 h-[36px] lg:h-[40px] bg-[#F5F1EA] text-[#8B7355] text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#8B7355] hover:text-white transition-all whitespace-nowrap">
+                      Retake Analysis
+                    </button>
+                  </Link>
+                )}
               </div>
-              <div className="flex flex-col items-center justify-center py-8 lg:py-12">
-                <IoSparkles className="w-[48px] h-[48px] md:w-[56px] md:h-[56px] text-[#C9A870] mb-4" />
-                <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-2 text-center">Complete Your Skin Analysis</h3>
-                <p className="text-[14px] md:text-[15px] text-[#666666] mb-5 text-center max-w-[400px]">Get personalized insights and recommendations for your unique skin profile</p>
-                <Link to="/skin-analysis">
-                  <button className="px-6 lg:px-8 h-[48px] lg:h-[52px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                    Start Skin Analysis
-                  </button>
-                </Link>
-              </div>
+              {skinAnalysis ? (
+                <>
+                  <div className="flex items-center justify-center mb-6 lg:mb-8">
+                    <div className="relative">
+                      <div className="w-[120px] h-[120px] lg:w-[140px] lg:h-[140px] rounded-full border-[8px] border-[#F5F1EA] flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-[36px] lg:text-[42px] font-bold text-[#8B7355]">{skinAnalysis.skin_score}</div>
+                          <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">/ 100</div>
+                        </div>
+                      </div>
+                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-3 lg:px-4 py-1 rounded-full whitespace-nowrap">
+                        {skinAnalysis.skin_label || 'Overall Score'}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 lg:gap-4 mb-5 lg:mb-6">
+                    <div className="bg-[#FDFBF7] rounded-[12px] p-4 lg:p-5">
+                      <div className="text-[12px] lg:text-[13px] font-medium text-[#666666] mb-2">Hydration</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[20px] lg:text-[24px] font-bold text-[#8B7355]">{skinAnalysis.metrics?.hydration || 0}%</div>
+                      </div>
+                      <div className="w-full h-[6px] bg-white rounded-full overflow-hidden">
+                        <div className="h-full bg-[#C9A870] rounded-full transition-all" style={{ width: `${skinAnalysis.metrics?.hydration || 0}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="bg-[#FDFBF7] rounded-[12px] p-4 lg:p-5">
+                      <div className="text-[12px] lg:text-[13px] font-medium text-[#666666] mb-2">Texture</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[20px] lg:text-[24px] font-bold text-[#8B7355]">{skinAnalysis.metrics?.texture || 0}%</div>
+                      </div>
+                      <div className="w-full h-[6px] bg-white rounded-full overflow-hidden">
+                        <div className="h-full bg-[#C9A870] rounded-full transition-all" style={{ width: `${skinAnalysis.metrics?.texture || 0}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="bg-[#FDFBF7] rounded-[12px] p-4 lg:p-5">
+                      <div className="text-[12px] lg:text-[13px] font-medium text-[#666666] mb-2">Clarity</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[20px] lg:text-[24px] font-bold text-[#8B7355]">{skinAnalysis.metrics?.clarity || 0}%</div>
+                      </div>
+                      <div className="w-full h-[6px] bg-white rounded-full overflow-hidden">
+                        <div className="h-full bg-[#C9A870] rounded-full transition-all" style={{ width: `${skinAnalysis.metrics?.clarity || 0}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="bg-[#FDFBF7] rounded-[12px] p-4 lg:p-5">
+                      <div className="text-[12px] lg:text-[13px] font-medium text-[#666666] mb-2">Tone Evenness</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-[20px] lg:text-[24px] font-bold text-[#8B7355]">{skinAnalysis.metrics?.toneEvenness || 0}%</div>
+                      </div>
+                      <div className="w-full h-[6px] bg-white rounded-full overflow-hidden">
+                        <div className="h-full bg-[#C9A870] rounded-full transition-all" style={{ width: `${skinAnalysis.metrics?.toneEvenness || 0}%` }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {skinAnalysis.summary && (
+                    <div className="bg-[#FDFBF7] rounded-[12px] p-4 lg:p-5">
+                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-2">Summary</div>
+                      <p className="text-[13px] lg:text-[14px] font-normal text-[#666666] leading-relaxed">{skinAnalysis.summary}</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8 lg:py-12">
+                  <IoSparkles className="w-[48px] h-[48px] md:w-[56px] md:h-[56px] text-[#C9A870] mb-4" />
+                  <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-2 text-center">Complete Your Skin Analysis</h3>
+                  <p className="text-[14px] md:text-[15px] text-[#666666] mb-5 text-center max-w-[400px]">Get personalized insights and recommendations for your unique skin profile</p>
+                  <Link to="/skin-analysis">
+                    <button className="px-6 lg:px-8 h-[48px] lg:h-[52px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+                      Start Skin Analysis
+                    </button>
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Recent Orders */}

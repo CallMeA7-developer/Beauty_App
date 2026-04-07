@@ -565,27 +565,46 @@ export default function AccountDashboard() {
               </div>
               {skinAnalysis ? (
                 <>
-                  <div className="grid grid-cols-3 gap-3 lg:gap-[20px] mb-5 lg:mb-[24px]">
+                  <div className="bg-white rounded-[8px] p-4 lg:p-[20px] mb-5 lg:mb-[24px]">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A]">Skin Score</div>
+                      <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355]">{skinAnalysis.skin_score}/100</div>
+                    </div>
+                    {skinAnalysis.skin_label && (
+                      <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Status: <span className="text-[#8B7355] font-medium">{skinAnalysis.skin_label}</span></div>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 lg:gap-[20px] mb-5 lg:mb-[24px]">
                     <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
-                      <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.hydration_level}%</div>
-                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Hydration Level</div>
+                      <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.hydration || 0}%</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Hydration</div>
                     </div>
                     <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
-                      <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.skin_firmness}%</div>
-                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Skin Firmness</div>
+                      <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.texture || 0}%</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Texture</div>
                     </div>
                     <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
-                      <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.radiance_score}%</div>
-                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Radiance Score</div>
+                      <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.clarity || 0}%</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Clarity</div>
+                    </div>
+                    <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
+                      <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.toneEvenness || 0}%</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Tone Evenness</div>
                     </div>
                   </div>
-                  {skinAnalysis.primary_concerns && skinAnalysis.primary_concerns.length > 0 && (
+                  {skinAnalysis.summary && (
+                    <div className="bg-white rounded-[8px] p-4 lg:p-[16px] mb-5 lg:mb-[24px]">
+                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[8px]">Summary</div>
+                      <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] leading-relaxed">{skinAnalysis.summary}</div>
+                    </div>
+                  )}
+                  {skinAnalysis.analysis_cards && skinAnalysis.analysis_cards.length > 0 && (
                     <div className="bg-white rounded-[8px] p-4 lg:p-[16px]">
-                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[8px]">Primary Concerns</div>
+                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[8px]">Analysis Insights</div>
                       <div className="flex gap-[8px] flex-wrap">
-                        {skinAnalysis.primary_concerns.map((concern) => (
-                          <div key={concern} className="bg-[#FDFBF7] text-[#8B7355] text-[12px] lg:text-[13px] font-normal px-[10px] lg:px-[12px] py-[5px] lg:py-[6px] rounded-full border border-[#E8E3D9]">
-                            {concern}
+                        {skinAnalysis.analysis_cards.map((card, index) => (
+                          <div key={index} className="bg-[#FDFBF7] text-[#8B7355] text-[12px] lg:text-[13px] font-normal px-[10px] lg:px-[12px] py-[5px] lg:py-[6px] rounded-full border border-[#E8E3D9]">
+                            {card.title}
                           </div>
                         ))}
                       </div>
