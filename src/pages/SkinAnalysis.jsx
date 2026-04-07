@@ -144,7 +144,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     }
   }
 
-  const fetchRecommendedProducts = async (result) => {
+  const fetchRecommendedProducts = async () => {
     const usedProductIds = new Set()
 
     // Mappings
@@ -168,19 +168,19 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     const mappedConcern = concernMap[selectedConcern]
     const mappedSkinType = skinTypeMap[selectedSkinType]
 
-    // Helper to shuffle array
-    const shuffle = (arr) => arr.sort(() => Math.random() - 0.5)
+    // FIX 1: shuffle always returns a NEW array — never mutates original
+    const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5)
 
-    // Helper to pick unique products
-    const pickUnique = (products, count) => {
-      const filtered = products.filter(p => !usedProductIds.has(p.id))
+    // Pick unique products from a pool, tracking used IDs globally
+    const pickUnique = (pool, count) => {
+      const filtered = pool.filter(p => !usedProductIds.has(p.id))
       const shuffled = shuffle(filtered)
       const picked = shuffled.slice(0, count)
       picked.forEach(p => usedProductIds.add(p.id))
       return picked
     }
 
-    // Step 1 & 2: Fetch products with AND logic (concern AND skin type)
+    // Step 1 & 2: AND logic first, fallback to OR
     let { data: productsAnd } = await supabase
       .from('products')
       .select('*')
@@ -190,16 +190,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
     if (!productsAnd) productsAnd = []
 
-    let step1Products = []
-    let step2Products = []
+    let allPool = []
 
     if (productsAnd.length >= 8) {
-      // Enough products with AND logic
-      const shuffled = shuffle([...productsAnd])
-      step1Products = pickUnique(shuffled, 4)
-      step2Products = pickUnique(shuffled, 4)
+      // Enough for both steps with AND logic
+      allPool = productsAnd
     } else {
-      // Fall back to OR logic
+      // Fallback: OR logic — fetch concern OR skin type
       let { data: productsOr } = await supabase
         .from('products')
         .select('*')
@@ -207,26 +204,29 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         .or(`skin_concerns.cs.{${mappedConcern}},skin_types.cs.{${mappedSkinType}}`)
 
       if (!productsOr) productsOr = []
-      const allProducts = [...new Map([...productsAnd, ...productsOr].map(p => [p.id, p])).values()]
-      const shuffled = shuffle(allProducts)
-      step1Products = pickUnique(shuffled, 4)
-      step2Products = pickUnique(shuffled, 4)
+
+      // Merge AND + OR results, remove duplicates by id
+      allPool = [...new Map([...productsAnd, ...productsOr].map(p => [p.id, p])).values()]
     }
 
-    // Step 3: Targeted products based on selected specific concerns
+    // FIX 1: Pick from the same pool independently — each call filters already-used IDs
+    const step1Products = pickUnique(allPool, 4)
+    const step2Products = pickUnique(allPool, 4)
+
+    // Step 3: 1 product per selected specific concern, no repeats
     const specificConcernMapping = {
-      'Fine Lines': { skinTypes: ['Mature', 'Dry'], concerns: ['Anti-Aging'], ingredients: ['Retinol', 'Hyaluronic Acid'] },
-      'Wrinkles': { skinTypes: ['Mature', 'Dry'], concerns: ['Anti-Aging'], ingredients: ['Retinol', 'Hyaluronic Acid'] },
-      'Large Pores': { skinTypes: ['Oily', 'Combination'], concerns: ['Acne Care'], ingredients: ['Niacinamide', 'AHA/BHA'] },
-      'Dark Circles': { skinTypes: ['Dry', 'Mature'], concerns: ['Hydration', 'Brightness'], ingredients: ['Vitamin C', 'Hyaluronic Acid'] },
-      'Uneven Tone': { skinTypes: ['Combination', 'Mature'], concerns: ['Brightness', 'Dark Spots'], ingredients: ['Vitamin C', 'Niacinamide'] },
-      'Hyperpigmentation': { skinTypes: ['Combination', 'Mature'], concerns: ['Dark Spots', 'Brightness'], ingredients: ['Vitamin C', 'Niacinamide'] },
-      'Redness': { skinTypes: ['Sensitive', 'Dry'], concerns: ['Redness Relief'], ingredients: ['Ceramides', 'Niacinamide'] },
-      'Blemishes': { skinTypes: ['Oily', 'Combination'], concerns: ['Acne Care'], ingredients: ['AHA/BHA', 'Niacinamide'] },
-      'Texture': { skinTypes: ['Oily', 'Combination', 'Mature'], concerns: ['Acne Care', 'Anti-Aging', 'Brightness'], ingredients: ['AHA/BHA', 'Retinol', 'Niacinamide'] },
-      'Dullness': { skinTypes: ['Dry', 'Mature'], concerns: ['Brightness', 'Hydration'], ingredients: ['Vitamin C', 'Hyaluronic Acid'] },
-      'Firmness': { skinTypes: ['Mature'], concerns: ['Anti-Aging'], ingredients: ['Retinol', 'Hyaluronic Acid'] },
-      'Hydration': { skinTypes: ['Dry', 'Sensitive', 'Mature'], concerns: ['Hydration'], ingredients: ['Hyaluronic Acid', 'Ceramides'] }
+      'Fine Lines':        { skinTypes: ['Mature', 'Dry'],                     concerns: ['Anti-Aging'],                       ingredients: ['Retinol', 'Hyaluronic Acid'] },
+      'Wrinkles':          { skinTypes: ['Mature', 'Dry'],                     concerns: ['Anti-Aging'],                       ingredients: ['Retinol', 'Hyaluronic Acid'] },
+      'Large Pores':       { skinTypes: ['Oily', 'Combination'],               concerns: ['Acne Care'],                        ingredients: ['Niacinamide', 'AHA/BHA'] },
+      'Dark Circles':      { skinTypes: ['Dry', 'Mature'],                     concerns: ['Hydration', 'Brightness'],          ingredients: ['Vitamin C', 'Hyaluronic Acid'] },
+      'Uneven Tone':       { skinTypes: ['Combination', 'Mature'],             concerns: ['Brightness', 'Dark Spots'],         ingredients: ['Vitamin C', 'Niacinamide'] },
+      'Hyperpigmentation': { skinTypes: ['Combination', 'Mature'],             concerns: ['Dark Spots', 'Brightness'],         ingredients: ['Vitamin C', 'Niacinamide'] },
+      'Redness':           { skinTypes: ['Sensitive', 'Dry'],                  concerns: ['Redness Relief'],                   ingredients: ['Ceramides', 'Niacinamide'] },
+      'Blemishes':         { skinTypes: ['Oily', 'Combination'],               concerns: ['Acne Care'],                        ingredients: ['AHA/BHA', 'Niacinamide'] },
+      'Texture':           { skinTypes: ['Oily', 'Combination', 'Mature'],     concerns: ['Acne Care', 'Anti-Aging', 'Brightness'], ingredients: ['AHA/BHA', 'Retinol', 'Niacinamide'] },
+      'Dullness':          { skinTypes: ['Dry', 'Mature'],                     concerns: ['Brightness', 'Hydration'],          ingredients: ['Vitamin C', 'Hyaluronic Acid'] },
+      'Firmness':          { skinTypes: ['Mature'],                            concerns: ['Anti-Aging'],                       ingredients: ['Retinol', 'Hyaluronic Acid'] },
+      'Hydration':         { skinTypes: ['Dry', 'Sensitive', 'Mature'],        concerns: ['Hydration'],                        ingredients: ['Hyaluronic Acid', 'Ceramides'] },
     }
 
     const targetedProducts = []
@@ -235,7 +235,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       const mapping = specificConcernMapping[concern]
       if (!mapping) continue
 
-      // Build query: skin_types overlap AND (concerns OR ingredients OR)
+      // Skin Types: AND logic (product must match at least one of the skin types — overlaps)
       const { data: targetedData } = await supabase
         .from('products')
         .select('*')
@@ -244,7 +244,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
       if (!targetedData || targetedData.length === 0) continue
 
-      // Filter by concerns OR ingredients
+      // Skin Concerns: OR logic, Ingredients: OR logic — filter in JS
       const filtered = targetedData.filter(p => {
         const hasConcern = p.skin_concerns?.some(c => mapping.concerns.includes(c))
         const hasIngredient = p.ingredients?.some(i => mapping.ingredients.includes(i))
@@ -330,6 +330,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       </div>
     </div>
   )
+
+  // FIX 2: Dynamic grid columns for Step 3 based on number of targeted products
+  const getGridCols = (count) => {
+    if (count === 1) return 'grid-cols-1'
+    if (count === 2) return 'grid-cols-1 sm:grid-cols-2'
+    return 'grid-cols-1 sm:grid-cols-3'
+  }
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -554,13 +561,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
           <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Curated specifically for your skin analysis results</p>
 
-          {/* Step 1: Morning — products only, no text list */}
+          {/* Step 1: Morning */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
             <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Morning Protection Routine</h3>
             {recommendedProducts.morning.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-                {recommendedProducts.morning.slice(0, 4).map((product) => (
+                {recommendedProducts.morning.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
@@ -569,13 +576,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             )}
           </div>
 
-          {/* Step 2: Evening — products only, no text list */}
+          {/* Step 2: Evening */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
             <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Evening Repair Routine</h3>
             {recommendedProducts.evening.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-                {recommendedProducts.evening.slice(0, 4).map((product) => (
+                {recommendedProducts.evening.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
@@ -584,18 +591,20 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             )}
           </div>
 
-          {/* Step 3: Targeted — products only, no text list */}
+          {/* Step 3: Targeted — FIX 2: no slice, dynamic grid cols */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
             <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Specialized Treatments</h3>
             {recommendedProducts.targeted.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
-                {recommendedProducts.targeted.slice(0, 3).map((product) => (
+              <div className={`grid ${getGridCols(recommendedProducts.targeted.length)} gap-4 lg:gap-5`}>
+                {recommendedProducts.targeted.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
-              <p className="text-[14px] text-[#999999] text-center py-8">Loading products...</p>
+              <p className="text-[14px] text-[#999999] text-center py-8">
+                {selectedSpecificConcerns.length === 0 ? 'Select specific concerns above to see targeted products.' : 'Loading products...'}
+              </p>
             )}
           </div>
 
@@ -622,7 +631,6 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
         <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-6 lg:p-[40px]">
           {analysisResult ? (
-            /* Has done analysis — show real result with real date */
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <div className="flex flex-col items-center flex-shrink-0">
                 <div className="w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] rounded-[12px] bg-[#C9A870] flex items-center justify-center mb-4">
@@ -643,7 +651,6 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
               </div>
             </div>
           ) : (
-            /* No analysis yet */
             <div className="flex flex-col items-center justify-center py-10 lg:py-14 text-center">
               <div className="w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] rounded-full bg-[#F5F1EA] flex items-center justify-center mb-6">
                 <IoSparklesOutline className="w-[36px] h-[36px] lg:w-[44px] lg:h-[44px] text-[#C9A870]" />
@@ -667,7 +674,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         </div>
       </div>
 
-      {/* FAQ — fully interactive */}
+      {/* FAQ */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
         <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Frequently Asked Questions</h2>
         <div className="max-w-[900px] mx-auto space-y-3">
