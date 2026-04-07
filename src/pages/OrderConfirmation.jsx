@@ -43,13 +43,7 @@ export default function OrderConfirmation() {
           query = query.order('created_at', { ascending: false }).limit(1)
         }
 
-        const { data, error: fetchError } = await supabase
-          .from('orders')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle()
+        const { data, error: fetchError } = await query.maybeSingle()
 
         if (fetchError) throw fetchError
 
