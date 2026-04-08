@@ -28,12 +28,165 @@ import {
 } from 'react-icons/io5'
 
 import {
-  productDetailImages     as thumbnailImages,
-  productDetailKeyBenefits as keyBenefits,
-  productDetailApplicationSteps as applicationSteps,
-  productDetailIngredients as keyIngredients,
-  productDetailSizes      as sizeOptions,
+  productDetailSizes as sizeOptions,
 } from '../data/products'
+
+// ─── Smart data generators from real product data ─────────────────────────────
+const concernBenefitMap = {
+  'Anti-Aging':      'Visibly reduces fine lines and signs of aging',
+  'Hydration':       'Delivers deep, long-lasting hydration to the skin',
+  'Brightness':      'Enhances natural radiance for a luminous glow',
+  'Redness Relief':  'Calms and soothes irritated, sensitive skin',
+  'Dark Spots':      'Targets hyperpigmentation and uneven skin tone',
+  'Acne':            'Controls breakouts and minimizes pores',
+  'Firming':         'Improves skin elasticity and firmness',
+  'Pore Minimizing': 'Refines and minimizes the appearance of pores',
+  'Sun Protection':  'Shields skin from harmful UV rays',
+  'Exfoliation':     'Gently removes dead skin cells for smoother texture',
+}
+
+const ingredientBenefitMap = {
+  'Retinol':           'Stimulates cell renewal and reduces visible signs of aging',
+  'Hyaluronic Acid':   'Attracts and retains moisture for lasting hydration and plumpness',
+  'Vitamin C':         'Brightens skin tone and provides powerful antioxidant protection',
+  'Niacinamide':       'Minimizes pores and improves overall skin texture',
+  'Ceramides':         'Restores the skin barrier and locks in essential moisture',
+  'Glycerin':          'Deeply hydrates and maintains the skin\'s moisture balance',
+  'Peptides':          'Supports collagen production for firmer, younger-looking skin',
+  'Green Tea Extract': 'Delivers powerful antioxidants to protect against environmental damage',
+  'Chamomile':         'Soothes and calms sensitive or irritated skin',
+  'Rosehip Oil':       'Nourishes and repairs with essential fatty acids and vitamins',
+  'Vitamin E':         'Protects skin from oxidative stress and environmental damage',
+  'Shea Butter':       'Deeply nourishes and softens for silky smooth skin',
+  'Salicylic Acid':    'Unclogs pores and helps control breakouts',
+  'AHA':               'Exfoliates dead skin cells to reveal brighter, smoother skin',
+  'Zinc':              'Regulates oil production and supports clear skin',
+  'Squalane':          'Lightweight hydration that mimics skin\'s natural oils',
+  'Bakuchiol':         'Natural alternative to retinol for gentle anti-aging benefits',
+  'Argan Oil':         'Provides intense nourishment and shine without greasiness',
+}
+
+const howToUseMap = {
+  Skincare: {
+    Serums:       [
+      { step: '1', text: 'Cleanse your face and pat dry',                              timing: 'Morning & Evening' },
+      { step: '2', text: 'Apply a few drops to fingertips',                            timing: null               },
+      { step: '3', text: 'Gently press into skin starting from the center of the face', timing: 'Work outward'    },
+      { step: '4', text: 'Follow with moisturizer to lock in benefits',                timing: null               },
+    ],
+    Moisturizers: [
+      { step: '1', text: 'Apply to clean, toned skin',                                 timing: 'Morning & Evening' },
+      { step: '2', text: 'Take a pea-sized amount and warm between fingertips',        timing: null               },
+      { step: '3', text: 'Gently smooth over face and neck in upward motions',         timing: null               },
+      { step: '4', text: 'Allow to absorb fully before applying makeup or SPF',        timing: 'Morning'          },
+    ],
+    Cleansers:    [
+      { step: '1', text: 'Wet your face with lukewarm water',                          timing: 'Morning & Evening' },
+      { step: '2', text: 'Dispense a small amount and work into a lather',             timing: null               },
+      { step: '3', text: 'Gently massage onto face in circular motions',               timing: 'For 60 seconds'   },
+      { step: '4', text: 'Rinse thoroughly and pat dry',                               timing: null               },
+    ],
+    'Eye Care':   [
+      { step: '1', text: 'Apply a small amount to the ring finger',                    timing: 'Morning & Evening' },
+      { step: '2', text: 'Gently tap around the orbital bone',                         timing: 'Do not rub'       },
+      { step: '3', text: 'Work from inner to outer corner of the eye',                 timing: null               },
+      { step: '4', text: 'Allow to absorb before applying concealer or makeup',        timing: null               },
+    ],
+    Masks:        [
+      { step: '1', text: 'Apply an even layer to clean, dry skin',                     timing: '1–3 times per week' },
+      { step: '2', text: 'Leave on for the recommended time',                          timing: '10–15 minutes'    },
+      { step: '3', text: 'Rinse thoroughly with lukewarm water',                       timing: null               },
+      { step: '4', text: 'Follow with serum and moisturizer',                          timing: null               },
+    ],
+    Toners:       [
+      { step: '1', text: 'After cleansing, pour a small amount onto a cotton pad',     timing: 'Morning & Evening' },
+      { step: '2', text: 'Gently sweep across face, neck and décolletage',             timing: null               },
+      { step: '3', text: 'Allow to absorb for 30 seconds',                             timing: null               },
+      { step: '4', text: 'Follow with serum and moisturizer',                          timing: null               },
+    ],
+    Sunscreen:    [
+      { step: '1', text: 'Apply as the last step of your morning skincare routine',    timing: 'Every Morning'    },
+      { step: '2', text: 'Use a generous amount — about 1/4 teaspoon for face',        timing: null               },
+      { step: '3', text: 'Spread evenly across face and neck',                         timing: null               },
+      { step: '4', text: 'Reapply every 2 hours when exposed to sunlight',             timing: 'Outdoors'         },
+    ],
+    Exfoliators:  [
+      { step: '1', text: 'Apply to clean, damp skin',                                  timing: '2–3 times per week' },
+      { step: '2', text: 'Gently massage in circular motions',                         timing: 'Avoid eye area'   },
+      { step: '3', text: 'Leave on for 1–2 minutes if a chemical exfoliant',           timing: null               },
+      { step: '4', text: 'Rinse thoroughly and follow with moisturizer',               timing: null               },
+    ],
+  },
+  Makeup: {
+    Foundation:   [
+      { step: '1', text: 'Start with clean, moisturized skin',                         timing: 'After skincare'   },
+      { step: '2', text: 'Apply dots across the face and blend outward',               timing: null               },
+      { step: '3', text: 'Use a brush or sponge for a seamless finish',                timing: null               },
+      { step: '4', text: 'Set with powder for longer wear',                            timing: null               },
+    ],
+    Lipstick:     [
+      { step: '1', text: 'Prep lips with a balm and let absorb',                       timing: null               },
+      { step: '2', text: 'Optionally line lips first for definition',                  timing: null               },
+      { step: '3', text: 'Apply directly from bullet or with a lip brush',             timing: null               },
+      { step: '4', text: 'Blot with tissue and reapply for longer wear',               timing: null               },
+    ],
+    Eyeshadow:    [
+      { step: '1', text: 'Prime eyelids for longer-lasting color',                     timing: null               },
+      { step: '2', text: 'Apply a light base shade across the lid',                    timing: null               },
+      { step: '3', text: 'Build depth with darker shades in the crease',               timing: null               },
+      { step: '4', text: 'Blend well and highlight the inner corner',                  timing: null               },
+    ],
+    default:      [
+      { step: '1', text: 'Start with a clean, prepped face',                           timing: null               },
+      { step: '2', text: 'Apply the product evenly using fingertips or a brush',       timing: null               },
+      { step: '3', text: 'Build coverage as desired',                                  timing: null               },
+      { step: '4', text: 'Set and blend for a flawless finish',                        timing: null               },
+    ],
+  },
+  Fragrance: {
+    default:      [
+      { step: '1', text: 'Apply to pulse points — wrists, neck, and behind the ears', timing: null               },
+      { step: '2', text: 'Hold the bottle 15–20 cm away from the skin',               timing: null               },
+      { step: '3', text: 'Do not rub — allow the fragrance to dry naturally',          timing: null               },
+      { step: '4', text: 'Reapply as needed throughout the day',                       timing: null               },
+    ],
+  },
+}
+
+function getKeyBenefits(product) {
+  const benefits = []
+  if (product.skin_concerns && product.skin_concerns.length > 0) {
+    product.skin_concerns.forEach(concern => {
+      if (concernBenefitMap[concern]) benefits.push(concernBenefitMap[concern])
+    })
+  }
+  if (product.skin_types && product.skin_types.length > 0 && product.skin_types[0] !== 'All Tones') {
+    benefits.push(`Suitable for ${product.skin_types.join(', ')} skin types`)
+  }
+  if (benefits.length === 0) {
+    benefits.push('Crafted with premium ingredients for visible results')
+    benefits.push('Dermatologist-tested for safety and efficacy')
+    benefits.push('Suitable for daily use')
+  }
+  return benefits
+}
+
+function getHowToUse(product) {
+  const category = product.category || 'Skincare'
+  const subcategory = product.subcategory || ''
+  const catMap = howToUseMap[category]
+  if (catMap && catMap[subcategory]) return catMap[subcategory]
+  if (catMap && catMap.default) return catMap.default
+  return howToUseMap.Skincare.Serums
+}
+
+function getKeyIngredients(product) {
+  if (!product.ingredients || product.ingredients.length === 0) return []
+  return product.ingredients.map(name => ({
+    name,
+    benefit: ingredientBenefitMap[name] || `Key active ingredient in this formula`,
+  }))
+}
 
 import { getProductById } from '../lib/productsService'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -432,16 +585,16 @@ function ProductDetailMobile({ product, onOpenAuthModal, reviews, relatedProduct
     )
   }
 
+  const keyBenefits = getKeyBenefits(product)
+  const applicationSteps = getHowToUse(product)
+  const keyIngredients = getKeyIngredients(product)
+
   const avgRating = reviews.length > 0
     ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
     : '0.0'
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
-
-      {/* Product Image Gallery */}
-      <div className="bg-white px-5 pt-5">
-        <div className="w-full h-[380px] rounded-[8px] overflow-hidden mb-3">
           <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
         </div>
         <div className="flex gap-2 justify-center mb-4">
@@ -605,15 +758,14 @@ function ProductDetailMobile({ product, onOpenAuthModal, reviews, relatedProduct
             label: 'Key Ingredients',
             content: (
               <div className="space-y-3 pb-4">
-                {keyIngredients.map((ing, idx) => (
+                {keyIngredients.length > 0 ? keyIngredients.map((ing, idx) => (
                   <div key={idx} className="bg-[#FDFBF7] rounded-[8px] p-3">
-                    <div className="flex items-start justify-between mb-1">
-                      <h4 className="text-[14px] font-semibold text-[#1A1A1A]">{ing.name}</h4>
-                      <span className="bg-[#C9A870] text-white text-[10px] font-medium px-2 py-0.5 rounded-full">{ing.concentration}</span>
-                    </div>
+                    <h4 className="text-[14px] font-semibold text-[#1A1A1A] mb-1">{ing.name}</h4>
                     <p className="text-[13px] font-normal text-[#666666]">{ing.benefit}</p>
                   </div>
-                ))}
+                )) : (
+                  <p className="text-[13px] text-[#666666] pb-4">Ingredient information not available for this product.</p>
+                )}
               </div>
             )
           },
@@ -980,6 +1132,10 @@ function ProductDetailDesktop({ product, onOpenAuthModal, reviews, relatedProduc
     )
   }
 
+  const keyBenefits = getKeyBenefits(product)
+  const applicationSteps = getHowToUse(product)
+  const keyIngredients = getKeyIngredients(product)
+
   const avgRating = reviews.length > 0
     ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
     : '0.0'
@@ -1152,15 +1308,14 @@ function ProductDetailDesktop({ product, onOpenAuthModal, reviews, relatedProduc
           <div className="mb-10 md:mb-14 lg:mb-[64px]">
             <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Key Ingredients</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-[24px]">
-              {keyIngredients.map((ing, idx) => (
+              {keyIngredients.length > 0 ? keyIngredients.map((ing, idx) => (
                 <div key={idx} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[24px]">
-                  <div className="flex items-start justify-between mb-3 lg:mb-[12px]">
-                    <h4 className="text-[15px] lg:text-[16px] font-semibold text-[#1A1A1A]">{ing.name}</h4>
-                    <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[8px] lg:px-[10px] py-[4px] rounded-full ml-2">{ing.concentration}</div>
-                  </div>
+                  <h4 className="text-[15px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-3">{ing.name}</h4>
                   <p className="text-[13px] lg:text-[14px] font-normal text-[#666666] leading-[1.5]">{ing.benefit}</p>
                 </div>
-              ))}
+              )) : (
+                <p className="text-[14px] text-[#666666] col-span-2">Ingredient information not available for this product.</p>
+              )}
             </div>
           </div>
 
