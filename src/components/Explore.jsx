@@ -400,7 +400,8 @@ function ExploreMobile() {
               <span className="text-[13px] font-medium text-[#8B7355]">Start Consultation →</span>
             </div>
           </Link>
-          <div onClick={() => alert('🚧 Virtual Try-On is currently under development. Please check back soon!')} className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] cursor-pointer">
+          <Link to="/virtual-tryon">
+          <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] cursor-pointer">
             <div className="w-12 h-12 rounded-full bg-[#D4AFA3] flex items-center justify-center mb-4">
               <IoCameraOutline className="w-6 h-6 text-white" />
             </div>
@@ -408,6 +409,7 @@ function ExploreMobile() {
             <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">Experience products virtually with augmented reality technology</p>
             <span className="text-[13px] font-medium text-[#8B7355]">Coming Soon →</span>
           </div>
+          </Link>
         </div>
       </div>
 
@@ -543,10 +545,12 @@ function ExploreDesktop() {
                     <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">AI Beauty Consultant</span>
                   </div>
                 </Link>
-                <div onClick={() => alert('🚧 Virtual Try-On is currently under development. Please check back soon!')} className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
-                  <IoScanOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#D4AFA3] flex-shrink-0" />
-                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">Virtual Try-On</span>
-                </div>
+                <Link to="/virtual-tryon">
+                  <div className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
+                    <IoScanOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#D4AFA3] flex-shrink-0" />
+                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">Virtual Try-On</span>
+                  </div>
+                </Link>
               </div>
             </div>
 
