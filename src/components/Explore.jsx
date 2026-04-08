@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoClose,
@@ -58,20 +58,53 @@ const popularSearches = [
   { label: 'Body Mist',     path: '/fragrance?subcategory=Body%20Mist'       },
 ]
 
-const subcategoryMap = {
-  'Cleansers': '/skincare', 'Exfoliators': '/skincare', 'Eye Care': '/skincare',
-  'Masks': '/skincare', 'Moisturizers': '/skincare', 'Serums': '/skincare',
-  'Sunscreen': '/skincare', 'Toners': '/skincare',
-  'Foundation': '/makeup', 'Concealer': '/makeup', 'Powder': '/makeup',
-  'Blush': '/makeup', 'Highlighter': '/makeup', 'Eyeshadow': '/makeup',
-  'Eyeliner': '/makeup', 'Mascara': '/makeup', 'Eyebrow': '/makeup',
-  'Lipstick': '/makeup', 'Lip Gloss': '/makeup', 'Lip Liner': '/makeup',
-  'Lip Care': '/makeup',
-  'Eau de Parfum': '/fragrance', 'Eau de Toilette': '/fragrance',
-  'Body Mist': '/fragrance', 'Discovery Sets': '/fragrance',
+// All searchable subcategories with their page and category label
+const allSubcategories = [
+  // Skincare
+  { label: 'Cleansers',      category: 'Skincare',   path: '/skincare?subcategory=Cleansers'      },
+  { label: 'Exfoliators',    category: 'Skincare',   path: '/skincare?subcategory=Exfoliators'    },
+  { label: 'Eye Care',       category: 'Skincare',   path: '/skincare?subcategory=Eye%20Care'     },
+  { label: 'Masks',          category: 'Skincare',   path: '/skincare?subcategory=Masks'          },
+  { label: 'Moisturizers',   category: 'Skincare',   path: '/skincare?subcategory=Moisturizers'   },
+  { label: 'Serums',         category: 'Skincare',   path: '/skincare?subcategory=Serums'         },
+  { label: 'Sunscreen',      category: 'Skincare',   path: '/skincare?subcategory=Sunscreen'      },
+  { label: 'Toners',         category: 'Skincare',   path: '/skincare?subcategory=Toners'         },
+  // Makeup
+  { label: 'Foundation',     category: 'Makeup',     path: '/makeup?subcategory=Foundation'       },
+  { label: 'Concealer',      category: 'Makeup',     path: '/makeup?subcategory=Concealer'        },
+  { label: 'Powder',         category: 'Makeup',     path: '/makeup?subcategory=Powder'           },
+  { label: 'Blush',          category: 'Makeup',     path: '/makeup?subcategory=Blush'            },
+  { label: 'Highlighter',    category: 'Makeup',     path: '/makeup?subcategory=Highlighter'      },
+  { label: 'Eyeshadow',      category: 'Makeup',     path: '/makeup?subcategory=Eyeshadow'        },
+  { label: 'Eyeliner',       category: 'Makeup',     path: '/makeup?subcategory=Eyeliner'         },
+  { label: 'Mascara',        category: 'Makeup',     path: '/makeup?subcategory=Mascara'          },
+  { label: 'Eyebrow',        category: 'Makeup',     path: '/makeup?subcategory=Eyebrow'          },
+  { label: 'Lipstick',       category: 'Makeup',     path: '/makeup?subcategory=Lipstick'         },
+  { label: 'Lip Gloss',      category: 'Makeup',     path: '/makeup?subcategory=Lip%20Gloss'      },
+  { label: 'Lip Liner',      category: 'Makeup',     path: '/makeup?subcategory=Lip%20Liner'      },
+  { label: 'Lip Care',       category: 'Makeup',     path: '/makeup?subcategory=Lip%20Care'       },
+  // Fragrance
+  { label: 'Eau de Parfum',  category: 'Fragrance',  path: '/fragrance?subcategory=Eau%20de%20Parfum'  },
+  { label: 'Eau de Toilette', category: 'Fragrance', path: '/fragrance?subcategory=Eau%20de%20Toilette' },
+  { label: 'Body Mist',      category: 'Fragrance',  path: '/fragrance?subcategory=Body%20Mist'   },
+  { label: 'Discovery Sets', category: 'Fragrance',  path: '/fragrance?subcategory=Discovery%20Sets' },
+]
+
+const categoryColors = {
+  Skincare:  'text-[#688B8D]',
+  Makeup:    'text-[#D4AFA3]',
+  Fragrance: 'text-[#C9A870]',
 }
 
-// Use image_url — the real DB column name
+// Filter suggestions based on query
+const getSuggestions = (query) => {
+  if (!query.trim()) return []
+  return allSubcategories.filter(item =>
+    item.label.toLowerCase().includes(query.toLowerCase())
+  )
+}
+
+// Fetch trending products
 const fetchTrendingProducts = async (setter) => {
   try {
     const { data, error } = await supabase
@@ -80,10 +113,7 @@ const fetchTrendingProducts = async (setter) => {
       .not('image_url', 'is', null)
       .limit(100)
 
-    if (error) {
-      console.error('Trending fetch error:', error)
-      return
-    }
+    if (error) { console.error('Trending fetch error:', error); return }
 
     if (data && data.length > 0) {
       const withImages = data.filter(p => p.image_url && p.image_url.trim() !== '')
@@ -97,22 +127,6 @@ const fetchTrendingProducts = async (setter) => {
   }
 }
 
-const buildSearchHandler = (navigate) => (query) => {
-  if (!query.trim()) return
-  const trimmed = query.trim()
-  const exactPath = subcategoryMap[trimmed]
-  if (exactPath) {
-    navigate(`${exactPath}?subcategory=${encodeURIComponent(trimmed)}`)
-    return
-  }
-  const key = Object.keys(subcategoryMap).find(k => k.toLowerCase() === trimmed.toLowerCase())
-  if (key) {
-    navigate(`${subcategoryMap[key]}?subcategory=${encodeURIComponent(key)}`)
-    return
-  }
-  navigate('/skincare')
-}
-
 const TrendingSkeleton = ({ mobile = false }) => (
   <div className={`flex gap-3 ${mobile ? '' : 'md:gap-[12px]'}`}>
     {[1, 2, 3].map((i) => (
@@ -124,11 +138,199 @@ const TrendingSkeleton = ({ mobile = false }) => (
   </div>
 )
 
+// ─── Search with suggestions ──────────────────────────────────────────────────
+function SearchWithSuggestions({ navigate, placeholder, inputClass = '', containerClass = '' }) {
+  const [searchValue, setSearchValue] = useState('')
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const wrapperRef = useRef(null)
+
+  // Update suggestions as user types
+  useEffect(() => {
+    if (searchValue.trim().length > 0) {
+      setSuggestions(getSuggestions(searchValue))
+      setShowSuggestions(true)
+    } else {
+      setSuggestions([])
+      setShowSuggestions(false)
+    }
+  }, [searchValue])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleSelect = (suggestion) => {
+    setSearchValue('')
+    setShowSuggestions(false)
+    navigate(suggestion.path)
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && suggestions.length > 0) {
+      handleSelect(suggestions[0])
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false)
+    }
+  }
+
+  return (
+    <div ref={wrapperRef} className={`relative ${containerClass}`}>
+      <div className="bg-white border border-[#E8E3D9] rounded-[8px] flex items-center px-[14px] h-[48px] md:h-[52px] focus-within:border-[#8B7355] transition-colors">
+        <IoSearchOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#666666] mr-3 flex-shrink-0" />
+        <input
+          type="text"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
+          placeholder={placeholder || 'Search products...'}
+          className={`flex-1 text-[14px] md:text-[15px] font-normal text-[#2B2B2B] bg-transparent outline-none placeholder:text-[#999999] ${inputClass}`}
+        />
+        {searchValue && (
+          <button onClick={() => { setSearchValue(''); setShowSuggestions(false) }} className="flex-shrink-0 ml-2">
+            <IoClose className="w-[16px] h-[16px] text-[#999999] hover:text-[#666666]" />
+          </button>
+        )}
+      </div>
+
+      {/* Suggestions Dropdown */}
+      {showSuggestions && suggestions.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden max-h-[240px] overflow-y-auto">
+          {suggestions.map((suggestion, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSelect(suggestion)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0"
+            >
+              <div className="flex items-center gap-3">
+                <IoSearchOutline className="w-[14px] h-[14px] text-[#999999] flex-shrink-0" />
+                <span className="text-[14px] font-normal text-[#1A1A1A]">
+                  {/* Highlight matching letters */}
+                  {suggestion.label.split(new RegExp(`(${searchValue})`, 'gi')).map((part, i) =>
+                    part.toLowerCase() === searchValue.toLowerCase()
+                      ? <span key={i} className="font-semibold text-[#8B7355]">{part}</span>
+                      : part
+                  )}
+                </span>
+              </div>
+              <span className={`text-[11px] font-medium ${categoryColors[suggestion.category] || 'text-[#999999]'}`}>
+                {suggestion.category}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* No results */}
+      {showSuggestions && searchValue.trim().length > 0 && suggestions.length === 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 px-4 py-3">
+          <p className="text-[13px] text-[#999999]">No results for "{searchValue}"</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Mobile search with suggestions ──────────────────────────────────────────
+function MobileSearchWithSuggestions({ navigate }) {
+  const [searchValue, setSearchValue] = useState('')
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const wrapperRef = useRef(null)
+
+  useEffect(() => {
+    if (searchValue.trim().length > 0) {
+      setSuggestions(getSuggestions(searchValue))
+      setShowSuggestions(true)
+    } else {
+      setSuggestions([])
+      setShowSuggestions(false)
+    }
+  }, [searchValue])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleSelect = (suggestion) => {
+    setSearchValue('')
+    setShowSuggestions(false)
+    navigate(suggestion.path)
+  }
+
+  return (
+    <div ref={wrapperRef} className="relative w-full">
+      <div className="w-full h-[52px] bg-white rounded-[26px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] px-5 flex items-center gap-3">
+        <IoSearchOutline className="w-5 h-5 text-[#8B7355] flex-shrink-0" />
+        <input
+          type="text"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && suggestions.length > 0) handleSelect(suggestions[0]) }}
+          onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
+          placeholder="Search products, collections..."
+          className="flex-1 text-[14px] font-normal text-[#999999] bg-transparent outline-none"
+        />
+        {searchValue && (
+          <button onClick={() => { setSearchValue(''); setShowSuggestions(false) }}>
+            <IoClose className="w-[16px] h-[16px] text-[#999999]" />
+          </button>
+        )}
+      </div>
+
+      {showSuggestions && suggestions.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden max-h-[200px] overflow-y-auto">
+          {suggestions.map((suggestion, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSelect(suggestion)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0"
+            >
+              <div className="flex items-center gap-3">
+                <IoSearchOutline className="w-[14px] h-[14px] text-[#999999] flex-shrink-0" />
+                <span className="text-[14px] font-normal text-[#1A1A1A]">
+                  {suggestion.label.split(new RegExp(`(${searchValue})`, 'gi')).map((part, i) =>
+                    part.toLowerCase() === searchValue.toLowerCase()
+                      ? <span key={i} className="font-semibold text-[#8B7355]">{part}</span>
+                      : part
+                  )}
+                </span>
+              </div>
+              <span className={`text-[11px] font-medium ${categoryColors[suggestion.category] || 'text-[#999999]'}`}>
+                {suggestion.category}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {showSuggestions && searchValue.trim().length > 0 && suggestions.length === 0 && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 px-4 py-3">
+          <p className="text-[13px] text-[#999999]">No results for "{searchValue}"</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Mobile ───────────────────────────────────────────────────────────────────
 function ExploreMobile() {
   const navigate = useNavigate()
   const [trendingProducts, setTrendingProducts] = useState([])
-  const [searchValue, setSearchValue] = useState('')
-  const handleSearch = buildSearchHandler(navigate)
 
   useEffect(() => { fetchTrendingProducts(setTrendingProducts) }, [])
 
@@ -145,17 +347,7 @@ function ExploreMobile() {
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-5 py-8 flex flex-col justify-center flex-shrink-0">
         <h1 className="text-[32px] font-semibold text-[#1A1A1A] text-center mb-2">Explore Shan Loray</h1>
         <p className="text-[15px] font-normal text-[#666666] text-center mb-6">Discover your perfect beauty ritual</p>
-        <div className="w-full h-[52px] bg-white rounded-[26px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] px-5 flex items-center gap-3">
-          <IoSearchOutline className="w-5 h-5 text-[#8B7355] flex-shrink-0" />
-          <input
-            type="text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(e.target.value) }}
-            placeholder="Search products, collections..."
-            className="flex-1 text-[14px] font-normal text-[#999999] bg-transparent outline-none"
-          />
-        </div>
+        <MobileSearchWithSuggestions navigate={navigate} />
       </div>
 
       <div className="bg-white px-5 py-8 flex-shrink-0">
@@ -255,11 +447,10 @@ function ExploreMobile() {
   )
 }
 
+// ─── Desktop ──────────────────────────────────────────────────────────────────
 function ExploreDesktop() {
   const navigate = useNavigate()
-  const [searchValue, setSearchValue] = useState('')
   const [trendingProducts, setTrendingProducts] = useState([])
-  const handleSearch = buildSearchHandler(navigate)
 
   useEffect(() => { fetchTrendingProducts(setTrendingProducts) }, [])
 
@@ -328,19 +519,10 @@ function ExploreDesktop() {
               </div>
             </div>
 
-            {/* Col 3 — Search & Links */}
+            {/* Col 3 — Search with live suggestions + Popular Searches + Tools */}
             <div>
-              <div className="bg-white border border-[#E8E3D9] rounded-[8px] flex items-center px-[14px] md:px-[16px] mb-5 md:mb-[24px] h-[48px] md:h-[52px] focus-within:border-[#8B7355] transition-colors">
-                <IoSearchOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#666666] mr-3 md:mr-[12px] flex-shrink-0" />
-                <input
-                  type="text"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(searchValue) }}
-                  placeholder="Search products..."
-                  className="flex-1 text-[14px] md:text-[15px] font-normal text-[#2B2B2B] bg-transparent outline-none placeholder:text-[#999999]"
-                />
-              </div>
+              <SearchWithSuggestions navigate={navigate} placeholder="Search products..." containerClass="mb-5 md:mb-[24px]" />
+
               <div className="mb-5 md:mb-[24px]">
                 <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">Popular Searches</h4>
                 <div className="flex flex-wrap gap-[6px] md:gap-[8px]">
@@ -353,6 +535,7 @@ function ExploreDesktop() {
                   ))}
                 </div>
               </div>
+
               <div className="flex flex-col gap-[8px] md:gap-[10px]">
                 <Link to="/skin-analysis">
                   <div className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
