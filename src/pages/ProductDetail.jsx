@@ -595,6 +595,10 @@ function ProductDetailMobile({ product, onOpenAuthModal, reviews, relatedProduct
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
+
+      {/* Product Image Gallery */}
+      <div className="bg-white px-5 pt-5">
+        <div className="w-full h-[380px] rounded-[8px] overflow-hidden mb-3">
           <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
         </div>
         <div className="flex gap-2 justify-center mb-4">
