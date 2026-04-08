@@ -200,11 +200,9 @@ export default function Payment() {
           shipping: shippingVal,
           tax: taxVal,
           total: totalVal,
-          total_amount: totalVal,
-          status: 'confirmed',
-          payment_status: 'paid',
           shipping_address: shippingAddress,
           delivery_method: deliveryMethod,
+          payment_status: 'paid',
           created_at: new Date().toISOString(),
         })
         .select()
