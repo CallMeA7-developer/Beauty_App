@@ -38,40 +38,83 @@ const mobileCategories = [
 ]
 
 const featuredCollections = [
-  { title: 'Spring Radiance', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=280&h=200&fit=crop'    },
+  { title: 'Spring Radiance',  image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=280&h=200&fit=crop'    },
   { title: 'Bestsellers Edit', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=280&h=200&fit=crop' },
   { title: 'New Arrivals',     image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=280&h=200&fit=crop' },
 ]
 
-const popularProducts = [
-  { name: 'Luminous Elixir', price: '$198', image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=100&h=100&fit=crop'   },
-  { name: 'Rose Lacquer',    price: '$52',  image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=100&h=100&fit=crop'   },
-  { name: 'Radiance Cream',  price: '$175', image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=100&h=100&fit=crop'   },
-  { name: 'Eye Complex',     price: '$145', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=100&h=100&fit=crop'   },
-  { name: 'Night Serum',     price: '$165', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=100&h=100&fit=crop'     },
-]
-
 const quickLinks = [
-  { label: 'Gift Guide',    icon: IoGiftOutline,              path: '/collections'         },
-  { label: 'About Us',      icon: IoInformationCircleOutline, path: '/advanced-formulations' },
-  { label: 'Sustainability', icon: IoLeafOutline,             path: '/advanced-formulations' },
-  { label: 'Contact',       icon: IoChatbubbleOutline,        path: '/search'              },
-]
-
-const trendingItems = [
-  { name: 'Luminous Youth Elixir', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=100&h=100&fit=crop' },
-  { name: 'Rose Lip Lacquer',      img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=100&h=100&fit=crop' },
-  { name: 'Radiance Cream',        img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=100&h=100&fit=crop' },
+  { label: 'Gift Guide',     icon: IoGiftOutline,              path: '/collections'           },
+  { label: 'About Us',       icon: IoInformationCircleOutline, path: '/advanced-formulations' },
+  { label: 'Sustainability', icon: IoLeafOutline,              path: '/advanced-formulations' },
+  { label: 'Contact',        icon: IoChatbubbleOutline,        path: '/search'                },
 ]
 
 const popularSearches = [
-  { label: 'Masks', path: '/skincare?subcategory=Masks' },
-  { label: 'Serums', path: '/skincare?subcategory=Serums' },
-  { label: 'Foundation', path: '/makeup?subcategory=Foundation' },
-  { label: 'Lipstick', path: '/makeup?subcategory=Lipstick' },
-  { label: 'Eau de Parfum', path: '/fragrance?subcategory=Eau%20de%20Parfum' },
-  { label: 'Body Mist', path: '/fragrance?subcategory=Body%20Mist' },
+  { label: 'Masks',         path: '/skincare?subcategory=Masks'                  },
+  { label: 'Serums',        path: '/skincare?subcategory=Serums'                 },
+  { label: 'Foundation',    path: '/makeup?subcategory=Foundation'               },
+  { label: 'Lipstick',      path: '/makeup?subcategory=Lipstick'                 },
+  { label: 'Eau de Parfum', path: '/fragrance?subcategory=Eau%20de%20Parfum'    },
+  { label: 'Body Mist',     path: '/fragrance?subcategory=Body%20Mist'          },
 ]
+
+const subcategoryMap = {
+  'Cleansers': '/skincare', 'Exfoliators': '/skincare', 'Eye Care': '/skincare',
+  'Masks': '/skincare', 'Moisturizers': '/skincare', 'Serums': '/skincare',
+  'Sunscreen': '/skincare', 'Toners': '/skincare',
+  'Foundation': '/makeup', 'Concealer': '/makeup', 'Powder': '/makeup',
+  'Blush': '/makeup', 'Highlighter': '/makeup', 'Eyeshadow': '/makeup',
+  'Eyeliner': '/makeup', 'Mascara': '/makeup', 'Eyebrow': '/makeup',
+  'Lipstick': '/makeup', 'Lip Gloss': '/makeup', 'Lip Liner': '/makeup',
+  'Lip Care': '/makeup',
+  'Eau de Parfum': '/fragrance', 'Eau de Toilette': '/fragrance',
+  'Body Mist': '/fragrance', 'Discovery Sets': '/fragrance',
+}
+
+// ─── Shared fetch function ────────────────────────────────────────────────────
+const fetchTrendingProducts = async (setter) => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, name, img_url, brand')
+      .not('img_url', 'is', null)
+      .limit(100)
+
+    if (error) {
+      console.error('Trending fetch error:', error)
+      return
+    }
+
+    if (data && data.length > 0) {
+      // Filter out any products with empty img_url
+      const withImages = data.filter(p => p.img_url && p.img_url.trim() !== '')
+      if (withImages.length > 0) {
+        const shuffled = [...withImages].sort(() => Math.random() - 0.5)
+        setter(shuffled.slice(0, 3))
+      }
+    }
+  } catch (err) {
+    console.error('Trending fetch exception:', err)
+  }
+}
+
+// ─── Shared search handler ────────────────────────────────────────────────────
+const buildSearchHandler = (navigate) => (query) => {
+  if (!query.trim()) return
+  const trimmed = query.trim()
+  const exactPath = subcategoryMap[trimmed]
+  if (exactPath) {
+    navigate(`${exactPath}?subcategory=${encodeURIComponent(trimmed)}`)
+    return
+  }
+  const key = Object.keys(subcategoryMap).find(k => k.toLowerCase() === trimmed.toLowerCase())
+  if (key) {
+    navigate(`${subcategoryMap[key]}?subcategory=${encodeURIComponent(key)}`)
+    return
+  }
+  navigate('/skincare')
+}
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function ExploreMobile() {
@@ -79,47 +122,10 @@ function ExploreMobile() {
   const [trendingProducts, setTrendingProducts] = useState([])
   const [searchValue, setSearchValue] = useState('')
 
-  const subcategoryMap = {
-    'Cleansers': '/skincare', 'Exfoliators': '/skincare', 'Eye Care': '/skincare',
-    'Masks': '/skincare', 'Moisturizers': '/skincare', 'Serums': '/skincare',
-    'Sunscreen': '/skincare', 'Toners': '/skincare',
-    'Foundation': '/makeup', 'Concealer': '/makeup', 'Powder': '/makeup',
-    'Blush': '/makeup', 'Highlighter': '/makeup', 'Eyeshadow': '/makeup',
-    'Eyeliner': '/makeup', 'Mascara': '/makeup', 'Eyebrow': '/makeup',
-    'Lipstick': '/makeup', 'Lip Gloss': '/makeup', 'Lip Liner': '/makeup',
-    'Lip Care': '/makeup',
-    'Eau de Parfum': '/fragrance', 'Eau de Toilette': '/fragrance',
-    'Body Mist': '/fragrance', 'Discovery Sets': '/fragrance',
-  }
-
-  const handleSearch = (query) => {
-    if (!query.trim()) return
-    const trimmed = query.trim()
-    const exactPath = subcategoryMap[trimmed]
-    if (exactPath) {
-      navigate(`${exactPath}?subcategory=${encodeURIComponent(trimmed)}`)
-      return
-    }
-    const key = Object.keys(subcategoryMap).find(k => k.toLowerCase() === trimmed.toLowerCase())
-    if (key) {
-      navigate(`${subcategoryMap[key]}?subcategory=${encodeURIComponent(key)}`)
-      return
-    }
-    navigate(`/skincare`)
-  }
+  const handleSearch = buildSearchHandler(navigate)
 
   useEffect(() => {
-    const fetchTrending = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('id, name, img_url, brand')
-        .limit(50)
-      if (data && data.length > 0) {
-        const shuffled = [...data].sort(() => Math.random() - 0.5)
-        setTrendingProducts(shuffled.slice(0, 3))
-      }
-    }
-    fetchTrending()
+    fetchTrendingProducts(setTrendingProducts)
   }, [])
 
   return (
@@ -217,26 +223,42 @@ function ExploreMobile() {
             <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">
               Experience products virtually with augmented reality technology
             </p>
-            <span className="text-[13px] font-medium text-[#8B7355]">Launch Try-On →</span>
+            <span className="text-[13px] font-medium text-[#8B7355]">Coming Soon →</span>
           </div>
         </div>
       </div>
 
-      {/* Popular Right Now */}
+      {/* Popular Right Now — real products */}
       <div className="bg-white px-5 py-8 flex-shrink-0">
         <h2 className="text-[16px] font-semibold text-[#1A1A1A] mb-5">Popular Right Now</h2>
-        <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-          <div className="flex gap-3" style={{ width: 'max-content' }}>
-            {trendingProducts.map((product) => (
-              <Link key={product.id} to={`/product/${product.id}`} className="w-[100px] flex-shrink-0">
-                <div className="w-full h-[100px] rounded-lg overflow-hidden mb-2">
-                  <img src={product.img_url} alt={product.name} className="w-full h-full object-cover" />
-                </div>
-                <p className="text-[13px] font-normal text-[#2B2B2B] leading-[1.3] mb-1 line-clamp-2">{product.name}</p>
-              </Link>
+        {trendingProducts.length > 0 ? (
+          <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-3" style={{ width: 'max-content' }}>
+              {trendingProducts.map((product) => (
+                <Link key={product.id} to={`/product/${product.id}`} className="w-[100px] flex-shrink-0">
+                  <div className="w-full h-[100px] rounded-lg overflow-hidden mb-2 bg-[#F5F1EA]">
+                    <img
+                      src={product.img_url}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.style.display = 'none' }}
+                    />
+                  </div>
+                  <p className="text-[13px] font-normal text-[#2B2B2B] leading-[1.3] mb-1 line-clamp-2">{product.name}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="flex gap-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="w-[100px] flex-shrink-0">
+                <div className="w-full h-[100px] rounded-lg bg-[#F5F1EA] animate-pulse mb-2" />
+                <div className="h-3 bg-[#F5F1EA] rounded animate-pulse" />
+              </div>
             ))}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Quick Links */}
@@ -263,47 +285,10 @@ function ExploreDesktop() {
   const [searchValue, setSearchValue] = useState('')
   const [trendingProducts, setTrendingProducts] = useState([])
 
-  const subcategoryMap = {
-    'Cleansers': '/skincare', 'Exfoliators': '/skincare', 'Eye Care': '/skincare',
-    'Masks': '/skincare', 'Moisturizers': '/skincare', 'Serums': '/skincare',
-    'Sunscreen': '/skincare', 'Toners': '/skincare',
-    'Foundation': '/makeup', 'Concealer': '/makeup', 'Powder': '/makeup',
-    'Blush': '/makeup', 'Highlighter': '/makeup', 'Eyeshadow': '/makeup',
-    'Eyeliner': '/makeup', 'Mascara': '/makeup', 'Eyebrow': '/makeup',
-    'Lipstick': '/makeup', 'Lip Gloss': '/makeup', 'Lip Liner': '/makeup',
-    'Lip Care': '/makeup',
-    'Eau de Parfum': '/fragrance', 'Eau de Toilette': '/fragrance',
-    'Body Mist': '/fragrance', 'Discovery Sets': '/fragrance',
-  }
-
-  const handleSearch = (query) => {
-    if (!query.trim()) return
-    const trimmed = query.trim()
-    const exactPath = subcategoryMap[trimmed]
-    if (exactPath) {
-      navigate(`${exactPath}?subcategory=${encodeURIComponent(trimmed)}`)
-      return
-    }
-    const key = Object.keys(subcategoryMap).find(k => k.toLowerCase() === trimmed.toLowerCase())
-    if (key) {
-      navigate(`${subcategoryMap[key]}?subcategory=${encodeURIComponent(key)}`)
-      return
-    }
-    navigate(`/skincare`)
-  }
+  const handleSearch = buildSearchHandler(navigate)
 
   useEffect(() => {
-    const fetchTrending = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('id, name, img_url, brand')
-        .limit(50)
-      if (data && data.length > 0) {
-        const shuffled = [...data].sort(() => Math.random() - 0.5)
-        setTrendingProducts(shuffled.slice(0, 3))
-      }
-    }
-    fetchTrending()
+    fetchTrendingProducts(setTrendingProducts)
   }, [])
 
   return (
@@ -321,7 +306,7 @@ function ExploreDesktop() {
           <div className="w-[80px] md:w-[120px] h-[2px] bg-[#C9A870]" />
         </div>
 
-        {/* 3-Column Grid → stacks on smaller tablet */}
+        {/* 3-Column Grid */}
         <div className="px-5 md:px-[40px] lg:px-[56px] py-6 md:py-[40px] pb-[100px] md:pb-[112px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-[32px]">
 
@@ -342,12 +327,16 @@ function ExploreDesktop() {
               </div>
             </div>
 
-            {/* Col 2 — Featured */}
+            {/* Col 2 — Featured + Trending Now */}
             <div>
               <h3 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#666666] mb-3 md:mb-[16px]">Featured</h3>
               <div className="mb-[16px]">
                 <div className="w-full h-[160px] md:h-[180px] lg:h-[200px] rounded-[12px] overflow-hidden mb-[12px] md:mb-[14px] group cursor-pointer">
-                  <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=360&h=240&fit=crop" alt="Spring 2024 Collection" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img
+                    src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=360&h=240&fit=crop"
+                    alt="Spring 2024 Collection"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
                 <h4 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[6px]">Spring 2024 Collection</h4>
                 <p className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#666666] mb-[12px]">Discover botanical elegance</p>
@@ -355,18 +344,37 @@ function ExploreDesktop() {
                   <span className="text-[13px] md:text-[14px] font-medium text-[#8B7355] cursor-pointer hover:underline">View Collection →</span>
                 </Link>
               </div>
+
+              {/* Trending Now — real products */}
               <div className="mt-4 md:mt-[20px]">
                 <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">Trending Now</h4>
-                <div className="flex gap-3 md:gap-[12px]">
-                  {trendingProducts.map((product) => (
-                    <Link key={product.id} to={`/product/${product.id}`} className="flex-1 cursor-pointer group">
-                      <div className="w-full aspect-square rounded-[8px] overflow-hidden mb-[6px] md:mb-[8px]">
-                        <img src={product.img_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                {trendingProducts.length > 0 ? (
+                  <div className="flex gap-3 md:gap-[12px]">
+                    {trendingProducts.map((product) => (
+                      <Link key={product.id} to={`/product/${product.id}`} className="flex-1 cursor-pointer group">
+                        <div className="w-full aspect-square rounded-[8px] overflow-hidden mb-[6px] md:mb-[8px] bg-[#F5F1EA]">
+                          <img
+                            src={product.img_url}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            onError={(e) => { e.target.style.display = 'none' }}
+                          />
+                        </div>
+                        <p className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors line-clamp-2">{product.name}</p>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  /* Loading skeleton */
+                  <div className="flex gap-3 md:gap-[12px]">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="flex-1">
+                        <div className="w-full aspect-square rounded-[8px] bg-[#F5F1EA] animate-pulse mb-2" />
+                        <div className="h-3 bg-[#F5F1EA] rounded animate-pulse" />
                       </div>
-                      <p className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors line-clamp-2">{product.name}</p>
-                    </Link>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -383,6 +391,7 @@ function ExploreDesktop() {
                   className="flex-1 text-[14px] md:text-[15px] font-normal text-[#2B2B2B] bg-transparent outline-none placeholder:text-[#999999]"
                 />
               </div>
+
               <div className="mb-5 md:mb-[24px]">
                 <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">Popular Searches</h4>
                 <div className="flex flex-wrap gap-[6px] md:gap-[8px]">
@@ -395,6 +404,7 @@ function ExploreDesktop() {
                   ))}
                 </div>
               </div>
+
               <div className="flex flex-col gap-[8px] md:gap-[10px]">
                 <Link to="/skin-analysis">
                   <div className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
