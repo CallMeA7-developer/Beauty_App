@@ -55,3 +55,77 @@ CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
 CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand);
 CREATE INDEX IF NOT EXISTS idx_products_rating ON products(rating DESC);
 CREATE INDEX IF NOT EXISTS idx_products_price ON products(price);
+
+-- Best Seller Products
+INSERT INTO products (id, name, category, subcategory, brand, price, rating, image_url, description, skin_types, skin_concerns, ingredients)
+VALUES
+(
+  gen_random_uuid()::text,
+  'Luminous Youth Elixir',
+  'Skincare',
+  'Serums',
+  'Shan Loray',
+  198,
+  4.9,
+  'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&h=800&fit=crop',
+  'A powerful anti-aging serum that restores luminosity and youthful radiance with every drop.',
+  ARRAY['Dry', 'Mature', 'Combination'],
+  ARRAY['Anti-Aging', 'Hydration', 'Brightness'],
+  ARRAY['Retinol', 'Hyaluronic Acid', 'Vitamin C', 'Niacinamide']
+),
+(
+  gen_random_uuid()::text,
+  'Velvet Rose Lip Lacquer',
+  'Makeup',
+  'Lipstick',
+  'Shan Loray',
+  52,
+  4.8,
+  'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&h=800&fit=crop',
+  'A luxurious lip lacquer with a velvet finish that delivers rich color and long-lasting moisture.',
+  ARRAY['All Tones'],
+  ARRAY[]::text[],
+  ARRAY[]::text[]
+),
+(
+  gen_random_uuid()::text,
+  'Supreme Radiance Cream',
+  'Skincare',
+  'Moisturizers',
+  'Shan Loray',
+  175,
+  4.9,
+  'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&h=800&fit=crop',
+  'An ultra-rich moisturizer that delivers supreme hydration and a radiant, luminous complexion.',
+  ARRAY['Dry', 'Sensitive', 'Mature'],
+  ARRAY['Hydration', 'Anti-Aging', 'Redness Relief'],
+  ARRAY['Hyaluronic Acid', 'Ceramides', 'Niacinamide']
+),
+(
+  gen_random_uuid()::text,
+  'Eye Renewal Complex',
+  'Skincare',
+  'Eye Care',
+  'Shan Loray',
+  145,
+  4.8,
+  'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=800&h=800&fit=crop',
+  'An advanced eye complex that targets dark circles, puffiness and fine lines for a refreshed look.',
+  ARRAY['Dry', 'Mature', 'Sensitive'],
+  ARRAY['Anti-Aging', 'Hydration', 'Dark Spots'],
+  ARRAY['Retinol', 'Hyaluronic Acid', 'Vitamin C', 'Ceramides']
+),
+(
+  gen_random_uuid()::text,
+  'Botanical Night Serum',
+  'Skincare',
+  'Serums',
+  'Shan Loray',
+  165,
+  4.9,
+  'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&h=800&fit=crop',
+  'A deeply restorative overnight serum infused with botanical extracts to repair and renew skin while you sleep.',
+  ARRAY['Dry', 'Combination', 'Sensitive'],
+  ARRAY['Anti-Aging', 'Hydration', 'Redness Relief'],
+  ARRAY['Retinol', 'Hyaluronic Acid', 'Ceramides', 'Niacinamide']
+);
