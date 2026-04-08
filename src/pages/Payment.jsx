@@ -152,42 +152,50 @@ export default function Payment() {
       return
     }
 
+    const itemsSnapshot = cartItems.map(item => ({
+      product_id: item.product_id || item.id,
+      product_name: item.product_name || item.name,
+      product_image: item.product_image || item.img_url || item.image_url,
+      brand: item.brand || 'Shan Loray',
+      price: parseFloat(item.price),
+      quantity: item.quantity,
+      size: item.size || '',
+    }))
+
+    if (itemsSnapshot.length === 0) {
+      setError('Your cart is empty. Please add items before placing an order.')
+      return
+    }
+
     setProcessing(true)
     setError('')
 
     try {
-      const itemsSnapshot = [...cartItems]
-
-      const orderItems = itemsSnapshot.map(item => ({
-        product_id: item.product_id || item.id,
-        product_name: item.product_name || item.name,
-        product_image: item.product_image || item.img_url || item.image_url,
-        brand: item.brand || 'Shan Loray',
-        price: parseFloat(item.price),
-        quantity: item.quantity,
-        size: item.size || '',
-      }))
-
       const subtotalVal = parseFloat(subtotal.toFixed(2))
       const shippingVal = parseFloat(shipping.toFixed(2))
       const taxVal = parseFloat(tax.toFixed(2))
       const totalVal = parseFloat(total.toFixed(2))
 
-      const shippingAddress = checkoutSession.selectedAddress
-        || checkoutSession.shippingAddress
-        || checkoutSession.address
-        || {}
+      const shippingAddress = checkoutSession.selectedAddress || {}
 
-      const deliveryMethod = checkoutSession.selectedDeliveryMethod
-        || checkoutSession.deliveryMethod
-        || checkoutSession.delivery_method
-        || 'Standard Delivery'
+      const deliveryMethodMap = {
+        1: 'Standard Delivery',
+        2: 'Express Delivery',
+        3: 'Same-Day Delivery',
+        4: 'International Shipping',
+      }
+      const rawMethod = checkoutSession.selectedDeliveryMethod
+      const deliveryMethod = typeof rawMethod === 'string'
+        ? rawMethod
+        : deliveryMethodMap[rawMethod] || 'Standard Delivery'
+
+      const selectedCardData = savedCards.find(c => c.id === selectedCard)
 
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
           user_id: user.id,
-          items: orderItems,
+          items: itemsSnapshot,
           subtotal: subtotalVal,
           shipping: shippingVal,
           tax: taxVal,
@@ -207,9 +215,10 @@ export default function Payment() {
         throw orderError
       }
 
-      await supabase.from('cart').delete().eq('user_id', user.id)
-
       navigate(`/order-confirmation?orderId=${orderData.id}`)
+      setTimeout(async () => {
+        await supabase.from('cart').delete().eq('user_id', user.id)
+      }, 500)
 
     } catch (err) {
       console.error('Order placement error:', err)
