@@ -814,15 +814,7 @@ function MakeupDesktop() {
                 </div>
               )}
 
-              {/* Newsletter */}
-              <div className="bg-[#F5F1EA] rounded-[16px] flex flex-col items-center justify-center px-6 md:px-10 lg:px-[64px] py-10 lg:py-0 lg:min-h-[140px] mb-12 lg:mb-[96px]">
-                <h3 className="text-[24px] md:text-[28px] lg:text-[32px] font-medium text-[#1A1A1A] mb-2 text-center">Join Our Beauty Circle</h3>
-                <p className="text-[14px] lg:text-[16px] text-[#666666] mb-6 text-center">Get early access to new makeup launches</p>
-                <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
-                  <input type="email" placeholder="Enter your email" className="w-full md:w-[300px] lg:w-[360px] h-[52px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-                  <button className="w-full md:w-auto h-[52px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
-                </div>
-              </div>
+
             </>
           )}
         </div>
