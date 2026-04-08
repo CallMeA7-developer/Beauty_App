@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   IoStarSharp,
@@ -9,6 +9,7 @@ import {
   IoClose,
   IoCheckmark,
   IoFunnelOutline,
+  IoSearchOutline,
   IoChevronUp,
   IoLogoInstagram,
   IoLogoFacebook,
@@ -42,7 +43,96 @@ const filterRatings         = filterRatingsFragrance || []
 const fragranceCategoryLabels = ['All Fragrances', 'Eau de Parfum', 'Eau de Toilette', 'Body Mist', 'Discovery Sets']
 
 const filterBrands  = filterBrandsFragrance || []
-const sortOptions   = sortOptionsFragrance || ['Best Selling', 'Newest', 'Price: Low to High', 'Price: High to Low']
+const sortOptions   = (sortOptionsFragrance || ['Best Selling', 'Newest', 'Price: Low to High', 'Price: High to Low']).filter(o => o !== 'Newest')
+
+// ─── Live Search with Suggestions ────────────────────────────────────────────
+function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, placeholder, className }) {
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const wrapperRef = useRef(null)
+
+  useEffect(() => {
+    if (searchQuery.trim().length > 0) {
+      const matches = allProducts
+        .filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        .slice(0, 6)
+      setSuggestions(matches)
+      setShowSuggestions(true)
+    } else {
+      setSuggestions([])
+      setShowSuggestions(false)
+    }
+  }, [searchQuery, allProducts])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleSelect = (name) => {
+    setSearchQuery(name)
+    setShowSuggestions(false)
+  }
+
+  const highlightMatch = (text, query) => {
+    const parts = text.split(new RegExp(`(${query})`, 'gi'))
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase()
+        ? <span key={i} className="font-semibold text-[#8B7355]">{part}</span>
+        : part
+    )
+  }
+
+  return (
+    <div ref={wrapperRef} className={`relative ${className || ''}`}>
+      <div className="w-full h-[52px] bg-[#F5F1EA] rounded-[8px] px-4 flex items-center">
+        <IoSearchOutline className="w-[20px] h-[20px] text-[#999999] mr-3 flex-shrink-0" />
+        <input
+          type="text"
+          placeholder={placeholder || 'Search products...'}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') setShowSuggestions(false)
+            if (e.key === 'Enter' && suggestions.length > 0) handleSelect(suggestions[0].name)
+          }}
+          className="flex-1 bg-transparent text-[15px] text-[#2B2B2B] outline-none"
+        />
+        {searchQuery && (
+          <button onClick={() => { setSearchQuery(''); setShowSuggestions(false) }}>
+            <IoClose className="w-[16px] h-[16px] text-[#999999] hover:text-[#666666]" />
+          </button>
+        )}
+      </div>
+      {showSuggestions && suggestions.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden">
+          {suggestions.map((product, idx) => (
+            <button key={product.id || idx} onClick={() => handleSelect(product.name)}
+              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0">
+              <img src={product.image} alt={product.name} className="w-[40px] h-[40px] rounded-[6px] object-cover flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-[14px] text-[#1A1A1A] leading-tight">{highlightMatch(product.name, searchQuery)}</p>
+                <p className="text-[12px] text-[#8B7355] mt-0.5">{product.price}</p>
+              </div>
+              <IoSearchOutline className="w-[14px] h-[14px] text-[#999999] flex-shrink-0" />
+            </button>
+          ))}
+        </div>
+      )}
+      {showSuggestions && searchQuery.trim().length > 0 && suggestions.length === 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 px-4 py-3">
+          <p className="text-[13px] text-[#999999]">No products found for "{searchQuery}"</p>
+        </div>
+      )}
+    </div>
+  )
+}
 
 // ── Shared filter + sort logic ────────────────────────────────────────────────
 function getFilteredAndSorted(allProducts, {
@@ -110,6 +200,7 @@ function FragranceMobile() {
   const [selectedRating, setSelectedRating]       = useState(null)
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [expandedNotes, setExpandedNotes]         = useState({ top: true, middle: false, base: false })
   const [displayCount, setDisplayCount]           = useState(10)
 
@@ -153,7 +244,9 @@ function FragranceMobile() {
 
   if (loading) return <LoadingSpinner />
 
-  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedTopNotes, selectedIntensity: [intensityLevel].filter(Boolean), selectedSizes: [], selectedBrands, selectedRating, minPrice, maxPrice, activeSort })
+  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedTopNotes, selectedIntensity: [intensityLevel].filter(Boolean), selectedSizes: [], selectedBrands, selectedRating, minPrice, maxPrice, activeSort }).filter(p =>
+    !searchQuery.trim() || p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
   const mobileProducts = products.slice(0, displayCount)
 
   const subcategoryCounts = allProducts.reduce((acc, p) => { if (p.subcategory) acc[p.subcategory] = (acc[p.subcategory] || 0) + 1; return acc }, {})
@@ -200,6 +293,13 @@ function FragranceMobile() {
 
       {/* Toolbar */}
       <div className="bg-white px-5 pt-4 pb-3">
+        <SearchWithSuggestions
+          allProducts={allProducts}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          placeholder="Search fragrance products..."
+          className="mb-3"
+        />
         <div className="flex items-center justify-between mb-3">
           <span className="text-[13px] font-normal text-[#666666]">Showing {products.length} products</span>
           <button onClick={() => setShowFilterSheet(true)} className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]">
@@ -249,16 +349,6 @@ function FragranceMobile() {
             Load More ({products.length - displayCount} remaining)
           </button>
         )}
-      </div>
-
-      {/* Newsletter */}
-      <div className="bg-[#F5F0EB] px-5 py-10 text-center">
-        <h3 className="text-[22px] font-semibold text-[#1A1A1A] mb-2">Discover Your Signature Scent</h3>
-        <p className="text-[13px] font-normal text-[#666666] mb-5">Get personalized fragrance recommendations</p>
-        <div className="flex gap-2">
-          <input type="email" placeholder="Enter your email" className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-12 px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px]">Subscribe</button>
-        </div>
       </div>
 
       {/* Footer */}
@@ -494,6 +584,7 @@ function FragranceDesktop() {
   const [selectedRating, setSelectedRating]       = useState(null)
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [displayCount, setDisplayCount]           = useState(10)
 
   const [searchParams] = useSearchParams()
@@ -528,7 +619,9 @@ function FragranceDesktop() {
   if (loading) return <LoadingSpinner />
 
   const activeFilters = selectedTypes.length + selectedFamilies.length + selectedTopNotes.length + selectedIntensity.length + selectedSizes.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
-  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedTopNotes, selectedIntensity, selectedSizes, selectedBrands, selectedRating, minPrice, maxPrice, activeSort })
+  const products = getFilteredAndSorted(allProducts, { selectedTypes, selectedFamilies, selectedTopNotes, selectedIntensity, selectedSizes, selectedBrands, selectedRating, minPrice, maxPrice, activeSort }).filter(p =>
+    !searchQuery.trim() || p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
   const displayedProducts   = products.slice(0, displayCount)
   const largeProducts       = displayedProducts.slice(0, 1)
   const mediumProducts      = displayedProducts.slice(1, 3)
@@ -650,24 +743,6 @@ function FragranceDesktop() {
                 </div>
               </div>
 
-              {/* Size */}
-              <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Size</h4>
-                <div className="space-y-[6px] lg:space-y-[8px]">
-                  {productSizes.map((size) => {
-                    const isChecked = selectedSizes.includes(size)
-                    return (
-                      <label key={size} onClick={() => setSelectedSizes(prev => isChecked ? prev.filter(s => s !== size) : [...prev, size])} className="flex items-center gap-[10px] cursor-pointer">
-                        <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
-                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
-                        </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{size}</span>
-                      </label>
-                    )
-                  })}
-                </div>
-              </div>
-
               <button onClick={() => { setSelectedTypes([]); setSelectedFamilies([]); setSelectedTopNotes([]); setSelectedIntensity([]); setSelectedSizes([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                 Clear All Filters
@@ -678,7 +753,14 @@ function FragranceDesktop() {
 
         {/* Product Grid */}
         <div className="flex-1 min-w-0">
-
+          {/* Search Bar */}
+          <SearchWithSuggestions
+            allProducts={allProducts}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            placeholder="Search fragrance products..."
+            className="mb-6"
+          />
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-[48px]">
             <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">Showing {products.length} fragrance products</span>
@@ -802,15 +884,7 @@ function FragranceDesktop() {
                 </div>
               )}
 
-              {/* Newsletter */}
-              <div className="bg-[#F5F1EA] rounded-[16px] flex flex-col items-center justify-center px-6 md:px-10 lg:px-[64px] py-10 lg:py-0 lg:min-h-[140px] mb-12 lg:mb-[96px]">
-                <h3 className="text-[22px] md:text-[26px] lg:text-[32px] font-medium text-[#1A1A1A] mb-2 text-center">Discover Your Signature Scent</h3>
-                <p className="text-[13px] md:text-[14px] lg:text-[16px] text-[#666666] mb-6 text-center">Get personalized fragrance recommendations</p>
-                <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
-                  <input type="email" placeholder="Enter your email" className="w-full md:w-[300px] lg:w-[360px] h-[52px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-                  <button className="w-full md:w-auto h-[52px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
-                </div>
-              </div>
+
             </>
           )}
         </div>
