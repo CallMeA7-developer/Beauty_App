@@ -581,7 +581,7 @@ export default function VirtualTryOn() {
   if (!unlocked) {
     return (
       <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #3D2B00 0%, #5C4200 40%, #7A5800 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Cormorant Garamond, serif' }}>
-        <div style={{ width: '100%', maxWidth: '440px', background: '#1E2A3A', borderRadius: '24px', padding: '40px', boxShadow: '0 24px 64px rgba(0,0,0,0.5)' }}>
+        <div style={{ width: '100%', maxWidth: '440px', background: 'rgba(20, 12, 0, 0.7)', backdropFilter: 'blur(24px)', borderRadius: '24px', padding: '40px', boxShadow: '0 24px 64px rgba(0,0,0,0.3)', border: '1px solid rgba(201,168,112,0.25)' }}>
 
           {/* Lock Icon */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
@@ -594,13 +594,13 @@ export default function VirtualTryOn() {
 
           {/* Title */}
           <h1 style={{ fontSize: '30px', fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: '8px' }}>Preview Access</h1>
-          <p style={{ fontSize: '15px', color: '#8899AA', textAlign: 'center', marginBottom: '32px', lineHeight: '1.6' }}>
+          <p style={{ fontSize: '15px', color: 'rgba(201,168,112,0.7)', textAlign: 'center', marginBottom: '32px', lineHeight: '1.6' }}>
             This environment is not public yet.<br />Enter the access code to continue.
           </p>
 
           {/* PIN Input */}
           <div style={{ marginBottom: '8px' }}>
-            <label style={{ fontSize: '13px', fontWeight: '500', color: '#8899AA', display: 'block', marginBottom: '8px' }}>Access code</label>
+            <label style={{ fontSize: '13px', fontWeight: '500', color: 'rgba(201,168,112,0.7)', display: 'block', marginBottom: '8px' }}>Access code</label>
             <input
               type="password"
               value={pin}
@@ -611,19 +611,19 @@ export default function VirtualTryOn() {
               style={{
                 width: '100%',
                 height: '52px',
-                background: '#0D1B2A',
+                background: 'rgba(10, 6, 0, 0.8)',
                 color: '#FFFFFF',
                 fontSize: '20px',
                 letterSpacing: '8px',
                 textAlign: 'center',
                 borderRadius: '12px',
                 outline: 'none',
-                border: error ? '2px solid #EF4444' : '2px solid #2A3A4A',
+                border: error ? '2px solid #EF4444' : '2px solid rgba(201,168,112,0.3)',
                 boxSizing: 'border-box',
                 transition: 'border-color 0.2s',
               }}
               onFocus={(e) => { if (!error) e.target.style.borderColor = '#C9A870' }}
-              onBlur={(e) => { if (!error) e.target.style.borderColor = '#2A3A4A' }}
+              onBlur={(e) => { if (!error) e.target.style.borderColor = 'rgba(201,168,112,0.25)' }}
             />
             {error && (
               <p style={{ color: '#EF4444', fontSize: '13px', textAlign: 'center', marginTop: '8px' }}>Incorrect access code. Please try again.</p>
@@ -640,16 +640,16 @@ export default function VirtualTryOn() {
 
           {/* Continue Shopping */}
           <a href="/" style={{ display: 'block', marginTop: '12px' }}>
-            <button style={{ width: '100%', height: '52px', background: 'transparent', color: '#8899AA', fontSize: '14px', fontWeight: '500', borderRadius: '12px', border: '1px solid #2A3A4A', cursor: 'pointer', transition: 'color 0.2s' }}
-              onMouseEnter={(e) => { e.target.style.color = '#FFFFFF'; e.target.style.borderColor = '#3A4A5A' }}
-              onMouseLeave={(e) => { e.target.style.color = '#8899AA'; e.target.style.borderColor = '#2A3A4A' }}
+            <button style={{ width: '100%', height: '52px', background: 'transparent', color: 'rgba(201,168,112,0.7)', fontSize: '14px', fontWeight: '500', borderRadius: '12px', border: '1px solid rgba(201,168,112,0.25)', cursor: 'pointer', transition: 'color 0.2s' }}
+              onMouseEnter={(e) => { e.target.style.color = '#FFFFFF'; e.target.style.borderColor = 'rgba(201,168,112,0.4)' }}
+              onMouseLeave={(e) => { e.target.style.color = '#8899AA'; e.target.style.borderColor = 'rgba(201,168,112,0.25)' }}
             >
               Continue Shopping
             </button>
           </a>
 
           {/* Footer note */}
-          <p style={{ fontSize: '12px', color: '#445566', textAlign: 'center', marginTop: '24px', lineHeight: '1.6' }}>
+          <p style={{ fontSize: '12px', color: 'rgba(201,168,112,0.4)', textAlign: 'center', marginTop: '24px', lineHeight: '1.6' }}>
             You will stay signed in to this preview until you log out of your account or close this browser tab.
           </p>
         </div>
