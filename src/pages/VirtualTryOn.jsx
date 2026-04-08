@@ -580,7 +580,7 @@ export default function VirtualTryOn() {
 
   if (!unlocked) {
     return (
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Cormorant Garamond, serif' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #3D2B00 0%, #5C4200 40%, #7A5800 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Cormorant Garamond, serif' }}>
         <div style={{ width: '100%', maxWidth: '440px', background: '#1E2A3A', borderRadius: '24px', padding: '40px', boxShadow: '0 24px 64px rgba(0,0,0,0.5)' }}>
 
           {/* Lock Icon */}
