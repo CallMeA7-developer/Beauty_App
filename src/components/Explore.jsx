@@ -113,7 +113,7 @@ function ExploreMobile() {
       const { data } = await supabase
         .from('products')
         .select('id, name, img_url, brand')
-        .limit(20)
+        .limit(50)
       if (data && data.length > 0) {
         const shuffled = [...data].sort(() => Math.random() - 0.5)
         setTrendingProducts(shuffled.slice(0, 3))
@@ -227,14 +227,13 @@ function ExploreMobile() {
         <h2 className="text-[16px] font-semibold text-[#1A1A1A] mb-5">Popular Right Now</h2>
         <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
           <div className="flex gap-3" style={{ width: 'max-content' }}>
-            {popularProducts.map((product, idx) => (
-              <div key={idx} className="w-[100px] flex-shrink-0">
+            {trendingProducts.map((product) => (
+              <Link key={product.id} to={`/product/${product.id}`} className="w-[100px] flex-shrink-0">
                 <div className="w-full h-[100px] rounded-lg overflow-hidden mb-2">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                  <img src={product.img_url} alt={product.name} className="w-full h-full object-cover" />
                 </div>
-                <p className="text-[13px] font-normal text-[#2B2B2B] leading-[1.3] mb-1">{product.name}</p>
-                <p className="text-[14px] font-semibold text-[#1A1A1A]">{product.price}</p>
-              </div>
+                <p className="text-[13px] font-normal text-[#2B2B2B] leading-[1.3] mb-1 line-clamp-2">{product.name}</p>
+              </Link>
             ))}
           </div>
         </div>
@@ -298,7 +297,7 @@ function ExploreDesktop() {
       const { data } = await supabase
         .from('products')
         .select('id, name, img_url, brand')
-        .limit(20)
+        .limit(50)
       if (data && data.length > 0) {
         const shuffled = [...data].sort(() => Math.random() - 0.5)
         setTrendingProducts(shuffled.slice(0, 3))
@@ -364,7 +363,7 @@ function ExploreDesktop() {
                       <div className="w-full aspect-square rounded-[8px] overflow-hidden mb-[6px] md:mb-[8px]">
                         <img src={product.img_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
-                      <p className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors">{product.name}</p>
+                      <p className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors line-clamp-2">{product.name}</p>
                     </Link>
                   ))}
                 </div>
