@@ -580,27 +580,27 @@ export default function VirtualTryOn() {
 
   if (!unlocked) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#1A1A2E] via-[#16213E] to-[#0F3460] flex items-center justify-center px-4 font-['Cormorant_Garamond']">
-        <div className="w-full max-w-[440px] bg-[#1E2A3A] rounded-[24px] p-8 md:p-10 shadow-[0_24px_64px_rgba(0,0,0,0.4)]">
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Cormorant Garamond, serif' }}>
+        <div style={{ width: '100%', maxWidth: '440px', background: '#1E2A3A', borderRadius: '24px', padding: '40px', boxShadow: '0 24px 64px rgba(0,0,0,0.5)' }}>
 
           {/* Lock Icon */}
-          <div className="flex justify-center mb-6">
-            <div className="w-[80px] h-[80px] bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-[20px] flex items-center justify-center shadow-[0_8px_24px_rgba(201,168,112,0.3)]">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-[40px] h-[40px] text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #C9A870, #8B7355)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(201,168,112,0.3)' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '40px', height: '40px', color: 'white' }} fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
           </div>
 
           {/* Title */}
-          <h1 className="text-[28px] md:text-[32px] font-bold text-white text-center mb-2">Preview Access</h1>
-          <p className="text-[14px] md:text-[15px] text-[#8899AA] text-center mb-8 leading-[1.6]">
+          <h1 style={{ fontSize: '30px', fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: '8px' }}>Preview Access</h1>
+          <p style={{ fontSize: '15px', color: '#8899AA', textAlign: 'center', marginBottom: '32px', lineHeight: '1.6' }}>
             This environment is not public yet.<br />Enter the access code to continue.
           </p>
 
           {/* PIN Input */}
-          <div className="mb-3">
-            <label className="text-[13px] font-medium text-[#8899AA] mb-2 block">Access code</label>
+          <div style={{ marginBottom: '8px' }}>
+            <label style={{ fontSize: '13px', fontWeight: '500', color: '#8899AA', display: 'block', marginBottom: '8px' }}>Access code</label>
             <input
               type="password"
               value={pin}
@@ -608,32 +608,48 @@ export default function VirtualTryOn() {
               onKeyDown={(e) => { if (e.key === 'Enter') handleUnlock() }}
               placeholder="····"
               maxLength={10}
-              className={`w-full h-[52px] bg-[#0D1B2A] text-white text-[18px] tracking-[8px] text-center rounded-[12px] outline-none border-2 transition-colors placeholder:text-[#3A4A5A] placeholder:tracking-[4px] ${
-                error ? 'border-red-500' : 'border-[#2A3A4A] focus:border-[#C9A870]'
-              }`}
+              style={{
+                width: '100%',
+                height: '52px',
+                background: '#0D1B2A',
+                color: '#FFFFFF',
+                fontSize: '20px',
+                letterSpacing: '8px',
+                textAlign: 'center',
+                borderRadius: '12px',
+                outline: 'none',
+                border: error ? '2px solid #EF4444' : '2px solid #2A3A4A',
+                boxSizing: 'border-box',
+                transition: 'border-color 0.2s',
+              }}
+              onFocus={(e) => { if (!error) e.target.style.borderColor = '#C9A870' }}
+              onBlur={(e) => { if (!error) e.target.style.borderColor = '#2A3A4A' }}
             />
             {error && (
-              <p className="text-red-400 text-[13px] text-center mt-2">Incorrect access code. Please try again.</p>
+              <p style={{ color: '#EF4444', fontSize: '13px', textAlign: 'center', marginTop: '8px' }}>Incorrect access code. Please try again.</p>
             )}
           </div>
 
           {/* Continue Button */}
           <button
             onClick={handleUnlock}
-            className="w-full h-[52px] bg-gradient-to-r from-[#C9A870] to-[#8B7355] text-white text-[16px] font-semibold rounded-[12px] hover:opacity-90 transition-opacity mt-4 shadow-[0_4px_16px_rgba(201,168,112,0.3)]"
+            style={{ width: '100%', height: '52px', background: 'linear-gradient(to right, #C9A870, #8B7355)', color: 'white', fontSize: '16px', fontWeight: '600', borderRadius: '12px', border: 'none', cursor: 'pointer', marginTop: '16px', boxShadow: '0 4px 16px rgba(201,168,112,0.3)', letterSpacing: '0.5px' }}
           >
             Continue
           </button>
 
           {/* Continue Shopping */}
-          <a href="/">
-            <button className="w-full h-[52px] bg-transparent text-[#8899AA] text-[14px] font-medium rounded-[12px] hover:text-white transition-colors mt-3 border border-[#2A3A4A] hover:border-[#3A4A5A]">
+          <a href="/" style={{ display: 'block', marginTop: '12px' }}>
+            <button style={{ width: '100%', height: '52px', background: 'transparent', color: '#8899AA', fontSize: '14px', fontWeight: '500', borderRadius: '12px', border: '1px solid #2A3A4A', cursor: 'pointer', transition: 'color 0.2s' }}
+              onMouseEnter={(e) => { e.target.style.color = '#FFFFFF'; e.target.style.borderColor = '#3A4A5A' }}
+              onMouseLeave={(e) => { e.target.style.color = '#8899AA'; e.target.style.borderColor = '#2A3A4A' }}
+            >
               Continue Shopping
             </button>
           </a>
 
           {/* Footer note */}
-          <p className="text-[12px] text-[#556677] text-center mt-6 leading-[1.6]">
+          <p style={{ fontSize: '12px', color: '#445566', textAlign: 'center', marginTop: '24px', lineHeight: '1.6' }}>
             You will stay signed in to this preview until you log out of your account or close this browser tab.
           </p>
         </div>
