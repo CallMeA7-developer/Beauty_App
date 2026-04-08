@@ -2,14 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { IoCheckmarkCircle, IoChevronBack, IoChevronForward, IoStarSharp } from 'react-icons/io5'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
-
-const newArrivalsSupporting = [
-  { name: 'Luminous Face Oil',       price: '$165', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=376&h=376&fit=crop' },
-  { name: 'Velvet Skin Primer',      price: '$78',  img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=376&h=376&fit=crop' },
-  { name: 'Botanical Lip Treatment', price: '$52',  img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=376&h=376&fit=crop' },
-]
 
 const testimonials = [
   { quote: 'Shan Loray represents the perfect balance of luxury and efficacy. Every product feels like an indulgent ritual.',        name: 'Anastasia Volkov',  location: 'St. Petersburg', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=72&h=72&fit=crop' },
@@ -35,7 +30,11 @@ const newArrivalsBenefits = [
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function HomeMobile() {
+  const { user } = useAuth()
   const [bestSellers, setBestSellers] = useState([])
+  const [newArrivalMain, setNewArrivalMain] = useState(null)
+  const [newArrivalSupporting, setNewArrivalSupporting] = useState([])
+  const [notifyMessage, setNotifyMessage] = useState(false)
 
   useEffect(() => {
     const fetchBestSellers = async () => {
@@ -51,6 +50,25 @@ function HomeMobile() {
       }
     }
     fetchBestSellers()
+  }, [])
+
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, brand, price, image_url')
+        .in('id', ['sk-405', 'sk-406', 'mk-402', 'mk-403'])
+
+      if (data && data.length > 0) {
+        const main = data.find(p => p.id === 'sk-405')
+        const supporting = ['sk-406', 'mk-402', 'mk-403']
+          .map(id => data.find(p => p.id === id))
+          .filter(Boolean)
+        setNewArrivalMain(main)
+        setNewArrivalSupporting(supporting)
+      }
+    }
+    fetchNewArrivals()
   }, [])
 
   return (
@@ -178,55 +196,79 @@ function HomeMobile() {
           <div className="w-16 h-[3px] bg-[#C9A870] mx-auto" />
         </div>
 
-        <div className="px-5 mb-8">
-          <div className="relative mb-5">
-            <img
-              src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=360&fit=crop"
-              alt="Ethereal Glow Concentrate"
-              className="w-full rounded-[8px] shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
-            />
-            <div className="absolute top-[-12px] right-[-12px] bg-[#688B8D] h-9 px-4 rounded-[18px] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.15)]">
-              <span className="text-[11px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
+        {newArrivalMain && (
+          <div className="px-5 mb-8">
+            <div className="relative mb-5">
+              <img
+                src={newArrivalMain.image_url}
+                alt={newArrivalMain.name}
+                className="w-full rounded-[8px] shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+              />
+              <div className="absolute top-[-12px] right-[-12px] bg-[#688B8D] h-9 px-4 rounded-[18px] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.15)]">
+                <span className="text-[11px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
+              </div>
             </div>
-          </div>
 
-          <div className="bg-white rounded-[16px] shadow-[0_8px_24px_rgba(0,0,0,0.08)] p-6">
-            <p className="text-[11px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-4">Available March 15</p>
-            <h3 className="text-[28px] font-semibold text-[#1A1A1A] leading-[1.15] mb-3">Ethereal Glow Concentrate</h3>
-            <p className="text-[24px] font-bold text-[#2B2B2B] mb-5">$285</p>
-            <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-6">
-              A transformative elixir infused with rare Himalayan botanicals and bio-active peptides. Experience visible luminosity within 14 days.
-            </p>
-            <div className="mb-6 space-y-3">
-              {['Reduces visible signs of aging by 40%', 'Enhances natural radiance', 'Sustainable luxury production'].map((benefit, idx) => (
-                <div key={idx} className="flex items-start gap-2">
-                  <IoCheckmarkCircle className="w-4 h-4 text-[#C9A870] flex-shrink-0 mt-0.5" />
-                  <span className="text-[13px] font-normal text-[#2B2B2B] leading-[1.5]">{benefit}</span>
-                </div>
-              ))}
-            </div>
-            <div className="space-y-3">
-              <Link to="/product/ethereal-glow-concentrate">
-                <button className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-semibold rounded-[4px]">Pre-Order Now</button>
-              </Link>
-              <button className="w-full h-12 border-[2px] border-[#8B7355] text-[#8B7355] text-[14px] font-semibold rounded-[4px]">Notify Me</button>
+            <div className="bg-white rounded-[16px] shadow-[0_8px_24px_rgba(0,0,0,0.08)] p-6">
+              <p className="text-[11px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-4">Available March 15</p>
+              <h3 className="text-[28px] font-semibold text-[#1A1A1A] leading-[1.15] mb-3">{newArrivalMain.name}</h3>
+              <p className="text-[24px] font-bold text-[#2B2B2B] mb-5">${parseFloat(newArrivalMain.price || 0).toFixed(2)}</p>
+              <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-6">
+                A transformative elixir infused with rare Himalayan botanicals and bio-active peptides. Experience visible luminosity within 14 days.
+              </p>
+              <div className="mb-6 space-y-3">
+                {['Reduces visible signs of aging by 40%', 'Enhances natural radiance', 'Sustainable luxury production'].map((benefit, idx) => (
+                  <div key={idx} className="flex items-start gap-2">
+                    <IoCheckmarkCircle className="w-4 h-4 text-[#C9A870] flex-shrink-0 mt-0.5" />
+                    <span className="text-[13px] font-normal text-[#2B2B2B] leading-[1.5]">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    if (user) {
+                      window.location.href = `/product/${newArrivalMain.id}`
+                    } else {
+                      window.location.href = '/account'
+                    }
+                  }}
+                  className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-semibold rounded-[4px]"
+                >
+                  Pre-Order Now
+                </button>
+                <button
+                  onClick={() => {
+                    setNotifyMessage(true)
+                    setTimeout(() => setNotifyMessage(false), 4000)
+                  }}
+                  className="w-full h-12 border-[2px] border-[#8B7355] text-[#8B7355] text-[14px] font-semibold rounded-[4px]"
+                >
+                  Notify Me
+                </button>
+                {notifyMessage && (
+                  <p className="text-[13px] text-center text-[#8B7355] mt-2">
+                    Turn on email notifications to know more about this product.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="px-5">
           <div className="space-y-3">
-            {newArrivalsSupporting.map((product, idx) => (
-              <Link key={idx} to={`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}`} className="flex items-center gap-3">
+            {newArrivalSupporting.map((product) => (
+              <Link key={product.id} to={`/product/${product.id}`} className="flex items-center gap-3">
                 <div className="relative w-[120px] h-[120px] flex-shrink-0 rounded-[8px] overflow-hidden">
-                  <img src={product.img} alt={product.name} className="w-full h-full object-cover" />
+                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                   <div className="absolute top-2 left-2 bg-[#D4AFA3] h-6 px-3 rounded-[12px] flex items-center justify-center">
                     <span className="text-[10px] font-semibold text-white uppercase">NEW</span>
                   </div>
                 </div>
                 <div>
                   <h4 className="text-[16px] font-medium text-[#2B2B2B] leading-[1.2] mb-1">{product.name}</h4>
-                  <p className="text-[17px] font-semibold text-[#1A1A1A]">{product.price}</p>
+                  <p className="text-[17px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</p>
                 </div>
               </Link>
             ))}
@@ -316,7 +358,11 @@ function HomeMobile() {
 
 // ─── Desktop (+ Tablet responsive) ───────────────────────────────────────────
 function HomeDesktop() {
+  const { user } = useAuth()
   const [bestSellers, setBestSellers] = useState([])
+  const [newArrivalMain, setNewArrivalMain] = useState(null)
+  const [newArrivalSupporting, setNewArrivalSupporting] = useState([])
+  const [notifyMessage, setNotifyMessage] = useState(false)
 
   useEffect(() => {
     const fetchBestSellers = async () => {
@@ -332,6 +378,25 @@ function HomeDesktop() {
       }
     }
     fetchBestSellers()
+  }, [])
+
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, brand, price, image_url')
+        .in('id', ['sk-405', 'sk-406', 'mk-402', 'mk-403'])
+
+      if (data && data.length > 0) {
+        const main = data.find(p => p.id === 'sk-405')
+        const supporting = ['sk-406', 'mk-402', 'mk-403']
+          .map(id => data.find(p => p.id === id))
+          .filter(Boolean)
+        setNewArrivalMain(main)
+        setNewArrivalSupporting(supporting)
+      }
+    }
+    fetchNewArrivals()
   }, [])
 
   return (
@@ -467,50 +532,74 @@ function HomeDesktop() {
           <p className="text-[13px] md:text-[14px] lg:text-[16px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-6">Spring 2024 Limited Edition</p>
           <div className="w-[88px] h-[3px] bg-[#C9A870] mx-auto" />
         </div>
-        <div className="px-6 md:px-[60px] lg:px-[120px] mb-12 md:mb-16 lg:mb-[80px]">
-          <div className="flex flex-col md:flex-row items-start gap-8 md:gap-10 lg:gap-[48px]">
-            <div className="relative w-full md:w-[340px] lg:w-[520px] flex-shrink-0 md:h-[400px] lg:h-[560px]">
-              <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=640&h=640&fit=crop" alt="Ethereal Glow Concentrate" className="w-full h-full object-cover rounded-[12px] shadow-[0_6px_28px_rgba(0,0,0,0.08)]" />
-              <div className="absolute top-[20px] right-[20px] bg-[#688B8D] h-[40px] px-5 rounded-[20px] flex items-center justify-center">
-                <span className="text-[13px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
+        {newArrivalMain && (
+          <div className="px-6 md:px-[60px] lg:px-[120px] mb-12 md:mb-16 lg:mb-[80px]">
+            <div className="flex flex-col md:flex-row items-start gap-8 md:gap-10 lg:gap-[48px]">
+              <div className="relative w-full md:w-[340px] lg:w-[520px] flex-shrink-0 md:h-[400px] lg:h-[560px]">
+                <img src={newArrivalMain.image_url} alt={newArrivalMain.name} className="w-full h-full object-cover rounded-[12px] shadow-[0_6px_28px_rgba(0,0,0,0.08)]" />
+                <div className="absolute top-[20px] right-[20px] bg-[#688B8D] h-[40px] px-5 rounded-[20px] flex items-center justify-center">
+                  <span className="text-[13px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
+                </div>
               </div>
-            </div>
-            <div className="flex-1 bg-white rounded-[24px] shadow-[0_12px_48px_rgba(0,0,0,0.10)] p-8 md:p-10 lg:p-[56px]">
-              <p className="text-[12px] md:text-[13px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-5 lg:mb-6">Available March 15</p>
-              <h3 className="text-[30px] md:text-[36px] lg:text-[42px] font-semibold text-[#1A1A1A] leading-[1.15] mb-4">Ethereal Glow Concentrate</h3>
-              <p className="text-[22px] md:text-[24px] lg:text-[28px] font-bold text-[#2B2B2B] mb-5 lg:mb-6">$285</p>
-              <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal text-[#666666] leading-[1.75] mb-7 lg:mb-8">
-                A transformative elixir infused with rare Himalayan botanicals and bio-active peptides. Experience visible luminosity within 14 days.
-              </p>
-              <div className="mb-8 lg:mb-10 space-y-3 lg:space-y-4">
-                {newArrivalsBenefits.map((benefit, idx) => (
-                  <div key={idx} className="flex items-start gap-3">
-                    <IoCheckmarkCircle className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870] flex-shrink-0 mt-1" />
-                    <span className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#2B2B2B] leading-[1.6]">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-4">
-                <Link to="/product/ethereal-glow-concentrate">
-                  <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#7a6448] transition-colors">Pre-Order Now</button>
-                </Link>
-                <button className="w-full h-[52px] lg:h-[56px] border-[2px] border-[#8B7355] bg-transparent text-[#8B7355] text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#8B7355] hover:text-white transition-all">Notify Me</button>
+              <div className="flex-1 bg-white rounded-[24px] shadow-[0_12px_48px_rgba(0,0,0,0.10)] p-8 md:p-10 lg:p-[56px]">
+                <p className="text-[12px] md:text-[13px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-5 lg:mb-6">Available March 15</p>
+                <h3 className="text-[30px] md:text-[36px] lg:text-[42px] font-semibold text-[#1A1A1A] leading-[1.15] mb-4">{newArrivalMain.name}</h3>
+                <p className="text-[22px] md:text-[24px] lg:text-[28px] font-bold text-[#2B2B2B] mb-5 lg:mb-6">${parseFloat(newArrivalMain.price || 0).toFixed(2)}</p>
+                <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal text-[#666666] leading-[1.75] mb-7 lg:mb-8">
+                  A transformative elixir infused with rare Himalayan botanicals and bio-active peptides. Experience visible luminosity within 14 days.
+                </p>
+                <div className="mb-8 lg:mb-10 space-y-3 lg:space-y-4">
+                  {newArrivalsBenefits.map((benefit, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      <IoCheckmarkCircle className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870] flex-shrink-0 mt-1" />
+                      <span className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#2B2B2B] leading-[1.6]">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-4">
+                  <button
+                    onClick={() => {
+                      if (user) {
+                        window.location.href = `/product/${newArrivalMain.id}`
+                      } else {
+                        window.location.href = '/account'
+                      }
+                    }}
+                    className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#7a6448] transition-colors"
+                  >
+                    Pre-Order Now
+                  </button>
+                  <button
+                    onClick={() => {
+                      setNotifyMessage(true)
+                      setTimeout(() => setNotifyMessage(false), 4000)
+                    }}
+                    className="w-full h-[52px] lg:h-[56px] border-[2px] border-[#8B7355] bg-transparent text-[#8B7355] text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#8B7355] hover:text-white transition-all"
+                  >
+                    Notify Me
+                  </button>
+                  {notifyMessage && (
+                    <p className="text-[13px] text-center text-[#8B7355] mt-2">
+                      Turn on email notifications to know more about this product.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
         <div className="px-6 md:px-[60px] lg:px-[120px] mb-12 lg:mb-[64px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[32px]">
-            {newArrivalsSupporting.map((product, idx) => (
-              <Link key={idx} to={`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}`} className="cursor-pointer group">
+            {newArrivalSupporting.map((product) => (
+              <Link key={product.id} to={`/product/${product.id}`} className="cursor-pointer group">
                 <div className="relative w-full aspect-square rounded-[8px] overflow-hidden mb-5">
-                  <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-[16px] left-[16px] bg-[#D4AFA3] h-[32px] px-4 rounded-[16px] flex items-center justify-center">
                     <span className="text-[12px] font-semibold text-white uppercase tracking-[1px]">NEW</span>
                   </div>
                 </div>
                 <h4 className="text-[18px] md:text-[19px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-3">{product.name}</h4>
-                <p className="text-[17px] md:text-[18px] lg:text-[19px] font-semibold text-[#1A1A1A]">{product.price}</p>
+                <p className="text-[17px] md:text-[18px] lg:text-[19px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</p>
               </Link>
             ))}
           </div>
