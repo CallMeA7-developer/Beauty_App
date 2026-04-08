@@ -1,15 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { IoCheckmarkCircle, IoChevronBack, IoChevronForward, IoStarSharp } from 'react-icons/io5'
+import { supabase } from '../lib/supabase'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
-const bestSellers = [
-  { name: 'Luminous Youth Elixir',   brand: 'Shan Loray', price: '$198', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=320&h=320&fit=crop' },
-  { name: 'Velvet Rose Lip Lacquer', brand: 'Shan Loray', price: '$52',  img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=320&h=320&fit=crop' },
-  { name: 'Supreme Radiance Cream',  brand: 'Shan Loray', price: '$175', img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=320&h=320&fit=crop' },
-  { name: 'Eye Renewal Complex',     brand: 'Shan Loray', price: '$145', img: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=320&h=320&fit=crop' },
-  { name: 'Botanical Night Serum',   brand: 'Shan Loray', price: '$165', img: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=320&h=320&fit=crop' },
-]
 
 const newArrivalsSupporting = [
   { name: 'Luminous Face Oil',       price: '$165', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=376&h=376&fit=crop' },
@@ -41,6 +35,24 @@ const newArrivalsBenefits = [
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function HomeMobile() {
+  const [bestSellers, setBestSellers] = useState([])
+
+  useEffect(() => {
+    const fetchBestSellers = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, brand, price, image_url')
+        .in('id', ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404'])
+
+      if (data && data.length > 0) {
+        const order = ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404']
+        const sorted = order.map(id => data.find(p => p.id === id)).filter(Boolean)
+        setBestSellers(sorted)
+      }
+    }
+    fetchBestSellers()
+  }, [])
+
   return (
     <div className="w-full bg-white font-['Cormorant_Garamond']">
 
@@ -139,14 +151,14 @@ function HomeMobile() {
         </div>
         <div className="overflow-x-auto px-5" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <div className="flex gap-4" style={{ width: 'max-content' }}>
-            {bestSellers.map((product, idx) => (
-              <Link key={idx} to={`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}`} className="w-[240px] flex-shrink-0">
+            {bestSellers.map((product) => (
+              <Link key={product.id} to={`/product/${product.id}`} className="w-[240px] flex-shrink-0">
                 <div className="w-[240px] h-[240px] bg-white rounded-[6px] overflow-hidden mb-4">
-                  <img src={product.img} alt={product.name} className="w-full h-full object-cover" />
+                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                 </div>
                 <p className="text-[12px] font-light italic text-[#8B7355] tracking-[1px] mb-2">{product.brand}</p>
                 <h4 className="text-[16px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
-                <p className="text-[17px] font-semibold text-[#1A1A1A]">{product.price}</p>
+                <p className="text-[17px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</p>
               </Link>
             ))}
           </div>
@@ -304,6 +316,24 @@ function HomeMobile() {
 
 // ─── Desktop (+ Tablet responsive) ───────────────────────────────────────────
 function HomeDesktop() {
+  const [bestSellers, setBestSellers] = useState([])
+
+  useEffect(() => {
+    const fetchBestSellers = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, brand, price, image_url')
+        .in('id', ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404'])
+
+      if (data && data.length > 0) {
+        const order = ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404']
+        const sorted = order.map(id => data.find(p => p.id === id)).filter(Boolean)
+        setBestSellers(sorted)
+      }
+    }
+    fetchBestSellers()
+  }, [])
+
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
@@ -411,14 +441,14 @@ function HomeDesktop() {
         </div>
         <div className="px-6 md:px-[60px] lg:px-[120px] relative">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {bestSellers.map((product, idx) => (
-              <Link key={idx} to={`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}`} className="cursor-pointer group">
+            {bestSellers.map((product) => (
+              <Link key={product.id} to={`/product/${product.id}`} className="cursor-pointer group">
                 <div className="w-full aspect-square bg-white rounded-[8px] overflow-hidden mb-5">
-                  <img src={product.img} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2 md:mb-3">{product.brand}</p>
                 <h4 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-2 md:mb-3">{product.name}</h4>
-                <p className="text-[16px] md:text-[18px] lg:text-[19px] font-semibold text-[#1A1A1A]">{product.price}</p>
+                <p className="text-[16px] md:text-[18px] lg:text-[19px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</p>
               </Link>
             ))}
           </div>
