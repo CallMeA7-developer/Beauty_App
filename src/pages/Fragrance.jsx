@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   IoStarSharp,
   IoHeartOutline,
@@ -113,6 +113,8 @@ function FragranceMobile() {
   const [expandedNotes, setExpandedNotes]         = useState({ top: true, middle: false, base: false })
   const [displayCount, setDisplayCount]           = useState(10)
 
+  const [searchParams] = useSearchParams()
+
   const toggle = (arr, setArr, val) => setArr(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val])
 
   const activeFilters = selectedTypes.length + selectedFamilies.length + selectedTopNotes.length + selectedMiddleNotes.length + selectedBaseNotes.length + (selectedOccasion ? 1 : 0) + (intensityLevel !== null ? 1 : 0) + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
@@ -123,6 +125,13 @@ function FragranceMobile() {
     setIntensityLevel(null); setSelectedBrands([]); setSelectedRating(null)
     setMinPrice(''); setMaxPrice('')
   }
+
+  useEffect(() => {
+    const sub = searchParams.get('subcategory')
+    if (sub) {
+      setSelectedTypes([sub])
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchProducts() {
@@ -487,7 +496,16 @@ function FragranceDesktop() {
   const [maxPrice, setMaxPrice] = useState('')
   const [displayCount, setDisplayCount]           = useState(10)
 
+  const [searchParams] = useSearchParams()
+
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
+
+  useEffect(() => {
+    const sub = searchParams.get('subcategory')
+    if (sub) {
+      setSelectedTypes([sub])
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchProducts() {

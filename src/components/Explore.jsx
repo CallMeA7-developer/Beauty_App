@@ -18,6 +18,7 @@ import {
   IoInformationCircleOutline,
   IoChatbubbleOutline,
 } from 'react-icons/io5'
+import { supabase } from '../lib/supabase'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
 const desktopCategories = [
@@ -63,11 +64,63 @@ const trendingItems = [
   { name: 'Radiance Cream',        img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=100&h=100&fit=crop' },
 ]
 
-const popularSearches = ['Serums', 'Anti-aging', 'Moisturizers', 'Luxury Sets', 'New Arrivals', 'Best Sellers']
+const popularSearches = [
+  { label: 'Masks', path: '/skincare?subcategory=Masks' },
+  { label: 'Serums', path: '/skincare?subcategory=Serums' },
+  { label: 'Foundation', path: '/makeup?subcategory=Foundation' },
+  { label: 'Lipstick', path: '/makeup?subcategory=Lipstick' },
+  { label: 'Eau de Parfum', path: '/fragrance?subcategory=Eau%20de%20Parfum' },
+  { label: 'Body Mist', path: '/fragrance?subcategory=Body%20Mist' },
+]
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function ExploreMobile() {
   const navigate = useNavigate()
+  const [trendingProducts, setTrendingProducts] = useState([])
+  const [searchValue, setSearchValue] = useState('')
+
+  const subcategoryMap = {
+    'Cleansers': '/skincare', 'Exfoliators': '/skincare', 'Eye Care': '/skincare',
+    'Masks': '/skincare', 'Moisturizers': '/skincare', 'Serums': '/skincare',
+    'Sunscreen': '/skincare', 'Toners': '/skincare',
+    'Foundation': '/makeup', 'Concealer': '/makeup', 'Powder': '/makeup',
+    'Blush': '/makeup', 'Highlighter': '/makeup', 'Eyeshadow': '/makeup',
+    'Eyeliner': '/makeup', 'Mascara': '/makeup', 'Eyebrow': '/makeup',
+    'Lipstick': '/makeup', 'Lip Gloss': '/makeup', 'Lip Liner': '/makeup',
+    'Lip Care': '/makeup',
+    'Eau de Parfum': '/fragrance', 'Eau de Toilette': '/fragrance',
+    'Body Mist': '/fragrance', 'Discovery Sets': '/fragrance',
+  }
+
+  const handleSearch = (query) => {
+    if (!query.trim()) return
+    const trimmed = query.trim()
+    const exactPath = subcategoryMap[trimmed]
+    if (exactPath) {
+      navigate(`${exactPath}?subcategory=${encodeURIComponent(trimmed)}`)
+      return
+    }
+    const key = Object.keys(subcategoryMap).find(k => k.toLowerCase() === trimmed.toLowerCase())
+    if (key) {
+      navigate(`${subcategoryMap[key]}?subcategory=${encodeURIComponent(key)}`)
+      return
+    }
+    navigate(`/skincare`)
+  }
+
+  useEffect(() => {
+    const fetchTrending = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, img_url, brand')
+        .limit(20)
+      if (data && data.length > 0) {
+        const shuffled = [...data].sort(() => Math.random() - 0.5)
+        setTrendingProducts(shuffled.slice(0, 3))
+      }
+    }
+    fetchTrending()
+  }, [])
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex flex-col">
@@ -89,6 +142,9 @@ function ExploreMobile() {
           <IoSearchOutline className="w-5 h-5 text-[#8B7355] flex-shrink-0" />
           <input
             type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(e.target.value) }}
             placeholder="Search products, collections..."
             className="flex-1 text-[14px] font-normal text-[#999999] bg-transparent outline-none"
           />
@@ -150,18 +206,19 @@ function ExploreMobile() {
               <span className="text-[13px] font-medium text-[#8B7355]">Start Consultation →</span>
             </div>
           </Link>
-          <Link to="/virtual-tryon">
-            <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
-              <div className="w-12 h-12 rounded-full bg-[#D4AFA3] flex items-center justify-center mb-4">
-                <IoCameraOutline className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">Virtual Try-On</h3>
-              <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">
-                Experience products virtually with augmented reality technology
-              </p>
-              <span className="text-[13px] font-medium text-[#8B7355]">Launch Try-On →</span>
+          <div
+            onClick={() => alert('🚧 Virtual Try-On is currently under development. Please check back soon!')}
+            className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] cursor-pointer"
+          >
+            <div className="w-12 h-12 rounded-full bg-[#D4AFA3] flex items-center justify-center mb-4">
+              <IoCameraOutline className="w-6 h-6 text-white" />
             </div>
-          </Link>
+            <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">Virtual Try-On</h3>
+            <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">
+              Experience products virtually with augmented reality technology
+            </p>
+            <span className="text-[13px] font-medium text-[#8B7355]">Launch Try-On →</span>
+          </div>
         </div>
       </div>
 
@@ -205,10 +262,50 @@ function ExploreMobile() {
 function ExploreDesktop() {
   const navigate = useNavigate()
   const [searchValue, setSearchValue] = useState('')
+  const [trendingProducts, setTrendingProducts] = useState([])
 
-  const handleSearch = (e) => {
-    if (e.key === 'Enter' && searchValue.trim()) navigate('/search')
+  const subcategoryMap = {
+    'Cleansers': '/skincare', 'Exfoliators': '/skincare', 'Eye Care': '/skincare',
+    'Masks': '/skincare', 'Moisturizers': '/skincare', 'Serums': '/skincare',
+    'Sunscreen': '/skincare', 'Toners': '/skincare',
+    'Foundation': '/makeup', 'Concealer': '/makeup', 'Powder': '/makeup',
+    'Blush': '/makeup', 'Highlighter': '/makeup', 'Eyeshadow': '/makeup',
+    'Eyeliner': '/makeup', 'Mascara': '/makeup', 'Eyebrow': '/makeup',
+    'Lipstick': '/makeup', 'Lip Gloss': '/makeup', 'Lip Liner': '/makeup',
+    'Lip Care': '/makeup',
+    'Eau de Parfum': '/fragrance', 'Eau de Toilette': '/fragrance',
+    'Body Mist': '/fragrance', 'Discovery Sets': '/fragrance',
   }
+
+  const handleSearch = (query) => {
+    if (!query.trim()) return
+    const trimmed = query.trim()
+    const exactPath = subcategoryMap[trimmed]
+    if (exactPath) {
+      navigate(`${exactPath}?subcategory=${encodeURIComponent(trimmed)}`)
+      return
+    }
+    const key = Object.keys(subcategoryMap).find(k => k.toLowerCase() === trimmed.toLowerCase())
+    if (key) {
+      navigate(`${subcategoryMap[key]}?subcategory=${encodeURIComponent(key)}`)
+      return
+    }
+    navigate(`/skincare`)
+  }
+
+  useEffect(() => {
+    const fetchTrending = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, img_url, brand')
+        .limit(20)
+      if (data && data.length > 0) {
+        const shuffled = [...data].sort(() => Math.random() - 0.5)
+        setTrendingProducts(shuffled.slice(0, 3))
+      }
+    }
+    fetchTrending()
+  }, [])
 
   return (
     <div className="min-h-screen bg-black/65 flex items-center justify-center font-['Cormorant_Garamond'] py-[24px] md:py-[40px] px-4 md:px-6">
@@ -262,13 +359,13 @@ function ExploreDesktop() {
               <div className="mt-4 md:mt-[20px]">
                 <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">Trending Now</h4>
                 <div className="flex gap-3 md:gap-[12px]">
-                  {trendingItems.map((item, idx) => (
-                    <div key={idx} className="flex-1 cursor-pointer group">
+                  {trendingProducts.map((product) => (
+                    <Link key={product.id} to={`/product/${product.id}`} className="flex-1 cursor-pointer group">
                       <div className="w-full aspect-square rounded-[8px] overflow-hidden mb-[6px] md:mb-[8px]">
-                        <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <img src={product.img_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
-                      <p className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors">{item.name}</p>
-                    </div>
+                      <p className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#3D3D3D] leading-[1.4] group-hover:text-[#8B7355] transition-colors">{product.name}</p>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -282,7 +379,7 @@ function ExploreDesktop() {
                   type="text"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyDown={handleSearch}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(searchValue) }}
                   placeholder="Search products..."
                   className="flex-1 text-[14px] md:text-[15px] font-normal text-[#2B2B2B] bg-transparent outline-none placeholder:text-[#999999]"
                 />
@@ -291,9 +388,9 @@ function ExploreDesktop() {
                 <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">Popular Searches</h4>
                 <div className="flex flex-wrap gap-[6px] md:gap-[8px]">
                   {popularSearches.map((search, idx) => (
-                    <Link key={idx} to="/search">
-                      <div className="h-[32px] md:h-[36px] px-3 md:px-[16px] bg-[#FDFBF7] border border-[#E8E3D9] rounded-[18px] flex items-center cursor-pointer hover:bg-[#8B7355] hover:text-white hover:border-[#8B7355] transition-all">
-                        <span className="text-[12px] md:text-[13px] lg:text-[14px] font-normal text-[#3D3D3D]">{search}</span>
+                    <Link key={idx} to={search.path}>
+                      <div className="h-[32px] md:h-[36px] px-3 md:px-[16px] bg-[#FDFBF7] border border-[#E8E3D9] rounded-[18px] flex items-center cursor-pointer hover:bg-[#8B7355] hover:border-[#8B7355] transition-all group">
+                        <span className="text-[12px] md:text-[13px] lg:text-[14px] font-normal text-[#3D3D3D] group-hover:text-white transition-colors">{search.label}</span>
                       </div>
                     </Link>
                   ))}
@@ -306,12 +403,13 @@ function ExploreDesktop() {
                     <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">AI Beauty Consultant</span>
                   </div>
                 </Link>
-                <Link to="/virtual-tryon">
-                  <div className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
-                    <IoScanOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#D4AFA3] flex-shrink-0" />
-                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">Virtual Try-On</span>
-                  </div>
-                </Link>
+                <div
+                  onClick={() => alert('🚧 Virtual Try-On is currently under development. Please check back soon!')}
+                  className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group"
+                >
+                  <IoScanOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#D4AFA3] flex-shrink-0" />
+                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">Virtual Try-On</span>
+                </div>
               </div>
             </div>
 

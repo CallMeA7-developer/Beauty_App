@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   IoStarSharp,
   IoChevronBack,
@@ -65,7 +65,16 @@ function SkinCareMobile() {
   const [maxPrice, setMaxPrice] = useState('')
   const [displayCount, setDisplayCount] = useState(10)
 
+  const [searchParams] = useSearchParams()
+
   const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
+
+  useEffect(() => {
+    const sub = searchParams.get('subcategory')
+    if (sub) {
+      setSelectedSubcategories([sub])
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchProducts() {
@@ -566,6 +575,15 @@ function SkinCareDesktop() {
   const [maxPrice, setMaxPrice] = useState('')
   const [displayCount, setDisplayCount] = useState(10)
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
+
+  const [searchParams] = useSearchParams()
+
+  useEffect(() => {
+    const sub = searchParams.get('subcategory')
+    if (sub) {
+      setSelectedSubcategories([sub])
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchProducts() {

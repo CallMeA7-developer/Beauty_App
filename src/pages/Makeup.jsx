@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   IoStarSharp,
   IoHeartOutline,
@@ -115,7 +115,16 @@ function MakeupMobile() {
   const [maxPrice, setMaxPrice] = useState('')
   const [displayCount, setDisplayCount] = useState(10)
 
+  const [searchParams] = useSearchParams()
+
   const activeFilters = selectedCategories.length + selectedShades.length + selectedFinish.length + selectedSkinTypes.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
+
+  useEffect(() => {
+    const sub = searchParams.get('subcategory')
+    if (sub) {
+      setSelectedCategories([sub])
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchProducts() {
@@ -444,7 +453,16 @@ function MakeupDesktop() {
   const [maxPrice, setMaxPrice] = useState('')
   const [displayCount, setDisplayCount] = useState(10)
 
+  const [searchParams] = useSearchParams()
+
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
+
+  useEffect(() => {
+    const sub = searchParams.get('subcategory')
+    if (sub) {
+      setSelectedCategories([sub])
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchProducts() {
