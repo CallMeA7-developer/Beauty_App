@@ -156,9 +156,9 @@ export default function Payment() {
     setError('')
 
     try {
-      const selectedCardData = savedCards.find(c => c.id === selectedCard)
+      const itemsSnapshot = [...cartItems]
 
-      const orderItems = cartItems.map(item => ({
+      const orderItems = itemsSnapshot.map(item => ({
         product_id: item.product_id || item.id,
         product_name: item.product_name || item.name,
         product_image: item.product_image || item.img_url || item.image_url,
@@ -172,9 +172,6 @@ export default function Payment() {
       const shippingVal = parseFloat(shipping.toFixed(2))
       const taxVal = parseFloat(tax.toFixed(2))
       const totalVal = parseFloat(total.toFixed(2))
-
-      console.log('checkoutSession:', JSON.stringify(checkoutSession))
-      console.log('cartItems:', JSON.stringify(cartItems))
 
       const shippingAddress = checkoutSession.selectedAddress
         || checkoutSession.shippingAddress
@@ -200,9 +197,6 @@ export default function Payment() {
           payment_status: 'paid',
           shipping_address: shippingAddress,
           delivery_method: deliveryMethod,
-          payment_method: selectedCardData
-            ? `${selectedCardData.card_brand} ending in ${selectedCardData.card_last_four}`
-            : 'Card',
           created_at: new Date().toISOString(),
         })
         .select()
