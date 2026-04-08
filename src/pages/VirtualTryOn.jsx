@@ -544,9 +544,15 @@ function VirtualTryOnDesktop() {
 }
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
+// ─── Main Export with PIN Gate ────────────────────────────────────────────────
 export default function VirtualTryOn() {
   const location = useLocation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
+  const [pin, setPin] = useState('')
+  const [unlocked, setUnlocked] = useState(false)
+  const [error, setError] = useState(false)
+
+  const CORRECT_PIN = '6969'
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
@@ -555,11 +561,85 @@ export default function VirtualTryOn() {
   }, [])
 
   useEffect(() => {
-    if (location.hash) {
+    if (location.hash && unlocked) {
       const el = document.getElementById(location.hash.replace('#', ''))
       if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
     }
-  }, [location])
+  }, [location, unlocked])
+
+  const handleUnlock = () => {
+    if (pin === CORRECT_PIN) {
+      setUnlocked(true)
+      setError(false)
+    } else {
+      setError(true)
+      setPin('')
+      setTimeout(() => setError(false), 2000)
+    }
+  }
+
+  if (!unlocked) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#1A1A2E] via-[#16213E] to-[#0F3460] flex items-center justify-center px-4 font-['Cormorant_Garamond']">
+        <div className="w-full max-w-[440px] bg-[#1E2A3A] rounded-[24px] p-8 md:p-10 shadow-[0_24px_64px_rgba(0,0,0,0.4)]">
+
+          {/* Lock Icon */}
+          <div className="flex justify-center mb-6">
+            <div className="w-[80px] h-[80px] bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-[20px] flex items-center justify-center shadow-[0_8px_24px_rgba(201,168,112,0.3)]">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-[40px] h-[40px] text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-[28px] md:text-[32px] font-bold text-white text-center mb-2">Preview Access</h1>
+          <p className="text-[14px] md:text-[15px] text-[#8899AA] text-center mb-8 leading-[1.6]">
+            This environment is not public yet.<br />Enter the access code to continue.
+          </p>
+
+          {/* PIN Input */}
+          <div className="mb-3">
+            <label className="text-[13px] font-medium text-[#8899AA] mb-2 block">Access code</label>
+            <input
+              type="password"
+              value={pin}
+              onChange={(e) => { setPin(e.target.value); setError(false) }}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleUnlock() }}
+              placeholder="····"
+              maxLength={10}
+              className={`w-full h-[52px] bg-[#0D1B2A] text-white text-[18px] tracking-[8px] text-center rounded-[12px] outline-none border-2 transition-colors placeholder:text-[#3A4A5A] placeholder:tracking-[4px] ${
+                error ? 'border-red-500' : 'border-[#2A3A4A] focus:border-[#C9A870]'
+              }`}
+            />
+            {error && (
+              <p className="text-red-400 text-[13px] text-center mt-2">Incorrect access code. Please try again.</p>
+            )}
+          </div>
+
+          {/* Continue Button */}
+          <button
+            onClick={handleUnlock}
+            className="w-full h-[52px] bg-gradient-to-r from-[#C9A870] to-[#8B7355] text-white text-[16px] font-semibold rounded-[12px] hover:opacity-90 transition-opacity mt-4 shadow-[0_4px_16px_rgba(201,168,112,0.3)]"
+          >
+            Continue
+          </button>
+
+          {/* Continue Shopping */}
+          <a href="/">
+            <button className="w-full h-[52px] bg-transparent text-[#8899AA] text-[14px] font-medium rounded-[12px] hover:text-white transition-colors mt-3 border border-[#2A3A4A] hover:border-[#3A4A5A]">
+              Continue Shopping
+            </button>
+          </a>
+
+          {/* Footer note */}
+          <p className="text-[12px] text-[#556677] text-center mt-6 leading-[1.6]">
+            You will stay signed in to this preview until you log out of your account or close this browser tab.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return isMobile ? <VirtualTryOnMobile /> : <VirtualTryOnDesktop />
 }
