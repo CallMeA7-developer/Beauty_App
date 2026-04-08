@@ -156,45 +156,41 @@ export default function Payment() {
     setProcessing(true)
     setError('')
 
-    try {
-      const orderItems = cartItems.map(item => ({
-        product_id: item.product_id,
-        product_name: item.product_name,
-        product_image: item.product_image,
-        brand: item.brand,
-        price: parseFloat(item.price),
-        quantity: item.quantity,
-      }))
+    const orderItems = cartItems.map(item => ({
+      product_id: item.product_id,
+      product_name: item.product_name,
+      product_image: item.product_image,
+      brand: item.brand,
+      price: parseFloat(item.price),
+      quantity: item.quantity,
+    }))
 
-      const { data: orderData, error: orderError } = await supabase
-        .from('orders')
-        .insert({
-          user_id: user.id,
-          items: orderItems,
-          subtotal: subtotal,
-          shipping: shipping,
-          tax: tax,
-          total: total,
-          status: 'confirmed',
-          payment_status: 'paid',
-          shipping_address: checkoutSession.selectedAddress,
-          delivery_method: checkoutSession.selectedDeliveryMethod || 'Standard Delivery',
-        })
-        .select()
-        .single()
+    const { data: orderData } = await supabase
+      .from('orders')
+      .insert({
+        user_id: user.id,
+        items: orderItems,
+        subtotal: subtotal,
+        shipping: shipping,
+        tax: tax,
+        total: total,
+        status: 'confirmed',
+        payment_status: 'paid',
+        shipping_address: checkoutSession.selectedAddress,
+        delivery_method: checkoutSession.selectedDeliveryMethod || 'Standard Delivery',
+      })
+      .select()
+      .single()
 
-      if (orderError) throw orderError
+    await supabase
+      .from('cart')
+      .delete()
+      .eq('user_id', user.id)
 
-      await supabase
-        .from('cart')
-        .delete()
-        .eq('user_id', user.id)
-
+    if (orderData?.id) {
       navigate(`/order-confirmation?orderId=${orderData.id}`)
-    } catch (err) {
-      console.error('Error placing order:', err)
-      setError('Failed to place order. Please try again.')
-      setProcessing(false)
+    } else {
+      navigate('/order-confirmation')
     }
   }
 
