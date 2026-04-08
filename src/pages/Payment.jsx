@@ -147,7 +147,6 @@ export default function Payment() {
       setError('Please agree to the Terms & Conditions to continue')
       return
     }
-
     if (!selectedCard) {
       setError('Please select a payment method')
       return
@@ -156,41 +155,72 @@ export default function Payment() {
     setProcessing(true)
     setError('')
 
-    const orderItems = cartItems.map(item => ({
-      product_id: item.product_id,
-      product_name: item.product_name,
-      product_image: item.product_image,
-      brand: item.brand,
-      price: parseFloat(item.price),
-      quantity: item.quantity,
-    }))
+    try {
+      const selectedCardData = savedCards.find(c => c.id === selectedCard)
 
-    const { data: orderData } = await supabase
-      .from('orders')
-      .insert({
-        user_id: user.id,
-        items: orderItems,
-        subtotal: subtotal,
-        shipping: shipping,
-        tax: tax,
-        total: total,
-        status: 'confirmed',
-        payment_status: 'paid',
-        shipping_address: checkoutSession.selectedAddress,
-        delivery_method: checkoutSession.selectedDeliveryMethod || 'Standard Delivery',
-      })
-      .select()
-      .single()
+      const orderItems = cartItems.map(item => ({
+        product_id: item.product_id || item.id,
+        product_name: item.product_name || item.name,
+        product_image: item.product_image || item.img_url || item.image_url,
+        brand: item.brand || 'Shan Loray',
+        price: parseFloat(item.price),
+        quantity: item.quantity,
+        size: item.size || '',
+      }))
 
-    await supabase
-      .from('cart')
-      .delete()
-      .eq('user_id', user.id)
+      const subtotalVal = parseFloat(subtotal.toFixed(2))
+      const shippingVal = parseFloat(shipping.toFixed(2))
+      const taxVal = parseFloat(tax.toFixed(2))
+      const totalVal = parseFloat(total.toFixed(2))
 
-    if (orderData?.id) {
+      console.log('checkoutSession:', JSON.stringify(checkoutSession))
+      console.log('cartItems:', JSON.stringify(cartItems))
+
+      const shippingAddress = checkoutSession.selectedAddress
+        || checkoutSession.shippingAddress
+        || checkoutSession.address
+        || {}
+
+      const deliveryMethod = checkoutSession.selectedDeliveryMethod
+        || checkoutSession.deliveryMethod
+        || checkoutSession.delivery_method
+        || 'Standard Delivery'
+
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          items: orderItems,
+          subtotal: subtotalVal,
+          shipping: shippingVal,
+          tax: taxVal,
+          total: totalVal,
+          total_amount: totalVal,
+          status: 'confirmed',
+          payment_status: 'paid',
+          shipping_address: shippingAddress,
+          delivery_method: deliveryMethod,
+          payment_method: selectedCardData
+            ? `${selectedCardData.card_brand} ending in ${selectedCardData.card_last_four}`
+            : 'Card',
+          created_at: new Date().toISOString(),
+        })
+        .select()
+        .single()
+
+      if (orderError) {
+        console.error('Order insert error:', orderError)
+        throw orderError
+      }
+
+      await supabase.from('cart').delete().eq('user_id', user.id)
+
       navigate(`/order-confirmation?orderId=${orderData.id}`)
-    } else {
-      navigate('/order-confirmation')
+
+    } catch (err) {
+      console.error('Order placement error:', err)
+      setError('Failed to place order. Please try again.')
+      setProcessing(false)
     }
   }
 
