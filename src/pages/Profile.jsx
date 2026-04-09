@@ -54,12 +54,12 @@ export default function Profile() {
 
       const { data: allOrders, error: pointsError } = await supabase
         .from('orders')
-        .select('total_amount')
+        .select('total')
         .eq('user_id', user.id)
 
       if (pointsError) throw pointsError
 
-      const totalPoints = allOrders?.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0) || 0
+      const totalPoints = allOrders?.reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0) || 0
       setLoyaltyPoints(Math.floor(totalPoints))
 
       const { data: skinData } = await supabase
@@ -123,10 +123,10 @@ export default function Profile() {
     {
       title: 'Beauty',
       items: [
-        { icon: IoSparkles,       label: 'Beauty Profile',    path: '/skin-analysis',   badge: null,                             badgeColor: ''              },
-        { icon: IoRibbonOutline,  label: 'Loyalty Program',   path: '/account',         badge: `${loyaltyPoints.toLocaleString()} pts`, badgeColor: 'bg-[#8B7355]'  },
-        { icon: IoCalendarOutline,label: 'My Routines',        path: '/beauty-journey',  badge: null,                             badgeColor: ''              },
-        { icon: IoStarSharp,      label: 'Reviews & Ratings', path: '/account',         badge: null,                             badgeColor: ''              },
+        { icon: IoSparkles,       label: 'Beauty Profile',    path: '/skin-analysis',   badge: skinAnalysis ? 'Completed' : 'Not Complete', badgeColor: skinAnalysis ? 'bg-[#4A7C59]' : 'bg-[#999999]' },
+        { icon: IoRibbonOutline,  label: 'Loyalty Program',   path: '/account',         badge: `${loyaltyPoints.toLocaleString()} pts`,      badgeColor: 'bg-[#8B7355]'                               },
+        { icon: IoCalendarOutline,label: 'My Routines',        path: '/beauty-journey',  badge: null,                                         badgeColor: ''                                           },
+        { icon: IoStarSharp,      label: 'Reviews & Ratings', path: '/account',         badge: null,                                         badgeColor: ''                                           },
       ],
     },
     {
@@ -370,17 +370,21 @@ export default function Profile() {
                 <div className="space-y-3 lg:space-y-4">
                   {recentOrders.map((order) => (
                     <div key={order.id} className="flex items-center gap-3 md:gap-4 lg:gap-[16px] bg-[#FDFBF7] rounded-[12px] p-3 lg:p-[16px]">
-                      <img src={order.product_image || 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=100&h=100&fit=crop'} alt={order.product_name} className="w-[56px] h-[56px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] object-cover rounded-[8px] flex-shrink-0" />
+                      <div className="w-[56px] h-[56px] md:w-[64px] md:h-[64px] lg:w-[72px] lg:h-[72px] rounded-[8px] flex-shrink-0 bg-gradient-to-br from-[#F5F1EA] to-[#E8E3D9] flex items-center justify-center">
+                        <IoBagCheckOutline className="w-[28px] h-[28px] text-[#8B7355]" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <span className="text-[13px] lg:text-[14px] font-medium text-[#8B7355]">#{order.id.slice(0, 8)}</span>
-                          <span className={`text-[10px] lg:text-[11px] font-medium px-2 lg:px-3 py-[3px] rounded-full ${getStatusColor(order.status)}`}>{order.status}</span>
+                          <span className={`text-[10px] lg:text-[11px] font-medium px-2 lg:px-3 py-[3px] rounded-full ${getStatusColor(order.payment_status)}`}>{order.payment_status || 'Processing'}</span>
                         </div>
-                        <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1 truncate">{order.product_name || 'Order Items'}</h4>
+                        <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1 truncate">
+                          {order.items?.length ? `${order.items.length} item${order.items.length > 1 ? 's' : ''}` : 'Order Items'}
+                        </h4>
                         <p className="text-[12px] lg:text-[13px] font-normal text-[#999999]">{new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <div className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-1 lg:mb-2">${parseFloat(order.total_amount).toFixed(2)}</div>
+                        <div className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-1 lg:mb-2">${parseFloat(order.total || 0).toFixed(2)}</div>
                         <Link to={`/order-tracking?orderId=${order.id}`}>
                           <button className="text-[12px] lg:text-[13px] font-medium text-[#8B7355] hover:underline">Track</button>
                         </Link>
