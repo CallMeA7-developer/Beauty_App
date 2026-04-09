@@ -58,7 +58,7 @@ export default function OrderTracking() {
 
         setAllOrders(allOrdersData || [])
 
-        const totalPoints = allOrdersData?.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0) || 0
+        const totalPoints = allOrdersData?.reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0) || 0
         setLoyaltyPoints(Math.floor(totalPoints))
 
         let mainOrder
@@ -527,14 +527,18 @@ export default function OrderTracking() {
                 </div>
               </div>
               <div className="flex items-center gap-3 lg:gap-[16px]">
-                <button className="flex-1 flex items-center justify-center gap-[8px] bg-[#8B7355] text-white text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                  <IoChatbubbleEllipsesOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
-                  Contact Support
-                </button>
-                <button className="flex-1 flex items-center justify-center gap-[8px] bg-white border border-[#8B7355] text-[#8B7355] text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
-                  <IoHelpCircleOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
-                  View FAQs
-                </button>
+                <a href="mailto:support@shanloray.ru" className="flex-1">
+                  <button className="w-full flex items-center justify-center gap-[8px] bg-[#8B7355] text-white text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                    <IoChatbubbleEllipsesOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
+                    Contact Support
+                  </button>
+                </a>
+                <a href="https://shanloray.ru/#faq" target="_blank" rel="noreferrer" className="flex-1">
+                  <button className="w-full flex items-center justify-center gap-[8px] bg-white border border-[#8B7355] text-[#8B7355] text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
+                    <IoHelpCircleOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
+                    View FAQs
+                  </button>
+                </a>
               </div>
             </div>
 
@@ -560,7 +564,7 @@ export default function OrderTracking() {
                         <div className={`${statusColor} text-white text-[11px] lg:text-[12px] font-medium px-[10px] lg:px-[12px] py-[4px] rounded-full`}>
                           {status}
                         </div>
-                        <Link to={`/order-tracking?orderId=${recentOrder.id}`}>
+                        <Link to={`/order-tracking?orderId=${recentOrder.id}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                           <button className="border border-[#8B7355] text-[#8B7355] text-[12px] lg:text-[14px] font-medium px-3 lg:px-[16px] py-[5px] lg:py-[6px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
                             Track
                           </button>
