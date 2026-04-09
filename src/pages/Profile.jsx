@@ -209,32 +209,23 @@ export default function Profile() {
                   <h3 className="text-[13px] lg:text-[14px] font-medium text-[#8B7355] tracking-[1px] uppercase">{section.title}</h3>
                 </div>
                 <div className="px-[8px] lg:px-[12px] py-[6px] lg:py-[8px]">
-                  {section.items.map((item) => {
-                    const isBeautyProfile = item.label === 'Beauty Profile'
-                    const badgeText = isBeautyProfile
-                      ? (skinAnalysis ? 'Completed' : 'Not Complete')
-                      : item.badge
-                    const badgeColor = isBeautyProfile
-                      ? (skinAnalysis ? 'bg-[#4A7C59]' : 'bg-[#999999]')
-                      : (item.badgeColor || 'bg-[#C9A870]')
-                    return (
-                      <Link key={item.label} to={item.path}>
-                        <div className="flex items-center justify-between h-[48px] lg:h-[52px] px-3 lg:px-[16px] rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors">
-                          <div className="flex items-center gap-3 lg:gap-[14px]">
-                            <item.icon className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355]" />
-                            <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">{item.label}</span>
-                          </div>
-                          {badgeText ? (
-                            <div className={`${badgeColor} text-white text-[10px] lg:text-[11px] font-normal px-[8px] lg:px-[10px] py-[3px] rounded-full`}>
-                              {badgeText}
-                            </div>
-                          ) : (
-                            <IoChevronForward className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] text-[#999999]" />
-                          )}
+                  {section.items.map((item) => (
+                    <Link key={item.label} to={item.path}>
+                      <div className="flex items-center justify-between h-[48px] lg:h-[52px] px-3 lg:px-[16px] rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors">
+                        <div className="flex items-center gap-3 lg:gap-[14px]">
+                          <item.icon className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355]" />
+                          <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">{item.label}</span>
                         </div>
-                      </Link>
-                    )
-                  })}
+                        {item.badge ? (
+                          <div className={`${item.badgeColor || 'bg-[#C9A870]'} text-white text-[10px] lg:text-[11px] font-normal px-[8px] lg:px-[10px] py-[3px] rounded-full`}>
+                            {item.badge}
+                          </div>
+                        ) : (
+                          <IoChevronForward className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] text-[#999999]" />
+                        )}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </div>
             ))}
