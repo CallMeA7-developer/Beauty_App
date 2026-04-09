@@ -9,6 +9,10 @@ import {
   IoWaterOutline,
   IoSparklesOutline,
   IoStarSharp,
+  IoCalendarOutline,
+  IoCloseOutline,
+  IoCheckmark,
+  IoMailOutline,
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
@@ -35,6 +39,14 @@ export default function SkinAnalysis() {
   const [openFaq, setOpenFaq] = useState(null)
   const [savedSuccess, setSavedSuccess] = useState(false)
   const [savedJourney, setSavedJourney] = useState(null)
+  const [allAnalyses, setAllAnalyses] = useState([])
+  const [showCalendar, setShowCalendar] = useState(false)
+  const [scheduledDate, setScheduledDate] = useState('')
+  const [scheduleSuccess, setScheduleSuccess] = useState(false)
+  const [pin, setPin] = useState('')
+  const [unlocked, setUnlocked] = useState(false)
+  const [pinError, setPinError] = useState(false)
+  const CORRECT_PIN = '6969'
 
   useEffect(() => {
     if (location.hash) {
@@ -56,10 +68,11 @@ export default function SkinAnalysis() {
         .select('skin_score, skin_label, created_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
 
-      if (data) setSavedJourney(data)
+      if (data && data.length > 0) {
+        setSavedJourney(data[0])
+        setAllAnalyses(data)
+      }
     } catch (err) {
       console.error('Error loading journey:', err)
     }
@@ -346,8 +359,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
   const saveAnalysisToDatabase = async (result) => {
     try {
-      // Delete existing row first, then insert fresh (upsert requires unique constraint)
-      await supabase.from('skin_analysis').delete().eq('user_id', user.id)
+      // Insert new row to keep full history
       await supabase.from('skin_analysis').insert({
         user_id: user.id,
         skin_score: result.skinScore,
@@ -376,7 +388,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       return
     }
     try {
-      await supabase.from('skin_analysis').delete().eq('user_id', user.id)
+      // Insert new row to keep full history (Profile.jsx reads latest)
       await supabase.from('skin_analysis').insert({
         user_id: user.id,
         skin_score: analysisResult.skinScore,
@@ -467,6 +479,50 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     return 'grid-cols-1 sm:grid-cols-3'
   }
 
+  if (!unlocked) {
+    return (
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #3D2B00 0%, #5C4200 40%, #7A5800 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Cormorant Garamond, serif' }}>
+        <div style={{ width: '100%', maxWidth: '440px', background: 'rgba(20, 12, 0, 0.7)', backdropFilter: 'blur(24px)', borderRadius: '24px', padding: '40px', boxShadow: '0 24px 64px rgba(0,0,0,0.3)', border: '1px solid rgba(201,168,112,0.25)' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #C9A870, #8B7355)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '40px', height: '40px' }} fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+          </div>
+          <h1 style={{ fontSize: '30px', fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: '8px' }}>Preview Access</h1>
+          <p style={{ fontSize: '15px', color: 'rgba(201,168,112,0.7)', textAlign: 'center', marginBottom: '32px', lineHeight: '1.6' }}>
+            This environment is not public yet.<br />Enter the access code to continue.
+          </p>
+          <div style={{ marginBottom: '8px' }}>
+            <label style={{ fontSize: '13px', fontWeight: '500', color: 'rgba(201,168,112,0.7)', display: 'block', marginBottom: '8px' }}>Access code</label>
+            <input
+              type="password"
+              value={pin}
+              onChange={(e) => { setPin(e.target.value); setPinError(false) }}
+              onKeyDown={(e) => { if (e.key === 'Enter') { if (pin === CORRECT_PIN) { setUnlocked(true) } else { setPinError(true); setPin(''); setTimeout(() => setPinError(false), 2000) } } }}
+              placeholder="····"
+              maxLength={10}
+              style={{ width: '100%', height: '52px', background: 'rgba(10, 6, 0, 0.8)', color: '#FFFFFF', fontSize: '20px', letterSpacing: '8px', textAlign: 'center', borderRadius: '12px', outline: 'none', border: pinError ? '2px solid #EF4444' : '2px solid rgba(201,168,112,0.3)', boxSizing: 'border-box' }}
+            />
+            {pinError && <p style={{ color: '#EF4444', fontSize: '13px', textAlign: 'center', marginTop: '8px' }}>Incorrect access code. Please try again.</p>}
+          </div>
+          <button
+            onClick={() => { if (pin === CORRECT_PIN) { setUnlocked(true) } else { setPinError(true); setPin(''); setTimeout(() => setPinError(false), 2000) } }}
+            style={{ width: '100%', height: '52px', background: 'linear-gradient(to right, #C9A870, #8B7355)', color: 'white', fontSize: '16px', fontWeight: '600', borderRadius: '12px', border: 'none', cursor: 'pointer', marginTop: '16px' }}
+          >
+            Continue
+          </button>
+          <a href="/" style={{ display: 'block', marginTop: '12px' }}>
+            <button style={{ width: '100%', height: '52px', background: 'transparent', color: 'rgba(201,168,112,0.7)', fontSize: '14px', fontWeight: '500', borderRadius: '12px', border: '1px solid rgba(201,168,112,0.25)', cursor: 'pointer' }}>
+              Continue Shopping
+            </button>
+          </a>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
@@ -492,33 +548,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Skin Analysis</span>
       </div>
 
-      {/* Upload Section */}
-      <div id="upload-section" className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
-        <div className="max-w-[1200px] mx-auto">
-          <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
-          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Upload a clear photo or use our questionnaire below</p>
-          <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-            <div className="min-h-[280px] md:min-h-[340px] lg:min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center px-4 py-8 lg:py-0">
-              <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-4" />
-              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Upload Your Photo</h3>
-              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 text-center">Drag and drop your photo here or click to browse</p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Upload Photo</button>
-                <button className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">Take Selfie</button>
-              </div>
-            </div>
-            <div className="p-5 md:p-6 lg:p-[32px] grid grid-cols-3 gap-4 lg:gap-6">
-              {guidelines.map((guide, idx) => (
-                <div key={idx} className="flex flex-col items-center text-center">
-                  <guide.icon className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px] text-[#8B7355] mb-2" />
-                  <h4 className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] mb-1">{guide.title}</h4>
-                  <p className="text-[11px] lg:text-[14px] font-normal text-[#666666]">{guide.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Upload Section - Hidden, kept as anchor for scroll */}
+      <div id="upload-section" />
 
       {/* Questionnaire */}
       <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
@@ -764,58 +795,129 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-4 lg:mb-6">Track Your Skin Journey</h2>
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">Monitor improvements with regular skin analysis</p>
 
-        <div className="max-w-[1200px] mx-auto bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-6 lg:p-[40px]">
-          {analysisResult || savedJourney ? (
-            <div className="flex flex-col sm:flex-row items-center gap-8">
-              <div className="flex flex-col items-center flex-shrink-0">
-                <div className="w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[130px] lg:h-[130px] rounded-[12px] bg-[#C9A870] flex items-center justify-center mb-4">
-                  <IoSparklesOutline className="w-[40px] h-[40px] lg:w-[52px] lg:h-[52px] text-white" />
+        <div className="max-w-[1200px] mx-auto">
+
+          {/* History List */}
+          {allAnalyses.length > 0 ? (
+            <div className="space-y-4 mb-8">
+              {allAnalyses.map((analysis, index) => (
+                <div key={index} className="bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-6 lg:p-[32px] flex flex-col sm:flex-row items-center gap-6">
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] rounded-[12px] bg-[#C9A870] flex items-center justify-center mb-3">
+                      <IoSparklesOutline className="w-[36px] h-[36px] lg:w-[44px] lg:h-[44px] text-white" />
+                    </div>
+                    <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-1">{analysis.skin_score}/100</div>
+                    <div className="px-3 py-1 bg-white rounded-full text-[11px] lg:text-[12px] text-[#8B7355] font-medium border border-[#E8E3D9]">
+                      {analysis.skin_label || 'Analysis'}
+                    </div>
+                  </div>
+                  <div className="flex-1 text-center sm:text-left">
+                    <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start">
+                      <IoCalendarOutline className="w-[16px] h-[16px] text-[#8B7355]" />
+                      <span className="text-[13px] lg:text-[14px] text-[#666666]">{formatDate(new Date(analysis.created_at))}</span>
+                      {index === 0 && <span className="bg-[#8B7355] text-white text-[10px] px-2 py-0.5 rounded-full">Latest</span>}
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+                      {[
+                        { label: 'Hydration', value: analysis.metrics?.hydration },
+                        { label: 'Texture', value: analysis.metrics?.texture },
+                        { label: 'Clarity', value: analysis.metrics?.clarity },
+                        { label: 'Tone', value: analysis.metrics?.toneEvenness },
+                      ].map((m) => m.value != null && (
+                        <div key={m.label} className="bg-white rounded-[8px] p-2 text-center border border-[#E8E3D9]">
+                          <div className="text-[14px] lg:text-[16px] font-bold text-[#8B7355]">{m.value}%</div>
+                          <div className="text-[11px] text-[#666666]">{m.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-[26px] lg:text-[32px] font-bold text-[#8B7355] mb-1">
-                  {analysisResult ? analysisResult.skinScore : savedJourney.skin_score}/100
-                </div>
-                <div className="text-[12px] lg:text-[14px] font-normal text-[#666666] mb-2">
-                  {analysisResult
-                    ? (analysisDate ? formatDate(analysisDate) : '')
-                    : formatDate(new Date(savedJourney.created_at))}
-                </div>
-                <div className="px-3 py-1 bg-[#F5F1EA] rounded-full text-[11px] lg:text-[12px] text-[#8B7355] font-medium">
-                  {analysisResult ? analysisResult.skinLabel : savedJourney.skin_label}
-                </div>
-              </div>
-              <div className="flex-1 text-center sm:text-left">
-                <p className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] mb-3">Your Latest Analysis is Saved!</p>
-                <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 max-w-[440px]">Come back monthly to track your skin progress and see how your routine is making a difference over time.</p>
-                <button
-                  onClick={() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="h-[44px] lg:h-[48px] px-8 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                  Schedule Next Analysis
-                </button>
-              </div>
+              ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-10 lg:py-14 text-center">
+            <div className="bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-8 lg:p-[40px] flex flex-col items-center justify-center text-center mb-8">
               <div className="w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] rounded-full bg-[#F5F1EA] flex items-center justify-center mb-6">
                 <IoSparklesOutline className="w-[36px] h-[36px] lg:w-[44px] lg:h-[44px] text-[#C9A870]" />
               </div>
               <h3 className="text-[18px] lg:text-[22px] font-medium text-[#1A1A1A] mb-3">No Analysis Yet</h3>
-              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-8 max-w-[380px]">Complete your first skin analysis to start tracking your skin journey over time.</p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="h-[48px] px-8 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                  Start Your Analysis
-                </button>
-                <button
-                  onClick={() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="h-[48px] px-8 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-                  Schedule Next Analysis
-                </button>
-              </div>
+              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] max-w-[380px]">Complete your first skin analysis above to start tracking your skin journey over time.</p>
             </div>
           )}
+
+          {/* Schedule Next Analysis Button */}
+          <div className="text-center">
+            <button
+              onClick={() => setShowCalendar(true)}
+              className="h-[48px] lg:h-[52px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors flex items-center gap-2 mx-auto">
+              <IoCalendarOutline className="w-[18px] h-[18px]" />
+              Schedule Next Analysis
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Calendar Modal */}
+      {showCalendar && (
+        <>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setShowCalendar(false)} />
+          <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+            <div className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(139,115,85,0.2)] w-full max-w-[420px] p-6 lg:p-8 font-['Cormorant_Garamond']">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A]">Schedule Next Analysis</h3>
+                <button onClick={() => { setShowCalendar(false); setScheduleSuccess(false) }}>
+                  <IoCloseOutline className="w-[24px] h-[24px] text-[#666666] hover:text-[#1A1A1A]" />
+                </button>
+              </div>
+
+              {scheduleSuccess ? (
+                <div className="text-center py-6">
+                  <div className="w-[64px] h-[64px] bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <IoCheckmark className="w-[32px] h-[32px] text-green-600" />
+                  </div>
+                  <h4 className="text-[18px] font-semibold text-[#1A1A1A] mb-2">Reminder Scheduled!</h4>
+                  <p className="text-[14px] text-[#666666] mb-2">We will send a reminder to:</p>
+                  <p className="text-[14px] font-medium text-[#8B7355] mb-2">{user?.email}</p>
+                  <p className="text-[14px] text-[#666666]">on <span className="font-medium text-[#1A1A1A]">{new Date(scheduledDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span></p>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-4">
+                    <IoMailOutline className="w-[16px] h-[16px] text-[#8B7355] inline mr-2" />
+                    <span className="text-[13px] text-[#666666]">Reminder will be sent to: <strong>{user?.email}</strong></span>
+                  </div>
+                  <div className="mb-6">
+                    <label className="text-[13px] font-medium text-[#1A1A1A] block mb-2">Select Date</label>
+                    <input
+                      type="date"
+                      value={scheduledDate}
+                      min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
+                      onChange={(e) => setScheduledDate(e.target.value)}
+                      className="w-full h-[48px] px-4 border border-[#E8E3D9] rounded-[8px] text-[14px] text-[#1A1A1A] outline-none focus:border-[#C9A870] transition-colors"
+                    />
+                  </div>
+                  <button
+                    onClick={async () => {
+                      if (!scheduledDate) return
+                      try {
+                        await supabase.from('skin_analysis_reminders').insert({
+                          user_id: user.id,
+                          email: user.email,
+                          scheduled_date: scheduledDate,
+                          created_at: new Date().toISOString()
+                        }).then(() => {})
+                      } catch(e) {}
+                      setScheduleSuccess(true)
+                    }}
+                    disabled={!scheduledDate}
+                    className="w-full h-[48px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Confirm & Send Reminder
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* FAQ */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
