@@ -540,25 +540,25 @@ export default function OrderTracking() {
                   </button>
                   <p className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-4">Reach us through any channel:</p>
                   <div className="space-y-3">
-                    <a href="tel:+74951234567" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                    <a href="#" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
                       <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
-                        <IoCallOutline className="w-[18px] h-[18px] text-[#8B7355] group-hover:text-[#8B7355]" />
+                        <IoCallOutline className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
                       <div>
                         <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Phone Support</div>
-                        <div className="text-[12px] text-[#666666] group-hover:text-white">+7 (495) 123-45-67</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">Call us</div>
                       </div>
                     </a>
-                    <a href="mailto:support@shanloray.ru" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                    <a href="#" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
                       <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
                         <IoMailOutline className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
                       <div>
                         <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Email Support</div>
-                        <div className="text-[12px] text-[#666666] group-hover:text-white">support@shanloray.ru</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">Send us an email</div>
                       </div>
                     </a>
-                    <a href="https://wa.me/74951234567" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                    <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
                       <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
                         <IoLogoWhatsapp className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
@@ -567,13 +567,13 @@ export default function OrderTracking() {
                         <div className="text-[12px] text-[#666666] group-hover:text-white">Chat with us</div>
                       </div>
                     </a>
-                    <a href="https://instagram.com/shanloray" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                    <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
                       <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
                         <IoLogoInstagram className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
                       <div>
-                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Instagram DM</div>
-                        <div className="text-[12px] text-[#666666] group-hover:text-white">@shanloray</div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Instagram</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">Message us</div>
                       </div>
                     </a>
                   </div>
