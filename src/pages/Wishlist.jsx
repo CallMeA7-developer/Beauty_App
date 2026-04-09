@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   IoPersonOutline,
@@ -42,14 +42,14 @@ import { useWishlist } from '../contexts/WishlistContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 const navigationItems = [
-  { icon: IoPersonOutline,   label: 'Account Dashboard', path: '/dashboard',        active: false, badge: null },
-  { icon: IoBagCheckOutline, label: 'Order History',     path: '/order-tracking',   active: false, badge: null },
-  { icon: IoHeartOutline,    label: 'Wishlist',          path: '/wishlist',         active: true,  badge: null },
-  { icon: IoSparkles,        label: 'Beauty Profile',    path: '/skin-analysis',    active: false, tag: 'Complete Analysis' },
-  { icon: IoRibbonOutline,   label: 'Loyalty Program',   path: '/account',          active: false, badge: null },
-  { icon: IoCalendarOutline, label: 'My Routines',       path: '/beauty-journey',   active: false, badge: null },
-  { icon: IoStarSharp,       label: 'Reviews & Ratings', path: '/account',          active: false, badge: null },
-  { icon: IoSettingsOutline, label: 'Account Settings',  path: '/privacy-settings', active: false, badge: null },
+  { icon: IoPersonOutline,   label: 'Account Dashboard', path: '/dashboard',        active: false },
+  { icon: IoBagCheckOutline, label: 'Order History',     path: '/order-tracking',   active: false },
+  { icon: IoHeartOutline,    label: 'Wishlist',          path: '/wishlist',         active: true  },
+  { icon: IoSparkles,        label: 'Beauty Profile',    path: '/skin-analysis',    active: false },
+  { icon: IoRibbonOutline,   label: 'Loyalty Program',   path: '/account',          active: false },
+  { icon: IoCalendarOutline, label: 'My Routines',       path: '/beauty-journey',   active: false },
+  { icon: IoStarSharp,       label: 'Reviews & Ratings', path: '/account',          active: false },
+  { icon: IoSettingsOutline, label: 'Account Settings',  path: '/privacy-settings', active: false },
 ]
 
 const sortOptions = [
@@ -519,6 +519,8 @@ function WishlistDesktop() {
   const [totalOrders, setTotalOrders] = useState(0)
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
   const [reviewsCount, setReviewsCount] = useState(0)
+  const [selectedSort, setSelectedSort] = useState('newest')
+  const shareRef = useRef(null)
 
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
   const userEmail = user?.email || ''
@@ -534,11 +536,11 @@ function WishlistDesktop() {
 
         const { data: orders } = await supabase
           .from('orders')
-          .select('total_amount')
+          .select('total')
           .eq('user_id', user.id)
         
         setTotalOrders(orders?.length || 0)
-        const points = orders?.reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0) || 0
+        const points = orders?.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0) || 0
         setLoyaltyPoints(Math.floor(points))
 
         const { data: reviews } = await supabase
@@ -646,8 +648,9 @@ function WishlistDesktop() {
                       <item.icon className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
                       <span className={`text-[13px] lg:text-[15px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
                     </div>
-                    {item.badge ? <div className="bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium px-[7px] lg:px-[8px] py-[2px] rounded-full">{item.badge}</div>
-                      : item.tag ? <div className="hidden md:block bg-[#8B7355] text-white text-[9px] lg:text-[10px] font-normal px-[7px] lg:px-[8px] py-[2px] rounded-[4px]">{item.tag}</div> : null}
+                    {item.label === 'Wishlist' && wishlistCount > 0 && (
+                      <div className="bg-[#C9A870] text-white text-[10px] lg:text-[11px] font-medium px-[7px] lg:px-[8px] py-[2px] rounded-full">{wishlistCount}</div>
+                    )}
                   </div>
                 </Link>
               ))}
@@ -671,21 +674,27 @@ function WishlistDesktop() {
 
             {/* Toolbar */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-4 lg:p-[24px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 lg:mb-[24px]">
-              <div className="flex items-center gap-[12px]">
+              <div className="flex items-center gap-[12px] relative">
                 <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Sort by:</span>
-                <div className="flex items-center gap-[8px] cursor-pointer">
-                  <span className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A]">Latest Added</span>
-                  <IoChevronDown className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] text-[#666666]" />
+                <div className="relative">
+                  <select
+                    value={selectedSort}
+                    onChange={(e) => setSelectedSort(e.target.value)}
+                    className="h-[36px] pl-3 pr-8 border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] bg-white cursor-pointer outline-none appearance-none hover:border-[#8B7355] transition-colors"
+                  >
+                    <option value="newest">Newest Added</option>
+                    <option value="low_high">Price: Low to High</option>
+                    <option value="high_low">Price: High to Low</option>
+                    <option value="highest_rated">Highest Rated</option>
+                  </select>
+                  <IoChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-[14px] h-[14px] text-[#666666] pointer-events-none" />
                 </div>
               </div>
-              <div className="flex items-center gap-[10px] lg:gap-[12px]">
-                <button className="h-[38px] lg:h-[40px] px-4 lg:px-[20px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer flex items-center gap-[6px] lg:gap-[8px] hover:border-[#8B7355] transition-colors">
-                  <IoFunnelOutline className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px]" />Filter
-                </button>
-                <button className="h-[38px] lg:h-[40px] px-4 lg:px-[20px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer flex items-center gap-[6px] lg:gap-[8px] hover:border-[#8B7355] transition-colors">
-                  <IoShareSocialOutline className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px]" />Share Wishlist
-                </button>
-              </div>
+              <button
+                onClick={() => shareRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                className="h-[38px] lg:h-[40px] px-4 lg:px-[20px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer flex items-center gap-[6px] lg:gap-[8px] hover:border-[#8B7355] transition-colors">
+                <IoShareSocialOutline className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px]" />Share Wishlist
+              </button>
             </div>
 
             {/* Product Grid */}
@@ -702,13 +711,19 @@ function WishlistDesktop() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-[24px] mb-5 lg:mb-[24px]">
-                {wishlistItems.map((item) => {
+                {[...wishlistItems].sort((a, b) => {
+                  const pa = a.products, pb = b.products
+                  if (selectedSort === 'low_high') return parseFloat(pa.price) - parseFloat(pb.price)
+                  if (selectedSort === 'high_low') return parseFloat(pb.price) - parseFloat(pa.price)
+                  if (selectedSort === 'highest_rated') return (pb.rating || 0) - (pa.rating || 0)
+                  return new Date(b.created_at) - new Date(a.created_at)
+                }).map((item) => {
                   const product = item.products
                   return (
                     <div key={item.id} className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-4 lg:p-[20px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300">
                       <Link to={`/product/${product.id}`}>
                         <div className="relative w-full h-[220px] md:h-[240px] lg:h-[280px] rounded-[8px] overflow-hidden mb-4 lg:mb-[16px] group">
-                          <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <img src={product.image_url || product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                           <button className="absolute top-[12px] right-[12px] w-[34px] h-[34px] lg:w-[36px] lg:h-[36px] rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center">
                             <IoHeart className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
                           </button>
@@ -745,23 +760,35 @@ function WishlistDesktop() {
             </div>
 
             {/* Share Wishlist Panel */}
-            <div className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] p-6 lg:p-[32px] max-w-full md:max-w-[520px] mx-auto">
+            <div ref={shareRef} className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] p-6 lg:p-[32px] max-w-full md:max-w-[520px] mx-auto">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
                 <h2 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A]">Share Your Wishlist</h2>
-                <IoCloseOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors" />
+
               </div>
               <div className="bg-[#F5F1EA] rounded-[8px] p-4 lg:p-[16px] flex items-center justify-between mb-5 lg:mb-[24px]">
-                <span className="text-[12px] lg:text-[14px] text-[#666666] truncate mr-3">shanloray.com/wishlist/alexandrachen</span>
-                <button className="flex-shrink-0 flex items-center gap-[6px] lg:gap-[8px] text-[13px] lg:text-[14px] font-medium text-[#8B7355]">
+                <span className="text-[12px] lg:text-[14px] text-[#666666] truncate mr-3">{window.location.origin}/wishlist</span>
+                <button
+                  onClick={() => navigator.clipboard.writeText(window.location.origin + '/wishlist')}
+                  className="flex-shrink-0 flex items-center gap-[6px] lg:gap-[8px] text-[13px] lg:text-[14px] font-medium text-[#8B7355] hover:text-[#7a6448] transition-colors">
                   <IoCopyOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />Copy
                 </button>
               </div>
               <div className="flex items-center justify-center gap-4 lg:gap-[16px]">
-                {[{ icon: IoLogoInstagram, label: 'Instagram' }, { icon: IoLogoWhatsapp, label: 'WhatsApp' }, { icon: IoMail, label: 'Email' }].map((s) => (
-                  <button key={s.label} className="w-[52px] h-[52px] lg:w-[56px] lg:h-[56px] rounded-full bg-[#FDFBF7] border-[1.5px] border-[#E8E3D9] flex items-center justify-center hover:bg-[#8B7355] group transition-all">
-                    <s.icon className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355] group-hover:text-white transition-colors" />
+                <a href="#" target="_blank" rel="noreferrer">
+                  <button className="w-[52px] h-[52px] lg:w-[56px] lg:h-[56px] rounded-full bg-[#FDFBF7] border-[1.5px] border-[#E8E3D9] flex items-center justify-center hover:bg-[#8B7355] group transition-all" title="Share on Instagram">
+                    <IoLogoInstagram className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355] group-hover:text-white transition-colors" />
                   </button>
-                ))}
+                </a>
+                <a href={`https://wa.me/?text=${encodeURIComponent('Check out my Shan Loray wishlist: ' + window.location.origin + '/wishlist')}`} target="_blank" rel="noreferrer">
+                  <button className="w-[52px] h-[52px] lg:w-[56px] lg:h-[56px] rounded-full bg-[#FDFBF7] border-[1.5px] border-[#E8E3D9] flex items-center justify-center hover:bg-[#8B7355] group transition-all" title="Share on WhatsApp">
+                    <IoLogoWhatsapp className="w-[24px] h-[24px] lg:w-[28px] lg:h=white] lg:h-[28px] text-[#8B7355] group-hover:text-white transition-colors" />
+                  </button>
+                </a>
+                <a href={`mailto:?subject=My Shan Loray Wishlist&body=Check out my wishlist: ${window.location.origin}/wishlist`}>
+                  <button className="w-[52px] h-[52px] lg:w-[56px] lg:h-[56px] rounded-full bg-[#FDFBF7] border-[1.5px] border-[#E8E3D9] flex items-center justify-center hover:bg-[#8B7355] group transition-all" title="Share via Email">
+                    <IoMail className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355] group-hover:text-white transition-colors" />
+                  </button>
+                </a>
               </div>
             </div>
           </div>
