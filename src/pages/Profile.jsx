@@ -123,7 +123,7 @@ export default function Profile() {
     {
       title: 'Beauty',
       items: [
-        { icon: IoSparkles,       label: 'Beauty Profile',    path: '/skin-analysis',   badge: skinAnalysis ? 'Completed' : 'Not Complete', badgeColor: skinAnalysis ? 'bg-[#4A7C59]' : 'bg-[#999999]' },
+        { icon: IoSparkles,       label: 'Beauty Profile',    path: '/skin-analysis',   badge: (skinAnalysis && skinAnalysis.skin_score) ? 'Completed' : 'Not Complete', badgeColor: (skinAnalysis && skinAnalysis.skin_score) ? 'bg-[#4A7C59]' : 'bg-[#999999]' },
         { icon: IoRibbonOutline,  label: 'Loyalty Program',   path: '/account',         badge: `${loyaltyPoints.toLocaleString()} pts`,      badgeColor: 'bg-[#8B7355]'                               },
         { icon: IoCalendarOutline,label: 'My Routines',        path: '/beauty-journey',  badge: null,                                         badgeColor: ''                                           },
         { icon: IoStarSharp,      label: 'Reviews & Ratings', path: '/account',         badge: null,                                         badgeColor: ''                                           },
