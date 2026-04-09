@@ -342,13 +342,14 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     if (savedSuccess || isSaving) return
     setIsSaving(true)
     try {
-      // Check if this exact analysis was already saved (same score, same user, within last 60 seconds)
+      // Check if this exact analysis already exists (same score + label + summary)
       const { data: existing } = await supabase
         .from('skin_analysis')
         .select('id')
         .eq('user_id', user.id)
         .eq('skin_score', analysisResult.skinScore)
-        .gte('created_at', new Date(Date.now() - 60000).toISOString())
+        .eq('skin_label', analysisResult.skinLabel)
+        .eq('summary', analysisResult.summary)
         .limit(1)
 
       if (existing && existing.length > 0) {
