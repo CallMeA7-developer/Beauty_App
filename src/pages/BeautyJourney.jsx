@@ -28,6 +28,10 @@ export default function BeautyJourney() {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
+  const userAvatar = user?.user_metadata?.avatar_url
+  const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+
   useEffect(() => {
     if (user) fetchData()
   }, [user])
@@ -153,15 +157,21 @@ export default function BeautyJourney() {
       <div className="min-h-[300px] md:min-h-[360px] lg:min-h-[420px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] flex flex-col md:flex-row items-center px-4 md:px-[60px] lg:px-[120px] py-8 md:py-0 gap-8 md:gap-0">
         <div className="w-full md:w-[500px] lg:w-[600px]">
           <p className="text-[11px] md:text-[12px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">YOUR PERSONALIZED BEAUTY PROFILE</p>
-          <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">Welcome Back, {profile?.full_name || user?.email}</h1>
+          <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">Welcome Back, {userName}</h1>
           <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-6">Your beauty journey continues with personalized insights and recommendations</p>
           <div className="w-[80px] md:w-[100px] lg:w-[120px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="flex-1 flex justify-center md:justify-end">
           <div className="relative">
-            <div className="w-[200px] h-[200px] md:w-[260px] md:h-[260px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-4 border-[#C9A870]">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=320&h=320&fit=crop" alt="Profile" className="w-full h-full object-cover" />
-            </div>
+            {userAvatar ? (
+              <div className="w-[200px] h-[200px] md:w-[260px] md:h-[260px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-4 border-[#C9A870]">
+                <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="w-[200px] h-[200px] md:w-[260px] md:h-[260px] lg:w-[320px] lg:h-[320px] rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] border-4 border-[#C9A870] flex items-center justify-center">
+                <span className="text-[64px] md:text-[80px] lg:text-[100px] font-bold text-white">{userInitials}</span>
+              </div>
+            )}
             <div className="absolute -right-3 lg:-right-4 top-1/2 -translate-y-1/2">
               <div className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] lg:w-[80px] lg:h-[80px] bg-white rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
                 <div className="text-center">
