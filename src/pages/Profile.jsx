@@ -31,6 +31,7 @@ export default function Profile() {
   const [recentOrders, setRecentOrders] = useState([])
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
   const [skinAnalysis, setSkinAnalysis] = useState(null)
+  const [skinAnalysisCompleted, setSkinAnalysisCompleted] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -70,9 +71,13 @@ export default function Profile() {
         .limit(1)
         .maybeSingle()
 
-      console.log('🧴 skinData from Supabase:', skinData)
+      console.log('🧴 skinData from Supabase:', JSON.stringify(skinData, null, 2))
       console.log('🧴 skinError:', skinError)
-      setSkinAnalysis(skinData)
+      console.log('🧴 skin_score value:', skinData?.skin_score)
+      console.log('🧴 skin_label value:', skinData?.skin_label)
+      // Mark as completed if ANY row exists (old or new structure)
+      setSkinAnalysis(skinData || null)
+      setSkinAnalysisCompleted(!!skinData)
     } catch (error) {
       console.error('Error fetching user data:', error)
     } finally {
@@ -125,7 +130,7 @@ export default function Profile() {
     {
       title: 'Beauty',
       items: [
-        { icon: IoSparkles,       label: 'Beauty Profile',    path: '/skin-analysis',   badge: (skinAnalysis && skinAnalysis.skin_score != null) ? 'Completed' : 'Not Complete', badgeColor: (skinAnalysis && skinAnalysis.skin_score != null) ? 'bg-[#4A7C59]' : 'bg-[#999999]' },
+        { icon: IoSparkles,       label: 'Beauty Profile',    path: '/skin-analysis',   badge: skinAnalysisCompleted ? 'Completed' : 'Not Complete', badgeColor: skinAnalysisCompleted ? 'bg-[#4A7C59]' : 'bg-[#999999]' },
         { icon: IoRibbonOutline,  label: 'Loyalty Program',   path: '/account',         badge: `${loyaltyPoints.toLocaleString()} pts`,      badgeColor: 'bg-[#8B7355]'                               },
         { icon: IoCalendarOutline,label: 'My Routines',        path: '/beauty-journey',  badge: null,                                         badgeColor: ''                                           },
         { icon: IoStarSharp,      label: 'Reviews & Ratings', path: '/account',         badge: null,                                         badgeColor: ''                                           },
