@@ -62,7 +62,7 @@ export default function Profile() {
       const totalPoints = allOrders?.reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0) || 0
       setLoyaltyPoints(Math.floor(totalPoints))
 
-      const { data: skinData } = await supabase
+      const { data: skinData, error: skinError } = await supabase
         .from('skin_analysis')
         .select('*')
         .eq('user_id', user.id)
@@ -70,6 +70,8 @@ export default function Profile() {
         .limit(1)
         .maybeSingle()
 
+      console.log('🧴 skinData from Supabase:', skinData)
+      console.log('🧴 skinError:', skinError)
       setSkinAnalysis(skinData)
     } catch (error) {
       console.error('Error fetching user data:', error)
