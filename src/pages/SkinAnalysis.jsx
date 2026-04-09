@@ -38,7 +38,6 @@ export default function SkinAnalysis() {
   const [recommendedProducts, setRecommendedProducts] = useState({ morning: [], evening: [], targeted: [] })
   const [openFaq, setOpenFaq] = useState(null)
   const [savedSuccess, setSavedSuccess] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
   const [savedJourney, setSavedJourney] = useState(null)
   const [allAnalyses, setAllAnalyses] = useState([])
   const [showCalendar, setShowCalendar] = useState(false)
@@ -150,7 +149,6 @@ export default function SkinAnalysis() {
     setLoading(true)
     setError(null)
     setSavedSuccess(false)
-    setIsSaving(false)
 
     try {
       const response = await fetch('/api/analyze', {
@@ -228,6 +226,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
   const fetchRecommendedProducts = async (result) => {
     const usedProductIds = new Set()
 
+    // Mappings
     const concernMap = {
       'Acne': 'Acne Care',
       'Aging': 'Anti-Aging',
@@ -248,8 +247,12 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     const mappedConcern = concernMap[selectedConcern] || 'Acne Care'
     const mappedSkinType = skinTypeMap[selectedSkinType] || 'Oily'
 
+    console.log('mappedConcern:', mappedConcern, 'mappedSkinType:', mappedSkinType, 'specificConcerns:', selectedSpecificConcerns)
+
+    // FIX 1: shuffle always returns a NEW array — never mutates original
     const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5)
 
+    // Pick unique products from a pool, tracking used IDs globally
     const pickUnique = (pool, count) => {
       const filtered = pool.filter(p => !usedProductIds.has(p.id))
       const shuffled = shuffle(filtered)
@@ -258,6 +261,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       return picked
     }
 
+    // Step 1 & 2: AND logic first, fallback to OR
     let { data: productsAnd } = await supabase
       .from('products')
       .select('*')
@@ -270,8 +274,10 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     let allPool = []
 
     if (productsAnd.length >= 8) {
+      // Enough for both steps with AND logic
       allPool = productsAnd
     } else {
+      // Fallback: OR logic — fetch concern OR skin type
       let { data: productsOr } = await supabase
         .from('products')
         .select('*')
@@ -279,12 +285,16 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         .or(`skin_concerns.cs.{${mappedConcern}},skin_types.cs.{${mappedSkinType}}`)
 
       if (!productsOr) productsOr = []
+
+      // Merge AND + OR results, remove duplicates by id
       allPool = [...new Map([...productsAnd, ...productsOr].map(p => [p.id, p])).values()]
     }
 
+    // FIX 1: Pick from the same pool independently — each call filters already-used IDs
     const step1Products = pickUnique(allPool, 4)
     const step2Products = pickUnique(allPool, 4)
 
+    // Step 3: 1 product per selected specific concern, no repeats
     const specificConcernMapping = {
       'Fine Lines':        { skinTypes: ['Mature', 'Dry'],                     concerns: ['Anti-Aging'],                       ingredients: ['Retinol', 'Hyaluronic Acid'] },
       'Wrinkles':          { skinTypes: ['Mature', 'Dry'],                     concerns: ['Anti-Aging'],                       ingredients: ['Retinol', 'Hyaluronic Acid'] },
@@ -306,6 +316,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       const mapping = specificConcernMapping[concern]
       if (!mapping) continue
 
+      // Skin Types: AND logic (product must match at least one of the skin types — overlaps)
       const { data: targetedData } = await supabase
         .from('products')
         .select('*')
@@ -314,6 +325,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
       if (!targetedData || targetedData.length === 0) continue
 
+      // Skin Concerns: OR logic, Ingredients: OR logic — filter in JS
       const filtered = targetedData.filter(p => {
         const hasConcern = p.skin_concerns?.some(c => mapping.concerns.includes(c))
         const hasIngredient = p.ingredients?.some(i => mapping.ingredients.includes(i))
@@ -335,6 +347,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
   const saveAnalysisToDatabase = async (result) => {
     try {
+      // Insert new row to keep full history
       await supabase.from('skin_analysis').insert({
         user_id: user.id,
         skin_score: result.skinScore,
@@ -362,9 +375,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       alert('Please sign in to save your analysis')
       return
     }
-    if (savedSuccess || isSaving) return
-    setIsSaving(true)
     try {
+      // Insert new row to keep full history (Profile.jsx reads latest)
       await supabase.from('skin_analysis').insert({
         user_id: user.id,
         skin_score: analysisResult.skinScore,
@@ -386,11 +398,9 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         created_at: new Date().toISOString(),
       })
       setSavedSuccess(true)
-      setIsSaving(false)
       await loadSavedJourney()
     } catch (err) {
       console.error('Save error:', err)
-      setIsSaving(false)
       alert('Failed to save. Please try again.')
     }
   }
@@ -450,11 +460,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     </div>
   )
 
+  // FIX 2: Dynamic grid columns for Step 3 based on number of targeted products
   const getGridCols = (count) => {
     if (count === 1) return 'grid-cols-1'
     if (count === 2) return 'grid-cols-1 sm:grid-cols-2'
     return 'grid-cols-1 sm:grid-cols-3'
   }
+
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -730,7 +742,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             )}
           </div>
 
-          {/* Step 3: Targeted */}
+          {/* Step 3: Targeted — FIX 2: no slice, dynamic grid cols */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
             <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Specialized Treatments</h3>
@@ -762,13 +774,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             </button>
             <button
               onClick={saveToProfile}
-              disabled={savedSuccess || isSaving}
-              className={`w-full sm:w-auto h-[48px] lg:h-[56px] px-8 border-2 text-[14px] lg:text-[15px] font-medium rounded-[8px] transition-colors ${
-                savedSuccess
-                  ? 'bg-[#F5F1EA] border-[#C9A870] text-[#C9A870] cursor-not-allowed'
-                  : 'bg-white border-[#8B7355] text-[#8B7355] hover:bg-[#F5F1EA]'
-              }`}>
-              {savedSuccess ? '✓ Saved to Profile' : isSaving ? 'Saving...' : 'Save to My Profile'}
+              className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+              Save to My Profile
             </button>
           </div>
         </div>
@@ -780,6 +787,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">Monitor improvements with regular skin analysis</p>
 
         <div className="max-w-[1200px] mx-auto">
+
+          {/* History List */}
           {allAnalyses.length > 0 ? (
             <div className="space-y-4 mb-8">
               {allAnalyses.map((analysis, index) => (
@@ -826,6 +835,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             </div>
           )}
 
+          {/* Schedule Next Analysis Button */}
           <div className="text-center">
             <button
               onClick={() => setShowCalendar(true)}
@@ -849,6 +859,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                   <IoCloseOutline className="w-[24px] h-[24px] text-[#666666] hover:text-[#1A1A1A]" />
                 </button>
               </div>
+
               {scheduleSuccess ? (
                 <div className="text-center py-6">
                   <div className="w-[64px] h-[64px] bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
