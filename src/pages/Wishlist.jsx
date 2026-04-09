@@ -520,6 +520,7 @@ function WishlistDesktop() {
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
   const [reviewsCount, setReviewsCount] = useState(0)
   const [selectedSort, setSelectedSort] = useState('newest')
+  const [showSortDropdown, setShowSortDropdown] = useState(false)
   const shareRef = useRef(null)
 
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
@@ -674,20 +675,36 @@ function WishlistDesktop() {
 
             {/* Toolbar */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-4 lg:p-[24px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 lg:mb-[24px]">
-              <div className="flex items-center gap-[12px] relative">
-                <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Sort by:</span>
+              <div className="flex items-center gap-3 lg:gap-[16px]">
+                <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">Sort by:</span>
                 <div className="relative">
-                  <select
-                    value={selectedSort}
-                    onChange={(e) => setSelectedSort(e.target.value)}
-                    className="h-[36px] pl-3 pr-8 border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] bg-white cursor-pointer outline-none appearance-none hover:border-[#8B7355] transition-colors"
+                  <button
+                    onClick={() => setShowSortDropdown(!showSortDropdown)}
+                    className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all"
                   >
-                    <option value="newest">Newest Added</option>
-                    <option value="low_high">Price: Low to High</option>
-                    <option value="high_low">Price: High to Low</option>
-                    <option value="highest_rated">Highest Rated</option>
-                  </select>
-                  <IoChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-[14px] h-[14px] text-[#666666] pointer-events-none" />
+                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">
+                      {selectedSort === 'newest' ? 'Newest Added' : selectedSort === 'low_high' ? 'Price: Low to High' : selectedSort === 'high_low' ? 'Price: High to Low' : 'Highest Rated'}
+                    </span>
+                    <IoChevronDown className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
+                  </button>
+                  {showSortDropdown && (
+                    <div className="absolute top-full mt-2 left-0 w-[240px] bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-10">
+                      {[
+                        { value: 'newest', label: 'Newest Added' },
+                        { value: 'low_high', label: 'Price: Low to High' },
+                        { value: 'high_low', label: 'Price: High to Low' },
+                        { value: 'highest_rated', label: 'Highest Rated' },
+                      ].map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => { setSelectedSort(option.value); setShowSortDropdown(false) }}
+                          className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${selectedSort === option.value ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <button
