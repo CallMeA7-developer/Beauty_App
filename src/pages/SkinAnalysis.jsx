@@ -212,7 +212,6 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       setAnalysisResult(result)
       setAnalysisDate(new Date())
       await fetchRecommendedProducts(result)
-      if (user) await saveAnalysisToDatabase(result)
       setTimeout(() => {
         document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' })
       }, 300)
@@ -333,29 +332,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     })
   }
 
-  const saveAnalysisToDatabase = async (result) => {
-    try {
-      await supabase.from('skin_analysis').insert({
-        user_id: user.id,
-        skin_score: result.skinScore,
-        skin_label: result.skinLabel,
-        summary: result.summary,
-        metrics: {
-          hydration: result.hydration,
-          texture: result.texture,
-          clarity: result.clarity,
-          toneEvenness: result.toneEvenness
-        },
-        analysis_cards: result.cards,
-        selected_skin_type: selectedSkinType,
-        selected_concern: selectedConcern,
-        selected_specific_concerns: selectedSpecificConcerns,
-        created_at: new Date().toISOString()
-      })
-    } catch (err) {
-      console.error('Failed to save:', err)
-    }
-  }
+
 
   const saveToProfile = async () => {
     if (!user) {
@@ -365,6 +342,22 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     if (savedSuccess || isSaving) return
     setIsSaving(true)
     try {
+      // Check if this exact analysis was already saved (same score, same user, within last 60 seconds)
+      const { data: existing } = await supabase
+        .from('skin_analysis')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('skin_score', analysisResult.skinScore)
+        .gte('created_at', new Date(Date.now() - 60000).toISOString())
+        .limit(1)
+
+      if (existing && existing.length > 0) {
+        setSavedSuccess(true)
+        setIsSaving(false)
+        await loadSavedJourney()
+        return
+      }
+
       await supabase.from('skin_analysis').insert({
         user_id: user.id,
         skin_score: analysisResult.skinScore,
