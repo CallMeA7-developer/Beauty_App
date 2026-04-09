@@ -41,48 +41,29 @@ export default function Profile() {
   }, [user])
 
   async function fetchUserData() {
+    // Orders
     try {
-      const { data: orders, error } = await supabase
-        .from('orders')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(3)
-
-      if (error) throw error
-
+      const { data: orders } = await supabase
+        .from('orders').select('*').eq('user_id', user.id)
+        .order('created_at', { ascending: false }).limit(3)
       setRecentOrders(orders || [])
-
-      const { data: allOrders, error: pointsError } = await supabase
-        .from('orders')
-        .select('total')
-        .eq('user_id', user.id)
-
-      if (pointsError) throw pointsError
-
-      const totalPoints = allOrders?.reduce((sum, order) => sum + (parseFloat(order.total) || 0), 0) || 0
+      const { data: allOrders } = await supabase
+        .from('orders').select('total').eq('user_id', user.id)
+      const totalPoints = allOrders?.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0) || 0
       setLoyaltyPoints(Math.floor(totalPoints))
+    } catch (e) { console.error('Orders error:', e) }
 
-      const { data: skinData, error: skinError } = await supabase
-        .from('skin_analysis')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
-      console.log('🧴 skinData from Supabase:', JSON.stringify(skinData, null, 2))
-      console.log('🧴 skinError:', skinError)
-      console.log('🧴 skin_score value:', skinData?.skin_score)
-      console.log('🧴 skin_label value:', skinData?.skin_label)
-      // Mark as completed if ANY row exists (old or new structure)
-      setSkinAnalysis(skinData || null)
+    // Skin analysis — runs independently so orders errors cannot block it
+    try {
+      const { data: skinData } = await supabase
+        .from('skin_analysis').select('*').eq('user_id', user.id)
+        .order('created_at', { ascending: false }).limit(1).maybeSingle()
+      console.log('skinData:', skinData)
+      setSkinAnalysis(skinData)
       setSkinAnalysisCompleted(!!skinData)
-    } catch (error) {
-      console.error('Error fetching user data:', error)
-    } finally {
-      setLoading(false)
-    }
+    } catch (e) { console.error('Skin error:', e) }
+
+    setLoading(false)
   }
 
   const getStatusColor = (status) => {
