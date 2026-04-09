@@ -43,6 +43,7 @@ export default function SkinAnalysis() {
   const [showCalendar, setShowCalendar] = useState(false)
   const [scheduledDate, setScheduledDate] = useState('')
   const [scheduleSuccess, setScheduleSuccess] = useState(false)
+  const [showUploadMessage, setShowUploadMessage] = useState(false)
 
   useEffect(() => {
     if (location.hash) {
@@ -501,11 +502,57 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Skin Analysis</span>
       </div>
 
-      {/* Upload Section - Hidden, kept as anchor for scroll */}
-      <div id="upload-section" />
+      {/* Upload Section */}
+      <div id="upload-section" className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
+        <div className="max-w-[1200px] mx-auto">
+          <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
+          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Upload a clear photo or use our questionnaire below</p>
+          <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+            <div className="min-h-[280px] md:min-h-[340px] lg:min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center px-4 py-8 lg:py-0">
+              <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-4" />
+              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Upload Your Photo</h3>
+              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 text-center">Drag and drop your photo here or click to browse</p>
+              {showUploadMessage ? (
+                <div className="bg-[#F5F1EA] border border-[#C9A870] rounded-[8px] px-6 py-4 text-center max-w-[360px]">
+                  <IoSparklesOutline className="w-[24px] h-[24px] text-[#8B7355] mx-auto mb-2" />
+                  <p className="text-[14px] font-medium text-[#8B7355] mb-1">We're working on this feature!</p>
+                  <p className="text-[13px] text-[#666666]">In the meantime, please use the questionnaire below to get your skin analysis.</p>
+                  <button
+                    onClick={() => document.getElementById('questionnaire-section')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="mt-3 h-[36px] px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+                    Go to Questionnaire
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => setShowUploadMessage(true)}
+                    className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+                    Upload Photo
+                  </button>
+                  <button
+                    onClick={() => setShowUploadMessage(true)}
+                    className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+                    Take Selfie
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="p-5 md:p-6 lg:p-[32px] grid grid-cols-3 gap-4 lg:gap-6">
+              {guidelines.map((guide, idx) => (
+                <div key={idx} className="flex flex-col items-center text-center">
+                  <guide.icon className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px] text-[#8B7355] mb-2" />
+                  <h4 className="text-[13px] lg:text-[15px] font-medium text-[#1A1A1A] mb-1">{guide.title}</h4>
+                  <p className="text-[11px] lg:text-[14px] font-normal text-[#666666]">{guide.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Questionnaire */}
-      <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
+      <div id="questionnaire-section" className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
         <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Tell Us About Your Skin</h2>
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Help us understand your unique skin concerns</p>
 
