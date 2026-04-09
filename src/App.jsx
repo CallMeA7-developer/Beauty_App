@@ -35,6 +35,7 @@ import Notifications from './pages/Notifications'
 import Privacy from './pages/Privacy'
 import Password from './pages/Password'
 import SplashScreen from './pages/SplashScreen'
+import FAQ from './pages/FAQ'
 import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
@@ -91,6 +92,7 @@ export default function App() {
               <Route path="/notifications"           element={<Notifications />} />
               <Route path="/privacy-settings"        element={<Privacy />} />
               <Route path="/change-password"         element={<Password />} />
+              <Route path="/faq"                      element={<FAQ />} />
 
               {/* Checkout Flow */}
               <Route path="/cart"                    element={<ShoppingBasket />} />
@@ -110,4 +112,3 @@ export default function App() {
     </CartProvider>
   )
 }
-
