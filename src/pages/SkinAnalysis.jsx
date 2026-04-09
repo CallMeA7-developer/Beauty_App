@@ -349,6 +349,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       await supabase.from('skin_analysis').upsert({
         user_id: user.id,
         skin_score: result.skinScore,
+        skin_label: result.skinLabel,
         summary: result.summary,
         metrics: {
           hydration: result.hydration,
@@ -357,8 +358,11 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           toneEvenness: result.toneEvenness
         },
         analysis_cards: result.cards,
+        selected_skin_type: selectedSkinType,
+        selected_concern: selectedConcern,
+        selected_specific_concerns: selectedSpecificConcerns,
         created_at: new Date().toISOString()
-      })
+      }, { onConflict: 'user_id' })
     } catch (err) {
       console.error('Failed to save:', err)
     }
