@@ -43,10 +43,6 @@ export default function SkinAnalysis() {
   const [showCalendar, setShowCalendar] = useState(false)
   const [scheduledDate, setScheduledDate] = useState('')
   const [scheduleSuccess, setScheduleSuccess] = useState(false)
-  const [pin, setPin] = useState('')
-  const [unlocked, setUnlocked] = useState(false)
-  const [pinError, setPinError] = useState(false)
-  const CORRECT_PIN = '6969'
 
   useEffect(() => {
     if (location.hash) {
@@ -479,49 +475,6 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
     return 'grid-cols-1 sm:grid-cols-3'
   }
 
-  if (!unlocked) {
-    return (
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #3D2B00 0%, #5C4200 40%, #7A5800 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', fontFamily: 'Cormorant Garamond, serif' }}>
-        <div style={{ width: '100%', maxWidth: '440px', background: 'rgba(20, 12, 0, 0.7)', backdropFilter: 'blur(24px)', borderRadius: '24px', padding: '40px', boxShadow: '0 24px 64px rgba(0,0,0,0.3)', border: '1px solid rgba(201,168,112,0.25)' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-            <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #C9A870, #8B7355)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" style={{ width: '40px', height: '40px' }} fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-          </div>
-          <h1 style={{ fontSize: '30px', fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: '8px' }}>Preview Access</h1>
-          <p style={{ fontSize: '15px', color: 'rgba(201,168,112,0.7)', textAlign: 'center', marginBottom: '32px', lineHeight: '1.6' }}>
-            This environment is not public yet.<br />Enter the access code to continue.
-          </p>
-          <div style={{ marginBottom: '8px' }}>
-            <label style={{ fontSize: '13px', fontWeight: '500', color: 'rgba(201,168,112,0.7)', display: 'block', marginBottom: '8px' }}>Access code</label>
-            <input
-              type="password"
-              value={pin}
-              onChange={(e) => { setPin(e.target.value); setPinError(false) }}
-              onKeyDown={(e) => { if (e.key === 'Enter') { if (pin === CORRECT_PIN) { setUnlocked(true) } else { setPinError(true); setPin(''); setTimeout(() => setPinError(false), 2000) } } }}
-              placeholder="····"
-              maxLength={10}
-              style={{ width: '100%', height: '52px', background: 'rgba(10, 6, 0, 0.8)', color: '#FFFFFF', fontSize: '20px', letterSpacing: '8px', textAlign: 'center', borderRadius: '12px', outline: 'none', border: pinError ? '2px solid #EF4444' : '2px solid rgba(201,168,112,0.3)', boxSizing: 'border-box' }}
-            />
-            {pinError && <p style={{ color: '#EF4444', fontSize: '13px', textAlign: 'center', marginTop: '8px' }}>Incorrect access code. Please try again.</p>}
-          </div>
-          <button
-            onClick={() => { if (pin === CORRECT_PIN) { setUnlocked(true) } else { setPinError(true); setPin(''); setTimeout(() => setPinError(false), 2000) } }}
-            style={{ width: '100%', height: '52px', background: 'linear-gradient(to right, #C9A870, #8B7355)', color: 'white', fontSize: '16px', fontWeight: '600', borderRadius: '12px', border: 'none', cursor: 'pointer', marginTop: '16px' }}
-          >
-            Continue
-          </button>
-          <a href="/" style={{ display: 'block', marginTop: '12px' }}>
-            <button style={{ width: '100%', height: '52px', background: 'transparent', color: 'rgba(201,168,112,0.7)', fontSize: '14px', fontWeight: '500', borderRadius: '12px', border: '1px solid rgba(201,168,112,0.25)', cursor: 'pointer' }}>
-              Continue Shopping
-            </button>
-          </a>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
