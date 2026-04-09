@@ -754,20 +754,22 @@ function WishlistDesktop() {
             )}
 
             {/* Bottom Actions */}
-            <div className="bg-[#F5F1EA] rounded-[12px] p-4 lg:p-[24px] flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 lg:mb-[32px]">
-              <button
-                onClick={async () => {
-                  for (const item of wishlistItems) {
-                    await removeFromWishlist(item.products.id)
-                  }
-                }}
-                className="text-[13px] lg:text-[14px] font-medium text-[#C84848] underline hover:text-[#a83030] transition-colors">
-                Clear All Items
-              </button>
-              <Link to="/collections">
-                <button className="w-full sm:w-auto h-[44px] lg:h-[48px] px-6 lg:px-[32px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all">Continue Shopping</button>
-              </Link>
-            </div>
+            {wishlistItems.length > 0 && (
+              <div className="bg-[#F5F1EA] rounded-[12px] p-4 lg:p-[24px] flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 lg:mb-[32px]">
+                <button
+                  onClick={async () => {
+                    for (const item of wishlistItems) {
+                      await removeFromWishlist(item.products.id)
+                    }
+                  }}
+                  className="text-[13px] lg:text-[14px] font-medium text-[#C84848] underline hover:text-[#a83030] transition-colors">
+                  Clear All Items
+                </button>
+                <Link to="/collections">
+                  <button className="w-full sm:w-auto h-[44px] lg:h-[48px] px-6 lg:px-[32px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all">Continue Shopping</button>
+                </Link>
+              </div>
+            )}
 
             {/* Share Wishlist Panel */}
             <div ref={shareRef} className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] p-6 lg:p-[32px] max-w-full md:max-w-[520px] mx-auto">
