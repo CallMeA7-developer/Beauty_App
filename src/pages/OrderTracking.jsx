@@ -20,6 +20,10 @@ import {
   IoSettingsOutline,
   IoDocumentTextOutline,
   IoCardOutline,
+  IoCallOutline,
+  IoLogoWhatsapp,
+  IoLogoInstagram,
+  IoClose,
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
 import { useWishlist } from '../contexts/WishlistContext'
@@ -36,6 +40,7 @@ export default function OrderTracking() {
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showSupport, setShowSupport] = useState(false)
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -526,19 +531,68 @@ export default function OrderTracking() {
                   <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">Our customer service team is here to assist you</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 lg:gap-[16px]">
-                <a href="mailto:support@shanloray.ru" className="flex-1">
-                  <button className="w-full flex items-center justify-center gap-[8px] bg-[#8B7355] text-white text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                    <IoChatbubbleEllipsesOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
-                    Contact Support
+
+              {/* Support Popup */}
+              {showSupport && (
+                <div className="bg-white rounded-[12px] border border-[#E8E3D9] p-5 mb-4 relative">
+                  <button onClick={() => setShowSupport(false)} className="absolute top-3 right-3 text-[#999999] hover:text-[#1A1A1A] transition-colors">
+                    <IoClose className="w-[20px] h-[20px]" />
                   </button>
-                </a>
-                <a href="https://shanloray.ru/#faq" target="_blank" rel="noreferrer" className="flex-1">
+                  <p className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-4">Reach us through any channel:</p>
+                  <div className="space-y-3">
+                    <a href="tel:+74951234567" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                      <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                        <IoCallOutline className="w-[18px] h-[18px] text-[#8B7355] group-hover:text-[#8B7355]" />
+                      </div>
+                      <div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Phone Support</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">+7 (495) 123-45-67</div>
+                      </div>
+                    </a>
+                    <a href="mailto:support@shanloray.ru" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                      <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                        <IoMailOutline className="w-[18px] h-[18px] text-[#8B7355]" />
+                      </div>
+                      <div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Email Support</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">support@shanloray.ru</div>
+                      </div>
+                    </a>
+                    <a href="https://wa.me/74951234567" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                      <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                        <IoLogoWhatsapp className="w-[18px] h-[18px] text-[#8B7355]" />
+                      </div>
+                      <div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">WhatsApp</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">Chat with us</div>
+                      </div>
+                    </a>
+                    <a href="https://instagram.com/shanloray" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                      <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                        <IoLogoInstagram className="w-[18px] h-[18px] text-[#8B7355]" />
+                      </div>
+                      <div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Instagram DM</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">@shanloray</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center gap-3 lg:gap-[16px]">
+                <button
+                  onClick={() => setShowSupport(!showSupport)}
+                  className="flex-1 flex items-center justify-center gap-[8px] bg-[#8B7355] text-white text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
+                  <IoChatbubbleEllipsesOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
+                  Contact Support
+                </button>
+                <Link to="/faq" className="flex-1">
                   <button className="w-full flex items-center justify-center gap-[8px] bg-white border border-[#8B7355] text-[#8B7355] text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
                     <IoHelpCircleOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
                     View FAQs
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
 
