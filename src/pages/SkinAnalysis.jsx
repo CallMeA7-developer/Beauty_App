@@ -346,7 +346,9 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
   const saveAnalysisToDatabase = async (result) => {
     try {
-      await supabase.from('skin_analysis').upsert({
+      // Delete existing row first, then insert fresh (upsert requires unique constraint)
+      await supabase.from('skin_analysis').delete().eq('user_id', user.id)
+      await supabase.from('skin_analysis').insert({
         user_id: user.id,
         skin_score: result.skinScore,
         skin_label: result.skinLabel,
@@ -362,7 +364,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         selected_concern: selectedConcern,
         selected_specific_concerns: selectedSpecificConcerns,
         created_at: new Date().toISOString()
-      }, { onConflict: 'user_id' })
+      })
     } catch (err) {
       console.error('Failed to save:', err)
     }
@@ -374,7 +376,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       return
     }
     try {
-      await supabase.from('skin_analysis').upsert({
+      await supabase.from('skin_analysis').delete().eq('user_id', user.id)
+      await supabase.from('skin_analysis').insert({
         user_id: user.id,
         skin_score: analysisResult.skinScore,
         skin_label: analysisResult.skinLabel,
@@ -393,7 +396,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         evening_product_ids: recommendedProducts.evening.map(p => p.id),
         targeted_product_ids: recommendedProducts.targeted.map(p => p.id),
         created_at: new Date().toISOString(),
-      }, { onConflict: 'user_id' })
+      })
       setSavedSuccess(true)
       await loadSavedJourney()
     } catch (err) {
