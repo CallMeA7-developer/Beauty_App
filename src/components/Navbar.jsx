@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import i18n from '../i18n'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   IoMenuOutline,
@@ -29,25 +31,25 @@ import { useWishlist } from '../contexts/WishlistContext'
 import AuthModal from './AuthModal'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
-const desktopNavLinks = [
-  { label: 'Collections', path: '/collections' },
-  { label: 'Skincare',    path: '/skincare'    },
-  { label: 'Makeup',      path: '/makeup'      },
-  { label: 'Fragrance',   path: '/fragrance'   },
-  { label: 'Technology',  path: '/technology'  },
-  { label: 'Journal',     path: '/journal'     },
+const getDesktopNavLinks = (t) => [
+  { label: t('nav.collections'), path: '/collections' },
+  { label: t('nav.skincare'),    path: '/skincare'    },
+  { label: t('nav.makeup'),      path: '/makeup'      },
+  { label: t('nav.fragrance'),   path: '/fragrance'   },
+  { label: t('nav.technology'),  path: '/technology'  },
+  { label: t('nav.journal'),     path: '/journal'     },
 ]
 
-const drawerNavItems = [
-  { label: 'Home',            path: '/',                      bold: true  },
-  { label: 'Shop',            path: '/collections',           bold: true  },
-  { label: 'Skincare',        path: '/skincare',              bold: false },
-  { label: 'Makeup',          path: '/makeup',                bold: false },
-  { label: 'Fragrance',       path: '/fragrance',             bold: false },
-  { label: 'AI Consultation', path: '/ai-consultation',       bold: false, badge: 'NEW' },
-  { label: 'Virtual Try-On',  path: '/virtual-tryon',         bold: false },
-  { label: 'Technology',      path: '/technology',            bold: false },
-  { label: 'About',           path: '/advanced-formulations', bold: false },
+const getDrawerNavItems = (t) => [
+  { label: t('nav.home'),            path: '/',                      bold: true  },
+  { label: t('nav.shop'),            path: '/collections',           bold: true  },
+  { label: t('nav.skincare'),        path: '/skincare',              bold: false },
+  { label: t('nav.makeup'),          path: '/makeup',                bold: false },
+  { label: t('nav.fragrance'),       path: '/fragrance',             bold: false },
+  { label: t('nav.aiConsultation'),  path: '/ai-consultation',       bold: false, badge: t('nav.new') },
+  { label: t('nav.virtualTryOn'),    path: '/virtual-tryon',         bold: false },
+  { label: t('nav.technology'),      path: '/technology',            bold: false },
+  { label: t('nav.about'),           path: '/advanced-formulations', bold: false },
 ]
 
 const utilityActions = [
@@ -103,6 +105,13 @@ const skinConcerns = ['Fine Lines & Wrinkles', 'Dark Spots', 'Dryness', 'Uneven 
 // ─── Search Overlay ───────────────────────────────────────────────────────────
 function SearchOverlay({ isOpen, onClose }) {
   const navigate = useNavigate()
+
+  const toggleLanguage = () => {
+    const newLang = currentLang === 'en' ? 'ru' : 'en'
+    setCurrentLang(newLang)
+    i18n.changeLanguage(newLang)
+    localStorage.setItem('shanloray_language', newLang)
+  }
   const { addToCart } = useCart()
   const [query, setQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
@@ -210,7 +219,7 @@ function SearchOverlay({ isOpen, onClose }) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             onBlur={() => { if (query.trim()) saveRecent(query.trim()) }}
-            placeholder="Search products, skin types, ingredients, brands..."
+            placeholder={t('search.placeholder')}
             autoFocus
             className="w-full h-[52px] pl-[48px] pr-[44px] text-[15px] md:text-[17px] text-[#2B2B2B] bg-[#FDFBF7] border-2 border-[#E8E3D9] rounded-[12px] outline-none focus:border-[#8B7355] focus:bg-white transition-all"
           />
@@ -299,7 +308,7 @@ function SearchOverlay({ isOpen, onClose }) {
           <div className="text-center py-12 mb-8">
             <IoSearchOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-4" />
             <h3 className="text-[20px] font-semibold text-[#1A1A1A] mb-2">No results for "{query}"</h3>
-            <p className="text-[14px] text-[#666666]">Try a different search term</p>
+            <p className="text-[14px] text-[#666666]">{t('search.tryDifferent')}</p>
           </div>
         )}
 
@@ -308,10 +317,10 @@ function SearchOverlay({ isOpen, onClose }) {
           <div>
             {/* Browse By */}
             <div className="mb-10">
-              <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A] mb-5">Browse By</h2>
+              <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A] mb-5">{t('search.browseBy')}</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">SKIN CONCERNS</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinConcerns')}</p>
                   <div className="flex flex-wrap gap-2">
                     {skinConcernsFilter.map(c => (
                       <button key={c} onClick={() => handleFilterClick(`/skincare?concern=${encodeURIComponent(c)}`)}
@@ -320,7 +329,7 @@ function SearchOverlay({ isOpen, onClose }) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">SKIN TYPES</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinTypes')}</p>
                   <div className="flex flex-wrap gap-2">
                     {skinTypesFilter.map(t => (
                       <button key={t} onClick={() => handleFilterClick(`/skincare?skinType=${encodeURIComponent(t)}`)}
@@ -329,7 +338,7 @@ function SearchOverlay({ isOpen, onClose }) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">KEY INGREDIENTS</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.keyIngredients')}</p>
                   <div className="flex flex-wrap gap-2">
                     {ingredientsFilter.map(i => (
                       <button key={i} onClick={() => handleFilterClick(`/skincare?ingredient=${encodeURIComponent(i)}`)}
@@ -362,9 +371,9 @@ function SearchOverlay({ isOpen, onClose }) {
             {recentSearches.length > 0 && (
               <div className="mb-10">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A]">Recent Searches</h2>
+                  <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A]">{t('search.recentSearches')}</h2>
                   <button onClick={() => { setRecentSearches([]); localStorage.removeItem('shanloray_recent_searches') }}
-                    className="text-[13px] text-[#8B7355] hover:underline">Clear All</button>
+                    className="text-[13px] text-[#8B7355] hover:underline">{t('search.clearAll')}</button>
                 </div>
                 {recentSearches.map(search => (
                   <div key={search} onClick={() => handleTermClick(search)}
@@ -383,7 +392,7 @@ function SearchOverlay({ isOpen, onClose }) {
 
             {/* Popular Right Now */}
             <div className="mb-10">
-              <h2 className="text-[18px] md:text-[24px] font-medium text-[#1A1A1A] mb-5">Popular Right Now</h2>
+              <h2 className="text-[18px] md:text-[24px] font-medium text-[#1A1A1A] mb-5">{t('search.popularRightNow')}</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {popularSearches.map(item => (
                   <div key={item.term} onClick={() => handleTermClick(item.term)}
@@ -400,7 +409,7 @@ function SearchOverlay({ isOpen, onClose }) {
             <div className="bg-[#FDFBF7] rounded-[12px] p-6">
               <div className="flex items-center gap-2 mb-4">
                 <IoFlame className="w-[22px] h-[22px] text-[#C9A870]" />
-                <h2 className="text-[18px] font-medium text-[#1A1A1A]">Trending Topics</h2>
+                <h2 className="text-[18px] font-medium text-[#1A1A1A]">{t('search.trendingTopics')}</h2>
               </div>
               <div className="flex flex-wrap gap-3">
                 {trendingTopics.map(topic => (
@@ -546,8 +555,19 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
 
 // ─── Main Navbar ──────────────────────────────────────────────────────────────
 export default function Navbar() {
+  const { t } = useTranslation()
+  const desktopNavLinks = getDesktopNavLinks(t)
+  const drawerNavItems = getDrawerNavItems(t)
+  const [currentLang, setCurrentLang] = useState(localStorage.getItem('shanloray_language') || 'en')
   const location = useLocation()
   const navigate = useNavigate()
+
+  const toggleLanguage = () => {
+    const newLang = currentLang === 'en' ? 'ru' : 'en'
+    setCurrentLang(newLang)
+    i18n.changeLanguage(newLang)
+    localStorage.setItem('shanloray_language', newLang)
+  }
   const { user, signOut } = useAuth()
   const { cartCount } = useCart()
   const { wishlistCount } = useWishlist()
@@ -654,7 +674,14 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-[16px] md:gap-[20px] lg:gap-[28px]">
-          <span className="hidden lg:inline text-[14px] font-light text-[#3D3D3D] font-['Cormorant_Garamond']">EN / RU</span>
+          <button
+            onClick={toggleLanguage}
+            className="hidden lg:flex items-center gap-[4px] text-[14px] font-light font-['Cormorant_Garamond'] cursor-pointer hover:text-[#C9A870] transition-colors"
+          >
+            <span className={currentLang === 'en' ? 'text-[#1A1A1A] font-semibold' : 'text-[#999999]'}>EN</span>
+            <span className="text-[#C9A870] mx-0.5">/</span>
+            <span className={currentLang === 'ru' ? 'text-[#1A1A1A] font-semibold' : 'text-[#999999]'}>RU</span>
+          </button>
           <div className="hidden lg:block w-[1px] h-4 bg-[#E8E3D9]" />
           <button onClick={() => setSearchOpen(true)}>
             <IoSearchOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
