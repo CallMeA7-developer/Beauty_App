@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { IoCheckmarkCircle, IoChevronBack, IoChevronForward, IoStarSharp } from 'react-icons/io5'
 import { supabase } from '../lib/supabase'
@@ -32,7 +31,6 @@ const newArrivalsBenefits = [
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function HomeMobile() {
   const { user } = useAuth()
-  const { t } = useTranslation()
   const [bestSellers, setBestSellers] = useState([])
   const [newArrivalMain, setNewArrivalMain] = useState(null)
   const [newArrivalSupporting, setNewArrivalSupporting] = useState([])
@@ -86,8 +84,8 @@ function HomeMobile() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
         <div className="absolute bottom-5 left-5 right-5">
           <div className="bg-white/90 backdrop-blur-sm rounded-[12px] p-6">
-            <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-3">heroCollection</p>
-            <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">heroTitle</h1>
+            <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-3">Spring 2024 Collection</p>
+            <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">The Art of Radiance</h1>
             <p className="text-[15px] font-normal text-[#666666] leading-[1.6] mb-5">
               Discover a luminous transformation through our newest collection, where botanical elegance meets scientific precision
             </p>
@@ -110,12 +108,12 @@ function HomeMobile() {
                 <path d="M12 2v4m0 12v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M2 12h4m12 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83" />
               </svg>
             </div>
-            <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-3">{t('home.aiTitle')}</h3>
+            <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-3">AI Skin Consultation</h3>
             <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-4">
               Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
             </p>
             <Link to="/skin-analysis#upload-section">
-              <span className="text-[13px] font-medium text-[#8B7355]">beginAnalysis</span>
+              <span className="text-[13px] font-medium text-[#8B7355]">Begin Analysis →</span>
             </Link>
           </div>
 
@@ -127,12 +125,12 @@ function HomeMobile() {
                 <path d="M12 17v4" />
               </svg>
             </div>
-            <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-3">{t('home.virtualTitle')}</h3>
+            <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-3">Virtual Try-On Mirror</h3>
             <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-4">
               Experience our complete collection through cutting-edge augmented reality technology in real-time
             </p>
             <Link to="/virtual-tryon#tryon-section">
-              <span className="text-[13px] font-medium text-[#8B7355]">tryNow</span>
+              <span className="text-[13px] font-medium text-[#8B7355]">Try Now →</span>
             </Link>
           </div>
         </div>
@@ -145,19 +143,19 @@ function HomeMobile() {
             <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=400&fit=crop" alt="Botanical Serums" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-6 left-6">
-              <h3 className="text-[28px] font-semibold text-white">{t('home.botanicalSerums')}</h3>
+              <h3 className="text-[28px] font-semibold text-white">Botanical Serums</h3>
             </div>
           </Link>
           <Link to="/makeup" className="block min-h-[240px] rounded-[8px] overflow-hidden">
             <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=240&fit=crop" alt="Artisan Tools" className="w-full h-full object-cover" />
           </Link>
           <div className="bg-[#EBE6DC] rounded-[8px] p-8">
-            <h4 className="text-[20px] font-semibold text-[#2B2B2B] mb-3">{t('home.artisanTools')}</h4>
+            <h4 className="text-[20px] font-semibold text-[#2B2B2B] mb-3">Artisan Tools Collection</h4>
             <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-4">
               Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
             </p>
             <Link to="/technology#how-it-works">
-              <span className="text-[13px] font-medium text-[#8B7355]">discoverTools</span>
+              <span className="text-[13px] font-medium text-[#8B7355]">Discover Tools →</span>
             </Link>
           </div>
         </div>
@@ -166,7 +164,7 @@ function HomeMobile() {
       {/* Best Sellers */}
       <section className="w-full bg-white py-12">
         <div className="text-center mb-10">
-          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-4">bestSellers</h2>
+          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-4">Best Sellers</h2>
           <div className="w-16 h-[3px] bg-[#C9A870] mx-auto" />
         </div>
         <div className="overflow-x-auto px-5" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
@@ -185,7 +183,7 @@ function HomeMobile() {
         </div>
         <div className="text-center mt-8">
           <Link to="/collections#browse-by-category">
-            <span className="text-[14px] font-normal text-[#8B7355] underline">viewAllProducts</span>
+            <span className="text-[14px] font-normal text-[#8B7355] underline">View All Products</span>
           </Link>
         </div>
       </section>
@@ -193,8 +191,8 @@ function HomeMobile() {
       {/* New Arrivals */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] py-12">
         <div className="text-center mb-10 px-5">
-          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-2">newArrivals</h2>
-          <p className="text-[12px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-4">{t('home.limitedEdition')}</p>
+          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-2">New Arrivals</h2>
+          <p className="text-[12px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-4">Spring 2024 Limited Edition</p>
           <div className="w-16 h-[3px] bg-[#C9A870] mx-auto" />
         </div>
 
@@ -207,19 +205,19 @@ function HomeMobile() {
                 className="w-full rounded-[8px] shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
               />
               <div className="absolute top-[-12px] right-[-12px] bg-[#688B8D] h-9 px-4 rounded-[18px] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.15)]">
-                <span className="text-[11px] font-semibold text-white uppercase tracking-[1.5px]">{t('home.new')}</span>
+                <span className="text-[11px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
               </div>
             </div>
 
             <div className="bg-white rounded-[16px] shadow-[0_8px_24px_rgba(0,0,0,0.08)] p-6">
-              <p className="text-[11px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-4">{t('home.availableMarch')}</p>
+              <p className="text-[11px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-4">Available March 15</p>
               <h3 className="text-[28px] font-semibold text-[#1A1A1A] leading-[1.15] mb-3">{newArrivalMain.name}</h3>
               <p className="text-[24px] font-bold text-[#2B2B2B] mb-5">${parseFloat(newArrivalMain.price || 0).toFixed(2)}</p>
               <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-6">
-                {t('home.productDesc')}
+                A transformative elixir infused with rare Himalayan botanicals and bio-active peptides. Experience visible luminosity within 14 days.
               </p>
               <div className="mb-6 space-y-3">
-                {[t('home.benefit1'), t('home.benefit2'), t('home.benefit3')].map((benefit, idx) => (
+                {['Reduces visible signs of aging by 40%', 'Enhances natural radiance', 'Sustainable luxury production'].map((benefit, idx) => (
                   <div key={idx} className="flex items-start gap-2">
                     <IoCheckmarkCircle className="w-4 h-4 text-[#C9A870] flex-shrink-0 mt-0.5" />
                     <span className="text-[13px] font-normal text-[#2B2B2B] leading-[1.5]">{benefit}</span>
@@ -250,7 +248,7 @@ function HomeMobile() {
                 </button>
                 {notifyMessage && (
                   <p className="text-[13px] text-center text-[#8B7355] mt-2">
-                    {t('home.notifyMsg')}
+                    Turn on email notifications to know more about this product.
                   </p>
                 )}
               </div>
@@ -265,7 +263,7 @@ function HomeMobile() {
                 <div className="relative w-[120px] h-[120px] flex-shrink-0 rounded-[8px] overflow-hidden">
                   <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                   <div className="absolute top-2 left-2 bg-[#D4AFA3] h-6 px-3 rounded-[12px] flex items-center justify-center">
-                    <span className="text-[10px] font-semibold text-white uppercase">{t('home.new')}</span>
+                    <span className="text-[10px] font-semibold text-white uppercase">NEW</span>
                   </div>
                 </div>
                 <div>
@@ -279,7 +277,7 @@ function HomeMobile() {
 
         <div className="text-center mt-8">
           <Link to="/collections" onClick={() => window.scrollTo(0, 0)}>
-            <span className="text-[14px] font-medium text-[#8B7355] underline">exploreCollection</span>
+            <span className="text-[14px] font-medium text-[#8B7355] underline">Explore Full Collection →</span>
           </Link>
         </div>
       </section>
@@ -287,19 +285,19 @@ function HomeMobile() {
       {/* Brand Story */}
       <section className="w-full">
         <div className="bg-[#F7F3EB] px-8 py-10">
-          <p className="text-[11px] font-light uppercase text-[#C9A870] tracking-[2px] mb-4">{t('home.philosophy')}</p>
-          <h2 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.2] mb-6">scienceMeetsNature</h2>
+          <p className="text-[11px] font-light uppercase text-[#C9A870] tracking-[2px] mb-4">PHILOSOPHY</p>
+          <h2 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.2] mb-6">Where Science Meets Nature</h2>
           <p className="text-[15px] font-normal text-[#666666] leading-[1.7] mb-4">
-            {t('home.brandStory1')}
+            At Shan Loray, we believe true luxury lies in the marriage of cutting-edge biotechnology and timeless botanical wisdom.
           </p>
           <p className="text-[15px] font-normal text-[#666666] leading-[1.7] mb-4">
-            {t('home.brandStory2')}
+            Our ingredients are sourced from pristine environments around the world, carefully selected for their potency and ethical cultivation.
           </p>
           <p className="text-[15px] font-normal text-[#666666] leading-[1.7] mb-6">
-            {t('home.brandStory3')}
+            This dedication to excellence has made us the choice of discerning individuals who refuse to compromise on quality or integrity.
           </p>
           <Link to="/advanced-formulations#our-story">
-            <span className="text-[14px] font-medium text-[#8B7355]">ourStory</span>
+            <span className="text-[14px] font-medium text-[#8B7355]">Our Story →</span>
           </Link>
         </div>
         <div className="min-h-[320px]">
@@ -310,7 +308,7 @@ function HomeMobile() {
       {/* Testimonials */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#FAF6F0] py-12">
         <div className="text-center mb-10">
-          <h2 className="text-[28px] font-semibold text-[#1A1A1A]">testimonials</h2>
+          <h2 className="text-[28px] font-semibold text-[#1A1A1A]">Testimonials</h2>
         </div>
         <div className="px-5 space-y-4">
           {testimonials.map((t, idx) => (
@@ -361,7 +359,6 @@ function HomeMobile() {
 // ─── Desktop (+ Tablet responsive) ───────────────────────────────────────────
 function HomeDesktop() {
   const { user } = useAuth()
-  const { t } = useTranslation()
   const [bestSellers, setBestSellers] = useState([])
   const [newArrivalMain, setNewArrivalMain] = useState(null)
   const [newArrivalSupporting, setNewArrivalSupporting] = useState([])
@@ -415,8 +412,8 @@ function HomeDesktop() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute left-6 md:left-[60px] lg:left-[120px] bottom-[80px] md:bottom-[120px] lg:bottom-[160px] w-[90%] max-w-[480px]">
           <div className="bg-white/85 backdrop-blur-sm rounded-[16px] shadow-[0_12px_48px_rgba(0,0,0,0.12)] p-7 md:p-10 lg:p-[48px]">
-            <p className="text-[11px] md:text-[12px] lg:text-[13px] font-light italic text-[#C9A870] tracking-[4px] uppercase mb-4 md:mb-5 lg:mb-6">heroCollection</p>
-            <h1 className="text-[44px] md:text-[54px] lg:text-[68px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 md:mb-5 lg:mb-6">heroTitle</h1>
+            <p className="text-[11px] md:text-[12px] lg:text-[13px] font-light italic text-[#C9A870] tracking-[4px] uppercase mb-4 md:mb-5 lg:mb-6">Spring 2024 Collection</p>
+            <h1 className="text-[44px] md:text-[54px] lg:text-[68px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 md:mb-5 lg:mb-6">The Art of Radiance</h1>
             <p className="text-[15px] md:text-[17px] lg:text-[19px] font-normal text-[#666666] leading-[1.8] mb-6 md:mb-7 lg:mb-8">
               Discover a luminous transformation through our newest collection, where botanical elegance meets scientific precision
             </p>
@@ -444,12 +441,12 @@ function HomeDesktop() {
                   <path d="M12 2v4m0 12v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M2 12h4m12 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83" />
                 </svg>
               </div>
-              <h3 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-5">{t('home.aiTitle')}</h3>
+              <h3 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-5">AI Skin Consultation</h3>
               <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] leading-[1.7] mb-5 lg:mb-6">
                 Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
               </p>
               <Link to="/skin-analysis#upload-section">
-                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">beginAnalysis</span>
+                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Begin Analysis →</span>
               </Link>
             </div>
 
@@ -462,12 +459,12 @@ function HomeDesktop() {
                   <path d="M12 17v4" />
                 </svg>
               </div>
-              <h3 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-5">{t('home.virtualTitle')}</h3>
+              <h3 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-5">Virtual Try-On Mirror</h3>
               <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] leading-[1.7] mb-5 lg:mb-6">
                 Experience our complete collection through cutting-edge augmented reality technology in real-time
               </p>
               <Link to="/virtual-tryon#tryon-section">
-                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">tryNow</span>
+                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Try Now →</span>
               </Link>
             </div>
           </div>
@@ -481,7 +478,7 @@ function HomeDesktop() {
             <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=720&h=820&fit=crop" alt="Botanical Serums Collection" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-8 md:bottom-10 lg:bottom-[48px] left-8 md:left-10 lg:left-[48px]">
-              <h3 className="text-[32px] md:text-[38px] lg:text-[44px] font-semibold text-white">{t('home.botanicalSerums')}</h3>
+              <h3 className="text-[32px] md:text-[38px] lg:text-[44px] font-semibold text-white">Botanical Serums</h3>
             </div>
           </Link>
           <div className="md:col-span-1 lg:col-span-3 flex flex-col gap-5">
@@ -489,12 +486,12 @@ function HomeDesktop() {
               <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=640&h=400&fit=crop" alt="Artisan Tools" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </Link>
             <div className="bg-[#EBE6DC] rounded-[12px] p-8 md:p-10 lg:p-[56px] min-h-[240px] md:min-h-[300px] lg:min-h-[380px] flex flex-col justify-center">
-              <h4 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#2B2B2B] mb-4 lg:mb-5">{t('home.artisanTools')}</h4>
+              <h4 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#2B2B2B] mb-4 lg:mb-5">Artisan Tools Collection</h4>
               <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal text-[#666666] leading-[1.75] mb-5 lg:mb-6">
                 Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
               </p>
               <Link to="/technology#how-it-works">
-                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">discoverTools</span>
+                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Discover Tools →</span>
               </Link>
             </div>
           </div>
@@ -504,7 +501,7 @@ function HomeDesktop() {
       {/* Best Sellers */}
       <section className="w-full bg-white py-16 md:py-20 lg:py-[96px] relative">
         <div className="text-center mb-16 md:mb-20 lg:mb-[88px]">
-          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-6">bestSellers</h2>
+          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-6">Best Sellers</h2>
           <div className="w-[88px] h-[3px] bg-[#C9A870] mx-auto" />
         </div>
         <div className="px-6 md:px-[60px] lg:px-[120px] relative">
@@ -523,7 +520,7 @@ function HomeDesktop() {
         </div>
         <div className="text-center mt-16 md:mt-18 lg:mt-[72px]">
           <Link to="/collections#browse-by-category">
-            <span className="text-[15px] lg:text-[16px] font-normal text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">viewAllProducts</span>
+            <span className="text-[15px] lg:text-[16px] font-normal text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">View All Products</span>
           </Link>
         </div>
       </section>
@@ -531,8 +528,8 @@ function HomeDesktop() {
       {/* New Arrivals */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] py-16 md:py-20 lg:py-[96px]">
         <div className="text-center mb-16 md:mb-20 lg:mb-[88px]">
-          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-4">newArrivals</h2>
-          <p className="text-[13px] md:text-[14px] lg:text-[16px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-6">{t('home.limitedEdition')}</p>
+          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-4">New Arrivals</h2>
+          <p className="text-[13px] md:text-[14px] lg:text-[16px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-6">Spring 2024 Limited Edition</p>
           <div className="w-[88px] h-[3px] bg-[#C9A870] mx-auto" />
         </div>
         {newArrivalMain && (
@@ -541,18 +538,18 @@ function HomeDesktop() {
               <div className="relative w-full md:w-[340px] lg:w-[520px] flex-shrink-0 md:h-[400px] lg:h-[560px]">
                 <img src={newArrivalMain.image_url} alt={newArrivalMain.name} className="w-full h-full object-cover rounded-[12px] shadow-[0_6px_28px_rgba(0,0,0,0.08)]" />
                 <div className="absolute top-[20px] right-[20px] bg-[#688B8D] h-[40px] px-5 rounded-[20px] flex items-center justify-center">
-                  <span className="text-[13px] font-semibold text-white uppercase tracking-[1.5px]">{t('home.new')}</span>
+                  <span className="text-[13px] font-semibold text-white uppercase tracking-[1.5px]">NEW</span>
                 </div>
               </div>
               <div className="flex-1 bg-white rounded-[24px] shadow-[0_12px_48px_rgba(0,0,0,0.10)] p-8 md:p-10 lg:p-[56px]">
-                <p className="text-[12px] md:text-[13px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-5 lg:mb-6">{t('home.availableMarch')}</p>
+                <p className="text-[12px] md:text-[13px] font-medium text-[#C9A870] tracking-[1.5px] uppercase mb-5 lg:mb-6">Available March 15</p>
                 <h3 className="text-[30px] md:text-[36px] lg:text-[42px] font-semibold text-[#1A1A1A] leading-[1.15] mb-4">{newArrivalMain.name}</h3>
                 <p className="text-[22px] md:text-[24px] lg:text-[28px] font-bold text-[#2B2B2B] mb-5 lg:mb-6">${parseFloat(newArrivalMain.price || 0).toFixed(2)}</p>
                 <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal text-[#666666] leading-[1.75] mb-7 lg:mb-8">
-                  {t('home.productDesc')}
+                  A transformative elixir infused with rare Himalayan botanicals and bio-active peptides. Experience visible luminosity within 14 days.
                 </p>
                 <div className="mb-8 lg:mb-10 space-y-3 lg:space-y-4">
-                  {[t('home.benefit1'), t('home.benefit2'), t('home.benefit3')].map((benefit, idx) => (
+                  {newArrivalsBenefits.map((benefit, idx) => (
                     <div key={idx} className="flex items-start gap-3">
                       <IoCheckmarkCircle className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870] flex-shrink-0 mt-1" />
                       <span className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#2B2B2B] leading-[1.6]">{benefit}</span>
@@ -583,7 +580,7 @@ function HomeDesktop() {
                   </button>
                   {notifyMessage && (
                     <p className="text-[13px] text-center text-[#8B7355] mt-2">
-                      {t('home.notifyMsg')}
+                      Turn on email notifications to know more about this product.
                     </p>
                   )}
                 </div>
@@ -598,7 +595,7 @@ function HomeDesktop() {
                 <div className="relative w-full aspect-square rounded-[8px] overflow-hidden mb-5">
                   <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-[16px] left-[16px] bg-[#D4AFA3] h-[32px] px-4 rounded-[16px] flex items-center justify-center">
-                    <span className="text-[12px] font-semibold text-white uppercase tracking-[1px]">{t('home.new')}</span>
+                    <span className="text-[12px] font-semibold text-white uppercase tracking-[1px]">NEW</span>
                   </div>
                 </div>
                 <h4 className="text-[18px] md:text-[19px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-3">{product.name}</h4>
@@ -609,7 +606,7 @@ function HomeDesktop() {
         </div>
         <div className="text-center">
           <Link to="/collections" onClick={() => window.scrollTo(0, 0)}>
-            <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">exploreCollection</span>
+            <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">Explore Full Collection →</span>
           </Link>
         </div>
       </section>
@@ -618,16 +615,16 @@ function HomeDesktop() {
       <section className="w-full min-h-[500px] md:min-h-[600px] lg:min-h-[720px] relative overflow-hidden">
         <div className="flex flex-col md:flex-row min-h-[500px] md:min-h-[600px] lg:min-h-[720px]">
           <div className="bg-[#F7F3EB] flex flex-col justify-center px-8 md:px-[60px] lg:px-[160px] py-14 md:py-0 w-full md:w-[58%]">
-            <p className="text-[12px] md:text-[13px] font-light uppercase text-[#C9A870] tracking-[3px] mb-5 lg:mb-6">{t('home.philosophy')}</p>
-            <h2 className="text-[36px] md:text-[44px] lg:text-[52px] font-bold text-[#1A1A1A] leading-[1.15] mb-6 lg:mb-8">scienceMeetsNature</h2>
+            <p className="text-[12px] md:text-[13px] font-light uppercase text-[#C9A870] tracking-[3px] mb-5 lg:mb-6">PHILOSOPHY</p>
+            <h2 className="text-[36px] md:text-[44px] lg:text-[52px] font-bold text-[#1A1A1A] leading-[1.15] mb-6 lg:mb-8">Where Science Meets Nature</h2>
             <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] leading-[1.85] mb-5 lg:mb-6">
-              {t('home.brandStory1')}
+              At Shan Loray, we believe true luxury lies in the marriage of cutting-edge biotechnology and timeless botanical wisdom.
             </p>
             <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] leading-[1.85] mb-8 lg:mb-10">
-              {t('home.brandStory2')}
+              Our ingredients are sourced from pristine environments around the world, carefully selected for their potency and ethical cultivation.
             </p>
             <Link to="/advanced-formulations#our-story">
-              <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">ourStory</span>
+              <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">Our Story →</span>
             </Link>
           </div>
           <div className="w-full md:w-[42%] min-h-[300px] md:min-h-0">
@@ -639,7 +636,7 @@ function HomeDesktop() {
       {/* Testimonials */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#FAF6F0] py-16 md:py-20 lg:py-[96px]">
         <div className="text-center mb-14 md:mb-16 lg:mb-[80px]">
-          <h2 className="text-[32px] md:text-[38px] lg:text-[42px] font-semibold text-[#1A1A1A]">testimonials</h2>
+          <h2 className="text-[32px] md:text-[38px] lg:text-[42px] font-semibold text-[#1A1A1A]">Testimonials</h2>
         </div>
         <div className="px-6 md:px-[60px] lg:px-[120px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[56px] items-start">
