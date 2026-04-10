@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -38,7 +37,6 @@ const Stars = () => (
 )
 
 export default function Search() {
-  const { t } = useTranslation()
   const navigate = useNavigate()
   const { addToCart } = useCart()
   const inputRef = useRef(null)
@@ -321,10 +319,10 @@ export default function Search() {
 
               {/* Quick Filter Pills */}
               <div>
-                <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5">{t('search.browseBy')}</h2>
+                <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5">Browse By</h2>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinConcerns')}</p>
+                    <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">SKIN CONCERNS</p>
                     <div className="flex flex-wrap gap-2">
                       {skinConcerns.map(c => (
                         <button key={c} onClick={() => navigate(`/skincare?concern=${encodeURIComponent(c)}`)}
@@ -335,7 +333,7 @@ export default function Search() {
                     </div>
                   </div>
                   <div>
-                    <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinTypes')}</p>
+                    <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">SKIN TYPES</p>
                     <div className="flex flex-wrap gap-2">
                       {skinTypes.map(t => (
                         <button key={t} onClick={() => navigate(`/skincare?skinType=${encodeURIComponent(t)}`)}
@@ -385,9 +383,9 @@ export default function Search() {
               {recentSearches.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">{t('search.recentSearches')}</h2>
+                    <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">Recent Searches</h2>
                     <button onClick={() => { setRecentSearches([]); localStorage.removeItem(RECENT_KEY) }}
-                      className="text-[13px] text-[#8B7355] hover:underline">{t('search.clearAll')}</button>
+                      className="text-[13px] text-[#8B7355] hover:underline">Clear All</button>
                   </div>
                   <div>
                     {recentSearches.map(search => (
@@ -408,7 +406,7 @@ export default function Search() {
 
               {/* Popular Right Now */}
               <div>
-                <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5">{t('search.popularRightNow')}</h2>
+                <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5">Popular Right Now</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
                   {popularSearches.map(item => (
                     <div key={item.term} onClick={() => handleTermClick(item.term)}
@@ -425,7 +423,7 @@ export default function Search() {
               <div className="bg-[#FDFBF7] rounded-[16px] p-5 lg:p-8">
                 <div className="flex items-center gap-2 mb-5">
                   <IoFlame className="w-[20px] h-[20px] text-[#C9A870]" />
-                  <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">{t('search.trendingTopics')}</h2>
+                  <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">Trending Topics</h2>
                 </div>
                 <div className="flex flex-wrap gap-2 lg:gap-3">
                   {trendingTopics.map(topic => (
