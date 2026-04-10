@@ -112,7 +112,7 @@ export default function Profile() {
       title: 'Beauty',
       items: [
         { icon: IoSparkles,        label: 'Beauty Profile',    path: '/skin-analysis',  badge: null, badgeColor: '' },
-        { icon: IoRibbonOutline,  label: 'Loyalty Program',   path: '/account',         badge: `${loyaltyPoints.toLocaleString()} pts`,      badgeColor: 'bg-[#8B7355]'                               },
+        { icon: IoRibbonOutline,  label: 'Loyalty Program',   path: '/account#loyalty',  badge: `${loyaltyPoints.toLocaleString()} pts`,      badgeColor: 'bg-[#8B7355]', scroll: 'loyalty-program'   },
         { icon: IoCalendarOutline,label: 'My Routines',        path: '/beauty-journey',  badge: null,                                         badgeColor: ''                                           },
         { icon: IoStarSharp,      label: 'Reviews & Ratings', path: '/account',         badge: null,                                         badgeColor: ''                                           },
       ],
@@ -210,7 +210,14 @@ export default function Profile() {
                 </div>
                 <div className="px-[8px] lg:px-[12px] py-[6px] lg:py-[8px]">
                   {section.items.map((item) => (
-                    <Link key={item.label} to={item.path}>
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      onClick={item.scroll ? (e) => {
+                        e.preventDefault()
+                        document.getElementById(item.scroll)?.scrollIntoView({ behavior: 'smooth' })
+                      } : undefined}
+                    >
                       <div className="flex items-center justify-between h-[48px] lg:h-[52px] px-3 lg:px-[16px] rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors">
                         <div className="flex items-center gap-3 lg:gap-[14px]">
                           <item.icon className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355]" />
@@ -384,6 +391,7 @@ export default function Profile() {
             </div>
 
             {/* Loyalty Program */}
+            <div id="loyalty-program" />
             <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] rounded-[16px] border border-[#E8E3D9] p-5 md:p-6 lg:p-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-6">
                 <h2 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A]">Loyalty Program</h2>
