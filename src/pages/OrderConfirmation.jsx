@@ -14,7 +14,8 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
-export default function OrderConfirmation() {
+export default function OrderConfirmation()
+  const navigate = useNavigate() {
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const [order, setOrder] = useState(null)
@@ -290,11 +291,23 @@ export default function OrderConfirmation() {
               <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px]">Need Help?</h3>
               <div>
                 {helpLinks.map((item, index) => (
-                  <div key={item}>
-                    <div className="py-3 lg:py-[14px] flex items-center justify-between cursor-pointer group">
-                      <span className="text-[14px] lg:text-[15px] font-normal text-[#666666] group-hover:text-[#8B7355] transition-colors">{item}</span>
+                  <div key={item.label}>
+                    <a
+                      href={item.path}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        if (item.path.includes('#')) {
+                          const [pagePath, hash] = item.path.split('#')
+                          window.location.href = pagePath + '#' + hash
+                        } else {
+                          window.location.href = item.path
+                        }
+                      }}
+                      className="py-3 lg:py-[14px] flex items-center justify-between cursor-pointer group"
+                    >
+                      <span className="text-[14px] lg:text-[15px] font-normal text-[#666666] group-hover:text-[#8B7355] transition-colors">{item.label}</span>
                       <IoArrowForward className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] text-[#666666] group-hover:text-[#8B7355] group-hover:translate-x-1 transition-all flex-shrink-0" />
-                    </div>
+                    </a>
                     {index < helpLinks.length - 1 && <div className="h-[1px] bg-[#E8E3D9]" />}
                   </div>
                 ))}
