@@ -36,6 +36,7 @@ import Privacy from './pages/Privacy'
 import Password from './pages/Password'
 import SplashScreen from './pages/SplashScreen'
 import FAQ from './pages/FAQ'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
@@ -93,6 +94,7 @@ export default function App() {
               <Route path="/privacy-settings"        element={<Privacy />} />
               <Route path="/change-password"         element={<Password />} />
               <Route path="/faq"                      element={<FAQ />} />
+              <Route path="/privacy-policy"           element={<PrivacyPolicy />} />
 
               {/* Checkout Flow */}
               <Route path="/cart"                    element={<ShoppingBasket />} />
