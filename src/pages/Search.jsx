@@ -1,221 +1,365 @@
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   IoClose,
   IoSearchOutline,
-  IoOptionsOutline,
   IoTimeOutline,
   IoTrendingUp,
   IoFlame,
   IoSparkles,
   IoStarSharp,
-  IoChevronForward,
-  IoBeakerOutline,
-  IoAlertCircleOutline,
   IoCloseCircle,
+  IoGridOutline,
+  IoCartOutline,
 } from 'react-icons/io5'
+import { supabase } from '../lib/supabase'
+import { useCart } from '../contexts/CartContext'
+
+const RECENT_KEY = 'shanloray_recent_searches'
+const MAX_RECENT = 6
+
+const categories = ['All', 'Skincare', 'Makeup', 'Fragrance', 'Tools']
+
+const popularSearches = [
+  { term: 'Anti-Aging',    count: '2.4k searches', icon: IoTrendingUp },
+  { term: 'Vitamin C',     count: '1.8k searches', icon: IoFlame      },
+  { term: 'Hydration',     count: '2.1k searches', icon: IoSparkles   },
+  { term: 'Night Routine', count: '1.5k searches', icon: IoStarSharp  },
+]
+
+const trendingTopics = [
+  'Anti-Aging', 'Vitamin C', 'Hydration', 'Night Routine',
+  'Luxury Skincare', 'Retinol', 'SPF Protection', 'Eye Care',
+  'Sensitive Skin', 'Natural Ingredients', 'K-Beauty', 'Exfoliation',
+]
+
+const Stars = ({ count = 0 }) => (
+  <div className="flex items-center gap-0.5">
+    {[...Array(5)].map((_, i) => (
+      <IoStarSharp key={i} className="w-[12px] h-[12px] text-[#C9A870]" />
+    ))}
+    <span className="text-[11px] text-[#999999] ml-1">({count})</span>
+  </div>
+)
 
 export default function Search() {
-  const quickCategories = ['All', 'Skincare', 'Makeup', 'Fragrance', 'Tools', 'Collections', 'Ingredients']
+  const navigate = useNavigate()
+  const { addToCart } = useCart()
+  const inputRef = useRef(null)
 
-  const recentSearches = [
-    'Vitamin C Serum',
-    'Anti-aging cream',
-    'Hydrating face mask',
-    'Retinol treatment',
-    'Eye cream for dark circles',
-    'Gentle cleanser',
-  ]
+  const [query, setQuery] = useState('')
+  const [activeCategory, setActiveCategory] = useState('All')
+  const [results, setResults] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || [] }
+    catch { return [] }
+  })
 
-  const popularSearches = [
-    { term: 'Anti-Aging',   count: '2.4k searches', icon: IoTrendingUp },
-    { term: 'Vitamin C',    count: '1.8k searches', icon: IoFlame      },
-    { term: 'Hydration',    count: '2.1k searches', icon: IoSparkles   },
-    { term: 'Night Routine',count: '1.5k searches', icon: IoStarSharp  },
-  ]
+  useEffect(() => {
+    setTimeout(() => inputRef.current?.focus(), 100)
+  }, [])
 
-  const trendingTopics = [
-    'Anti-Aging', 'Vitamin C', 'Hydration', 'Night Routine',
-    'Luxury Skincare', 'Retinol', 'SPF Protection', 'Eye Care',
-    'Sensitive Skin', 'Natural Ingredients', 'K-Beauty', 'Exfoliation',
-  ]
+  useEffect(() => {
+    if (query.trim().length < 2) {
+      setResults([])
+      setLoading(false)
+      return
+    }
+    setLoading(true)
+    const timer = setTimeout(() => doSearch(query.trim()), 350)
+    return () => clearTimeout(timer)
+  }, [query, activeCategory])
 
-  const productSuggestions = [
-    { name: 'Age-Defying Serum',      brand: 'Shan Loray', price: '$124', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop', reviews: 342 },
-    { name: 'Vitamin C Brightening',  brand: 'Shan Loray', price: '$95',  image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=160&h=160&fit=crop', reviews: 521 },
-    { name: 'Hydrating Essence',      brand: 'Shan Loray', price: '$78',  image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=160&h=160&fit=crop', reviews: 467 },
-  ]
+  const doSearch = async (q) => {
+    try {
+      let qb = supabase
+        .from('products')
+        .select('*')
+        .or(`name.ilike.%${q}%,description.ilike.%${q}%,brand.ilike.%${q}%,subcategory.ilike.%${q}%`)
+        .limit(20)
 
-  const collections = [
-    { name: 'Anti-Aging Collection', items: '12 products', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=80&h=80&fit=crop'  },
-    { name: 'Hydration Essentials',  items: '8 products',  image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=80&h=80&fit=crop'  },
-    { name: 'Brightening Bundle',    items: '6 products',  image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=80&h=80&fit=crop'  },
-  ]
+      if (activeCategory !== 'All') {
+        qb = qb.ilike('category', activeCategory)
+      }
 
-  const ingredients   = ['Vitamin C (Ascorbic Acid)', 'Retinol', 'Hyaluronic Acid', 'Niacinamide', 'Peptides']
-  const skinConcerns  = ['Fine Lines & Wrinkles', 'Dark Spots', 'Dryness', 'Uneven Texture', 'Loss of Firmness']
+      const { data } = await qb
+      setResults(data || [])
+    } catch (err) {
+      console.error('Search error:', err)
+      setResults([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)
+  const saveRecentSearch = (term) => {
+    if (!term.trim()) return
+    const updated = [term, ...recentSearches.filter(s => s !== term)].slice(0, MAX_RECENT)
+    setRecentSearches(updated)
+    localStorage.setItem(RECENT_KEY, JSON.stringify(updated))
+  }
+
+  const removeRecent = (term, e) => {
+    e.stopPropagation()
+    const updated = recentSearches.filter(s => s !== term)
+    setRecentSearches(updated)
+    localStorage.setItem(RECENT_KEY, JSON.stringify(updated))
+  }
+
+  const clearAllRecent = () => {
+    setRecentSearches([])
+    localStorage.removeItem(RECENT_KEY)
+  }
+
+  const handleTermClick = (term) => {
+    setQuery(term)
+    saveRecentSearch(term)
+    inputRef.current?.focus()
+  }
+
+  const handleProductClick = (product) => {
+    saveRecentSearch(query.trim() || product.name)
+    navigate(`/product/${product.id}`)
+  }
+
+  const isSearching = query.trim().length >= 2
+  const hasResults = results.length > 0
+  const noResults = isSearching && !loading && !hasResults
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div className="bg-white font-['Cormorant_Garamond'] min-h-screen">
 
-      {/* ── Search Header ── */}
-      <div className="min-h-[80px] md:min-h-[100px] lg:min-h-[120px] bg-white flex items-center justify-between gap-3 px-4 md:px-[60px] lg:px-[120px] border-b border-[#E8E3D9]">
-        <Link to="/" className="flex-shrink-0">
-          <IoClose className="w-[24px] h-[24px] md:w-[26px] md:h-[26px] lg:w-[28px] lg:h-[28px] text-[#2B2B2B] cursor-pointer hover:text-[#8B7355] transition-colors" />
-        </Link>
-
-        <div className="relative flex-1 md:flex-none">
-          <IoSearchOutline className="absolute left-[14px] md:left-[20px] lg:left-[24px] top-1/2 -translate-y-1/2 w-[18px] h-[18px] md:w-[22px] md:h-[22px] lg:w-[24px] lg:h-[24px] text-[#8B7355]" />
-          <input
-            type="text"
-            placeholder="Search products, collections..."
-            className="w-full md:w-[500px] lg:w-[800px] h-[48px] md:h-[56px] lg:h-[64px] pl-[40px] md:pl-[52px] lg:pl-[60px] pr-[40px] md:pr-[52px] lg:pr-[60px] text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#2B2B2B] bg-white border-2 border-[#E8E3D9] rounded-[12px] outline-none focus:border-[#8B7355] focus:shadow-[0_2px_12px_rgba(139,115,85,0.15)] transition-all"
-          />
-          <IoCloseCircle className="absolute right-[14px] md:right-[20px] lg:right-[24px] top-1/2 -translate-y-1/2 w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#999999] cursor-pointer hover:text-[#8B7355] transition-colors" />
-        </div>
-
-        <button className="flex-shrink-0 flex items-center gap-[6px] text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B] cursor-pointer hover:text-[#8B7355] transition-colors">
-          <IoOptionsOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" />
-          <span className="hidden sm:inline">Filters</span>
-        </button>
-      </div>
-
-      {/* ── Category Tabs ── */}
-      <div className="min-h-[64px] md:min-h-[72px] lg:min-h-[80px] bg-gradient-to-b from-[#FDFBF7] to-white flex items-center">
-        <div className="w-full overflow-x-auto px-4 md:px-[60px] lg:px-0" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-          <div className="flex items-center gap-[10px] md:gap-[14px] lg:gap-[16px] lg:justify-center w-max lg:w-full px-0 lg:px-[120px]">
-            {quickCategories.map((category, idx) => (
-              <button
-                key={category}
-                className={`flex-shrink-0 h-[38px] md:h-[40px] lg:h-[44px] px-[16px] md:px-[20px] lg:px-[24px] rounded-full text-[13px] md:text-[14px] lg:text-[15px] transition-all whitespace-nowrap ${
-                  idx === 0
-                    ? 'bg-[#8B7355] text-white font-medium'
-                    : 'bg-white text-[#666666] font-normal border border-[#E8E3D9] hover:border-[#8B7355] hover:text-[#8B7355]'
-                }`}
-              >
-                {category}
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-50 bg-white border-b border-[#E8E3D9] shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
+        <div className="flex items-center gap-3 px-4 md:px-[60px] lg:px-[120px] py-4">
+          <Link to="/" className="flex-shrink-0">
+            <IoClose className="w-[24px] h-[24px] text-[#2B2B2B] hover:text-[#8B7355] transition-colors" />
+          </Link>
+          <div className="relative flex-1">
+            <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#8B7355]" />
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onBlur={() => { if (query.trim()) saveRecentSearch(query.trim()) }}
+              placeholder="Search products, brands, ingredients..."
+              className="w-full h-[48px] md:h-[56px] pl-[44px] pr-[44px] text-[14px] md:text-[16px] text-[#2B2B2B] bg-[#FDFBF7] border-2 border-[#E8E3D9] rounded-[12px] outline-none focus:border-[#8B7355] focus:bg-white transition-all"
+            />
+            {query && (
+              <button type="button" onClick={() => { setQuery(''); setResults([]) }} className="absolute right-4 top-1/2 -translate-y-1/2">
+                <IoCloseCircle className="w-[18px] h-[18px] text-[#999999] hover:text-[#8B7355] transition-colors" />
               </button>
-            ))}
+            )}
           </div>
         </div>
+
+        {/* Category Tabs */}
+        <div className="flex gap-2 px-4 md:px-[60px] lg:px-[120px] pb-3 overflow-x-auto scrollbar-hide">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`flex-shrink-0 h-[34px] px-4 rounded-full text-[13px] font-medium transition-all ${
+                activeCategory === cat
+                  ? 'bg-[#8B7355] text-white'
+                  : 'bg-[#F5F1EA] text-[#666666] hover:bg-[#E8E3D9]'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* ── Main Content ── */}
-      <div className="px-4 md:px-[60px] lg:px-[120px] py-8 md:py-10 lg:py-[48px]">
+      <div className="px-4 md:px-[60px] lg:px-[120px] py-8 lg:py-[48px]">
         <div className="max-w-[1200px] mx-auto">
 
-          {/* Recent Searches */}
-          <div className="mb-8 md:mb-10 lg:mb-[48px]">
-            <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h2 className="text-[17px] md:text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">Recent Searches</h2>
-              <button className="text-[13px] md:text-[14px] font-normal text-[#8B7355] cursor-pointer hover:underline">Clear All</button>
+          {/* Loading */}
+          {loading && (
+            <div className="flex items-center justify-center py-20">
+              <div className="flex gap-2">
+                {[0, 1, 2].map(i => (
+                  <div key={i} className="w-2.5 h-2.5 bg-[#C9A870] rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                ))}
+              </div>
             </div>
+          )}
+
+          {/* Results */}
+          {!loading && hasResults && (
             <div>
-              {recentSearches.map((search) => (
-                <div key={search} className="flex items-center justify-between py-[14px] lg:py-[16px] border-b border-[#F5F1EA] cursor-pointer hover:bg-[#FDFBF7] px-2 rounded transition-colors">
-                  <div className="flex items-center gap-[10px] lg:gap-[12px]">
-                    <IoTimeOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0" />
-                    <span className="text-[14px] md:text-[15px] lg:text-[16px] font-normal text-[#2B2B2B]">{search}</span>
-                  </div>
-                  <IoClose className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#999999] cursor-pointer hover:text-[#8B7355] transition-colors flex-shrink-0" />
-                </div>
-              ))}
-            </div>
-          </div>
+              <div className="flex items-center justify-between mb-6">
+                <p className="text-[14px] text-[#666666]">
+                  <span className="font-semibold text-[#1A1A1A]">{results.length}</span> results for{' '}
+                  <span className="font-semibold text-[#8B7355]">"{query}"</span>
+                </p>
+                <IoGridOutline className="w-[20px] h-[20px] text-[#8B7355]" />
+              </div>
 
-          {/* Popular Searches */}
-          <div className="mb-8 md:mb-10 lg:mb-[48px]">
-            <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-medium text-[#1A1A1A] mb-5 lg:mb-[24px]">Popular Right Now</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-[12px] md:gap-[14px] lg:gap-[16px]">
-              {popularSearches.map((item) => (
-                <div key={item.term} className="bg-white border border-[#E8E3D9] rounded-[8px] p-[16px] lg:p-[20px] cursor-pointer hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] hover:border-[#C9A870] transition-all duration-300">
-                  <item.icon className="w-[26px] h-[26px] lg:w-[32px] lg:h-[32px] text-[#C9A870] mb-[10px] lg:mb-[12px]" />
-                  <h3 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[6px] lg:mb-[8px]">{item.term}</h3>
-                  <p className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{item.count}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Trending Topics */}
-          <div className="bg-[#FDFBF7] rounded-[12px] p-5 md:p-6 lg:p-[32px] mb-8 md:mb-10 lg:mb-[48px]">
-            <div className="flex items-center gap-[8px] mb-4 lg:mb-[20px]">
-              <IoFlame className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px] text-[#C9A870]" />
-              <h2 className="text-[17px] md:text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">Trending Topics</h2>
-            </div>
-            <div className="flex flex-wrap gap-[8px] md:gap-[10px] lg:gap-[12px]">
-              {trendingTopics.map((topic) => (
-                <button key={topic} className="bg-white px-[14px] md:px-[16px] lg:px-[20px] py-[8px] md:py-[10px] lg:py-[12px] rounded-full border border-[#E8E3D9] text-[12px] md:text-[13px] lg:text-[14px] font-normal text-[#8B7355] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
-                  {topic}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Product Suggestions */}
-          <div className="mb-8 md:mb-10 lg:mb-[48px]">
-            <h3 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#8B7355] mb-4 lg:mb-[16px]">Products</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-[14px] lg:gap-[20px]">
-              {productSuggestions.map((product) => (
-                <div key={product.name} className="bg-white rounded-[8px] p-[14px] lg:p-[16px] cursor-pointer hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-all duration-300 flex sm:flex-col items-center sm:items-start gap-4 sm:gap-0 border border-[#F5F1EA] sm:border-0">
-                  <img src={product.image} alt={product.name} className="w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] lg:w-[160px] lg:h-[160px] object-cover rounded-[8px] sm:mb-[12px] flex-shrink-0" />
-                  <div>
-                    <p className="text-[11px] md:text-[12px] font-light italic text-[#8B7355] mb-[4px]">{product.brand}</p>
-                    <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-[6px] lg:mb-[8px]">{product.name}</h4>
-                    <p className="text-[15px] lg:text-[16px] font-semibold text-[#2B2B2B] mb-[6px] lg:mb-[8px]">{product.price}</p>
-                    <div className="flex items-center gap-[4px]">
-                      <Stars />
-                      <span className="text-[11px] md:text-[12px] font-normal text-[#999999] ml-[4px]">({product.reviews})</span>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                {results.map(product => (
+                  <div
+                    key={product.id}
+                    className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden hover:shadow-[0_8px_24px_rgba(0,0,0,0.10)] transition-shadow group cursor-pointer"
+                    onClick={() => handleProductClick(product)}
+                  >
+                    <div className="relative overflow-hidden h-[160px] md:h-[180px] lg:h-[200px]">
+                      <img
+                        src={product.image_url || product.img_url}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="p-3 lg:p-4">
+                      <p className="text-[11px] font-light italic text-[#8B7355] mb-1">{product.brand || 'Shan Loray'}</p>
+                      <h4 className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-1.5 leading-snug line-clamp-2">{product.name}</h4>
+                      <Stars count={product.review_count || 0} />
+                      <div className="flex items-center justify-between mt-3">
+                        <span className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A]">
+                          ${parseFloat(product.price).toFixed(2)}
+                        </span>
+                        <button
+                          onClick={e => {
+                            e.stopPropagation()
+                            addToCart(
+                              product.id,
+                              product.name,
+                              product.image_url || product.img_url,
+                              product.brand || 'Shan Loray',
+                              product.size || '',
+                              product.price,
+                              1
+                            )
+                          }}
+                          className="w-[36px] h-[36px] bg-[#8B7355] text-white rounded-full flex items-center justify-center hover:bg-[#7a6448] transition-colors"
+                        >
+                          <IoCartOutline className="w-[16px] h-[16px]" />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Collections */}
-          <div className="mb-8 md:mb-10 lg:mb-[48px]">
-            <h3 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#8B7355] mb-4 lg:mb-[16px]">Collections</h3>
-            <div className="space-y-[10px] lg:space-y-[12px]">
-              {collections.map((collection) => (
-                <div key={collection.name} className="flex items-center gap-[14px] lg:gap-[16px] bg-white rounded-[8px] h-[72px] lg:h-[80px] cursor-pointer hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-all duration-300 border border-[#F5F1EA]">
-                  <img src={collection.image} alt={collection.name} className="w-[72px] h-[72px] lg:w-[80px] lg:h-[80px] object-cover rounded-l-[8px] flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[4px]">{collection.name}</h4>
-                    <p className="text-[13px] lg:text-[14px] font-normal text-[#666666]">{collection.items}</p>
+          {/* No Results */}
+          {!loading && noResults && (
+            <div className="text-center py-16">
+              <div className="w-[80px] h-[80px] bg-[#F5F1EA] rounded-full flex items-center justify-center mx-auto mb-5">
+                <IoSearchOutline className="w-[36px] h-[36px] text-[#C9A870]" />
+              </div>
+              <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-2">No results for "{query}"</h3>
+              <p className="text-[14px] text-[#666666] mb-6">Try a different search term or browse our popular topics</p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {trendingTopics.slice(0, 6).map(topic => (
+                  <button
+                    key={topic}
+                    onClick={() => handleTermClick(topic)}
+                    className="bg-[#F5F1EA] px-4 py-2 rounded-full text-[13px] text-[#8B7355] hover:bg-[#8B7355] hover:text-white transition-all"
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Default State */}
+          {!isSearching && !loading && (
+            <div className="space-y-10">
+
+              {/* Recent Searches */}
+              {recentSearches.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">Recent Searches</h2>
+                    <button onClick={clearAllRecent} className="text-[13px] text-[#8B7355] hover:underline">Clear All</button>
                   </div>
-                  <IoChevronForward className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] mr-[14px] lg:mr-[16px] flex-shrink-0" />
+                  <div>
+                    {recentSearches.map(search => (
+                      <div
+                        key={search}
+                        onClick={() => handleTermClick(search)}
+                        className="flex items-center justify-between py-[14px] border-b border-[#F5F1EA] cursor-pointer hover:bg-[#FDFBF7] px-2 rounded transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <IoTimeOutline className="w-[18px] h-[18px] text-[#8B7355] flex-shrink-0" />
+                          <span className="text-[14px] lg:text-[15px] text-[#2B2B2B]">{search}</span>
+                        </div>
+                        <button onClick={e => removeRecent(search, e)}>
+                          <IoClose className="w-[16px] h-[16px] text-[#999999] hover:text-[#8B7355] transition-colors" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              )}
 
-          {/* Ingredients */}
-          <div className="mb-8 md:mb-10 lg:mb-[48px]">
-            <h3 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#8B7355] mb-4 lg:mb-[16px]">Ingredients</h3>
-            <div>
-              {ingredients.map((ingredient) => (
-                <div key={ingredient} className="flex items-center gap-[10px] lg:gap-[12px] py-[11px] lg:py-[12px] border-b border-[#F5F1EA] cursor-pointer hover:bg-[#FDFBF7] px-2 rounded transition-colors">
-                  <IoBeakerOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0" />
-                  <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">{ingredient}</span>
+              {/* Popular Right Now */}
+              <div>
+                <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5">Popular Right Now</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+                  {popularSearches.map(item => (
+                    <div
+                      key={item.term}
+                      onClick={() => handleTermClick(item.term)}
+                      className="bg-white border border-[#E8E3D9] rounded-[12px] p-4 lg:p-5 cursor-pointer hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:border-[#C9A870] transition-all"
+                    >
+                      <item.icon className="w-[28px] h-[28px] text-[#C9A870] mb-3" />
+                      <h3 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-1">{item.term}</h3>
+                      <p className="text-[12px] text-[#666666]">{item.count}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* Skin Concerns */}
-          <div className="mb-8 md:mb-10 lg:mb-[48px]">
-            <h3 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#8B7355] mb-4 lg:mb-[16px]">Skin Concerns</h3>
-            <div>
-              {skinConcerns.map((concern) => (
-                <div key={concern} className="flex items-center gap-[10px] lg:gap-[12px] py-[11px] lg:py-[12px] border-b border-[#F5F1EA] cursor-pointer hover:bg-[#FDFBF7] px-2 rounded transition-colors">
-                  <IoAlertCircleOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0" />
-                  <span className="text-[14px] lg:text-[15px] font-normal text-[#2B2B2B]">{concern}</span>
+              {/* Trending Topics */}
+              <div className="bg-[#FDFBF7] rounded-[16px] p-5 lg:p-8">
+                <div className="flex items-center gap-2 mb-5">
+                  <IoFlame className="w-[20px] h-[20px] text-[#C9A870]" />
+                  <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A]">Trending Topics</h2>
                 </div>
-              ))}
+                <div className="flex flex-wrap gap-2 lg:gap-3">
+                  {trendingTopics.map(topic => (
+                    <button
+                      key={topic}
+                      onClick={() => handleTermClick(topic)}
+                      className="bg-white px-4 py-2 rounded-full border border-[#E8E3D9] text-[13px] text-[#8B7355] hover:bg-[#8B7355] hover:text-white hover:border-[#8B7355] transition-all"
+                    >
+                      {topic}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Browse Categories */}
+              <div>
+                <h2 className="text-[18px] lg:text-[20px] font-medium text-[#1A1A1A] mb-5">Browse Categories</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+                  {[
+                    { name: 'Skincare',    path: '/skincare',    image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=300&h=200&fit=crop' },
+                    { name: 'Makeup',      path: '/makeup',      image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&h=200&fit=crop' },
+                    { name: 'Fragrance',   path: '/fragrance',   image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=300&h=200&fit=crop' },
+                    { name: 'Collections', path: '/collections', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300&h=200&fit=crop' },
+                  ].map(cat => (
+                    <Link key={cat.name} to={cat.path}>
+                      <div className="relative h-[120px] lg:h-[140px] rounded-[12px] overflow-hidden group">
+                        <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-black/35 group-hover:bg-black/50 transition-colors" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-white text-[15px] lg:text-[17px] font-semibold">{cat.name}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
             </div>
-          </div>
+          )}
 
         </div>
       </div>
