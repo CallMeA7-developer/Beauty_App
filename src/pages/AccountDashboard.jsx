@@ -64,7 +64,7 @@ export default function AccountDashboard() {
       ] = await Promise.all([
         supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle(),
         supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-        supabase.from('skin_analysis').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('skin_analysis').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
         supabase.from('routines').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
         supabase.from('reviews').select('*, products(name, image_url, brand)').eq('user_id', user.id).order('created_at', { ascending: false }).limit(2),
         supabase.from('addresses').select('id').eq('user_id', user.id),
@@ -81,8 +81,10 @@ export default function AccountDashboard() {
         setLoyaltyPoints(Math.floor(totalPoints))
       }
 
-      if (skinAnalysisRes.data) {
-        setSkinAnalysis(skinAnalysisRes.data)
+      if (skinAnalysisRes.data && skinAnalysisRes.data.length > 0) {
+        // Pick the latest analysis that has product IDs
+        const bestAnalysis = skinAnalysisRes.data.find(a => a.morning_product_ids?.length > 0) || skinAnalysisRes.data[0]
+        setSkinAnalysis(bestAnalysis)
         // Fetch morning and evening products from skin analysis
         const fetchByIds = async (ids) => {
           if (!ids || ids.length === 0) return []
@@ -90,8 +92,8 @@ export default function AccountDashboard() {
           return data || []
         }
         const [morning, evening] = await Promise.all([
-          fetchByIds(skinAnalysisRes.data.morning_product_ids),
-          fetchByIds(skinAnalysisRes.data.evening_product_ids),
+          fetchByIds(bestAnalysis.morning_product_ids),
+          fetchByIds(bestAnalysis.evening_product_ids),
         ])
         setMorningProducts(morning)
         setEveningProducts(evening)
