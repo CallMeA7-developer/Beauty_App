@@ -38,6 +38,8 @@ export default function AccountDashboard() {
   const [orders, setOrders] = useState([])
   const [skinAnalysis, setSkinAnalysis] = useState(null)
   const [routines, setRoutines] = useState([])
+  const [morningProducts, setMorningProducts] = useState([])
+  const [eveningProducts, setEveningProducts] = useState([])
   const [reviews, setReviews] = useState([])
   const [addressesCount, setAddressesCount] = useState(0)
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
@@ -79,7 +81,21 @@ export default function AccountDashboard() {
         setLoyaltyPoints(Math.floor(totalPoints))
       }
 
-      if (skinAnalysisRes.data) setSkinAnalysis(skinAnalysisRes.data)
+      if (skinAnalysisRes.data) {
+        setSkinAnalysis(skinAnalysisRes.data)
+        // Fetch morning and evening products from skin analysis
+        const fetchByIds = async (ids) => {
+          if (!ids || ids.length === 0) return []
+          const { data } = await supabase.from('products').select('id, name, image_url, img_url').in('id', ids)
+          return data || []
+        }
+        const [morning, evening] = await Promise.all([
+          fetchByIds(skinAnalysisRes.data.morning_product_ids),
+          fetchByIds(skinAnalysisRes.data.evening_product_ids),
+        ])
+        setMorningProducts(morning)
+        setEveningProducts(evening)
+      }
       if (routinesRes.data) setRoutines(routinesRes.data)
       if (reviewsRes.data) setReviews(reviewsRes.data)
       if (addressesRes.data) setAddressesCount(addressesRes.data.length)
@@ -651,32 +667,43 @@ export default function AccountDashboard() {
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
                 <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Saved Routines</h3>
-                <Link to="/beauty-journey">
-                  <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">View All Routines</button>
-                </Link>
+                {skinAnalysis && (
+                  <Link to="/beauty-journey">
+                    <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">View All Routines</button>
+                  </Link>
+                )}
               </div>
-              {routines.length > 0 ? (
+              {skinAnalysis ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[20px]">
-                  {routines.slice(0, 2).map((routine) => (
-                    <div key={routine.id} className="border border-[#E8E3D9] rounded-[8px] p-4 lg:p-[20px] hover:border-[#C9A870] transition-colors">
-                      <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{routine.name}</h4>
-                      <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-4 lg:mb-[16px]">
-                        {routine.product_count} products · Last used {routine.last_used}
-                      </div>
-                      {routine.product_images && routine.product_images.length > 0 && (
-                        <div className="flex gap-[6px] lg:gap-[8px]">
-                          {routine.product_images.slice(0, 3).map((img, idx) => (
-                            <img key={idx} src={img} alt="Product" className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-cover rounded-[6px]" />
-                          ))}
-                        </div>
-                      )}
+                  {/* Morning Ritual */}
+                  <div className="border border-[#E8E3D9] rounded-[8px] p-4 lg:p-[20px] hover:border-[#C9A870] transition-colors">
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">Morning Ritual</h4>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-4 lg:mb-[16px]">
+                      {morningProducts.length} products
                     </div>
-                  ))}
+                    <div className="flex gap-[6px] lg:gap-[8px]">
+                      {morningProducts.slice(0, 3).map((product, idx) => (
+                        <img key={idx} src={product.image_url || product.img_url} alt={product.name} className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-cover rounded-[6px]" />
+                      ))}
+                    </div>
+                  </div>
+                  {/* Evening Care */}
+                  <div className="border border-[#E8E3D9] rounded-[8px] p-4 lg:p-[20px] hover:border-[#C9A870] transition-colors">
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">Evening Care</h4>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-4 lg:mb-[16px]">
+                      {eveningProducts.length} products
+                    </div>
+                    <div className="flex gap-[6px] lg:gap-[8px]">
+                      {eveningProducts.slice(0, 3).map((product, idx) => (
+                        <img key={idx} src={product.image_url || product.img_url} alt={product.name} className="w-[52px] h-[52px] lg:w-[60px] lg:h-[60px] object-cover rounded-[6px]" />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-[40px]">
                   <IoCalendarOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-[16px]" />
-                  <p className="text-[15px] text-[#666666] mb-[16px]">Complete your beauty journey to create routines</p>
+                  <p className="text-[15px] text-[#666666] mb-[16px]">Complete your skin analysis to create your personalized routine</p>
                   <Link to="/beauty-journey">
                     <button className="bg-[#8B7355] text-white text-[14px] font-medium px-[24px] py-[10px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
                       Start Journey
