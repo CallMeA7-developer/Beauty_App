@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -18,7 +17,6 @@ import { useCart } from '../contexts/CartContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function ShoppingBasket() {
-  const { t } = useTranslation()
   const { user, loading: authLoading } = useAuth()
   const { cartItems, loading, updateQuantity, removeFromCart } = useCart()
   const navigate = useNavigate()
@@ -150,7 +148,7 @@ export default function ShoppingBasket() {
             <div className="mt-5 lg:mt-[24px]">
               <Link to="/collections">
                 <button className="flex items-center gap-[8px] text-[14px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">
-                  <span>{t('cart.continueShopping')}</span>
+                  <span>Continue Shopping</span>
                   <IoArrowForwardOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
                 </button>
               </Link>
@@ -178,7 +176,7 @@ export default function ShoppingBasket() {
           {/* ── Order Summary ── */}
           <div className="w-full lg:w-[360px] lg:flex-shrink-0">
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] lg:sticky lg:top-[24px]">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('cart.orderSummary')}</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Order Summary</h2>
 
               {/* Line items */}
               <div className="space-y-3 lg:space-y-[16px] mb-4 lg:mb-[16px]">
@@ -196,13 +194,13 @@ export default function ShoppingBasket() {
               <div className="h-[1px] bg-[#E8E3D9] mb-4 lg:mb-[16px]" />
 
               <div className="flex items-center justify-between mb-3 lg:mb-[16px]">
-                <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('cart.subtotal')}</span>
+                <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Subtotal</span>
                 <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${subtotal.toFixed(2)}</span>
               </div>
 
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-[6px]">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('cart.shipping')}</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Shipping</span>
                   <IoInformationCircleOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] text-[#999999]" />
                 </div>
                 <span className="text-[14px] lg:text-[16px] font-normal text-green-600">Free</span>
