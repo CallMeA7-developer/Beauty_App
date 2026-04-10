@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IoTimeOutline, IoArrowForward, IoSearchOutline } from 'react-icons/io5'
@@ -106,6 +107,7 @@ const categoryColors = {
 }
 
 export default function Journal() {
+  const { t } = useTranslation()
   const [activeCategory, setActiveCategory] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
@@ -177,7 +179,7 @@ export default function Journal() {
         {/* Featured Article */}
         {featured && (
           <div className="max-w-[1200px] mx-auto mb-12 lg:mb-[64px]">
-            <p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-4">FEATURED STORY</p>
+            <p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-4">{t('journal.featuredStory')}</p>
             <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.08)] grid grid-cols-1 lg:grid-cols-2 group cursor-pointer"
               onClick={() => navigate(`/journal/${featured.id}`)}>
               <div className="relative overflow-hidden h-[280px] lg:h-auto">
@@ -268,8 +270,8 @@ export default function Journal() {
 
       {/* Newsletter */}
       <div className="bg-gradient-to-b from-[#1A1A1A] to-[#2D2418] px-4 md:px-[60px] lg:px-[120px] py-16 lg:py-[80px] text-center">
-        <p className="text-[12px] font-light italic text-[#C9A870] tracking-[3px] mb-3">STAY INSPIRED</p>
-        <h3 className="text-[28px] md:text-[36px] lg:text-[48px] font-bold text-white mb-4">Beauty Wisdom, Delivered</h3>
+        <p className="text-[12px] font-light italic text-[#C9A870] tracking-[3px] mb-3">{t('journal.stayInspired')}</p>
+        <h3 className="text-[28px] md:text-[36px] lg:text-[48px] font-bold text-white mb-4">{t('journal.beautyWisdom')}</h3>
         <p className="text-[14px] lg:text-[16px] font-light text-white/60 mb-8 max-w-[480px] mx-auto">
           Get the latest skincare tips, beauty trends, and exclusive Shan Loray content straight to your inbox.
         </p>
