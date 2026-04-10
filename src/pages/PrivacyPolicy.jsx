@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IoChevronDown, IoShieldCheckmarkOutline, IoLockClosedOutline, IoPersonOutline, IoGlobeOutline, IoMailOutline, IoCallOutline } from 'react-icons/io5'
@@ -131,7 +130,6 @@ const sections = [
 ]
 
 export default function PrivacyPolicy() {
-  const { t } = useTranslation()
   const [openSections, setOpenSections] = useState({})
 
   const toggle = (index) => {
@@ -147,11 +145,11 @@ export default function PrivacyPolicy() {
           <IoShieldCheckmarkOutline className="w-[32px] h-[32px] text-white" />
         </div>
         <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">LEGAL</p>
-        <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] mb-4">{t('privacy.title')}</h1>
+        <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] mb-4">Privacy Policy</h1>
         <p className="text-[15px] md:text-[16px] lg:text-[18px] font-light text-[#666666] max-w-[600px] mx-auto mb-4">
           Your privacy is important to us. This policy explains how Shan Loray collects, uses, and protects your personal information.
         </p>
-        <p className="text-[13px] text-[#999999]">{t('privacy.lastUpdated')}</p>
+        <p className="text-[13px] text-[#999999]">Last updated: April 2026</p>
       </div>
 
       {/* Breadcrumb */}
@@ -160,7 +158,7 @@ export default function PrivacyPolicy() {
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
         <Link to="/privacy-settings"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">Account Settings</span></Link>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">{t('privacy.title')}</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Privacy Policy</span>
       </div>
 
       {/* Content */}
