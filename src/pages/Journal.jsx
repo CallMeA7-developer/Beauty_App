@@ -179,7 +179,7 @@ export default function Journal() {
           <div className="max-w-[1200px] mx-auto mb-12 lg:mb-[64px]">
             <p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-4">FEATURED STORY</p>
             <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.08)] grid grid-cols-1 lg:grid-cols-2 group cursor-pointer"
-              onClick={() => {}}>
+              onClick={() => navigate(`/journal/${featured.id}`)}>
               <div className="relative overflow-hidden h-[280px] lg:h-auto">
                 <img
                   src={featured.image}
@@ -222,7 +222,7 @@ export default function Journal() {
                 <div
                   key={article.id}
                   className="bg-white rounded-[12px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)] group cursor-pointer hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-shadow"
-                  onClick={() => {}}
+                  onClick={() => navigate(`/journal/${article.id}`)}
                 >
                   <div className="relative overflow-hidden h-[220px]">
                     <img
