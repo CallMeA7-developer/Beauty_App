@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IoChevronDown, IoChevronUp, IoSparkles, IoBagOutline, IoLocationOutline, IoCardOutline, IoRefreshOutline, IoShieldCheckmarkOutline } from 'react-icons/io5'
@@ -66,7 +65,6 @@ const faqs = [
 ]
 
 export default function FAQ() {
-  const { t } = useTranslation()
   const [openItems, setOpenItems] = useState({})
   const [activeCategory, setActiveCategory] = useState('All')
 
@@ -84,7 +82,7 @@ export default function FAQ() {
       {/* Hero */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-12 md:py-16 lg:py-[80px] text-center">
         <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">SUPPORT CENTER</p>
-        <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] mb-4">{t('faq.title')}</h1>
+        <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] mb-4">Frequently Asked Questions</h1>
         <p className="text-[15px] md:text-[16px] lg:text-[18px] font-light text-[#666666] max-w-[600px] mx-auto mb-8">
           Find answers to the most common questions about orders, products, returns and more.
         </p>
