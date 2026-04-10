@@ -292,22 +292,13 @@ export default function OrderConfirmation()
               <div>
                 {helpLinks.map((item, index) => (
                   <div key={item.label}>
-                    <a
-                      href={item.path}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        if (item.path.includes('#')) {
-                          const [pagePath, hash] = item.path.split('#')
-                          window.location.href = pagePath + '#' + hash
-                        } else {
-                          window.location.href = item.path
-                        }
-                      }}
+                    <Link
+                      to={item.path}
                       className="py-3 lg:py-[14px] flex items-center justify-between cursor-pointer group"
                     >
                       <span className="text-[14px] lg:text-[15px] font-normal text-[#666666] group-hover:text-[#8B7355] transition-colors">{item.label}</span>
                       <IoArrowForward className="w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] text-[#666666] group-hover:text-[#8B7355] group-hover:translate-x-1 transition-all flex-shrink-0" />
-                    </a>
+                    </Link>
                     {index < helpLinks.length - 1 && <div className="h-[1px] bg-[#E8E3D9]" />}
                   </div>
                 ))}
