@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
@@ -375,7 +374,7 @@ function FragranceMobile() {
           <div className="relative bg-white rounded-t-[20px] px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-[#E8E3D9] rounded-full mx-auto mb-5" />
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">{t('skincare.sortBy')}</h3>
+              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">Sort By</h3>
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
@@ -556,7 +555,7 @@ function FragranceMobile() {
             <div className="px-5 py-5 bg-white border-t border-[#E8E3D9] flex-shrink-0">
               <div className="flex items-center gap-3">
                 <button onClick={clearAll} className="flex-1 min-h-[52px] bg-white border-2 border-[#E8E3D9] rounded-[10px] flex items-center justify-center">
-                  <span className="text-[14px] font-medium text-[#8B7355]">{t('skincare.clearFilters')}</span>
+                  <span className="text-[14px] font-medium text-[#8B7355]">Clear Filters</span>
                 </button>
                 <button onClick={() => setShowFilterSheet(false)} className="flex-1 min-h-[52px] bg-[#8B7355] rounded-[10px] flex items-center justify-center">
                   <span className="text-[14px] font-medium text-white">Apply Filters ({products.length})</span>
@@ -650,7 +649,7 @@ function FragranceDesktop() {
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Shop</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">{t('fragrance.title')}</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">Fragrance</span>
       </div>
 
       {/* Main Content */}
@@ -660,7 +659,7 @@ function FragranceDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">{t('skincare.refineSelection')}</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">REFINE SELECTION</h3>
               {activeFilters > 0 && <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>}
             </div>
 
@@ -728,7 +727,7 @@ function FragranceDesktop() {
 
               {/* Intensity */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('fragrance.intensity')}</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Intensity</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {intensityLevels.map((level) => {
                     const isChecked = selectedIntensity.includes(level)
@@ -896,7 +895,6 @@ function FragranceDesktop() {
 
 // ── Main Export ───────────────────────────────────────────────────────────────
 export default function Fragrance() {
-  const { t } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
