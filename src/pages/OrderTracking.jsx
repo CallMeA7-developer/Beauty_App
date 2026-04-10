@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
@@ -31,6 +32,7 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function OrderTracking() {
+  const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const { wishlistItems } = useWishlist()
@@ -441,7 +443,7 @@ export default function OrderTracking() {
                 </div>
                 <div>
                   <div className="mb-4 lg:mb-[20px]">
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Estimated Delivery</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">{t('orderTracking.estimatedDelivery')}</div>
                     <div className="flex items-center gap-[8px]">
                       <IoCalendarOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
                       <span className="text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">{estimatedDelivery}</span>
