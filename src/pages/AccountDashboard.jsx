@@ -84,19 +84,28 @@ export default function AccountDashboard() {
       if (skinAnalysisRes.data && skinAnalysisRes.data.length > 0) {
         // Pick the latest analysis that has product IDs
         const bestAnalysis = skinAnalysisRes.data.find(a => a.morning_product_ids?.length > 0) || skinAnalysisRes.data[0]
+        console.log('🌸 bestAnalysis:', bestAnalysis)
+        console.log('🌸 morning_product_ids:', bestAnalysis.morning_product_ids)
+        console.log('🌸 evening_product_ids:', bestAnalysis.evening_product_ids)
         setSkinAnalysis(bestAnalysis)
-        // Fetch morning and evening products from skin analysis
-        const fetchByIds = async (ids) => {
-          if (!ids || ids.length === 0) return []
-          const { data } = await supabase.from('products').select('id, name, image_url, img_url').in('id', ids)
-          return data || []
+
+        if (bestAnalysis.morning_product_ids?.length > 0) {
+          const { data: morningData } = await supabase
+            .from('products')
+            .select('id, name, image_url, img_url')
+            .in('id', bestAnalysis.morning_product_ids)
+          console.log('🌸 morningData:', morningData)
+          setMorningProducts(morningData || [])
         }
-        const [morning, evening] = await Promise.all([
-          fetchByIds(bestAnalysis.morning_product_ids),
-          fetchByIds(bestAnalysis.evening_product_ids),
-        ])
-        setMorningProducts(morning)
-        setEveningProducts(evening)
+
+        if (bestAnalysis.evening_product_ids?.length > 0) {
+          const { data: eveningData } = await supabase
+            .from('products')
+            .select('id, name, image_url, img_url')
+            .in('id', bestAnalysis.evening_product_ids)
+          console.log('🌸 eveningData:', eveningData)
+          setEveningProducts(eveningData || [])
+        }
       }
       if (routinesRes.data) setRoutines(routinesRes.data)
       if (reviewsRes.data) setReviews(reviewsRes.data)
