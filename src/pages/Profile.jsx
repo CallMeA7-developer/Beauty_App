@@ -114,7 +114,7 @@ export default function Profile() {
         { icon: IoSparkles,        label: 'Beauty Profile',    path: '/skin-analysis',  badge: null, badgeColor: '' },
         { icon: IoRibbonOutline,  label: 'Loyalty Program',   path: '/account#loyalty',  badge: `${loyaltyPoints.toLocaleString()} pts`,      badgeColor: 'bg-[#8B7355]', scroll: 'loyalty-program'   },
         { icon: IoCalendarOutline,label: 'My Routines',        path: '/beauty-journey',  badge: null,                                         badgeColor: ''                                           },
-        { icon: IoStarSharp,      label: 'Reviews & Ratings', path: '/account',         badge: null,                                         badgeColor: ''                                           },
+        { icon: IoStarSharp,      label: 'Reviews & Ratings', path: '/dashboard#reviews', badge: null,                                        badgeColor: ''                                           },
       ],
     },
     {
