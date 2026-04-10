@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
@@ -296,7 +297,7 @@ function SkinCareMobile() {
         {/* Left text */}
         <div className="relative z-10 px-5 py-10 w-[62%]">
           <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">SCIENCE MEETS NATURE</p>
-          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">Skincare</h1>
+          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">{t('skincare.title')}</h1>
           <p className="text-[13px] font-normal text-[#666666] mb-4">Discover transformative formulas</p>
           <div className="w-[48px] h-[2px] bg-[#C9A870]" />
         </div>
@@ -452,7 +453,7 @@ function SkinCareMobile() {
           <div className="relative bg-white rounded-t-[20px] px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-[#E8E3D9] rounded-full mx-auto mb-5" />
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">Sort By</h3>
+              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">{t('skincare.sortBy')}</h3>
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
@@ -551,7 +552,7 @@ function SkinCareMobile() {
 
               {/* Skin Type */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Type</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.skinType')}</h3>
                 <div className="space-y-3">
                   {filterSkinTypes.map((type) => {
                     const isChecked = selectedSkinTypes.includes(type)
@@ -570,7 +571,7 @@ function SkinCareMobile() {
 
               {/* Skin Concerns */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Concerns</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.skinConcerns')}</h3>
                 <div className="flex flex-wrap gap-2">
                   {filterConcerns.map((concern) => {
                     const isSelected = selectedConcerns.includes(concern)
@@ -819,7 +820,7 @@ function SkinCareDesktop() {
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Shop</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">Skincare</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">{t('skincare.title')}</span>
       </div>
 
       {/* Main Content */}
@@ -829,7 +830,7 @@ function SkinCareDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">REFINE SELECTION</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">{t('skincare.refineSelection')}</h3>
               {activeFilters > 0 && (
                 <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">
                   {activeFilters}
@@ -881,7 +882,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Type</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.skinType')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {skinTypes.map((item) => {
                     const isChecked = selectedSkinTypes.includes(item)
@@ -897,7 +898,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Concerns</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.skinConcerns')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {skinConcerns.map((item) => {
                     const isChecked = selectedConcerns.includes(item)
@@ -913,7 +914,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Ingredients</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.ingredients')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {ingredients.map((item) => {
                     const isChecked = selectedIngredients.includes(item)
@@ -1114,6 +1115,7 @@ function SkinCareDesktop() {
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function SkinCare() {
+  const { t } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
