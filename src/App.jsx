@@ -39,6 +39,7 @@ import FAQ from './pages/FAQ'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsConditions from './pages/TermsConditions'
 import Journal from './pages/Journal'
+import JournalArticle from './pages/JournalArticle'
 import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
@@ -99,6 +100,7 @@ export default function App() {
               <Route path="/privacy-policy"           element={<PrivacyPolicy />} />
               <Route path="/terms-conditions"          element={<TermsConditions />} />
               <Route path="/journal"                    element={<Journal />} />
+              <Route path="/journal/:id"               element={<JournalArticle />} />
 
               {/* Checkout Flow */}
               <Route path="/cart"                    element={<ShoppingBasket />} />
