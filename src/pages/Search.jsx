@@ -4,11 +4,9 @@ import {
   IoClose, IoSearchOutline, IoTimeOutline,
   IoTrendingUp, IoFlame, IoSparkles, IoStarSharp,
   IoCloseCircle, IoCartOutline, IoChevronForward,
-  IoColorPaletteOutline, IoLeafOutline, IoWaterOutline,
 } from 'react-icons/io5'
 import { getSkincareProducts, getMakeupProducts, getFragranceProducts, formatProductsForUI } from '../lib/productsService'
 import { useCart } from '../contexts/CartContext'
-import { useNavigate as useNav } from 'react-router-dom'
 
 const RECENT_KEY = 'shanloray_recent_searches'
 const MAX_RECENT = 6
