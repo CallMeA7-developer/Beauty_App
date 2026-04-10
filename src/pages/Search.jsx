@@ -168,7 +168,26 @@ export default function Search() {
       return
     }
     setLoading(true)
-    const timer = setTimeout(() => doSearch(query.trim()), 400)
+    const q = query.trim()
+    const cat = activeCategory
+    const timer = setTimeout(async () => {
+      try {
+        let qb = supabase
+          .from('products')
+          .select('*')
+          .or(`name.ilike.%${q}%,description.ilike.%${q}%,brand.ilike.%${q}%,subcategory.ilike.%${q}%`)
+          .limit(20)
+        if (cat !== 'All') qb = qb.ilike('category', cat)
+        const { data, error } = await qb
+        if (error) console.error('Supabase error:', error)
+        setResults(data || [])
+      } catch (err) {
+        console.error('Search error:', err)
+        setResults([])
+      } finally {
+        setLoading(false)
+      }
+    }, 400)
     return () => clearTimeout(timer)
   }, [query, activeCategory])
 
@@ -183,25 +202,7 @@ export default function Search() {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  const doSearch = async (q) => {
-    try {
-      let qb = supabase
-        .from('products')
-        .select('*')
-        .or(`name.ilike.%${q}%,description.ilike.%${q}%,brand.ilike.%${q}%,subcategory.ilike.%${q}%`)
-        .limit(20)
 
-      if (activeCategory !== 'All') qb = qb.ilike('category', activeCategory)
-
-      const { data } = await qb
-      setResults(data || [])
-    } catch (err) {
-      console.error('Search error:', err)
-      setResults([])
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const saveRecent = (term) => {
     if (!term.trim()) return
