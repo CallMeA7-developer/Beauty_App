@@ -20,28 +20,4 @@
     "region": "Region: United States",
     "currency": "USD $"
   },
-  "search": {
-    "placeholder": "Search products, skin types, ingredients, brands...",
-    "browseBy": "Browse By",
-    "skinConcerns": "SKIN CONCERNS",
-    "skinTypes": "SKIN TYPES",
-    "keyIngredients": "KEY INGREDIENTS",
-    "makeup": "MAKEUP",
-    "fragrance": "FRAGRANCE",
-    "recentSearches": "Recent Searches",
-    "clearAll": "Clear All",
-    "popularRightNow": "Popular Right Now",
-    "trendingTopics": "Trending Topics",
-    "noResults": "No results for",
-    "tryDifferent": "Try a different search term",
-    "results": "results for",
-    "antiAging": "Anti-Aging",
-    "vitaminC": "Vitamin C",
-    "hydration": "Hydration",
-    "nightRoutine": "Night Routine",
-    "searches24k": "2.4k searches",
-    "searches18k": "1.8k searches",
-    "searches21k": "2.1k searches",
-    "searches15k": "1.5k searches"
-  },
 }
