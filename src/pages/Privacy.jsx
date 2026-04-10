@@ -80,7 +80,7 @@ export default function Privacy() {
     { label: 'Shipping Addresses', icon: IoLocationOutline, path: '/shipping-address', active: false },
     { label: 'Payment Methods', icon: IoCardOutline, path: '/payment-methods', active: false },
     { label: 'Beauty Profile', icon: IoBodyOutline, path: '/skin-analysis', active: false },
-    { label: 'Loyalty Program', icon: IoSparkles, path: '/account', active: false },
+    { label: 'Loyalty Program', icon: IoSparkles, path: '/account', active: false, badge: loyaltyPoints > 0 ? `${loyaltyPoints.toLocaleString()} pts` : null },
     { label: 'My Routines', icon: IoBookOutline, path: '/beauty-journey', active: false },
     { label: 'Reviews & Ratings', icon: IoStarSharp, path: '/dashboard', active: false },
     { label: 'Account Settings', icon: IoSettingsOutline, path: '/privacy-settings', active: true },
@@ -326,9 +326,9 @@ export default function Privacy() {
             <div className="bg-[#F5F1EA] rounded-[12px] p-4 lg:p-[24px] flex items-center gap-4 lg:gap-[16px] mb-5 lg:mb-[24px]">
               <IoDocumentTextOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#8B7355] flex-shrink-0" />
               <div className="flex-1">
-                <span className="text-[14px] lg:text-[16px] font-medium text-[#8B7355] underline cursor-pointer hover:text-[#7a6448] transition-colors block mb-[4px]">
+                <a href="/privacy-policy" className="text-[14px] lg:text-[16px] font-medium text-[#8B7355] underline cursor-pointer hover:text-[#7a6448] transition-colors block mb-[4px]">
                   View Our Complete Privacy Policy
-                </span>
+                </a>
                 <p className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Last updated: December 2024</p>
               </div>
             </div>
