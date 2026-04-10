@@ -211,9 +211,13 @@ function MakeupMobile() {
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
-    if (sub) {
-      setSelectedCategories([sub])
-    }
+    if (sub) setSelectedCategories([sub])
+    const finish = searchParams.get('finish')
+    if (finish) setSelectedFinish([finish])
+    const coverage = searchParams.get('coverage')
+    if (coverage) setSelectedCoverage([coverage])
+    const skinTone = searchParams.get('skinTone')
+    if (skinTone) setSelectedSkinTones([skinTone])
   }, [])
 
   useEffect(() => {
@@ -559,9 +563,13 @@ function MakeupDesktop() {
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
-    if (sub) {
-      setSelectedCategories([sub])
-    }
+    if (sub) setSelectedCategories([sub])
+    const finish = searchParams.get('finish')
+    if (finish) setSelectedFinish([finish])
+    const coverage = searchParams.get('coverage')
+    if (coverage) setSelectedCoverage([coverage])
+    const skinTone = searchParams.get('skinTone')
+    if (skinTone) setSelectedSkinTones([skinTone])
   }, [])
 
   useEffect(() => {
