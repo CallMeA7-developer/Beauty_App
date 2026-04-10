@@ -37,6 +37,7 @@ import Password from './pages/Password'
 import SplashScreen from './pages/SplashScreen'
 import FAQ from './pages/FAQ'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsConditions from './pages/TermsConditions'
 import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
@@ -95,6 +96,7 @@ export default function App() {
               <Route path="/change-password"         element={<Password />} />
               <Route path="/faq"                      element={<FAQ />} />
               <Route path="/privacy-policy"           element={<PrivacyPolicy />} />
+              <Route path="/terms-conditions"          element={<TermsConditions />} />
 
               {/* Checkout Flow */}
               <Route path="/cart"                    element={<ShoppingBasket />} />
