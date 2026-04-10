@@ -219,9 +219,9 @@ function FragranceMobile() {
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
-    if (sub) {
-      setSelectedTypes([sub])
-    }
+    if (sub) setSelectedTypes([sub])
+    const family = searchParams.get('family')
+    if (family) setSelectedFamilies([family])
   }, [])
 
   useEffect(() => {
@@ -593,9 +593,9 @@ function FragranceDesktop() {
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
-    if (sub) {
-      setSelectedTypes([sub])
-    }
+    if (sub) setSelectedTypes([sub])
+    const family = searchParams.get('family')
+    if (family) setSelectedFamilies([family])
   }, [])
 
   useEffect(() => {
