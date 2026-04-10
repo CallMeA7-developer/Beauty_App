@@ -68,7 +68,7 @@ export const confirmedOrder = {
 }
 
 export const helpLinks = [
-  'View Order History',
-  'Contact Customer Service',
-  'Return & Exchange Policy',
+  { label: 'View Order History',       path: '/order-tracking' },
+  { label: 'Contact Customer Service', path: '/faq' },
+  { label: 'Return & Exchange Policy', path: '/terms-conditions#returns' },
 ]
