@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { IoArrowBack, IoTimeOutline, IoCalendarOutline, IoShareSocialOutline, IoHeartOutline, IoCloseOutline, IoLinkOutline, IoLogoWhatsapp, IoLogoInstagram, IoCheckmarkCircle } from 'react-icons/io5'
@@ -563,6 +564,7 @@ const articles = [
 ]
 
 export default function JournalArticle() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const navigate = useNavigate()
   const [liked, setLiked] = useState(false)
@@ -586,7 +588,7 @@ export default function JournalArticle() {
       <div className="min-h-screen bg-[#FDFBF7] font-['Cormorant_Garamond'] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-[28px] font-bold text-[#1A1A1A] mb-4">Article not found</h2>
-          <button onClick={() => navigate('/journal')} className="text-[#8B7355] underline text-[16px]">Back to Journal</button>
+          <button onClick={() => navigate('/journal')} className="text-[#8B7355] underline text-[16px]">{t('journal.backToJournal')}</button>
         </div>
       </div>
     )
@@ -660,7 +662,7 @@ export default function JournalArticle() {
           {/* Share */}
           <div className="mt-12 pt-8 border-t border-[#E8E3D9]">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[14px] text-[#666666]">Did you find this helpful?</span>
+              <span className="text-[14px] text-[#666666]">{t('journal.helpful')}</span>
               <div className="flex gap-3">
                 <button
                   onClick={handleLike}
@@ -684,7 +686,7 @@ export default function JournalArticle() {
             {showShare && (
               <div className="bg-[#FDFBF7] border border-[#E8E3D9] rounded-[16px] p-5 lg:p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-[16px] font-semibold text-[#1A1A1A]">Share this article</h4>
+                  <h4 className="text-[16px] font-semibold text-[#1A1A1A]">{t('journal.shareArticle')}</h4>
                   <button onClick={() => setShowShare(false)}>
                     <IoCloseOutline className="w-[20px] h-[20px] text-[#999999] hover:text-[#1A1A1A]" />
                   </button>
