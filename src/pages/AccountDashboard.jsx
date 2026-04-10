@@ -91,16 +91,20 @@ export default function AccountDashboard() {
         const allEveningIds = Array.isArray(bestAnalysis.evening_product_ids) ? bestAnalysis.evening_product_ids.slice(0, 3) : []
         const allIds = [...new Set([...allMorningIds, ...allEveningIds])]
 
-        if (allIds.length > 0) {
-          const { data: allProducts } = await supabase
+        if (allMorningIds.length > 0) {
+          const { data: mProds } = await supabase
             .from('products')
-            .select('id, name, image_url, img_url')
-            .or(allIds.map(id => `id.eq.${id}`).join(','))
+            .select('*')
+            .in('id', allMorningIds)
+          setMorningProducts(mProds || [])
+        }
 
-          if (allProducts) {
-            setMorningProducts(allProducts.filter(p => allMorningIds.includes(p.id)))
-            setEveningProducts(allProducts.filter(p => allEveningIds.includes(p.id)))
-          }
+        if (allEveningIds.length > 0) {
+          const { data: eProds } = await supabase
+            .from('products')
+            .select('*')
+            .in('id', allEveningIds)
+          setEveningProducts(eProds || [])
         }
       }
       if (routinesRes.data) setRoutines(routinesRes.data)
