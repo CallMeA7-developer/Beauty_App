@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -15,6 +16,7 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function DeliveryInfo() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
   const { cartItems } = useCart()
@@ -189,7 +191,7 @@ export default function DeliveryInfo() {
 
             {/* Delivery Info Card */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Delivery Information</h2>
+              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">{t('checkout.deliveryInfo')}</h2>
 
               {/* Saved Addresses */}
               {addresses.length > 0 && (
@@ -265,7 +267,7 @@ export default function DeliveryInfo() {
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Phone Number</label>
+                      <label className={labelClass}>{t('checkout.phone')}</label>
                       <input
                         type="tel"
                         name="phone"
@@ -276,7 +278,7 @@ export default function DeliveryInfo() {
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Street Address</label>
+                      <label className={labelClass}>{t('checkout.address')}</label>
                       <input
                         type="text"
                         name="street"
@@ -288,7 +290,7 @@ export default function DeliveryInfo() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px]">
                       <div>
-                        <label className={labelClass}>City</label>
+                        <label className={labelClass}>{t('checkout.city')}</label>
                         <input
                           type="text"
                           name="city"
@@ -323,7 +325,7 @@ export default function DeliveryInfo() {
                         />
                       </div>
                       <div>
-                        <label className={labelClass}>Country</label>
+                        <label className={labelClass}>{t('checkout.country')}</label>
                         <select
                           name="country"
                           value={formData.country}
