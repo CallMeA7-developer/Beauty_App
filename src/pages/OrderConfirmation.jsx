@@ -14,8 +14,8 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
-export default function OrderConfirmation()
-  const navigate = useNavigate() {
+export default function OrderConfirmation() {
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const [order, setOrder] = useState(null)
