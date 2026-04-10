@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -84,7 +85,7 @@ function SortSheet({ isOpen, onClose, selected, onSelect }) {
           <div className="w-10 h-1 bg-[#E8E3D9] rounded-full" />
         </div>
         <div className="flex items-center justify-between px-5 pb-3 border-b border-[#F5F1EA]">
-          <span className="text-[18px] font-semibold text-[#1A1A1A]">Sort By</span>
+          <span className="text-[18px] font-semibold text-[#1A1A1A]">{t('wishlist.sortBy')}</span>
           <button onClick={onClose}><IoCloseOutline className="w-6 h-6 text-[#666666]" /></button>
         </div>
         <div className="py-2">
@@ -287,7 +288,7 @@ function ShareModal({ isOpen, onClose }) {
           {/* Header */}
           <div className="px-6 py-5 flex items-start justify-between border-b border-[#F5F1EA]">
             <div>
-              <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-1">Share Wishlist</h2>
+              <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-1">{t('wishlist.shareWishlist')}</h2>
               <p className="text-[15px] font-normal text-[#666666]">Share your curated collection</p>
             </div>
             <button onClick={onClose} className="w-6 h-6 flex items-center justify-center mt-1">
@@ -405,7 +406,7 @@ function WishlistMobile() {
 
       {/* Title */}
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] px-6 py-6 flex-shrink-0">
-        <h1 className="text-[32px] font-semibold text-[#1A1A1A] mb-1">My Wishlist</h1>
+        <h1 className="text-[32px] font-semibold text-[#1A1A1A] mb-1">{t('wishlist.title')}</h1>
         <p className="text-[16px] font-normal text-[#666666]">{wishlistCount} saved {wishlistCount === 1 ? 'treasure' : 'treasures'}</p>
       </div>
 
@@ -606,7 +607,7 @@ function WishlistDesktop() {
       {/* Page Header */}
       <div className="min-h-[100px] md:min-h-[120px] lg:min-h-[140px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-6 md:px-[60px] lg:px-[120px]">
         <div className="max-w-[1200px] w-full">
-          <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold text-[#1A1A1A]">My Wishlist</h1>
+          <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold text-[#1A1A1A]">{t('wishlist.title')}</h1>
           <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">{wishlistCount} saved {wishlistCount === 1 ? 'item' : 'items'} awaiting your attention</p>
         </div>
       </div>
@@ -783,7 +784,7 @@ function WishlistDesktop() {
                   Clear All Items
                 </button>
                 <Link to="/collections">
-                  <button className="w-full sm:w-auto h-[44px] lg:h-[48px] px-6 lg:px-[32px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all">Continue Shopping</button>
+                  <button className="w-full sm:w-auto h-[44px] lg:h-[48px] px-6 lg:px-[32px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all">{t('wishlist.continueShopping')}</button>
                 </Link>
               </div>
             )}
@@ -830,6 +831,7 @@ function WishlistDesktop() {
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function Wishlist() {
+  const { t } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
