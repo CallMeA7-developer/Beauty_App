@@ -775,37 +775,37 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
         <div className="max-w-[1200px] mx-auto">
           {allAnalyses.length > 0 ? (
-            <div className="space-y-4 mb-8">
+            <div className="flex gap-4 overflow-x-auto pb-4 mb-8">
               {allAnalyses.map((analysis, index) => (
-                <div key={index} className="bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 md:p-6 lg:p-[32px] flex flex-col sm:flex-row items-center gap-6">
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div className="w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] rounded-[12px] bg-[#C9A870] flex items-center justify-center mb-3">
-                      <IoSparklesOutline className="w-[36px] h-[36px] lg:w-[44px] lg:h-[44px] text-white" />
+                <div key={index} className="bg-gradient-to-b from-[#F5F1EA] to-white rounded-[16px] p-5 lg:p-[24px] flex-shrink-0 w-[240px] lg:w-[280px] flex flex-col items-center text-center">
+                  <div className="relative mb-3">
+                    <div className="w-[80px] h-[80px] rounded-full bg-[#C9A870] flex items-center justify-center">
+                      <IoSparklesOutline className="w-[36px] h-[36px] text-white" />
                     </div>
-                    <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-1">{analysis.skin_score}/100</div>
-                    <div className="px-3 py-1 bg-white rounded-full text-[11px] lg:text-[12px] text-[#8B7355] font-medium border border-[#E8E3D9]">
-                      {analysis.skin_label || 'Analysis'}
-                    </div>
+                    {index === 0 && (
+                      <span className="absolute -top-2 -right-2 bg-[#8B7355] text-white text-[9px] px-2 py-0.5 rounded-full whitespace-nowrap">Latest</span>
+                    )}
                   </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start">
-                      <IoCalendarOutline className="w-[16px] h-[16px] text-[#8B7355]" />
-                      <span className="text-[13px] lg:text-[14px] text-[#666666]">{formatDate(new Date(analysis.created_at))}</span>
-                      {index === 0 && <span className="bg-[#8B7355] text-white text-[10px] px-2 py-0.5 rounded-full">Latest</span>}
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
-                      {[
-                        { label: 'Hydration', value: analysis.metrics?.hydration },
-                        { label: 'Texture', value: analysis.metrics?.texture },
-                        { label: 'Clarity', value: analysis.metrics?.clarity },
-                        { label: 'Tone', value: analysis.metrics?.toneEvenness },
-                      ].map((m) => m.value != null && (
-                        <div key={m.label} className="bg-white rounded-[8px] p-2 text-center border border-[#E8E3D9]">
-                          <div className="text-[14px] lg:text-[16px] font-bold text-[#8B7355]">{m.value}%</div>
-                          <div className="text-[11px] text-[#666666]">{m.label}</div>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="text-[28px] lg:text-[32px] font-bold text-[#8B7355] mb-1">{analysis.skin_score}/100</div>
+                  <div className="px-3 py-1 bg-white rounded-full text-[11px] text-[#8B7355] font-medium border border-[#E8E3D9] mb-3">
+                    {analysis.skin_label || 'Analysis'}
+                  </div>
+                  <div className="flex items-center gap-1 mb-4">
+                    <IoCalendarOutline className="w-[13px] h-[13px] text-[#8B7355]" />
+                    <span className="text-[11px] lg:text-[12px] text-[#666666]">{formatDate(new Date(analysis.created_at))}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 w-full">
+                    {[
+                      { label: 'Hydration', value: analysis.metrics?.hydration },
+                      { label: 'Texture', value: analysis.metrics?.texture },
+                      { label: 'Clarity', value: analysis.metrics?.clarity },
+                      { label: 'Tone', value: analysis.metrics?.toneEvenness },
+                    ].map((m) => m.value != null && (
+                      <div key={m.label} className="bg-white rounded-[8px] p-2 text-center border border-[#E8E3D9]">
+                        <div className="text-[13px] lg:text-[14px] font-bold text-[#8B7355]">{m.value}%</div>
+                        <div className="text-[10px] text-[#666666]">{m.label}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
