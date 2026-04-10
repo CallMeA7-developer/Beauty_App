@@ -459,7 +459,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
         <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
           <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
-          <h1 className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">{t('skinAnalysis.title')}</h1>
+          <h1 className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">title</h1>
           <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Advanced AI technology analyzes your skin in seconds with medical-grade precision</p>
           <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
@@ -480,17 +480,17 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       {/* Upload Section */}
       <div id="upload-section" className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
         <div className="max-w-[1200px] mx-auto">
-          <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.startAnalysis')}</h2>
+          <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">startAnalysis</h2>
           <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Upload a clear photo or use our questionnaire below</p>
           <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
             <div className="min-h-[280px] md:min-h-[340px] lg:min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center px-4 py-8 lg:py-0">
               <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-4" />
-              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">{t('skinAnalysis.uploadPhoto')}</h3>
+              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">uploadPhoto</h3>
               <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 text-center">Drag and drop your photo here or click to browse</p>
               {showUploadMessage ? (
                 <div className="bg-[#F5F1EA] border border-[#C9A870] rounded-[8px] px-6 py-4 text-center max-w-[360px]">
                   <IoSparklesOutline className="w-[24px] h-[24px] text-[#8B7355] mx-auto mb-2" />
-                  <p className="text-[14px] font-medium text-[#8B7355] mb-1">{t('skinAnalysis.workingOnFeature')}</p>
+                  <p className="text-[14px] font-medium text-[#8B7355] mb-1">workingOnFeature</p>
                   <p className="text-[13px] text-[#666666]">In the meantime, please use the questionnaire below to get your skin analysis.</p>
                   <button
                     onClick={() => document.getElementById('questionnaire-section')?.scrollIntoView({ behavior: 'smooth' })}
@@ -528,7 +528,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
       {/* Questionnaire */}
       <div id="questionnaire-section" className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
-        <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.tellUsAboutSkin')}</h2>
+        <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">tellUsAboutSkin</h2>
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Help us understand your unique skin concerns</p>
 
         {error && (
@@ -546,7 +546,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Primary Concern */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.primaryConcern')}</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">primaryConcern</h3>
             <div className="grid grid-cols-2 gap-3">
               {skinConcerns.map((concern) => (
                 <button key={concern} onClick={() => setSelectedConcern(concern)}
@@ -559,7 +559,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Skin Type */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.skinType')}</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">skinType</h3>
             <div className="grid grid-cols-3 gap-3">
               {skinTypes.map((type) => (
                 <button key={type} onClick={() => setSelectedSkinType(type)}
@@ -572,7 +572,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Current Routine */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.currentRoutine')}</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">currentRoutine</h3>
             <select value={selectedRoutine} onChange={(e) => setSelectedRoutine(e.target.value)}
               className="w-full h-[48px] lg:h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] px-5 text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] cursor-pointer outline-none">
               <option>Minimal (1-3 products)</option>
@@ -583,7 +583,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Sun Exposure */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.sunExposure')}</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">sunExposure</h3>
             <div className="flex gap-3">
               {['Minimal', 'Moderate', 'High'].map((level) => (
                 <button key={level} onClick={() => setSunExposure(level)}
@@ -596,7 +596,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Age Range */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.ageRange')}</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">ageRange</h3>
             <div className="grid grid-cols-3 gap-3">
               {ageRanges.map((range) => (
                 <button key={range} onClick={() => setSelectedAge(range)}
@@ -609,7 +609,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Specific Concerns */}
           <div className="md:col-span-2 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.specificConcerns')}</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">specificConcerns</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {specificConcerns.map((concern) => (
                 <label key={concern} className="flex items-center gap-3 cursor-pointer" onClick={() => toggleSpecificConcern(concern)}>
@@ -640,7 +640,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       {/* Analysis Results */}
       {analysisResult && (
         <div id="results-section" className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
-          <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.resultsTitle')}</h2>
+          <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">resultsTitle</h2>
           <div className="flex justify-center mb-8 lg:mb-12">
             <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">
               <IoCheckmarkCircle className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
@@ -693,13 +693,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       {/* Product Recommendations */}
       {analysisResult && (
         <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
-          <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.personalizedRecs')}</h2>
+          <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">personalizedRecs</h2>
           <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Curated specifically for your skin analysis results</p>
 
           {/* Step 1: Morning */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
-            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">{t('skinAnalysis.morningTitle')}</h3>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">morningTitle</h3>
             {recommendedProducts.morning.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
                 {recommendedProducts.morning.map((product) => (
@@ -714,7 +714,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           {/* Step 2: Evening */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
-            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">{t('skinAnalysis.eveningTitle')}</h3>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">eveningTitle</h3>
             {recommendedProducts.evening.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
                 {recommendedProducts.evening.map((product) => (
@@ -729,7 +729,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           {/* Step 3: Targeted */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
             <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
-            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">{t('skinAnalysis.targetedTitle')}</h3>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">targetedTitle</h3>
             {recommendedProducts.targeted.length > 0 ? (
               <div className={`grid ${getGridCols(recommendedProducts.targeted.length)} gap-4 lg:gap-5`}>
                 {recommendedProducts.targeted.map((product) => (
@@ -772,7 +772,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
       {/* Track Your Skin Journey */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-4 lg:mb-6">{t('skinAnalysis.trackJourney')}</h2>
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-4 lg:mb-6">trackJourney</h2>
         <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">Monitor improvements with regular skin analysis</p>
 
         <div className="max-w-[1200px] mx-auto">
@@ -785,7 +785,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                       <IoSparklesOutline className="w-[36px] h-[36px] text-white" />
                     </div>
                     {index === 0 && (
-                      <span className="absolute -top-2 -right-2 bg-[#8B7355] text-white text-[9px] px-2 py-0.5 rounded-full whitespace-nowrap">{t('skinAnalysis.latest')}</span>
+                      <span className="absolute -top-2 -right-2 bg-[#8B7355] text-white text-[9px] px-2 py-0.5 rounded-full whitespace-nowrap">latest</span>
                     )}
                   </div>
                   <div className="text-[28px] lg:text-[32px] font-bold text-[#8B7355] mb-1">{analysis.skin_score}/100</div>
@@ -817,7 +817,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
               <div className="w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] rounded-full bg-[#F5F1EA] flex items-center justify-center mb-6">
                 <IoSparklesOutline className="w-[36px] h-[36px] lg:w-[44px] lg:h-[44px] text-[#C9A870]" />
               </div>
-              <h3 className="text-[18px] lg:text-[22px] font-medium text-[#1A1A1A] mb-3">{t('skinAnalysis.noAnalysisYet')}</h3>
+              <h3 className="text-[18px] lg:text-[22px] font-medium text-[#1A1A1A] mb-3">noAnalysisYet</h3>
               <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] max-w-[380px]">Complete your first skin analysis above to start tracking your skin journey over time.</p>
             </div>
           )}
@@ -840,7 +840,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
             <div className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(139,115,85,0.2)] w-full max-w-[420px] p-6 lg:p-8 font-['Cormorant_Garamond']">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A]">{t('skinAnalysis.scheduleNext')}</h3>
+                <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A]">scheduleNext</h3>
                 <button onClick={() => { setShowCalendar(false); setScheduleSuccess(false) }}>
                   <IoCloseOutline className="w-[24px] h-[24px] text-[#666666] hover:text-[#1A1A1A]" />
                 </button>
