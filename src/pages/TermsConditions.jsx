@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { IoChevronDown, IoDocumentTextOutline, IoShieldCheckmarkOutline, IoCartOutline, IoRefreshOutline, IoCardOutline, IoGlobeOutline } from 'react-icons/io5'
 
@@ -136,7 +136,18 @@ const sections = [
 ]
 
 export default function TermsConditions() {
-  const [openSections, setOpenSections] = useState({})
+  const [openSections, setOpenSections] = useState(() => {
+    if (window.location.hash === '#returns') return { 3: true }
+    return {}
+  })
+
+  useEffect(() => {
+    if (window.location.hash === '#returns') {
+      setTimeout(() => {
+        document.getElementById('returns')?.scrollIntoView({ behavior: 'smooth' })
+      }, 300)
+    }
+  }, [])
 
   const toggle = (index) => {
     setOpenSections(prev => ({ ...prev, [index]: !prev[index] }))
@@ -182,7 +193,7 @@ export default function TermsConditions() {
           {/* Sections */}
           <div className="space-y-4 mb-12">
             {sections.map((section, sIndex) => (
-              <div key={sIndex} className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden">
+              <div key={sIndex} id={sIndex === 3 ? 'returns' : undefined} className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden">
                 <button
                   onClick={() => toggle(sIndex)}
                   className="w-full flex items-center justify-between px-5 lg:px-6 py-5 text-left hover:bg-[#FDFBF7] transition-colors"
