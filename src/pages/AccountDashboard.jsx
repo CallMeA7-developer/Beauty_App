@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -30,7 +29,6 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function AccountDashboard() {
-  const { t } = useTranslation()
   const { user, signOut } = useAuth()
   const { wishlistItems } = useWishlist()
   const navigate = useNavigate()
@@ -330,7 +328,7 @@ export default function AccountDashboard() {
             {/* Personal Info */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('account.personalInfo')}</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Personal Information</h3>
                 {!editMode && (
                   <button
                     onClick={() => setEditMode(true)}
@@ -685,10 +683,10 @@ export default function AccountDashboard() {
             {/* Saved Routines */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('account.savedRoutines')}</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Saved Routines</h3>
                 {skinAnalysis && (
                   <Link to="/beauty-journey">
-                    <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">{t('account.viewAllRoutines')}</button>
+                    <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">View All Routines</button>
                   </Link>
                 )}
               </div>
@@ -696,7 +694,7 @@ export default function AccountDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[20px]">
                   {/* Morning Ritual */}
                   <div className="border border-[#E8E3D9] rounded-[8px] p-4 lg:p-[20px] hover:border-[#C9A870] transition-colors">
-                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{t('account.morningRitual')}</h4>
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">Morning Ritual</h4>
                     <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-4 lg:mb-[16px]">
                       {morningProducts.length} products
                     </div>
@@ -708,7 +706,7 @@ export default function AccountDashboard() {
                   </div>
                   {/* Evening Care */}
                   <div className="border border-[#E8E3D9] rounded-[8px] p-4 lg:p-[20px] hover:border-[#C9A870] transition-colors">
-                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{t('account.eveningCare')}</h4>
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">Evening Care</h4>
                     <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-4 lg:mb-[16px]">
                       {eveningProducts.length} products
                     </div>
@@ -735,7 +733,7 @@ export default function AccountDashboard() {
             {/* Recent Reviews */}
             <div id="reviews" className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('account.recentReviews')}</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Recent Reviews</h3>
                 {reviews.length > 2 && (
                   <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">View All Reviews</button>
                 )}
