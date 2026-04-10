@@ -76,7 +76,7 @@ export default function Notifications() {
     { label: 'Shipping Addresses', icon: IoLocationOutline, path: '/shipping-address', active: false },
     { label: 'Payment Methods', icon: IoCardOutline, path: '/payment-methods', active: false },
     { label: 'Beauty Profile', icon: IoBodyOutline, path: '/skin-analysis', active: false },
-    { label: 'Loyalty Program', icon: IoSparkles, path: '/account', active: false },
+    { label: 'Loyalty Program', icon: IoSparkles, path: '/account', active: false, badge: loyaltyPoints > 0 ? `${loyaltyPoints.toLocaleString()} pts` : null },
     { label: 'My Routines', icon: IoBookOutline, path: '/beauty-journey', active: false },
     { label: 'Reviews & Ratings', icon: IoStarSharp, path: '/dashboard', active: false },
     { label: 'Account Settings', icon: IoSettingsOutline, path: '/privacy-settings', active: false },
