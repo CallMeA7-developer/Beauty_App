@@ -83,28 +83,27 @@ export default function AccountDashboard() {
 
       if (skinAnalysisRes.data && skinAnalysisRes.data.length > 0) {
         // Pick the latest analysis that has product IDs
-        const bestAnalysis = skinAnalysisRes.data.find(a => a.morning_product_ids?.length > 0) || skinAnalysisRes.data[0]
-        console.log('🌸 bestAnalysis:', bestAnalysis)
-        console.log('🌸 morning_product_ids:', bestAnalysis.morning_product_ids)
-        console.log('🌸 evening_product_ids:', bestAnalysis.evening_product_ids)
+        const bestAnalysis = skinAnalysisRes.data.find(a => Array.isArray(a.morning_product_ids) && a.morning_product_ids.length > 0) || skinAnalysisRes.data[0]
         setSkinAnalysis(bestAnalysis)
 
-        if (bestAnalysis.morning_product_ids?.length > 0) {
-          const { data: morningData } = await supabase
-            .from('products')
-            .select('id, name, image_url, img_url')
-            .in('id', bestAnalysis.morning_product_ids)
-          console.log('🌸 morningData:', morningData)
-          setMorningProducts(morningData || [])
+        // Fetch morning products one by one to avoid query issues
+        if (Array.isArray(bestAnalysis.morning_product_ids) && bestAnalysis.morning_product_ids.length > 0) {
+          const morningResults = []
+          for (const id of bestAnalysis.morning_product_ids.slice(0, 3)) {
+            const { data } = await supabase.from('products').select('id, name, image_url, img_url').eq('id', id).maybeSingle()
+            if (data) morningResults.push(data)
+          }
+          setMorningProducts(morningResults)
         }
 
-        if (bestAnalysis.evening_product_ids?.length > 0) {
-          const { data: eveningData } = await supabase
-            .from('products')
-            .select('id, name, image_url, img_url')
-            .in('id', bestAnalysis.evening_product_ids)
-          console.log('🌸 eveningData:', eveningData)
-          setEveningProducts(eveningData || [])
+        // Fetch evening products one by one to avoid query issues
+        if (Array.isArray(bestAnalysis.evening_product_ids) && bestAnalysis.evening_product_ids.length > 0) {
+          const eveningResults = []
+          for (const id of bestAnalysis.evening_product_ids.slice(0, 3)) {
+            const { data } = await supabase.from('products').select('id, name, image_url, img_url').eq('id', id).maybeSingle()
+            if (data) eveningResults.push(data)
+          }
+          setEveningProducts(eveningResults)
         }
       }
       if (routinesRes.data) setRoutines(routinesRes.data)
