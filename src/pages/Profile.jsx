@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -25,7 +24,6 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function Profile() {
-  const { t } = useTranslation()
   const { user, signOut } = useAuth()
   const { wishlistItems } = useWishlist()
   const navigate = useNavigate()
@@ -167,7 +165,7 @@ export default function Profile() {
           <div className="hidden sm:block bg-white border-2 border-[#C9A870] rounded-[16px] p-5 lg:p-[32px] text-center shadow-[0_4px_16px_rgba(201,168,112,0.15)] flex-shrink-0">
             <IoSparkles className="w-[28px] h-[28px] md:w-[32px] md:h-[32px] lg:w-[40px] lg:h-[40px] text-[#C9A870] mx-auto mb-2 lg:mb-3" />
             <div className="text-[28px] md:text-[34px] lg:text-[40px] font-bold text-[#8B7355] mb-1">{loyaltyPoints.toLocaleString()}</div>
-            <div className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#666666]">{t('account.loyaltyPoints')}</div>
+            <div className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#666666]">Loyalty Points</div>
             <button className="mt-3 lg:mt-4 px-4 lg:px-5 h-[36px] lg:h-[40px] bg-[#8B7355] text-white text-[12px] lg:text-[13px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
               Redeem
             </button>
@@ -243,7 +241,7 @@ export default function Profile() {
             <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-4 lg:p-[20px]">
               <button onClick={handleSignOut} className="w-full h-[48px] lg:h-[52px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[10px] cursor-pointer hover:border-[#8B7355] group transition-colors">
                 <IoLogOutOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666] group-hover:text-[#8B7355] transition-colors" />
-                <span className="text-[14px] lg:text-[15px] font-medium text-[#666666] group-hover:text-[#8B7355] transition-colors">{t('account.signOut')}</span>
+                <span className="text-[14px] lg:text-[15px] font-medium text-[#666666] group-hover:text-[#8B7355] transition-colors">Sign Out</span>
               </button>
             </div>
           </div>
@@ -396,7 +394,7 @@ export default function Profile() {
             <div id="loyalty-program" />
             <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] rounded-[16px] border border-[#E8E3D9] p-5 md:p-6 lg:p-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-6">
-                <h2 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A]">{t('account.loyaltyProgram')}</h2>
+                <h2 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A]">Loyalty Program</h2>
                 <span className="px-3 lg:px-4 py-[6px] lg:py-2 bg-[#8B7355] text-white text-[12px] lg:text-[13px] font-medium rounded-full">
                   {loyaltyPoints >= 3000 ? 'Gold Member' : loyaltyPoints >= 2000 ? 'Elite Member' : 'Member'}
                 </span>
