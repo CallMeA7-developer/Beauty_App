@@ -86,24 +86,21 @@ export default function AccountDashboard() {
         const bestAnalysis = skinAnalysisRes.data.find(a => Array.isArray(a.morning_product_ids) && a.morning_product_ids.length > 0) || skinAnalysisRes.data[0]
         setSkinAnalysis(bestAnalysis)
 
-        // Fetch morning products one by one to avoid query issues
-        if (Array.isArray(bestAnalysis.morning_product_ids) && bestAnalysis.morning_product_ids.length > 0) {
-          const morningResults = []
-          for (const id of bestAnalysis.morning_product_ids.slice(0, 3)) {
-            const { data } = await supabase.from('products').select('id, name, image_url, img_url').eq('id', id).maybeSingle()
-            if (data) morningResults.push(data)
-          }
-          setMorningProducts(morningResults)
-        }
+        // Fetch all products and filter by IDs in JavaScript to avoid Supabase query encoding issues
+        const allMorningIds = Array.isArray(bestAnalysis.morning_product_ids) ? bestAnalysis.morning_product_ids.slice(0, 3) : []
+        const allEveningIds = Array.isArray(bestAnalysis.evening_product_ids) ? bestAnalysis.evening_product_ids.slice(0, 3) : []
+        const allIds = [...new Set([...allMorningIds, ...allEveningIds])]
 
-        // Fetch evening products one by one to avoid query issues
-        if (Array.isArray(bestAnalysis.evening_product_ids) && bestAnalysis.evening_product_ids.length > 0) {
-          const eveningResults = []
-          for (const id of bestAnalysis.evening_product_ids.slice(0, 3)) {
-            const { data } = await supabase.from('products').select('id, name, image_url, img_url').eq('id', id).maybeSingle()
-            if (data) eveningResults.push(data)
+        if (allIds.length > 0) {
+          const { data: allProducts } = await supabase
+            .from('products')
+            .select('id, name, image_url, img_url')
+            .or(allIds.map(id => `id.eq.${id}`).join(','))
+
+          if (allProducts) {
+            setMorningProducts(allProducts.filter(p => allMorningIds.includes(p.id)))
+            setEveningProducts(allProducts.filter(p => allEveningIds.includes(p.id)))
           }
-          setEveningProducts(eveningResults)
         }
       }
       if (routinesRes.data) setRoutines(routinesRes.data)
