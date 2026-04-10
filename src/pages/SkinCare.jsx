@@ -173,9 +173,15 @@ function SkinCareMobile() {
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
-    if (sub) {
-      setSelectedSubcategories([sub])
-    }
+    if (sub) setSelectedSubcategories([sub])
+    const skinType = searchParams.get('skinType')
+    if (skinType) setSelectedSkinTypes([skinType])
+    const concern = searchParams.get('concern')
+    if (concern) setSelectedConcerns([concern])
+    const ingredient = searchParams.get('ingredient')
+    if (ingredient) setSelectedIngredients([ingredient])
+    const brand = searchParams.get('brand')
+    if (brand) setSelectedBrands([brand])
   }, [])
 
   useEffect(() => {
@@ -679,9 +685,15 @@ function SkinCareDesktop() {
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
-    if (sub) {
-      setSelectedSubcategories([sub])
-    }
+    if (sub) setSelectedSubcategories([sub])
+    const skinType = searchParams.get('skinType')
+    if (skinType) setSelectedSkinTypes([skinType])
+    const concern = searchParams.get('concern')
+    if (concern) setSelectedConcerns([concern])
+    const ingredient = searchParams.get('ingredient')
+    if (ingredient) setSelectedIngredients([ingredient])
+    const brand = searchParams.get('brand')
+    if (brand) setSelectedBrands([brand])
   }, [])
 
   useEffect(() => {
