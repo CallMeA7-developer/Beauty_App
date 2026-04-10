@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { IoArrowBack, IoTimeOutline, IoCalendarOutline, IoShareSocialOutline, IoHeartOutline } from 'react-icons/io5'
+import { useState } from 'react'
+import { IoArrowBack, IoTimeOutline, IoCalendarOutline, IoShareSocialOutline, IoHeartOutline, IoCloseOutline, IoLinkOutline, IoLogoWhatsapp, IoLogoInstagram, IoCheckmarkCircle } from 'react-icons/io5'
 
 const categoryColors = {
   Skincare: 'bg-[#E8F4F0] text-[#2D7D62]',
@@ -564,7 +565,21 @@ const articles = [
 export default function JournalArticle() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [liked, setLiked] = useState(false)
+  const [showShare, setShowShare] = useState(false)
+  const [copied, setCopied] = useState(false)
   const article = articles.find(a => a.id === parseInt(id))
+
+  const handleLike = () => setLiked(true)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(window.location.href)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2500)
+  }
+
+  const articleUrl = encodeURIComponent(window.location.href)
+  const articleTitle = encodeURIComponent(article?.title || '')
 
   if (!article) {
     return (
@@ -643,16 +658,72 @@ export default function JournalArticle() {
           })}
 
           {/* Share */}
-          <div className="mt-12 pt-8 border-t border-[#E8E3D9] flex items-center justify-between">
-            <span className="text-[14px] text-[#666666]">Did you find this helpful?</span>
-            <div className="flex gap-3">
-              <button className="flex items-center gap-2 h-[40px] px-5 bg-[#F5F1EA] text-[#8B7355] text-[13px] font-medium rounded-full hover:bg-[#E8E3D9] transition-colors">
-                <IoHeartOutline className="w-[15px] h-[15px]" /> Like
-              </button>
-              <button className="flex items-center gap-2 h-[40px] px-5 bg-[#F5F1EA] text-[#8B7355] text-[13px] font-medium rounded-full hover:bg-[#E8E3D9] transition-colors">
-                <IoShareSocialOutline className="w-[15px] h-[15px]" /> Share
-              </button>
+          <div className="mt-12 pt-8 border-t border-[#E8E3D9]">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[14px] text-[#666666]">Did you find this helpful?</span>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleLike}
+                  className={`flex items-center gap-2 h-[40px] px-5 text-[13px] font-medium rounded-full transition-all ${
+                    liked
+                      ? 'bg-[#C9A870] text-white'
+                      : 'bg-[#F5F1EA] text-[#8B7355] hover:bg-[#E8E3D9]'
+                  }`}>
+                  <IoHeartOutline className="w-[15px] h-[15px]" />
+                  {liked ? 'Thanks darling! 🌹' : 'Like'}
+                </button>
+                <button
+                  onClick={() => setShowShare(!showShare)}
+                  className="flex items-center gap-2 h-[40px] px-5 bg-[#F5F1EA] text-[#8B7355] text-[13px] font-medium rounded-full hover:bg-[#E8E3D9] transition-colors">
+                  <IoShareSocialOutline className="w-[15px] h-[15px]" /> Share
+                </button>
+              </div>
             </div>
+
+            {/* Share Panel */}
+            {showShare && (
+              <div className="bg-[#FDFBF7] border border-[#E8E3D9] rounded-[16px] p-5 lg:p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-[16px] font-semibold text-[#1A1A1A]">Share this article</h4>
+                  <button onClick={() => setShowShare(false)}>
+                    <IoCloseOutline className="w-[20px] h-[20px] text-[#999999] hover:text-[#1A1A1A]" />
+                  </button>
+                </div>
+
+                {/* Copy Link */}
+                <div className="flex items-center gap-3 bg-white border border-[#E8E3D9] rounded-[10px] p-3 mb-4">
+                  <div className="flex-1 text-[12px] text-[#666666] truncate">{window.location.href}</div>
+                  <button
+                    onClick={handleCopy}
+                    className={`flex items-center gap-1.5 h-[34px] px-4 rounded-[8px] text-[12px] font-medium transition-all flex-shrink-0 ${
+                      copied ? 'bg-green-100 text-green-600' : 'bg-[#8B7355] text-white hover:bg-[#7a6448]'
+                    }`}>
+                    {copied ? <><IoCheckmarkCircle className="w-[14px] h-[14px]" /> Copied!</> : <><IoLinkOutline className="w-[14px] h-[14px]" /> Copy Link</>}
+                  </button>
+                </div>
+
+                {/* Social Share */}
+                <div className="grid grid-cols-2 gap-3">
+                  <a
+                    href={`https://wa.me/?text=${articleTitle}%20${articleUrl}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-3 p-3 bg-[#25D366] text-white rounded-[10px] hover:opacity-90 transition-opacity">
+                    <IoLogoWhatsapp className="w-[20px] h-[20px]" />
+                    <span className="text-[13px] font-medium">WhatsApp</span>
+                  </a>
+                  <a
+                    href="https://www.instagram.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-3 p-3 rounded-[10px] hover:opacity-90 transition-opacity"
+                    style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)' }}>
+                    <IoLogoInstagram className="w-[20px] h-[20px] text-white" />
+                    <span className="text-[13px] font-medium text-white">Instagram</span>
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
