@@ -52,6 +52,14 @@ export default function AccountDashboard() {
     }
   }, [user])
 
+  useEffect(() => {
+    if (window.location.hash === '#reviews') {
+      setTimeout(() => {
+        document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' })
+      }, 800)
+    }
+  }, [])
+
   async function fetchAllData() {
     try {
       const [
@@ -723,6 +731,7 @@ export default function AccountDashboard() {
             </div>
 
             {/* Recent Reviews */}
+            <div id="reviews" />
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
                 <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Recent Reviews</h3>
