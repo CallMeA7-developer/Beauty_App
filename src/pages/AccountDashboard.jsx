@@ -54,11 +54,17 @@ export default function AccountDashboard() {
 
   useEffect(() => {
     if (window.location.hash === '#reviews') {
-      setTimeout(() => {
-        document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' })
-      }, 800)
+      const tryScroll = (attempts = 0) => {
+        const el = document.getElementById('reviews')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        } else if (attempts < 10) {
+          setTimeout(() => tryScroll(attempts + 1), 300)
+        }
+      }
+      setTimeout(() => tryScroll(), 500)
     }
-  }, [])
+  }, [loading])
 
   async function fetchAllData() {
     try {
