@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
+import i18n from '../i18n'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   IoMenuOutline,
@@ -104,6 +105,7 @@ const skinConcerns = ['Fine Lines & Wrinkles', 'Dark Spots', 'Dryness', 'Uneven 
 
 // ─── Search Overlay ───────────────────────────────────────────────────────────
 function SearchOverlay({ isOpen, onClose }) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const toggleLanguage = () => {
@@ -219,7 +221,7 @@ function SearchOverlay({ isOpen, onClose }) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             onBlur={() => { if (query.trim()) saveRecent(query.trim()) }}
-            placeholder={t('search.placeholder')}
+            placeholder=placeholder
             autoFocus
             className="w-full h-[52px] pl-[48px] pr-[44px] text-[15px] md:text-[17px] text-[#2B2B2B] bg-[#FDFBF7] border-2 border-[#E8E3D9] rounded-[12px] outline-none focus:border-[#8B7355] focus:bg-white transition-all"
           />
@@ -308,7 +310,7 @@ function SearchOverlay({ isOpen, onClose }) {
           <div className="text-center py-12 mb-8">
             <IoSearchOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-4" />
             <h3 className="text-[20px] font-semibold text-[#1A1A1A] mb-2">No results for "{query}"</h3>
-            <p className="text-[14px] text-[#666666]">{t('search.tryDifferent')}</p>
+            <p className="text-[14px] text-[#666666]">tryDifferent</p>
           </div>
         )}
 
@@ -317,10 +319,10 @@ function SearchOverlay({ isOpen, onClose }) {
           <div>
             {/* Browse By */}
             <div className="mb-10">
-              <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A] mb-5">{t('search.browseBy')}</h2>
+              <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A] mb-5">browseBy</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinConcerns')}</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">skinConcerns</p>
                   <div className="flex flex-wrap gap-2">
                     {skinConcernsFilter.map(c => (
                       <button key={c} onClick={() => handleFilterClick(`/skincare?concern=${encodeURIComponent(c)}`)}
@@ -329,7 +331,7 @@ function SearchOverlay({ isOpen, onClose }) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinTypes')}</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">skinTypes</p>
                   <div className="flex flex-wrap gap-2">
                     {skinTypesFilter.map(t => (
                       <button key={t} onClick={() => handleFilterClick(`/skincare?skinType=${encodeURIComponent(t)}`)}
@@ -338,7 +340,7 @@ function SearchOverlay({ isOpen, onClose }) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.keyIngredients')}</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">keyIngredients</p>
                   <div className="flex flex-wrap gap-2">
                     {ingredientsFilter.map(i => (
                       <button key={i} onClick={() => handleFilterClick(`/skincare?ingredient=${encodeURIComponent(i)}`)}
@@ -371,9 +373,9 @@ function SearchOverlay({ isOpen, onClose }) {
             {recentSearches.length > 0 && (
               <div className="mb-10">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A]">{t('search.recentSearches')}</h2>
+                  <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A]">recentSearches</h2>
                   <button onClick={() => { setRecentSearches([]); localStorage.removeItem('shanloray_recent_searches') }}
-                    className="text-[13px] text-[#8B7355] hover:underline">{t('search.clearAll')}</button>
+                    className="text-[13px] text-[#8B7355] hover:underline">clearAll</button>
                 </div>
                 {recentSearches.map(search => (
                   <div key={search} onClick={() => handleTermClick(search)}
@@ -392,7 +394,7 @@ function SearchOverlay({ isOpen, onClose }) {
 
             {/* Popular Right Now */}
             <div className="mb-10">
-              <h2 className="text-[18px] md:text-[24px] font-medium text-[#1A1A1A] mb-5">{t('search.popularRightNow')}</h2>
+              <h2 className="text-[18px] md:text-[24px] font-medium text-[#1A1A1A] mb-5">popularRightNow</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {popularSearches.map(item => (
                   <div key={item.term} onClick={() => handleTermClick(item.term)}
@@ -409,7 +411,7 @@ function SearchOverlay({ isOpen, onClose }) {
             <div className="bg-[#FDFBF7] rounded-[12px] p-6">
               <div className="flex items-center gap-2 mb-4">
                 <IoFlame className="w-[22px] h-[22px] text-[#C9A870]" />
-                <h2 className="text-[18px] font-medium text-[#1A1A1A]">{t('search.trendingTopics')}</h2>
+                <h2 className="text-[18px] font-medium text-[#1A1A1A]">trendingTopics</h2>
               </div>
               <div className="flex flex-wrap gap-3">
                 {trendingTopics.map(topic => (
