@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { IoCheckmarkCircle, IoChevronBack, IoChevronForward, IoStarSharp } from 'react-icons/io5'
@@ -84,8 +85,8 @@ function HomeMobile() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
         <div className="absolute bottom-5 left-5 right-5">
           <div className="bg-white/90 backdrop-blur-sm rounded-[12px] p-6">
-            <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-3">Spring 2024 Collection</p>
-            <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">The Art of Radiance</h1>
+            <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-3">{t('home.heroCollection')}</p>
+            <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">{t('home.heroTitle')}</h1>
             <p className="text-[15px] font-normal text-[#666666] leading-[1.6] mb-5">
               Discover a luminous transformation through our newest collection, where botanical elegance meets scientific precision
             </p>
@@ -113,7 +114,7 @@ function HomeMobile() {
               Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
             </p>
             <Link to="/skin-analysis#upload-section">
-              <span className="text-[13px] font-medium text-[#8B7355]">Begin Analysis →</span>
+              <span className="text-[13px] font-medium text-[#8B7355]">{t('home.beginAnalysis')}</span>
             </Link>
           </div>
 
@@ -130,7 +131,7 @@ function HomeMobile() {
               Experience our complete collection through cutting-edge augmented reality technology in real-time
             </p>
             <Link to="/virtual-tryon#tryon-section">
-              <span className="text-[13px] font-medium text-[#8B7355]">Try Now →</span>
+              <span className="text-[13px] font-medium text-[#8B7355]">{t('home.tryNow')}</span>
             </Link>
           </div>
         </div>
@@ -155,7 +156,7 @@ function HomeMobile() {
               Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
             </p>
             <Link to="/technology#how-it-works">
-              <span className="text-[13px] font-medium text-[#8B7355]">Discover Tools →</span>
+              <span className="text-[13px] font-medium text-[#8B7355]">{t('home.discoverTools')}</span>
             </Link>
           </div>
         </div>
@@ -164,7 +165,7 @@ function HomeMobile() {
       {/* Best Sellers */}
       <section className="w-full bg-white py-12">
         <div className="text-center mb-10">
-          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-4">Best Sellers</h2>
+          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-4">{t('home.bestSellers')}</h2>
           <div className="w-16 h-[3px] bg-[#C9A870] mx-auto" />
         </div>
         <div className="overflow-x-auto px-5" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
@@ -183,7 +184,7 @@ function HomeMobile() {
         </div>
         <div className="text-center mt-8">
           <Link to="/collections#browse-by-category">
-            <span className="text-[14px] font-normal text-[#8B7355] underline">View All Products</span>
+            <span className="text-[14px] font-normal text-[#8B7355] underline">{t('home.viewAllProducts')}</span>
           </Link>
         </div>
       </section>
@@ -191,7 +192,7 @@ function HomeMobile() {
       {/* New Arrivals */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] py-12">
         <div className="text-center mb-10 px-5">
-          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-2">New Arrivals</h2>
+          <h2 className="text-[32px] font-bold text-[#1A1A1A] mb-2">{t('home.newArrivals')}</h2>
           <p className="text-[12px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-4">Spring 2024 Limited Edition</p>
           <div className="w-16 h-[3px] bg-[#C9A870] mx-auto" />
         </div>
@@ -277,7 +278,7 @@ function HomeMobile() {
 
         <div className="text-center mt-8">
           <Link to="/collections" onClick={() => window.scrollTo(0, 0)}>
-            <span className="text-[14px] font-medium text-[#8B7355] underline">Explore Full Collection →</span>
+            <span className="text-[14px] font-medium text-[#8B7355] underline">{t('home.exploreCollection')}</span>
           </Link>
         </div>
       </section>
@@ -286,7 +287,7 @@ function HomeMobile() {
       <section className="w-full">
         <div className="bg-[#F7F3EB] px-8 py-10">
           <p className="text-[11px] font-light uppercase text-[#C9A870] tracking-[2px] mb-4">PHILOSOPHY</p>
-          <h2 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.2] mb-6">Where Science Meets Nature</h2>
+          <h2 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.2] mb-6">{t('home.scienceMeetsNature')}</h2>
           <p className="text-[15px] font-normal text-[#666666] leading-[1.7] mb-4">
             At Shan Loray, we believe true luxury lies in the marriage of cutting-edge biotechnology and timeless botanical wisdom.
           </p>
@@ -297,7 +298,7 @@ function HomeMobile() {
             This dedication to excellence has made us the choice of discerning individuals who refuse to compromise on quality or integrity.
           </p>
           <Link to="/advanced-formulations#our-story">
-            <span className="text-[14px] font-medium text-[#8B7355]">Our Story →</span>
+            <span className="text-[14px] font-medium text-[#8B7355]">{t('home.ourStory')}</span>
           </Link>
         </div>
         <div className="min-h-[320px]">
@@ -308,7 +309,7 @@ function HomeMobile() {
       {/* Testimonials */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#FAF6F0] py-12">
         <div className="text-center mb-10">
-          <h2 className="text-[28px] font-semibold text-[#1A1A1A]">Testimonials</h2>
+          <h2 className="text-[28px] font-semibold text-[#1A1A1A]">{t('home.testimonials')}</h2>
         </div>
         <div className="px-5 space-y-4">
           {testimonials.map((t, idx) => (
@@ -412,8 +413,8 @@ function HomeDesktop() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute left-6 md:left-[60px] lg:left-[120px] bottom-[80px] md:bottom-[120px] lg:bottom-[160px] w-[90%] max-w-[480px]">
           <div className="bg-white/85 backdrop-blur-sm rounded-[16px] shadow-[0_12px_48px_rgba(0,0,0,0.12)] p-7 md:p-10 lg:p-[48px]">
-            <p className="text-[11px] md:text-[12px] lg:text-[13px] font-light italic text-[#C9A870] tracking-[4px] uppercase mb-4 md:mb-5 lg:mb-6">Spring 2024 Collection</p>
-            <h1 className="text-[44px] md:text-[54px] lg:text-[68px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 md:mb-5 lg:mb-6">The Art of Radiance</h1>
+            <p className="text-[11px] md:text-[12px] lg:text-[13px] font-light italic text-[#C9A870] tracking-[4px] uppercase mb-4 md:mb-5 lg:mb-6">{t('home.heroCollection')}</p>
+            <h1 className="text-[44px] md:text-[54px] lg:text-[68px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 md:mb-5 lg:mb-6">{t('home.heroTitle')}</h1>
             <p className="text-[15px] md:text-[17px] lg:text-[19px] font-normal text-[#666666] leading-[1.8] mb-6 md:mb-7 lg:mb-8">
               Discover a luminous transformation through our newest collection, where botanical elegance meets scientific precision
             </p>
@@ -446,7 +447,7 @@ function HomeDesktop() {
                 Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
               </p>
               <Link to="/skin-analysis#upload-section">
-                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Begin Analysis →</span>
+                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('home.beginAnalysis')}</span>
               </Link>
             </div>
 
@@ -464,7 +465,7 @@ function HomeDesktop() {
                 Experience our complete collection through cutting-edge augmented reality technology in real-time
               </p>
               <Link to="/virtual-tryon#tryon-section">
-                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Try Now →</span>
+                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('home.tryNow')}</span>
               </Link>
             </div>
           </div>
@@ -491,7 +492,7 @@ function HomeDesktop() {
                 Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
               </p>
               <Link to="/technology#how-it-works">
-                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">Discover Tools →</span>
+                <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('home.discoverTools')}</span>
               </Link>
             </div>
           </div>
@@ -501,7 +502,7 @@ function HomeDesktop() {
       {/* Best Sellers */}
       <section className="w-full bg-white py-16 md:py-20 lg:py-[96px] relative">
         <div className="text-center mb-16 md:mb-20 lg:mb-[88px]">
-          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-6">Best Sellers</h2>
+          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-6">{t('home.bestSellers')}</h2>
           <div className="w-[88px] h-[3px] bg-[#C9A870] mx-auto" />
         </div>
         <div className="px-6 md:px-[60px] lg:px-[120px] relative">
@@ -520,7 +521,7 @@ function HomeDesktop() {
         </div>
         <div className="text-center mt-16 md:mt-18 lg:mt-[72px]">
           <Link to="/collections#browse-by-category">
-            <span className="text-[15px] lg:text-[16px] font-normal text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">View All Products</span>
+            <span className="text-[15px] lg:text-[16px] font-normal text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">{t('home.viewAllProducts')}</span>
           </Link>
         </div>
       </section>
@@ -528,7 +529,7 @@ function HomeDesktop() {
       {/* New Arrivals */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] py-16 md:py-20 lg:py-[96px]">
         <div className="text-center mb-16 md:mb-20 lg:mb-[88px]">
-          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-4">New Arrivals</h2>
+          <h2 className="text-[36px] md:text-[42px] lg:text-[48px] font-bold text-[#1A1A1A] mb-4">{t('home.newArrivals')}</h2>
           <p className="text-[13px] md:text-[14px] lg:text-[16px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-6">Spring 2024 Limited Edition</p>
           <div className="w-[88px] h-[3px] bg-[#C9A870] mx-auto" />
         </div>
@@ -606,7 +607,7 @@ function HomeDesktop() {
         </div>
         <div className="text-center">
           <Link to="/collections" onClick={() => window.scrollTo(0, 0)}>
-            <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">Explore Full Collection →</span>
+            <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer underline hover:text-[#6b5740] transition-colors">{t('home.exploreCollection')}</span>
           </Link>
         </div>
       </section>
@@ -616,7 +617,7 @@ function HomeDesktop() {
         <div className="flex flex-col md:flex-row min-h-[500px] md:min-h-[600px] lg:min-h-[720px]">
           <div className="bg-[#F7F3EB] flex flex-col justify-center px-8 md:px-[60px] lg:px-[160px] py-14 md:py-0 w-full md:w-[58%]">
             <p className="text-[12px] md:text-[13px] font-light uppercase text-[#C9A870] tracking-[3px] mb-5 lg:mb-6">PHILOSOPHY</p>
-            <h2 className="text-[36px] md:text-[44px] lg:text-[52px] font-bold text-[#1A1A1A] leading-[1.15] mb-6 lg:mb-8">Where Science Meets Nature</h2>
+            <h2 className="text-[36px] md:text-[44px] lg:text-[52px] font-bold text-[#1A1A1A] leading-[1.15] mb-6 lg:mb-8">{t('home.scienceMeetsNature')}</h2>
             <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] leading-[1.85] mb-5 lg:mb-6">
               At Shan Loray, we believe true luxury lies in the marriage of cutting-edge biotechnology and timeless botanical wisdom.
             </p>
@@ -624,7 +625,7 @@ function HomeDesktop() {
               Our ingredients are sourced from pristine environments around the world, carefully selected for their potency and ethical cultivation.
             </p>
             <Link to="/advanced-formulations#our-story">
-              <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">Our Story →</span>
+              <span className="text-[15px] lg:text-[16px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('home.ourStory')}</span>
             </Link>
           </div>
           <div className="w-full md:w-[42%] min-h-[300px] md:min-h-0">
@@ -636,7 +637,7 @@ function HomeDesktop() {
       {/* Testimonials */}
       <section className="w-full bg-gradient-to-b from-[#FDFBF7] to-[#FAF6F0] py-16 md:py-20 lg:py-[96px]">
         <div className="text-center mb-14 md:mb-16 lg:mb-[80px]">
-          <h2 className="text-[32px] md:text-[38px] lg:text-[42px] font-semibold text-[#1A1A1A]">Testimonials</h2>
+          <h2 className="text-[32px] md:text-[38px] lg:text-[42px] font-semibold text-[#1A1A1A]">{t('home.testimonials')}</h2>
         </div>
         <div className="px-6 md:px-[60px] lg:px-[120px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[56px] items-start">
@@ -704,6 +705,7 @@ function HomeDesktop() {
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function Home() {
+  const { t } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
