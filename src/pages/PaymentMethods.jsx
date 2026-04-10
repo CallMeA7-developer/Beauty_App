@@ -206,7 +206,7 @@ export default function PaymentMethods() {
     { label: 'Shipping Addresses', path: '/shipping-address', icon: IoLocationOutline, badge: null, tag: null },
     { label: 'Payment Methods', path: '/payment-methods', icon: IoCardOutline, badge: null, tag: null, active: true },
     { label: 'Beauty Profile', path: '/skin-analysis', icon: IoSparkles, badge: null, tag: null },
-    { label: 'Loyalty Program', path: '/account', icon: IoRibbonOutline, badge: null, tag: 'NEW' },
+    { label: 'Loyalty Program', path: '/account', icon: IoRibbonOutline, badge: stats.loyaltyPoints > 0 ? `${stats.loyaltyPoints.toLocaleString()} pts` : null, tag: null },
     { label: 'My Routines', path: '/beauty-journey', icon: IoCalendarOutline, badge: null, tag: null },
     { label: 'Reviews & Ratings', path: '/dashboard', icon: IoStarSharp, badge: null, tag: null },
     { label: 'Account Settings', path: '/privacy-settings', icon: IoSettingsOutline, badge: null, tag: null },
