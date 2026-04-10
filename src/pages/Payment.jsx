@@ -576,7 +576,7 @@ export default function Payment() {
                   className="w-[18px] h-[18px] mt-[2px] flex-shrink-0 cursor-pointer accent-[#8B7355]"
                 />
                 <label htmlFor="terms" className="text-[13px] lg:text-[14px] font-normal text-[#666666] cursor-pointer leading-[1.5]">
-                  I agree to the <span className="text-[#8B7355] underline cursor-pointer">Terms & Conditions</span> and <span className="text-[#8B7355] underline cursor-pointer">Privacy Policy</span>
+                  I agree to the <a href="/terms-conditions" target="_blank" className="text-[#8B7355] underline cursor-pointer hover:text-[#7a6448]">Terms & Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-[#8B7355] underline cursor-pointer hover:text-[#7a6448]">Privacy Policy</a>
                 </label>
               </div>
 
