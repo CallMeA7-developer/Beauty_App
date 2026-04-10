@@ -89,8 +89,6 @@ export default function AccountDashboard() {
         // Fetch all products and filter by IDs in JavaScript to avoid Supabase query encoding issues
         const allMorningIds = Array.isArray(bestAnalysis.morning_product_ids) ? bestAnalysis.morning_product_ids.slice(0, 3) : []
         const allEveningIds = Array.isArray(bestAnalysis.evening_product_ids) ? bestAnalysis.evening_product_ids.slice(0, 3) : []
-        const allIds = [...new Set([...allMorningIds, ...allEveningIds])]
-
         if (allMorningIds.length > 0) {
           const { data: mProds } = await supabase
             .from('products')
