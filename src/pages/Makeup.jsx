@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   IoStarSharp,
@@ -187,8 +189,35 @@ function getFilteredAndSorted(allProducts, {
   return filtered
 }
 
+
+// ─── Translation helpers ───────────────────────────────────────────────────────
+const makeupFilterTranslationsRU = {
+  'All Skin Types': 'Все типы кожи', 'Dry': 'Сухая', 'Oily': 'Жирная',
+  'Combination': 'Комбинированная', 'Sensitive': 'Чувствительная', 'Mature': 'Зрелая',
+  'Matte': 'Матовый', 'Satin': 'Атласный', 'Shimmer': 'Мерцающий', 'Glitter': 'С блёстками',
+  'Glossy': 'Глянцевый', 'Sheer': 'Лёгкое', 'Medium': 'Среднее', 'Full': 'Полное',
+  'Fair': 'Светлый', 'Light': 'Нежный', 'Tan': 'Загорелый', 'Deep': 'Тёмный', 'All Tones': 'Все оттенки',
+}
+const subcategoryTranslationsRU_makeup = {
+  'Foundation': 'Тональная основа', 'Concealer': 'Консилер', 'Powder': 'Пудра',
+  'Blush': 'Румяна', 'Highlighter': 'Хайлайтер', 'Eyeshadow': 'Тени для глаз',
+  'Eyeliner': 'Подводка', 'Mascara': 'Тушь', 'Eyebrow': 'Для бровей',
+  'Lipstick': 'Помада', 'Lip Gloss': 'Блеск для губ', 'Lip Liner': 'Карандаш для губ',
+  'Lip Care': 'Уход за губами', 'Face': 'Лицо', 'Eyes': 'Глаза', 'Lips': 'Губы',
+  'Sets & Palettes': 'Наборы и палетки',
+}
+const useMakeupTranslation = () => {
+  const { i18n } = useTranslation()
+  const tf = (value) => i18n.language === 'ru' ? (makeupFilterTranslationsRU[value] || value) : value
+  const ts = (value) => i18n.language === 'ru' ? (subcategoryTranslationsRU_makeup[value] || value) : value
+  return { tf, ts }
+}
+
+
 // ── Mobile ────────────────────────────────────────────────────────────────────
 function MakeupMobile() {
+  const { t } = useTranslation()
+  const { tf, ts } = useMakeupTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading]         = useState(true)
   const [activeSort, setActiveSort]             = useState('Best Selling')
@@ -254,9 +283,9 @@ function MakeupMobile() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#F5F0EB] via-[#F5F0EB]/30 to-transparent" />
         </div>
         <div className="relative z-10 px-5 py-10 w-[62%]">
-          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">ARTISTRY ESSENTIALS</p>
-          <h1 className="text-[30px] font-bold text-[#1A1A1A] leading-[1.1] mb-3">Makeup Collection</h1>
-          <p className="text-[13px] font-normal text-[#666666] mb-4">Discover your signature look</p>
+          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('makeup.artistryEssentials')}</p>
+          <h1 className="text-[30px] font-bold text-[#1A1A1A] leading-[1.1] mb-3">{t('makeup.title')}</h1>
+          <p className="text-[13px] font-normal text-[#666666] mb-4">{t('makeup.subtitle')}</p>
           <div className="w-[48px] h-[2px] bg-[#C9A870]" />
         </div>
       </div>
@@ -272,7 +301,7 @@ function MakeupMobile() {
                 <div className="w-[64px] h-[64px] rounded-full overflow-hidden bg-[#F9F6F2]">
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                 </div>
-                <span className="text-[14px] font-medium text-[#1A1A1A]">{cat.name}</span>
+                <span className="text-[14px] font-medium text-[#1A1A1A]">{ts(cat.name)}</span>
                 <span className="text-[12px] font-light text-[#999999]">{cat.count}</span>
               </div>
             )
@@ -286,14 +315,14 @@ function MakeupMobile() {
           allProducts={allProducts}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          placeholder="Search makeup products..."
+          placeholder={t('makeup.searchPlaceholder')}
           className="mb-3"
         />
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[13px] font-normal text-[#666666]">Showing {products.length} products</span>
+          <span className="text-[13px] font-normal text-[#666666]">{t('makeup.showing')} {products.length} {t('makeup.products')}</span>
           <button onClick={() => setShowFilterSheet(true)} className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]">
             <IoFunnelOutline className="w-3.5 h-3.5 text-[#8B7355]" />
-            Filters
+            {t('makeup.filters')}
             {activeFilters > 0 && (
               <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#8B7355] rounded-full flex items-center justify-center">
                 <span className="text-[10px] font-medium text-white">{activeFilters}</span>
@@ -302,7 +331,7 @@ function MakeupMobile() {
           </button>
         </div>
         <button onClick={() => setShowSortSheet(true)} className="w-full h-12 px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between mb-2">
-          <span className="text-[14px] font-normal text-[#2B2B2B]">Sort: {activeSort}</span>
+          <span className="text-[14px] font-normal text-[#2B2B2B]">{t('makeup.sortBy')} {activeSort === 'Best Selling' ? t('makeup.sortBestSelling') : activeSort === 'Newest' ? t('makeup.sortNewest') : activeSort === 'Price: Low to High' ? t('makeup.sortPriceLow') : activeSort === 'Price: High to Low' ? t('makeup.sortPriceHigh') : activeSort === 'Most Popular' ? t('makeup.sortMostPopular') : activeSort}</span>
           <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
         </button>
       </div>
@@ -310,7 +339,7 @@ function MakeupMobile() {
       {/* Product Grid */}
       <div className="px-4 pb-6">
         {products.length === 0 ? (
-          <div className="flex items-center justify-center min-h-[300px]"><p className="text-[16px] text-[#666666]">No products found</p></div>
+          <div className="flex items-center justify-center min-h-[300px]"><p className="text-[16px] text-[#666666]">{t('makeup.noProducts')}</p></div>
         ) : (
           <div className="grid grid-cols-2 gap-4">
             {mobileProducts.map((product, idx) => (
@@ -330,7 +359,7 @@ function MakeupMobile() {
                     <div className="flex items-center gap-0.5">{[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[11px] h-[11px] text-[#C9A870]" />)}</div>
                   </div>
                   <p className="text-[11px] text-[#999999] mb-3">({product.reviews})</p>
-                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">Add to Bag</button>
+                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">{t('makeup.addToBag')}</button>
                 </div>
               </Link>
             ))}
@@ -345,28 +374,28 @@ function MakeupMobile() {
 
       {/* Newsletter */}
       <div className="bg-[#F5F0EB] px-5 py-10 text-center">
-        <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-2">Unlock Beauty Secrets</h3>
-        <p className="text-[14px] font-normal text-[#666666] mb-5">Exclusive tips & new releases</p>
+        <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-2">{t('makeup.newsletter')}</h3>
+        <p className="text-[14px] font-normal text-[#666666] mb-5">{t('makeup.newsletterDesc')}</p>
         <div className="flex gap-2">
-          <input type="email" placeholder="Enter your email" className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-12 px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px]">Subscribe</button>
+          <input type="email" placeholder={t('makeup.emailPlaceholder')} className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <button className="h-12 px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px]">{t('makeup.subscribe')}</button>
         </div>
       </div>
 
       {/* Footer */}
       <footer className="bg-[#2B2B2B] px-5 pt-10 pb-8">
         <h3 className="text-[18px] font-semibold text-white tracking-[2px] mb-1">SHAN LORAY</h3>
-        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">Timeless Luxury Beauty</p>
+        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">{t('makeup.timelessLuxury')}</p>
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div><h4 className="text-[13px] font-medium text-white mb-3">Shop</h4><div className="space-y-2">{['Skincare','Makeup','Fragrance'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">Help</h4><div className="space-y-2">{['Contact','Shipping','Returns'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">About</h4><div className="space-y-2">{['Our Story','Ingredients','Sustainability'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
+          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('makeup.shop')}</h4><div className="space-y-2">{['Skincare','Makeup','Fragrance'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
+          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerHelp')}</h4><div className="space-y-2">{['Contact','Shipping','Returns'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
+          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerAbout')}</h4><div className="space-y-2">{['Our Story','Ingredients','Sustainability'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
         </div>
         <div className="flex justify-center gap-6 mb-6">
           <IoLogoInstagram className="w-6 h-6 text-white" /><IoLogoFacebook className="w-6 h-6 text-white" />
           <IoLogoPinterest className="w-6 h-6 text-white" /><IoLogoYoutube className="w-6 h-6 text-white" />
         </div>
-        <div className="border-t border-[#3D3D3D] pt-5 text-center"><p className="text-[11px] text-[#808080]">©2024 Shan Loray. All rights reserved.</p></div>
+        <div className="border-t border-[#3D3D3D] pt-5 text-center"><p className="text-[11px] text-[#808080]">{t('makeup.copyright')}</p></div>
       </footer>
 
       {/* Sort Sheet */}
@@ -376,14 +405,20 @@ function MakeupMobile() {
           <div className="relative bg-white rounded-t-[20px] px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-[#E8E3D9] rounded-full mx-auto mb-5" />
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">Sort By</h3>
+              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">sortBy</h3>
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
-              {sortOptions.map((option) => (
-                <button key={option} onClick={() => { setActiveSort(option); setShowSortSheet(false) }} className="w-full h-12 flex items-center justify-between px-4 rounded-[8px] hover:bg-[#FAF8F5]">
-                  <span className={`text-[15px] ${activeSort === option ? 'font-medium text-[#8B7355]' : 'font-normal text-[#2B2B2B]'}`}>{option}</span>
-                  {activeSort === option && <div className="w-5 h-5 rounded-full bg-[#8B7355] flex items-center justify-center"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>}
+              {[
+                { key: 'Best Selling',        label: t('makeup.sortBestSelling') },
+                { key: 'Newest',              label: t('makeup.sortNewest') },
+                { key: 'Price: Low to High',  label: t('makeup.sortPriceLow') },
+                { key: 'Price: High to Low',  label: t('makeup.sortPriceHigh') },
+                { key: 'Most Popular',        label: t('makeup.sortMostPopular') },
+              ].map(({ key, label }) => (
+                <button key={key} onClick={() => { setActiveSort(key); setShowSortSheet(false) }} className="w-full h-12 flex items-center justify-between px-4 rounded-[8px] hover:bg-[#FAF8F5]">
+                  <span className={`text-[15px] ${activeSort === key ? 'font-medium text-[#8B7355]' : 'font-normal text-[#2B2B2B]'}`}>{label}</span>
+                  {activeSort === key && <div className="w-5 h-5 rounded-full bg-[#8B7355] flex items-center justify-center"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>}
                 </button>
               ))}
             </div>
@@ -399,7 +434,7 @@ function MakeupMobile() {
             <div className="flex items-center justify-center pt-3 pb-1 flex-shrink-0"><div className="w-10 h-1 bg-[#E8E3D9] rounded-full" /></div>
             <div className="min-h-[60px] px-5 flex items-center justify-between border-b border-[#E8E3D9] flex-shrink-0">
               <div className="flex items-center gap-2">
-                <h2 className="text-[22px] font-semibold text-[#1A1A1A]">Filters</h2>
+                <h2 className="text-[22px] font-semibold text-[#1A1A1A]">{t('makeup.filters')}</h2>
                 {activeFilters > 0 && <div className="w-[22px] h-[22px] bg-[#C9A870] rounded-full flex items-center justify-center"><span className="text-[11px] font-semibold text-white">{activeFilters}</span></div>}
               </div>
               <button onClick={() => setShowFilterSheet(false)}><IoClose className="w-6 h-6 text-[#2B2B2B]" /></button>
@@ -408,7 +443,7 @@ function MakeupMobile() {
 
               {/* Product Category */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Product Category</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.productCategory')}</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {subcategoryCards.map((cat) => {
                     const isSelected = selectedCategories.includes(cat.name)
@@ -416,7 +451,7 @@ function MakeupMobile() {
                       <button key={cat.name} onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
                         className={`rounded-[8px] p-3 flex flex-col items-center justify-center gap-2 border-2 transition-colors ${isSelected ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}>
                         <img src={cat.image} alt={cat.name} className="w-[40px] h-[40px] rounded-full object-cover" />
-                        <span className="text-[13px] font-medium text-[#2B2B2B] text-center">{cat.name}</span>
+                        <span className="text-[13px] font-medium text-[#2B2B2B] text-center">{ts(cat.name)}</span>
                         <span className="text-[11px] font-normal text-[#999999]">{cat.count}</span>
                       </button>
                     )
@@ -427,7 +462,7 @@ function MakeupMobile() {
               {/* Price Range */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[16px] font-medium text-[#2B2B2B]">Price Range</h3>
+                  <h3 className="text-[16px] font-medium text-[#2B2B2B]">{t('makeup.priceRange')}</h3>
                   <span className="text-[14px] font-medium text-[#8B7355]">${'$'}{minPrice || 0} – ${'$'}{maxPrice || 500}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -440,8 +475,8 @@ function MakeupMobile() {
               {/* Shade Selection */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <div className="mb-4">
-                  <h3 className="text-[16px] font-medium text-[#2B2B2B]">Shade Selection</h3>
-                  <p className="text-[12px] text-[#999999]">{shadeColors.length} shades available</p>
+                  <h3 className="text-[16px] font-medium text-[#2B2B2B]">{t('makeup.shadeSelection')}</h3>
+                  <p className="text-[12px] text-[#999999]">{shadeColors.length} {t('makeup.shadesAvailable')}</p>
                 </div>
                 <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
                   {shadeColors.map((shade) => {
@@ -458,14 +493,14 @@ function MakeupMobile() {
 
               {/* Finish Type */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Finish Type</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.finishType')}</h3>
                 <div className="flex gap-3 flex-wrap">
                   {filterFinishTypes.map((finish) => {
                     const isSelected = selectedFinish.includes(finish)
                     return (
                       <button key={finish} onClick={() => setSelectedFinish(prev => isSelected ? prev.filter(f => f !== finish) : [...prev, finish])}
                         className={`px-5 h-[34px] rounded-[8px] text-[14px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B]'}`}>
-                        {finish}
+                        {tf(finish)}
                       </button>
                     )
                   })}
@@ -474,7 +509,7 @@ function MakeupMobile() {
 
               {/* Skin Type */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Type</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.skinType')}</h3>
                 <div className="space-y-3">
                   {filterSkinTypes.map((type) => {
                     const isChecked = selectedSkinTypes.includes(type)
@@ -483,7 +518,7 @@ function MakeupMobile() {
                         <div className={`w-[20px] h-[20px] rounded-[4px] border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'bg-white border-[#E8E3D9]'}`}>
                           {isChecked && <IoCheckmark className="w-[13px] h-[13px] text-white" />}
                         </div>
-                        <span className="text-[14px] font-normal text-[#2B2B2B]">{type}</span>
+                        <span className="text-[14px] font-normal text-[#2B2B2B]">{tf(type)}</span>
                       </button>
                     )
                   })}
@@ -492,10 +527,10 @@ function MakeupMobile() {
 
               {/* Brand */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Brand</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.brand')}</h3>
                 <div className="w-full h-[44px] bg-[#F5F1EA] rounded-[8px] px-4 flex items-center mb-4">
                   <IoSearchOutline className="w-[16px] h-[16px] text-[#999999] mr-2 flex-shrink-0" />
-                  <input type="text" placeholder="Search brands" className="flex-1 bg-transparent text-[14px] text-[#2B2B2B] outline-none" />
+                  <input type="text" placeholder={t('makeup.searchBrands')} className="flex-1 bg-transparent text-[14px] text-[#2B2B2B] outline-none" />
                 </div>
                 <div className="space-y-2">
                   {filterBrands.map((brand) => {
@@ -514,14 +549,14 @@ function MakeupMobile() {
 
               {/* Rating */}
               <div className="px-5 py-5">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Rating</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.rating')}</h3>
                 <div className="space-y-2">
                   {filterRatings.map((r) => (
                     <button key={r.stars} onClick={() => setSelectedRating(prev => prev === r.stars ? null : r.stars)}
                       className={`flex items-center justify-between w-full h-[36px] px-3 rounded-[4px] transition-colors ${selectedRating === r.stars ? 'bg-[#FDFBF7]' : ''}`}>
                       <div className="flex items-center gap-2">
                         <div className="flex gap-0.5">{[...Array(r.stars)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)}</div>
-                        <span className="text-[13px] text-[#2B2B2B]">& up</span>
+                        <span className="text-[13px] text-[#2B2B2B]">{t('makeup.andUp')}</span>
                       </div>
                       <span className="text-[13px] text-[#999999]">({r.count})</span>
                     </button>
@@ -531,8 +566,8 @@ function MakeupMobile() {
             </div>
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
               <button onClick={() => { setSelectedCategories([]); setSelectedShades([]); setSelectedFinish([]); setSelectedSkinTypes([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice('') }}
-                className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]">Clear All</button>
-              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">Apply Filters ({products.length} items)</button>
+                className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]">{t('makeup.clearAll')}</button>
+              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">{t('makeup.applyFilters')} ({products.length})</button>
             </div>
           </div>
         </div>
@@ -543,6 +578,8 @@ function MakeupMobile() {
 
 // ── Desktop ───────────────────────────────────────────────────────────────────
 function MakeupDesktop() {
+  const { t } = useTranslation()
+  const { tf, ts } = useMakeupTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading]         = useState(true)
   const [activeSort, setActiveSort]             = useState('Best Selling')
@@ -606,9 +643,9 @@ function MakeupDesktop() {
       <div className="min-h-[300px] md:min-h-[380px] lg:min-h-[480px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px]">
         <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[180px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-20" />
         <div className="w-full max-w-[650px] relative z-10">
-          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">LUXURY MAKEUP COLLECTION</p>
-          <h1 className="text-[42px] md:text-[60px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">Color Meets Artistry</h1>
-          <p className="text-[15px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">From foundation to finishing touches, discover transformative makeup</p>
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('makeup.luxuryCollection')}</p>
+          <h1 className="text-[42px] md:text-[60px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">{t('makeup.heroTitle')}</h1>
+          <p className="text-[15px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">{t('makeup.heroDesc')}</p>
           <div className="w-[90px] md:w-[105px] lg:w-[120px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
@@ -618,9 +655,9 @@ function MakeupDesktop() {
 
       {/* Breadcrumb */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Shop</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">Makeup</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('makeup.home')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('makeup.shop')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">title</span>
       </div>
 
       {/* Main Content */}
@@ -630,12 +667,12 @@ function MakeupDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">REFINE SELECTION</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">refineSelection</h3>
               {activeFilters > 0 && <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>}
             </div>
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
-              <div onClick={() => setSelectedCategories([])} className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedCategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>All Makeup</div>
-              {[{ label: 'Face', subs: faceCategories }, { label: 'Eyes', subs: eyesCategories }, { label: 'Lips', subs: lipsCategories }].map(({ label, subs }) => (
+              <div onClick={() => setSelectedCategories([])} className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedCategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>{t('makeup.allMakeup')}</div>
+              {[{ label: t('makeup.face'), subs: faceCategories }, { label: t('makeup.eyes'), subs: eyesCategories }, { label: t('makeup.lips'), subs: lipsCategories }].map(({ label, subs }) => (
                 <div key={label}>
                   <div className="inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] bg-[#F5F1EA] text-[#3D3D3D] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer gap-2">
                     <span>{label}</span><IoChevronDown className="w-[13px] h-[13px] lg:w-[14px] lg:h-[14px]" />
@@ -646,7 +683,7 @@ function MakeupDesktop() {
                       return (
                         <div key={item} onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== item) : [...prev, item])}
                           className={`inline-block px-[12px] lg:px-[16px] py-[5px] lg:py-[6px] text-[12px] lg:text-[13px] rounded-full cursor-pointer mr-1 lg:mr-2 mb-2 border transition-colors ${isSelected ? 'bg-[#8B7355] text-white border-[#8B7355]' : 'bg-white border-[#E8E3D9] text-[#666666] hover:border-[#C9A870]'}`}>
-                          {item}
+                          {ts(item)}
                         </div>
                       )
                     })}
@@ -656,14 +693,14 @@ function MakeupDesktop() {
             </div>
             <div className="border-t border-[#E8E3D9] pt-5 lg:pt-[24px] space-y-4 lg:space-y-[20px]">
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Price Range</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('makeup.priceRange')}</h4>
                 <div className="flex items-center gap-[6px] lg:gap-[8px]">
                   <input type="number" placeholder="$0" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
                   <span className="text-[13px] lg:text-[14px] text-[#666666]">—</span>
                   <input type="number" placeholder="$500" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
                 </div>
               </div>
-              {[{ title: 'Finish', items: finishTypes, state: selectedFinish, setState: setSelectedFinish }, { title: 'Coverage', items: coverageTypes, state: selectedCoverage, setState: setSelectedCoverage }, { title: 'Skin Tone', items: skinTones, state: selectedSkinTones, setState: setSelectedSkinTones }].map(({ title, items, state, setState }) => (
+              {[{ title: t('makeup.finish'), items: finishTypes, state: selectedFinish, setState: setSelectedFinish }, { title: t('makeup.coverage'), items: coverageTypes, state: selectedCoverage, setState: setSelectedCoverage }, { title: t('makeup.skinTone'), items: skinTones, state: selectedSkinTones, setState: setSelectedSkinTones }].map(({ title, items, state, setState }) => (
                 <div key={title}>
                   <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{title}</h4>
                   <div className="space-y-[6px] lg:space-y-[8px]">
@@ -674,7 +711,7 @@ function MakeupDesktop() {
                           <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                             {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                           </div>
-                          <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                          <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                         </label>
                       )
                     })}
@@ -696,23 +733,35 @@ function MakeupDesktop() {
             allProducts={allProducts}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            placeholder="Search makeup products..."
+            placeholder={t('makeup.searchPlaceholder')}
             className="mb-6"
           />
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-[48px]">
-            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">Showing {products.length} makeup products</span>
+            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">{t('makeup.showing')} {products.length} {t('makeup.makeupProducts')}</span>
             <div className="flex items-center gap-3 lg:gap-[16px]">
-              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">Sort by:</span>
+              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">{t('makeup.sortBy')}</span>
               <div className="relative">
                 <button onClick={() => setShowSortDropdown(!showSortDropdown)} className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all">
-                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">{activeSort}</span>
+                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">
+                    {activeSort === 'Best Selling' ? t('makeup.sortBestSelling') :
+                     activeSort === 'Newest' ? t('makeup.sortNewest') :
+                     activeSort === 'Price: Low to High' ? t('makeup.sortPriceLow') :
+                     activeSort === 'Price: High to Low' ? t('makeup.sortPriceHigh') :
+                     activeSort === 'Most Popular' ? t('makeup.sortMostPopular') : activeSort}
+                  </span>
                   <IoChevronDown className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
                 </button>
                 {showSortDropdown && (
                   <div className="absolute top-full mt-2 right-0 w-[240px] bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-10">
-                    {sortOptions.map((option) => (
-                      <button key={option} onClick={() => { setActiveSort(option); setShowSortDropdown(false) }} className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === option ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}>{option}</button>
+                    {[
+                      { key: 'Best Selling',        label: t('makeup.sortBestSelling') },
+                      { key: 'Newest',              label: t('makeup.sortNewest') },
+                      { key: 'Price: Low to High',  label: t('makeup.sortPriceLow') },
+                      { key: 'Price: High to Low',  label: t('makeup.sortPriceHigh') },
+                      { key: 'Most Popular',        label: t('makeup.sortMostPopular') },
+                    ].map(({ key, label }) => (
+                      <button key={key} onClick={() => { setActiveSort(key); setShowSortDropdown(false) }} className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === key ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}>{label}</button>
                     ))}
                   </div>
                 )}
@@ -721,7 +770,7 @@ function MakeupDesktop() {
           </div>
 
           {products.length === 0 ? (
-            <div className="flex items-center justify-center min-h-[400px]"><p className="text-[16px] text-[#666666]">No products found</p></div>
+            <div className="flex items-center justify-center min-h-[400px]"><p className="text-[16px] text-[#666666]">{t('makeup.noProducts')}</p></div>
           ) : (
             <>
               {/* Row 1 */}
@@ -817,7 +866,7 @@ function MakeupDesktop() {
               {products.length > displayCount && (
                 <div className="flex items-center justify-center mb-16 lg:mb-[96px]">
                   <button onClick={() => setDisplayCount(prev => prev + 10)} className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors">
-                    Load More ({products.length - displayCount} remaining)
+                    {t('makeup.loadMore')} ({products.length - displayCount} {t('makeup.remaining')})
                   </button>
                 </div>
               )}
@@ -833,11 +882,12 @@ function MakeupDesktop() {
 
 // ── Main Export ───────────────────────────────────────────────────────────────
 export default function Makeup() {
+  const { t } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-  return isMobile ? <MakeupMobile /> : <MakeupDesktop />
+  return isMobile ? <MakeupMobile key={i18n.language} /> : <MakeupDesktop key={i18n.language} />
 }
