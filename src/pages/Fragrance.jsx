@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   IoStarSharp,
@@ -182,8 +183,37 @@ function getFilteredAndSorted(allProducts, {
   return filtered
 }
 
+
+// ─── Translation helpers ───────────────────────────────────────────────────────
+const fragranceFilterRU = {
+  'Floral': 'Цветочный', 'Woody': 'Древесный', 'Citrus': 'Цитрусовый',
+  'Oriental': 'Восточный', 'Fresh': 'Свежий', 'Spicy': 'Пряный',
+  'Aquatic': 'Водный', 'Fruity': 'Фруктовый',
+  'Light': 'Лёгкая', 'Moderate': 'Умеренная', 'Strong': 'Сильная',
+  'Very Strong': 'Очень сильная', 'Long-Lasting': 'Стойкая',
+  'Rose': 'Роза', 'Bergamot': 'Бергамот', 'Jasmine': 'Жасмин',
+  'Sandalwood': 'Сандал', 'Vanilla': 'Ваниль', 'Oud': 'Уд',
+  'Lemon': 'Лимон', 'Lavender': 'Лаванда', 'Cedar': 'Кедр',
+  'Patchouli': 'Пачули', 'Musk': 'Мускус', 'Amber': 'Амбра',
+  'Oakmoss': 'Дубовый мох', 'Tonka Bean': 'Бобы тонка',
+  'Day Wear': 'Дневной', 'Evening': 'Вечерний', 'Special Occasions': 'Для особых случаев',
+}
+const fragranceCategoryRU = {
+  'Eau de Parfum': 'Парфюмерная вода', 'Eau de Toilette': 'Туалетная вода',
+  'Body Mist': 'Мист для тела', 'Discovery Sets': 'Наборы-открытия',
+}
+const useFragranceTranslation = () => {
+  const { i18n } = useTranslation()
+  const tf = (value) => i18n.language === 'ru' ? (fragranceFilterRU[value] || value) : value
+  const ts = (value) => i18n.language === 'ru' ? (fragranceCategoryRU[value] || value) : value
+  return { tf, ts }
+}
+
+
 // ── Mobile ────────────────────────────────────────────────────────────────────
 function FragranceMobile() {
+  const { t } = useTranslation()
+  const { tf, ts } = useFragranceTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading]         = useState(true)
   const [activeSort, setActiveSort]             = useState('Best Selling')
@@ -265,9 +295,9 @@ function FragranceMobile() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#F5F0EB] via-[#F5F0EB]/20 to-transparent" />
         </div>
         <div className="relative z-10 px-5 py-10 w-[62%]">
-          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">SIGNATURE FRAGRANCES</p>
-          <h1 className="text-[34px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">Scent Stories</h1>
-          <p className="text-[13px] font-normal text-[#666666] mb-4">Crafted with rare botanicals</p>
+          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('fragrance.signatureFragrances')}</p>
+          <h1 className="text-[34px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">{t('fragrance.title')}</h1>
+          <p className="text-[13px] font-normal text-[#666666] mb-4">{t('fragrance.subtitle')}</p>
           <div className="w-[48px] h-[2px] bg-[#C9A870]" />
         </div>
       </div>
@@ -283,7 +313,7 @@ function FragranceMobile() {
                 <div className="w-[60px] h-[60px] rounded-full overflow-hidden bg-[#F9F6F2]">
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                 </div>
-                <span className="text-[12px] font-medium text-[#1A1A1A] text-center leading-tight">{cat.name}</span>
+                <span className="text-[12px] font-medium text-[#1A1A1A] text-center leading-tight">{ts(cat.name)}</span>
                 <span className="text-[11px] font-light text-[#999999]">{cat.count}</span>
               </div>
             )
@@ -297,19 +327,19 @@ function FragranceMobile() {
           allProducts={allProducts}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          placeholder="Search fragrance products..."
+          placeholder={t('fragrance.searchPlaceholder')}
           className="mb-3"
         />
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[13px] font-normal text-[#666666]">Showing {products.length} products</span>
+          <span className="text-[13px] font-normal text-[#666666]">{t('fragrance.showing')} {products.length} {t('fragrance.products')}</span>
           <button onClick={() => setShowFilterSheet(true)} className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]">
             <IoFunnelOutline className="w-3.5 h-3.5 text-[#8B7355]" />
-            Filters
+            {t('fragrance.filters')}
             {activeFilters > 0 && <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#8B7355] rounded-full flex items-center justify-center"><span className="text-[10px] font-medium text-white">{activeFilters}</span></div>}
           </button>
         </div>
         <button onClick={() => setShowSortSheet(true)} className="w-full h-12 px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between mb-2">
-          <span className="text-[14px] font-normal text-[#2B2B2B]">Sort: {activeSort}</span>
+          <span className="text-[14px] font-normal text-[#2B2B2B]">{t('fragrance.sortBy')} {activeSort === 'Best Selling' ? t('fragrance.sortBestSelling') : activeSort === 'Price: Low to High' ? t('fragrance.sortPriceLow') : activeSort === 'Price: High to Low' ? t('fragrance.sortPriceHigh') : activeSort === 'Most Popular' ? t('fragrance.sortMostPopular') : activeSort}</span>
           <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
         </button>
       </div>
@@ -317,7 +347,7 @@ function FragranceMobile() {
       {/* Product Grid */}
       <div className="px-4 pb-6">
         {products.length === 0 ? (
-          <div className="flex items-center justify-center min-h-[300px]"><p className="text-[16px] text-[#666666]">No products found</p></div>
+          <div className="flex items-center justify-center min-h-[300px]"><p className="text-[16px] text-[#666666]">{t('fragrance.noProducts')}</p></div>
         ) : (
           <div className="grid grid-cols-2 gap-4">
             {mobileProducts.map((product, idx) => (
@@ -338,7 +368,7 @@ function FragranceMobile() {
                     <div className="flex items-center gap-0.5">{[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[10px] h-[10px] text-[#C9A870]" />)}</div>
                   </div>
                   <p className="text-[10px] text-[#999999] mb-3">({product.reviews})</p>
-                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">Add to Bag</button>
+                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">{t('fragrance.addToBag')}</button>
                 </div>
               </Link>
             ))}
@@ -354,17 +384,17 @@ function FragranceMobile() {
       {/* Footer */}
       <footer className="bg-[#2B2B2B] px-5 pt-10 pb-8">
         <h3 className="text-[18px] font-semibold text-white tracking-[2px] mb-1">SHAN LORAY</h3>
-        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">Timeless Luxury Beauty</p>
+        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">{t('fragrance.timelessLuxury')}</p>
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div><h4 className="text-[13px] font-medium text-white mb-3">Shop</h4><div className="space-y-2">{['Skincare','Makeup','Fragrance'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">Help</h4><div className="space-y-2">{['Contact','Shipping','Returns'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">About</h4><div className="space-y-2">{['Our Story','Ingredients','Sustainability'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
+          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('fragrance.shop')}</h4><div className="space-y-2">{['Skincare','Makeup','Fragrance'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
+          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerHelp')}</h4><div className="space-y-2">{['Contact','Shipping','Returns'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
+          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerAbout')}</h4><div className="space-y-2">{['Our Story','Ingredients','Sustainability'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
         </div>
         <div className="flex justify-center gap-6 mb-6">
           <IoLogoInstagram className="w-6 h-6 text-white" /><IoLogoFacebook className="w-6 h-6 text-white" />
           <IoLogoPinterest className="w-6 h-6 text-white" /><IoLogoYoutube className="w-6 h-6 text-white" />
         </div>
-        <div className="border-t border-[#3D3D3D] pt-5 text-center"><p className="text-[11px] text-[#808080]">©2024 Shan Loray. All rights reserved.</p></div>
+        <div className="border-t border-[#3D3D3D] pt-5 text-center"><p className="text-[11px] text-[#808080]">{t('fragrance.copyright')}</p></div>
       </footer>
 
       {/* Sort Sheet */}
@@ -374,14 +404,19 @@ function FragranceMobile() {
           <div className="relative bg-white rounded-t-[20px] px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-[#E8E3D9] rounded-full mx-auto mb-5" />
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">Sort By</h3>
+              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">sortBy</h3>
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
-              {sortOptions.map((option) => (
-                <button key={option} onClick={() => { setActiveSort(option); setShowSortSheet(false) }} className="w-full h-12 flex items-center justify-between px-4 rounded-[8px] hover:bg-[#FAF8F5]">
-                  <span className={`text-[15px] ${activeSort === option ? 'font-medium text-[#8B7355]' : 'font-normal text-[#2B2B2B]'}`}>{option}</span>
-                  {activeSort === option && <div className="w-5 h-5 rounded-full bg-[#8B7355] flex items-center justify-center"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>}
+              {[
+                { key: 'Best Selling',        label: t('fragrance.sortBestSelling') },
+                { key: 'Price: Low to High',  label: t('fragrance.sortPriceLow') },
+                { key: 'Price: High to Low',  label: t('fragrance.sortPriceHigh') },
+                { key: 'Most Popular',        label: t('fragrance.sortMostPopular') },
+              ].map(({ key, label }) => (
+                <button key={key} onClick={() => { setActiveSort(key); setShowSortSheet(false) }} className="w-full h-12 flex items-center justify-between px-4 rounded-[8px] hover:bg-[#FAF8F5]">
+                  <span className={`text-[15px] ${activeSort === key ? 'font-medium text-[#8B7355]' : 'font-normal text-[#2B2B2B]'}`}>{label}</span>
+                  {activeSort === key && <div className="w-5 h-5 rounded-full bg-[#8B7355] flex items-center justify-center"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>}
                 </button>
               ))}
             </div>
@@ -395,14 +430,14 @@ function FragranceMobile() {
           <div className="absolute inset-0 bg-black/50" onClick={() => setShowFilterSheet(false)} />
           <div className="relative bg-white rounded-t-[20px] flex flex-col" style={{ maxHeight: '95vh' }}>
             <div className="min-h-[76px] px-5 py-5 flex items-center justify-between border-b border-[#E8E3D9] flex-shrink-0">
-              <h2 className="text-[22px] font-semibold text-[#1A1A1A]">Filters</h2>
+              <h2 className="text-[22px] font-semibold text-[#1A1A1A]">{t('fragrance.filters')}</h2>
               <button onClick={() => setShowFilterSheet(false)} className="w-11 h-11 flex items-center justify-center"><IoClose className="w-6 h-6 text-[#8B7355]" /></button>
             </div>
             <div className="flex-1 overflow-y-auto px-5 py-5">
 
               {/* Fragrance Type */}
               <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">Fragrance Type</h3>
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.fragranceType')}</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {subcategoryCards.map((cat) => {
                     const isSel = selectedTypes.includes(cat.name)
@@ -410,7 +445,7 @@ function FragranceMobile() {
                       <button key={cat.name} onClick={() => toggle(selectedTypes, setSelectedTypes, cat.name)}
                         className={`rounded-[8px] p-3 flex flex-col items-center gap-2 border-2 transition-colors ${isSel ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}>
                         <img src={cat.image} alt={cat.name} className="w-[40px] h-[40px] rounded-full object-cover" />
-                        <span className="text-[12px] font-medium text-[#2B2B2B] text-center leading-tight">{cat.name}</span>
+                        <span className="text-[12px] font-medium text-[#2B2B2B] text-center leading-tight">{ts(cat.name)}</span>
                         <span className="text-[11px] text-[#999999]">{cat.count}</span>
                       </button>
                     )
@@ -422,7 +457,7 @@ function FragranceMobile() {
               {/* Price Range */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[16px] font-semibold text-[#2B2B2B]">Price Range</h3>
+                  <h3 className="text-[16px] font-semibold text-[#2B2B2B]">{t('fragrance.priceRange')}</h3>
                   <span className="text-[14px] font-medium text-[#8B7355]">${minPrice || 0} – ${maxPrice || 500}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -435,14 +470,14 @@ function FragranceMobile() {
 
               {/* Fragrance Family */}
               <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">Fragrance Family</h3>
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.fragranceFamily')}</h3>
                 <div className="flex flex-wrap gap-2">
                   {filterFamilies.map((f) => {
                     const isSel = selectedFamilies.includes(f)
                     return (
                       <button key={f} onClick={() => toggle(selectedFamilies, setSelectedFamilies, f)}
                         className={`px-4 py-2.5 rounded-full border text-[13px] transition-colors ${isSel ? 'bg-[#8B7355] border-[#8B7355] text-white font-medium' : 'bg-white border-[#E8E3D9] text-[#2B2B2B]'}`}>
-                        {f}
+                        {tf(f)}
                       </button>
                     )
                   })}
@@ -452,10 +487,10 @@ function FragranceMobile() {
 
               {/* Scent Notes */}
               <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">Scent Notes</h3>
-                {[{ label: 'Top Notes', key: 'top', notes: filterTopNotes, sel: selectedTopNotes, setSel: setSelectedTopNotes },
-                  { label: 'Middle Notes', key: 'middle', notes: filterMiddleNotes, sel: selectedMiddleNotes, setSel: setSelectedMiddleNotes },
-                  { label: 'Base Notes', key: 'base', notes: filterBaseNotes, sel: selectedBaseNotes, setSel: setSelectedBaseNotes }
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.scentNotes')}</h3>
+                {[{ label: t('fragrance.topNotes'), key: 'top', notes: filterTopNotes, sel: selectedTopNotes, setSel: setSelectedTopNotes },
+                  { label: t('fragrance.middleNotes'), key: 'middle', notes: filterMiddleNotes, sel: selectedMiddleNotes, setSel: setSelectedMiddleNotes },
+                  { label: t('fragrance.baseNotes'), key: 'base', notes: filterBaseNotes, sel: selectedBaseNotes, setSel: setSelectedBaseNotes }
                 ].map(({ label, key, notes, sel, setSel }) => (
                   <div key={key} className="mb-2">
                     <button onClick={() => setExpandedNotes(p => ({ ...p, [key]: !p[key] }))} className="flex items-center justify-between w-full py-3 border-b border-[#E8E3D9]">
@@ -471,7 +506,7 @@ function FragranceMobile() {
                               <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#E8E3D9]'}`}>
                                 {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
                               </div>
-                              <span className="text-[13px] text-[#2B2B2B]">{note}</span>
+                              <span className="text-[13px] text-[#2B2B2B]">{tf(note)}</span>
                             </button>
                           )
                         })}
@@ -484,14 +519,14 @@ function FragranceMobile() {
 
               {/* Occasion */}
               <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">Occasion</h3>
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.occasion')}</h3>
                 <div className="space-y-3">
                   {filterOccasions.map((occ) => (
                     <button key={occ} onClick={() => setSelectedOccasion(prev => prev === occ ? null : occ)} className="flex items-center gap-2.5 w-full">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedOccasion === occ ? 'border-[#C9A870]' : 'border-[#E8E3D9]'}`}>
                         {selectedOccasion === occ && <div className="w-2.5 h-2.5 bg-[#C9A870] rounded-full" />}
                       </div>
-                      <span className="text-[14px] text-[#2B2B2B]">{occ}</span>
+                      <span className="text-[14px] text-[#2B2B2B]">{tf(occ)}</span>
                     </button>
                   ))}
                 </div>
@@ -500,7 +535,7 @@ function FragranceMobile() {
 
               {/* Intensity */}
               <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">Intensity & Longevity</h3>
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.intensityLongevity')}</h3>
                 <div className="flex gap-1 mb-2">
                   {filterIntensityLevels.map((level, idx) => (
                     <button key={level} onClick={() => setIntensityLevel(prev => prev === idx ? null : idx)}
@@ -508,14 +543,14 @@ function FragranceMobile() {
                   ))}
                 </div>
                 <div className="flex justify-between">
-                  {filterIntensityLevels.map((level) => <span key={level} className="text-[11px] text-[#666666] text-center flex-1 leading-tight">{level}</span>)}
+                  {filterIntensityLevels.map((level) => <span key={level} className="text-[11px] text-[#666666] text-center flex-1 leading-tight">{tf(level)}</span>)}
                 </div>
               </div>
               <div className="w-full h-px bg-[#E8E3D9] mb-6" />
 
               {/* Brand */}
               <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">Brand</h3>
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.brand')}</h3>
                 <div className="space-y-3">
                   {filterBrands.map((brand) => {
                     const isChecked = selectedBrands.includes(brand)
@@ -534,7 +569,7 @@ function FragranceMobile() {
 
               {/* Rating */}
               <div className="mb-4">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">Customer Rating</h3>
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.customerRating')}</h3>
                 <div className="space-y-3">
                   {filterRatings.map((r) => (
                     <button key={r.stars} onClick={() => setSelectedRating(prev => prev === r.stars ? null : r.stars)} className="flex items-center gap-2.5 w-full">
@@ -543,7 +578,7 @@ function FragranceMobile() {
                       </div>
                       <div className="flex items-center gap-1.5">
                         {[...Array(5)].map((_, i) => <IoStarSharp key={i} className={`w-4 h-4 ${i < r.stars ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />)}
-                        <span className="text-[13px] text-[#2B2B2B] ml-1">& up</span>
+                        <span className="text-[13px] text-[#2B2B2B] ml-1">{t('fragrance.andUp')}</span>
                         <span className="text-[13px] text-[#999999]">({r.count})</span>
                       </div>
                     </button>
@@ -555,10 +590,10 @@ function FragranceMobile() {
             <div className="px-5 py-5 bg-white border-t border-[#E8E3D9] flex-shrink-0">
               <div className="flex items-center gap-3">
                 <button onClick={clearAll} className="flex-1 min-h-[52px] bg-white border-2 border-[#E8E3D9] rounded-[10px] flex items-center justify-center">
-                  <span className="text-[14px] font-medium text-[#8B7355]">Clear Filters</span>
+                  <span className="text-[14px] font-medium text-[#8B7355]">clearFilters</span>
                 </button>
                 <button onClick={() => setShowFilterSheet(false)} className="flex-1 min-h-[52px] bg-[#8B7355] rounded-[10px] flex items-center justify-center">
-                  <span className="text-[14px] font-medium text-white">Apply Filters ({products.length})</span>
+                  <span className="text-[14px] font-medium text-white">{t('fragrance.applyFilters')} ({products.length})</span>
                 </button>
               </div>
             </div>
@@ -571,6 +606,8 @@ function FragranceMobile() {
 
 // ── Desktop ───────────────────────────────────────────────────────────────────
 function FragranceDesktop() {
+  const { t } = useTranslation()
+  const { tf, ts } = useFragranceTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading]         = useState(true)
   const [activeSort, setActiveSort]             = useState('Best Selling')
@@ -635,9 +672,9 @@ function FragranceDesktop() {
       <div className="min-h-[300px] md:min-h-[380px] lg:min-h-[480px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px]">
         <img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[180px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-15" />
         <div className="w-full max-w-[650px] relative z-10">
-          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">SIGNATURE FRAGRANCES</p>
-          <h1 className="text-[42px] md:text-[60px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">Scent Stories</h1>
-          <p className="text-[15px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">Discover captivating fragrances crafted with rare botanicals</p>
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('fragrance.signatureFragrances')}</p>
+          <h1 className="text-[42px] md:text-[60px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">{t('fragrance.heroTitle')}</h1>
+          <p className="text-[15px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">{t('fragrance.heroDesc')}</p>
           <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
@@ -647,9 +684,9 @@ function FragranceDesktop() {
 
       {/* Breadcrumb */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Shop</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">Fragrance</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('fragrance.home')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('fragrance.shop')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">title</span>
       </div>
 
       {/* Main Content */}
@@ -659,19 +696,19 @@ function FragranceDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">REFINE SELECTION</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">refineSelection</h3>
               {activeFilters > 0 && <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>}
             </div>
 
             {/* Category pills */}
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
-              <div onClick={() => setSelectedTypes([])} className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedTypes.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>All Fragrances</div>
+              <div onClick={() => setSelectedTypes([])} className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedTypes.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>{t('fragrance.allFragrances')}</div>
               {fragranceCategoryLabels.slice(1).map((cat) => {
                 const isSelected = selectedTypes.includes(cat)
                 return (
                   <div key={cat} onClick={() => setSelectedTypes(prev => isSelected ? prev.filter(c => c !== cat) : [...prev, cat])}
                     className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>
-                    {cat}
+                    {ts(cat)}
                   </div>
                 )
               })}
@@ -681,7 +718,7 @@ function FragranceDesktop() {
 
               {/* Price Range */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Price Range</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('fragrance.priceRange')}</h4>
                 <div className="flex items-center gap-[6px] lg:gap-[8px]">
                   <input type="number" placeholder="$0" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
                   <span className="text-[13px] lg:text-[14px] text-[#666666]">—</span>
@@ -691,7 +728,7 @@ function FragranceDesktop() {
 
               {/* Fragrance Family */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Fragrance Family</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('fragrance.fragranceFamily')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {fragranceFamilies.map((item) => {
                     const isChecked = selectedFamilies.includes(item)
@@ -700,16 +737,16 @@ function FragranceDesktop() {
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                       </label>
                     )
                   })}
                 </div>
               </div>
 
-              {/* Top Notes */}
+              {/* Top Notes */
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Top Notes</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('fragrance.topNotes')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {topNotes.map((item) => {
                     const isChecked = selectedTopNotes.includes(item)
@@ -718,16 +755,16 @@ function FragranceDesktop() {
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                       </label>
                     )
                   })}
                 </div>
               </div>
 
-              {/* Intensity */}
+              {/* Intensity */
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Intensity</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">intensity</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {intensityLevels.map((level) => {
                     const isChecked = selectedIntensity.includes(level)
@@ -736,7 +773,7 @@ function FragranceDesktop() {
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-full flex items-center justify-center flex-shrink-0 ${isChecked ? 'border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <div className="w-[7px] h-[7px] bg-[#C9A870] rounded-full" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{level}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(level)}</span>
                       </label>
                     )
                   })}
@@ -758,23 +795,33 @@ function FragranceDesktop() {
             allProducts={allProducts}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            placeholder="Search fragrance products..."
+            placeholder={t('fragrance.searchPlaceholder')}
             className="mb-6"
           />
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-[48px]">
-            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">Showing {products.length} fragrance products</span>
+            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">{t('fragrance.showing')} {products.length} {t('fragrance.fragranceProducts')}</span>
             <div className="flex items-center gap-3 lg:gap-[16px]">
-              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">Sort by:</span>
+              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">{t('fragrance.sortBy')}</span>
               <div className="relative">
                 <button onClick={() => setShowSortDropdown(!showSortDropdown)} className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all">
-                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">{activeSort}</span>
+                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">
+                    {activeSort === 'Best Selling' ? t('fragrance.sortBestSelling') :
+                     activeSort === 'Price: Low to High' ? t('fragrance.sortPriceLow') :
+                     activeSort === 'Price: High to Low' ? t('fragrance.sortPriceHigh') :
+                     activeSort === 'Most Popular' ? t('fragrance.sortMostPopular') : activeSort}
+                  </span>
                   <IoChevronDown className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
                 </button>
                 {showSortDropdown && (
                   <div className="absolute top-full mt-2 right-0 w-[240px] bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-10">
-                    {sortOptions.map((option) => (
-                      <button key={option} onClick={() => { setActiveSort(option); setShowSortDropdown(false) }} className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === option ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}>{option}</button>
+                    {[
+                      { key: 'Best Selling',        label: t('fragrance.sortBestSelling') },
+                      { key: 'Price: Low to High',  label: t('fragrance.sortPriceLow') },
+                      { key: 'Price: High to Low',  label: t('fragrance.sortPriceHigh') },
+                      { key: 'Most Popular',        label: t('fragrance.sortMostPopular') },
+                    ].map(({ key, label }) => (
+                      <button key={key} onClick={() => { setActiveSort(key); setShowSortDropdown(false) }} className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === key ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}>{label}</button>
                     ))}
                   </div>
                 )}
@@ -783,7 +830,7 @@ function FragranceDesktop() {
           </div>
 
           {products.length === 0 ? (
-            <div className="flex items-center justify-center min-h-[400px]"><p className="text-[16px] text-[#666666]">No products found</p></div>
+            <div className="flex items-center justify-center min-h-[400px]"><p className="text-[16px] text-[#666666]">{t('fragrance.noProducts')}</p></div>
           ) : (
             <>
               {/* Row 1 */}
@@ -879,7 +926,7 @@ function FragranceDesktop() {
               {products.length > displayCount && (
                 <div className="flex items-center justify-center mb-16 lg:mb-[96px]">
                   <button onClick={() => setDisplayCount(prev => prev + 10)} className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors">
-                    Load More ({products.length - displayCount} remaining)
+                    {t('fragrance.loadMore')} ({products.length - displayCount} {t('fragrance.remaining')})
                   </button>
                 </div>
               )}
@@ -895,11 +942,12 @@ function FragranceDesktop() {
 
 // ── Main Export ───────────────────────────────────────────────────────────────
 export default function Fragrance() {
+  const { t } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-  return isMobile ? <FragranceMobile /> : <FragranceDesktop />
+  return isMobile ? <FragranceMobile key={i18n.language} /> : <FragranceDesktop key={i18n.language} />
 }
