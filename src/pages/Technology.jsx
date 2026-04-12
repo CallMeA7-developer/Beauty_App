@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import {
   IoSearchOutline,
@@ -89,8 +90,60 @@ const stats = [
   { icon: IoFlaskOutline,        value: 'Patent-Pending', label: 'Innovative Technology'  },
 ]
 
+
+// ─── Translation-aware data builders ─────────────────────────────────────────
+const getCoreFeatures = (t) => [
+  { icon: IoHardwareChipOutline, title: t('technology.features.aiConsultation'),      description: t('technology.features.aiConsultationDesc'),      gradient: 'from-[#E8E3F7] to-[#D5CAE8]' },
+  { icon: IoCameraOutline,       title: t('technology.features.arTryOn'),             description: t('technology.features.arTryOnDesc'),             gradient: 'from-[#FFE8F0] to-[#FFDDE8]' },
+  { icon: IoFlaskOutline,        title: t('technology.features.formulationScience'),  description: t('technology.features.formulationScienceDesc'),  gradient: 'from-[#E3F2FD] to-[#CCEAF9]' },
+  { icon: IoSearchOutline,       title: t('technology.features.skinAnalysis'),        description: t('technology.features.skinAnalysisDesc'),        gradient: 'from-[#E8F5E9] to-[#D4EDD6]' },
+  { icon: IoSparklesOutline,     title: t('technology.features.smartRecs'),           description: t('technology.features.smartRecsDesc'),           gradient: 'from-[#FFF3E0] to-[#FFE8CC]' },
+  { icon: IoTrendingUpOutline,   title: t('technology.features.beautyJourney'),       description: t('technology.features.beautyJourneyDesc'),       gradient: 'from-[#E0F7FA] to-[#CCF0F5]' },
+]
+const getAIBenefits = (t) => [
+  { icon: IoFlaskOutline,           title: t('technology.aiBenefits.instantAnalysis'),    desc: t('technology.aiBenefits.instantAnalysisDesc') },
+  { icon: IoSparklesOutline,        title: t('technology.aiBenefits.personalizedResults'), desc: t('technology.aiBenefits.personalizedResultsDesc') },
+  { icon: IoCheckmarkCircleOutline, title: t('technology.aiBenefits.expertRecs'),          desc: t('technology.aiBenefits.expertRecsDesc') },
+]
+const getScientificInnovations = (t) => [
+  { title: t('technology.innovations.bioActive'),     desc: t('technology.innovations.bioActiveDesc'),     gradient: 'from-[#E8E3F7] to-[#D5CAE8]' },
+  { title: t('technology.innovations.timeRelease'),   desc: t('technology.innovations.timeReleaseDesc'),   gradient: 'from-[#E3F2FD] to-[#CCEAF9]' },
+  { title: t('technology.innovations.clinicalTesting'), desc: t('technology.innovations.clinicalTestingDesc'), gradient: 'from-[#E8F5E9] to-[#D4EDD6]' },
+]
+const getMobileBenefits = (t) => [
+  { icon: IoTimeOutline,       title: t('technology.benefits.saveTime'),      desc: t('technology.benefits.saveTimeDesc') },
+  { icon: IoTrendingUpOutline, title: t('technology.benefits.betterResults'), desc: t('technology.benefits.betterResultsDesc') },
+  { icon: IoBulbOutline,       title: t('technology.benefits.expertGuidance'), desc: t('technology.benefits.expertGuidanceDesc') },
+  { icon: IoSparklesOutline,   title: t('technology.benefits.personalized'),  desc: t('technology.benefits.personalizedDesc') },
+]
+const getInnovationCards = (t) => [
+  { tag: t('technology.innovationCards.aiTag'),     title: t('technology.innovationCards.aiTitle'),     description: t('technology.innovationCards.aiDesc'),     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=580&h=280&fit=crop', buttonText: t('technology.innovationCards.aiBtn'),     path: '/skin-analysis' },
+  { tag: t('technology.innovationCards.arTag'),     title: t('technology.innovationCards.arTitle'),     description: t('technology.innovationCards.arDesc'),     image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=580&h=280&fit=crop', buttonText: t('technology.innovationCards.arBtn'),     path: '/virtual-tryon' },
+  { tag: t('technology.innovationCards.personTag'), title: t('technology.innovationCards.personTitle'), description: t('technology.innovationCards.personDesc'), image: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=580&h=280&fit=crop', buttonText: t('technology.innovationCards.personBtn'), path: '/beauty-journey' },
+  { tag: t('technology.innovationCards.innovTag'),  title: t('technology.innovationCards.innovTitle'),  description: t('technology.innovationCards.innovDesc'),  image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=580&h=280&fit=crop', buttonText: t('technology.innovationCards.innovBtn'),  path: '/advanced-formulations' },
+]
+const getHowItWorksSteps = (t) => [
+  { number: '1', title: t('technology.howItWorksSteps.step1Title'), description: t('technology.howItWorksSteps.step1Desc'), image: 'https://images.unsplash.com/photo-1611349411198-e26e0d5f4a52?w=120&h=120&fit=crop' },
+  { number: '2', title: t('technology.howItWorksSteps.step2Title'), description: t('technology.howItWorksSteps.step2Desc'), image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=120&h=120&fit=crop' },
+  { number: '3', title: t('technology.howItWorksSteps.step3Title'), description: t('technology.howItWorksSteps.step3Desc'), image: 'https://images.unsplash.com/photo-1556740772-1a741367b93e?w=120&h=120&fit=crop' },
+]
+const getDesktopBenefits = (t) => [
+  { icon: IoSearchOutline,          title: t('technology.benefits.precisionAnalysis'),    description: t('technology.benefits.precisionAnalysisDesc') },
+  { icon: IoTimeOutline,            title: t('technology.benefits.timeSaving'),           description: t('technology.benefits.timeSavingDesc') },
+  { icon: IoPersonOutline,          title: t('technology.benefits.personalizedResults'),  description: t('technology.benefits.personalizedResultsDesc') },
+  { icon: IoHeadsetOutline,         title: t('technology.benefits.expertGuidanceLong'),   description: t('technology.benefits.expertGuidanceLongDesc') },
+  { icon: IoCheckmarkCircleOutline, title: t('technology.benefits.productMatching'),      description: t('technology.benefits.productMatchingDesc') },
+  { icon: IoRefreshOutline,         title: t('technology.benefits.progressTracking'),     description: t('technology.benefits.progressTrackingDesc') },
+]
+
+
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function TechnologyMobile() {
+  const { t } = useTranslation()
+  const coreFeatures = getCoreFeatures(t)
+  const aiBenefits = getAIBenefits(t)
+  const scientificInnovations = getScientificInnovations(t)
+  const mobileBenefits = getMobileBenefits(t)
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex flex-col">
 
@@ -99,7 +152,7 @@ function TechnologyMobile() {
         <button className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center">
           <IoChevronBack className="w-6 h-6 text-white" />
         </button>
-        <h1 className="text-[18px] font-semibold text-white">Technology</h1>
+        <h1 className="text-[18px] font-semibold text-white">{t('technology.title')}</h1>
         <button className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center">
           <IoInformationCircleOutline className="w-6 h-6 text-white" />
         </button>
@@ -107,9 +160,9 @@ function TechnologyMobile() {
 
       {/* Hero */}
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-6 pt-8 pb-0 flex flex-col items-center">
-        <p className="text-[11px] font-light italic text-[#8B7355] tracking-[1.5px] mb-2">INNOVATION IN BEAUTY</p>
-        <h2 className="text-[36px] font-bold text-[#1A1A1A] leading-tight mb-2 text-center">The Future of Beauty</h2>
-        <p className="text-[15px] font-normal text-[#666666] mb-4 text-center">Experience AI-Powered Personalization</p>
+        <p className="text-[11px] font-light italic text-[#8B7355] tracking-[1.5px] mb-2">{t('technology.tagline')}</p>
+        <h2 className="text-[36px] font-bold text-[#1A1A1A] leading-tight mb-2 text-center">{t('technology.heroTitle')}</h2>
+        <p className="text-[15px] font-normal text-[#666666] mb-4 text-center">{t('technology.heroSubtitle')}</p>
         <div className="w-16 h-[3px] bg-[#C9A870] mb-6" />
         <img
           src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=440&h=180&fit=crop"
@@ -120,7 +173,7 @@ function TechnologyMobile() {
 
       {/* Core Features Grid */}
       <div className="bg-white px-5 pt-6 pb-4">
-        <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-5">Smart Beauty Solutions</h3>
+        <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-5">{t('technology.smartSolutions')}</h3>
         <div className="grid grid-cols-2 gap-4">
           {coreFeatures.map((feature, idx) => (
             <div key={idx} className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden">
@@ -131,7 +184,7 @@ function TechnologyMobile() {
                 <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-2">{feature.title}</h4>
                 <p className="text-[12px] font-normal text-[#666666] mb-3 line-clamp-2">{feature.description}</p>
                 <button className="flex items-center gap-1 text-[13px] font-medium text-[#8B7355]">
-                  Explore <IoArrowForward className="w-3.5 h-3.5" />
+                  {t('technology.explore')} <IoArrowForward className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -141,7 +194,7 @@ function TechnologyMobile() {
 
       {/* AI Analysis Detail */}
       <div className="bg-[#FDFBF7] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">AI-Powered Analysis</h3>
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.aiAnalysis')}</h3>
         <img
           src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=200&fit=crop"
           alt="AI Analysis"
@@ -160,14 +213,14 @@ function TechnologyMobile() {
         </div>
         <Link to="/ai-consultation" onClick={() => window.scrollTo(0, 0)}>
           <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mt-4 shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
-            <span className="text-[15px] font-semibold text-white">Try AI Consultation</span>
+            <span className="text-[15px] font-semibold text-white">{t('technology.tryAI')}</span>
           </button>
         </Link>
       </div>
 
       {/* AR Try-On Showcase */}
       <div className="bg-white px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">Virtual Try-On Mirror</h3>
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.virtualTryOn')}</h3>
         <div className="relative mb-4">
           <img
             src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=200&fit=crop"
@@ -181,20 +234,20 @@ function TechnologyMobile() {
           </div>
         </div>
         <div className="flex gap-2 overflow-x-auto mb-4" style={{ scrollbarWidth: 'none' }}>
-          {['Real-Time', 'Multiple Products', 'HD Quality'].map((f, i) => (
+          {[t('technology.realTime'), t('technology.multipleProducts'), t('technology.hdQuality')].map((f, i) => (
             <div key={i} className="bg-white border border-[#E8E3D9] text-[#8B7355] text-[12px] px-4 py-2 rounded-full flex-shrink-0">{f}</div>
           ))}
         </div>
         <Link to="/virtual-tryon" onClick={() => window.scrollTo(0, 0)}>
           <button className="w-full min-h-[52px] bg-white border-2 border-[#8B7355] rounded-xl">
-            <span className="text-[15px] font-semibold text-[#8B7355]">Experience AR Mirror</span>
+            <span className="text-[15px] font-semibold text-[#8B7355]">{t('technology.experienceAR')}</span>
           </button>
         </Link>
       </div>
 
       {/* Breakthrough Formulations */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-[#E8E3D9] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">Breakthrough Formulations</h3>
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.breakthroughFormulations')}</h3>
         <div className="space-y-3">
           {scientificInnovations.map((item, idx) => (
             <div key={idx} className="bg-white rounded-lg p-4 flex items-center gap-4">
@@ -212,7 +265,7 @@ function TechnologyMobile() {
 
       {/* Custom Journey */}
       <div className="bg-white px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">Your Custom Journey</h3>
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">{t('technology.customJourney')}</h3>
         <div className="relative">
           {journeySteps.map((step, idx) => (
             <div key={idx} className="flex gap-4 mb-5 last:mb-0">
@@ -231,14 +284,14 @@ function TechnologyMobile() {
         </div>
         <Link to="/beauty-journey" onClick={() => window.scrollTo(0, 0)}>
           <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mt-4 shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
-            <span className="text-[15px] font-semibold text-white">Start Your Journey</span>
+            <span className="text-[15px] font-semibold text-white">{t('technology.startJourney')}</span>
           </button>
         </Link>
       </div>
 
       {/* Smart Recommendations */}
       <div className="bg-[#FDFBF7] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">Intelligent Recommendations</h3>
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.intelligentRecs')}</h3>
         <div className="flex gap-3 overflow-x-auto mb-4" style={{ scrollbarWidth: 'none' }}>
           {[
             'https://images.unsplash.com/photo-1556228578-4d08bdfaf8ce?w=120&h=120&fit=crop',
@@ -248,14 +301,14 @@ function TechnologyMobile() {
             <div key={i} className="min-w-[130px] bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.06)] overflow-hidden flex-shrink-0">
               <img src={img} alt="Product" className="w-full h-[100px] object-cover" />
               <div className="p-3">
-                <p className="text-[13px] font-normal text-[#1A1A1A] mb-2">Premium Serum</p>
+                <p className="text-[13px] font-normal text-[#1A1A1A] mb-2">{t('technology.premiumSerum')}</p>
                 <div className="bg-[#C9A870] text-white text-[11px] font-medium px-2 py-1 rounded-full inline-block">Match: 94%</div>
               </div>
             </div>
           ))}
         </div>
         <div className="flex flex-wrap gap-2">
-          {['AI-Powered', 'Learns Your Preferences', 'Real Results'].map((badge, i) => (
+          {[t('technology.aiBadge'), t('technology.learnsPrefs'), t('technology.realResultsBadge')].map((badge, i) => (
             <div key={i} className="border border-[#E8E3D9] text-[#666666] text-[12px] px-3 py-2 rounded-full inline-flex items-center gap-1.5">
               <IoSparklesOutline className="w-3.5 h-3.5 text-[#8B7355]" />
               {badge}
@@ -266,7 +319,7 @@ function TechnologyMobile() {
 
       {/* Benefits Grid */}
       <div className="bg-white px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">Why Choose Smart Beauty</h3>
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">{t('technology.whySmartBeauty')}</h3>
         <div className="grid grid-cols-2 gap-5">
           {mobileBenefits.map((benefit, idx) => (
             <div key={idx} className="flex flex-col items-center text-center">
@@ -280,17 +333,17 @@ function TechnologyMobile() {
 
       {/* Testimonials */}
       <div className="bg-[#FAF8F5] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">Real Results</h3>
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">{t('technology.realResults')}</h3>
         <div className="flex gap-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-          {testimonials.map((t, idx) => (
+          {testimonials.map((item, idx) => (
             <div key={idx} className="min-w-[300px] bg-white rounded-2xl p-5 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex-shrink-0">
-              <img src={t.photo} alt={t.name} className="w-14 h-14 rounded-full object-cover mb-4" />
-              <p className="text-[14px] font-normal italic text-[#333333] mb-4">"{t.quote}"</p>
-              <p className="text-[13px] font-medium text-[#1A1A1A] mb-1">{t.name}</p>
+              <img src={item.photo} alt={item.name} className="w-14 h-14 rounded-full object-cover mb-4" />
+              <p className="text-[14px] font-normal italic text-[#333333] mb-4">"{item.quote}"</p>
+              <p className="text-[13px] font-medium text-[#1A1A1A] mb-1">{item.name}</p>
               <div className="flex items-center gap-0.5 mb-3">
                 {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-3.5 h-3.5 text-[#C9A870]" />)}
               </div>
-              <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] font-normal px-3 py-1 rounded-full inline-block">{t.tech}</div>
+              <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] font-normal px-3 py-1 rounded-full inline-block">{item.tech}</div>
             </div>
           ))}
         </div>
@@ -298,31 +351,31 @@ function TechnologyMobile() {
 
       {/* Final CTA */}
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-6 py-10 flex flex-col items-center">
-        <h2 className="text-[26px] font-bold text-[#1A1A1A] mb-2 text-center">Experience the Future</h2>
-        <p className="text-[14px] font-normal text-[#666666] mb-6 text-center">Join thousands discovering smart beauty</p>
+        <h2 className="text-[26px] font-bold text-[#1A1A1A] mb-2 text-center">{t('technology.experienceFuture')}</h2>
+        <p className="text-[14px] font-normal text-[#666666] mb-6 text-center">{t('technology.joinThousands')}</p>
         <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mb-3 shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
-          <span className="text-[16px] font-semibold text-white">Get Started</span>
+          <span className="text-[16px] font-semibold text-white">{t('technology.getStarted')}</span>
         </button>
-        <button className="text-[14px] font-medium text-[#8B7355] underline">Learn More About Technology</button>
+        <button className="text-[14px] font-medium text-[#8B7355] underline">{t('technology.learnMore')}</button>
       </div>
 
       {/* Bottom Nav */}
       <div className="min-h-[64px] bg-white border-t border-[#E8E3D9] flex items-center justify-around flex-shrink-0">
         <button className="flex flex-col items-center gap-1">
           <IoHomeOutline className="w-6 h-6 text-[#BDBDBD]" />
-          <span className="text-[11px] text-[#BDBDBD]">Home</span>
+          <span className="text-[11px] text-[#BDBDBD]">{t('technology.nav.home')}</span>
         </button>
         <button className="flex flex-col items-center gap-1">
           <IoDesktopOutline className="w-6 h-6 text-[#8B7355]" />
-          <span className="text-[11px] text-[#8B7355]">Tech</span>
+          <span className="text-[11px] text-[#8B7355]">{t('technology.nav.tech')}</span>
         </button>
         <button className="flex flex-col items-center gap-1">
           <IoHeartOutline className="w-6 h-6 text-[#BDBDBD]" />
-          <span className="text-[11px] text-[#BDBDBD]">Saved</span>
+          <span className="text-[11px] text-[#BDBDBD]">{t('technology.nav.saved')}</span>
         </button>
         <button className="flex flex-col items-center gap-1">
           <IoPersonOutline className="w-6 h-6 text-[#BDBDBD]" />
-          <span className="text-[11px] text-[#BDBDBD]">Profile</span>
+          <span className="text-[11px] text-[#BDBDBD]">{t('technology.nav.profile')}</span>
         </button>
       </div>
 
@@ -332,15 +385,19 @@ function TechnologyMobile() {
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function TechnologyDesktop() {
+  const { t } = useTranslation()
+  const innovationCards = getInnovationCards(t)
+  const howItWorksSteps = getHowItWorksSteps(t)
+  const desktopBenefits = getDesktopBenefits(t)
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
 
       {/* Hero */}
       <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
         <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
-          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">ADVANCED BEAUTY TECHNOLOGY</p>
-          <h1 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">Innovation Meets Beauty</h1>
-          <p className="text-[15px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Experience the future of personalized beauty with cutting-edge technology</p>
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('technology.advancedTech')}</p>
+          <h1 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">{t('technology.desktopHeroTitle')}</h1>
+          <p className="text-[15px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">{t('technology.desktopHeroDesc')}</p>
           <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
@@ -350,9 +407,9 @@ function TechnologyDesktop() {
 
       {/* Breadcrumb */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('technology.home')}</span>
         <span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">Technology</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">{t('technology.breadcrumbTech')}</span>
       </div>
 
       {/* Main Content */}
@@ -390,7 +447,7 @@ function TechnologyDesktop() {
 
         {/* How It Works */}
         <div className="bg-white pt-8 md:pt-10 lg:pt-[64px] mb-10 md:mb-14 lg:mb-[64px]">
-          <h2 className="text-[28px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">How Our Technology Works</h2>
+          <h2 className="text-[28px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('technology.howItWorks')}</h2>
           <div className="flex flex-col md:flex-row justify-center gap-5 md:gap-6 lg:gap-[48px]">
             {howItWorksSteps.map((step, idx) => (
               <div key={idx} className="w-full md:flex-1 lg:w-[360px] lg:flex-none bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[24px]">
@@ -420,11 +477,11 @@ function TechnologyDesktop() {
 
         {/* CTA */}
         <div className="min-h-[120px] lg:min-h-[140px] bg-[#F5F1EA] rounded-[16px] flex flex-col items-center justify-center px-6 md:px-10 lg:px-[64px] py-8 lg:py-0 mb-10 md:mb-14 lg:mb-[64px]">
-          <h3 className="text-[22px] md:text-[26px] lg:text-[32px] font-medium text-[#1A1A1A] mb-2 text-center">Experience Innovation Today</h3>
-          <p className="text-[13px] lg:text-[16px] text-[#666666] mb-5 lg:mb-6 text-center">Join thousands using AI-powered beauty technology</p>
+          <h3 className="text-[22px] md:text-[26px] lg:text-[32px] font-medium text-[#1A1A1A] mb-2 text-center">{t('technology.experienceToday')}</h3>
+          <p className="text-[13px] lg:text-[16px] text-[#666666] mb-5 lg:mb-6 text-center">{t('technology.joinThousandsAI')}</p>
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-            <input type="email" placeholder="Enter your email" className="w-full sm:w-[280px] lg:w-[360px] h-[52px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-            <button className="w-full sm:w-auto h-[52px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Get Started</button>
+            <input type="email" placeholder={t('technology.emailPlaceholder')} className="w-full sm:w-[280px] lg:w-[360px] h-[52px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+            <button className="w-full sm:w-auto h-[52px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">{t('technology.getStarted')}</button>
           </div>
         </div>
 
@@ -435,6 +492,7 @@ function TechnologyDesktop() {
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function Technology() {
+  const { i18n } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
@@ -443,5 +501,5 @@ export default function Technology() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  return isMobile ? <TechnologyMobile /> : <TechnologyDesktop />
+  return isMobile ? <TechnologyMobile key={i18n.language} /> : <TechnologyDesktop key={i18n.language} />
 }
