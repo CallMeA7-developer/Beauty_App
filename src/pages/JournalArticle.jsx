@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { IoArrowBack, IoTimeOutline, IoCalendarOutline, IoShareSocialOutline, IoHeartOutline, IoCloseOutline, IoLinkOutline, IoLogoWhatsapp, IoLogoInstagram, IoCheckmarkCircle } from 'react-icons/io5'
 
@@ -563,6 +564,7 @@ const articles = [
 ]
 
 export default function JournalArticle() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const navigate = useNavigate()
   const [liked, setLiked] = useState(false)
@@ -585,8 +587,8 @@ export default function JournalArticle() {
     return (
       <div className="min-h-screen bg-[#FDFBF7] font-['Cormorant_Garamond'] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-[28px] font-bold text-[#1A1A1A] mb-4">Article not found</h2>
-          <button onClick={() => navigate('/journal')} className="text-[#8B7355] underline text-[16px]">Back to Journal</button>
+          <h2 className="text-[28px] font-bold text-[#1A1A1A] mb-4">{t('journal.articleNotFound')}</h2>
+          <button onClick={() => navigate('/journal')} className="text-[#8B7355] underline text-[16px]">{t('journal.backToJournal')}</button>
         </div>
       </div>
     )
@@ -605,7 +607,7 @@ export default function JournalArticle() {
           onClick={() => navigate('/journal')}
           className="absolute top-6 left-6 md:left-[60px] lg:left-[120px] flex items-center gap-2 text-white text-[13px] font-medium bg-white/10 backdrop-blur px-4 py-2 rounded-full hover:bg-white/20 transition-colors"
         >
-          <IoArrowBack className="w-[15px] h-[15px]" /> Back to Journal
+          <IoArrowBack className="w-[15px] h-[15px]" /> {t('journal.backToJournal')}
         </button>
         <div className="absolute bottom-8 left-4 md:left-[60px] lg:left-[120px] right-4 md:right-[60px] lg:right-[120px]">
           <span className={`inline-block text-[11px] font-semibold px-3 py-1 rounded-full mb-3 ${categoryColors[article.category]}`}>
@@ -660,7 +662,7 @@ export default function JournalArticle() {
           {/* Share */}
           <div className="mt-12 pt-8 border-t border-[#E8E3D9]">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[14px] text-[#666666]">Did you find this helpful?</span>
+              <span className="text-[14px] text-[#666666]">{t('journal.helpful')}</span>
               <div className="flex gap-3">
                 <button
                   onClick={handleLike}
@@ -670,12 +672,12 @@ export default function JournalArticle() {
                       : 'bg-[#F5F1EA] text-[#8B7355] hover:bg-[#E8E3D9]'
                   }`}>
                   <IoHeartOutline className="w-[15px] h-[15px]" />
-                  {liked ? 'Thanks darling! 🌹' : 'Like'}
+                  {liked ? t('journal.thanks') : t('journal.like')}
                 </button>
                 <button
                   onClick={() => setShowShare(!showShare)}
                   className="flex items-center gap-2 h-[40px] px-5 bg-[#F5F1EA] text-[#8B7355] text-[13px] font-medium rounded-full hover:bg-[#E8E3D9] transition-colors">
-                  <IoShareSocialOutline className="w-[15px] h-[15px]" /> Share
+                  <IoShareSocialOutline className="w-[15px] h-[15px]" /> {t('journal.share')}
                 </button>
               </div>
             </div>
@@ -684,7 +686,7 @@ export default function JournalArticle() {
             {showShare && (
               <div className="bg-[#FDFBF7] border border-[#E8E3D9] rounded-[16px] p-5 lg:p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-[16px] font-semibold text-[#1A1A1A]">Share this article</h4>
+                  <h4 className="text-[16px] font-semibold text-[#1A1A1A]">{t('journal.shareArticle')}</h4>
                   <button onClick={() => setShowShare(false)}>
                     <IoCloseOutline className="w-[20px] h-[20px] text-[#999999] hover:text-[#1A1A1A]" />
                   </button>
@@ -698,7 +700,7 @@ export default function JournalArticle() {
                     className={`flex items-center gap-1.5 h-[34px] px-4 rounded-[8px] text-[12px] font-medium transition-all flex-shrink-0 ${
                       copied ? 'bg-green-100 text-green-600' : 'bg-[#8B7355] text-white hover:bg-[#7a6448]'
                     }`}>
-                    {copied ? <><IoCheckmarkCircle className="w-[14px] h-[14px]" /> Copied!</> : <><IoLinkOutline className="w-[14px] h-[14px]" /> Copy Link</>}
+                    {copied ? <><IoCheckmarkCircle className="w-[14px] h-[14px]" /> {t('journal.copied')}</> : <><IoLinkOutline className="w-[14px] h-[14px]" /> {t('journal.copyLink')}</>}
                   </button>
                 </div>
 
@@ -732,7 +734,7 @@ export default function JournalArticle() {
       {related.length > 0 && (
         <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 lg:py-[64px] border-t border-[#E8E3D9]">
           <div className="max-w-[1200px] mx-auto">
-            <p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-6">MORE FROM {article.category.toUpperCase()}</p>
+<p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-6">{t('journal.moreFrom')} {article.category.toUpperCase()}</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {related.map(rel => (
                 <div
@@ -759,7 +761,7 @@ export default function JournalArticle() {
           onClick={() => navigate('/journal')}
           className="h-[52px] px-10 bg-[#1A1A1A] text-white text-[14px] font-medium rounded-full hover:bg-[#8B7355] transition-colors"
         >
-          ← Back to Journal
+          {t('journal.backBtn')}
         </button>
       </div>
 
