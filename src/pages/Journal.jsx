@@ -1,8 +1,7 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { IoTimeOutline, IoArrowForward, IoSearchOutline } from 'react-icons/io5'
-
-const categories = ['All', 'Skincare', 'Makeup', 'Fragrance', 'Wellness', 'Trends']
 
 const articles = [
   {
@@ -106,7 +105,17 @@ const categoryColors = {
 }
 
 export default function Journal() {
+  const { t, i18n } = useTranslation()
   const [activeCategory, setActiveCategory] = useState('All')
+  const categories = ['All', 'Skincare', 'Makeup', 'Fragrance', 'Wellness', 'Trends']
+  const categoryLabels = {
+    'All': t('journal.categories.all'),
+    'Skincare': t('journal.categories.skincare'),
+    'Makeup': t('journal.categories.makeup'),
+    'Fragrance': t('journal.categories.fragrance'),
+    'Wellness': t('journal.categories.wellness'),
+    'Trends': t('journal.categories.trends'),
+  }
   const [searchQuery, setSearchQuery] = useState('')
   const navigate = useNavigate()
 
@@ -127,17 +136,17 @@ export default function Journal() {
       <div className="bg-gradient-to-b from-[#1A1A1A] to-[#2D2418] px-4 md:px-[60px] lg:px-[120px] py-16 md:py-20 lg:py-[100px] text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #C9A870 0%, transparent 60%), radial-gradient(circle at 70% 50%, #8B7355 0%, transparent 60%)' }} />
         <div className="relative z-10">
-          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#C9A870] tracking-[4px] mb-4">THE SHAN LORAY</p>
-          <h1 className="text-[48px] md:text-[64px] lg:text-[88px] font-bold text-white leading-[1] mb-6">Journal</h1>
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#C9A870] tracking-[4px] mb-4">{t('journal.tagline')}</p>
+          <h1 className="text-[48px] md:text-[64px] lg:text-[88px] font-bold text-white leading-[1] mb-6">{t('journal.title')}</h1>
           <p className="text-[15px] md:text-[17px] lg:text-[20px] font-light text-[#C9A870]/80 max-w-[560px] mx-auto mb-10">
-            Beauty wisdom, skincare science, and lifestyle inspiration — curated for the modern woman.
+            {t('journal.subtitle')}
           </p>
           {/* Search */}
           <div className="max-w-[480px] mx-auto relative">
             <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#8B7355]" />
             <input
               type="text"
-              placeholder="Search articles..."
+              placeholder={t('journal.searchPlaceholder')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="w-full h-[52px] pl-11 pr-5 bg-white/10 backdrop-blur border border-white/20 rounded-full text-[14px] text-white placeholder-white/40 outline-none focus:border-[#C9A870] transition-colors"
@@ -148,9 +157,9 @@ export default function Journal() {
 
       {/* Breadcrumb */}
       <div className="min-h-[48px] bg-white px-4 md:px-[60px] lg:px-[120px] flex items-center border-b border-[#E8E3D9]">
-        <span onClick={() => navigate('/')} className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">Home</span>
+        <span onClick={() => navigate('/')} className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">{t('journal.home')}</span>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Journal</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">{t('journal.breadcrumb')}</span>
       </div>
 
       {/* Categories */}
@@ -166,7 +175,7 @@ export default function Journal() {
                   : 'bg-[#F5F1EA] text-[#666666] hover:bg-[#E8E3D9]'
               }`}
             >
-              {cat}
+              {categoryLabels[cat] || cat}
             </button>
           ))}
         </div>
@@ -177,7 +186,7 @@ export default function Journal() {
         {/* Featured Article */}
         {featured && (
           <div className="max-w-[1200px] mx-auto mb-12 lg:mb-[64px]">
-            <p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-4">FEATURED STORY</p>
+            <p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-4">{t('journal.featuredStory')}</p>
             <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.08)] grid grid-cols-1 lg:grid-cols-2 group cursor-pointer"
               onClick={() => navigate(`/journal/${featured.id}`)}>
               <div className="relative overflow-hidden h-[280px] lg:h-auto">
@@ -204,7 +213,7 @@ export default function Journal() {
                 <h2 className="text-[24px] md:text-[28px] lg:text-[36px] font-bold text-[#1A1A1A] leading-[1.2] mb-4">{featured.title}</h2>
                 <p className="text-[14px] lg:text-[16px] font-light text-[#666666] leading-relaxed mb-6">{featured.excerpt}</p>
                 <div className="flex items-center gap-2 text-[#8B7355] font-medium text-[14px] group-hover:gap-4 transition-all">
-                  Read Article <IoArrowForward className="w-[16px] h-[16px]" />
+                  {t('journal.readArticle')} <IoArrowForward className="w-[16px] h-[16px]" />
                 </div>
               </div>
             </div>
@@ -215,7 +224,7 @@ export default function Journal() {
         {rest.length > 0 && (
           <div className="max-w-[1200px] mx-auto">
             <p className="text-[11px] lg:text-[13px] font-medium text-[#8B7355] tracking-[2px] mb-6">
-              {activeCategory === 'All' ? 'LATEST STORIES' : activeCategory.toUpperCase()}
+{activeCategory === 'All' ? t('journal.latestStories') : (categoryLabels[activeCategory] || activeCategory).toUpperCase()}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {rest.map(article => (
@@ -248,7 +257,7 @@ export default function Journal() {
                     <h3 className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] leading-[1.3] mb-3 group-hover:text-[#8B7355] transition-colors">{article.title}</h3>
                     <p className="text-[12px] lg:text-[13px] font-light text-[#666666] leading-relaxed mb-4 line-clamp-2">{article.excerpt}</p>
                     <div className="flex items-center gap-2 text-[#8B7355] font-medium text-[13px] group-hover:gap-3 transition-all">
-                      Read More <IoArrowForward className="w-[14px] h-[14px]" />
+                      {t('journal.readMore')} <IoArrowForward className="w-[14px] h-[14px]" />
                     </div>
                   </div>
                 </div>
@@ -260,27 +269,27 @@ export default function Journal() {
         {/* No results */}
         {filtered.length === 0 && (
           <div className="max-w-[1200px] mx-auto text-center py-20">
-            <p className="text-[18px] text-[#999999]">No articles found for "{searchQuery}"</p>
-            <button onClick={() => { setSearchQuery(''); setActiveCategory('All') }} className="mt-4 text-[#8B7355] underline text-[14px]">Clear filters</button>
+            <p className="text-[18px] text-[#999999]">{t('journal.noResults')} "{searchQuery}"</p>
+            <button onClick={() => { setSearchQuery(''); setActiveCategory('All') }} className="mt-4 text-[#8B7355] underline text-[14px]">{t('journal.clearFilters')}</button>
           </div>
         )}
       </div>
 
       {/* Newsletter */}
       <div className="bg-gradient-to-b from-[#1A1A1A] to-[#2D2418] px-4 md:px-[60px] lg:px-[120px] py-16 lg:py-[80px] text-center">
-        <p className="text-[12px] font-light italic text-[#C9A870] tracking-[3px] mb-3">STAY INSPIRED</p>
-        <h3 className="text-[28px] md:text-[36px] lg:text-[48px] font-bold text-white mb-4">Beauty Wisdom, Delivered</h3>
+        <p className="text-[12px] font-light italic text-[#C9A870] tracking-[3px] mb-3">{t('journal.stayInspired')}</p>
+        <h3 className="text-[28px] md:text-[36px] lg:text-[48px] font-bold text-white mb-4">{t('journal.newsletter')}</h3>
         <p className="text-[14px] lg:text-[16px] font-light text-white/60 mb-8 max-w-[480px] mx-auto">
-          Get the latest skincare tips, beauty trends, and exclusive Shan Loray content straight to your inbox.
+          {t('journal.newsletterDesc')}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[460px] mx-auto">
           <input
             type="email"
-            placeholder="Your email address"
+            placeholder={t('journal.emailPlaceholder')}
             className="flex-1 h-[52px] px-5 bg-white/10 border border-white/20 rounded-[8px] text-[14px] text-white placeholder-white/40 outline-none focus:border-[#C9A870] transition-colors"
           />
           <button className="h-[52px] px-8 bg-[#C9A870] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#b8956a] transition-colors whitespace-nowrap">
-            Subscribe
+            {t('journal.subscribe')}
           </button>
         </div>
       </div>
