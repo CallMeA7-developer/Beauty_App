@@ -7,10 +7,10 @@ import { useAuth } from '../contexts/AuthContext'
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
 
-const testimonials = [
-  { quote: 'Shan Loray represents the perfect balance of luxury and efficacy. Every product feels like an indulgent ritual.',        name: 'Anastasia Volkov',  location: 'St. Petersburg', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=72&h=72&fit=crop' },
-  { quote: 'The transformative power of these serums is undeniable. My complexion has never been more luminous and radiant.',        name: 'Elena Morozova',    location: 'Moscow',         img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=72&h=72&fit=crop' },
-  { quote: 'From the elegant packaging to the exquisite formulations, everything about this brand speaks to quality and care.',      name: 'Sofia Ivanova',     location: 'Kazan',          img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=72&h=72&fit=crop' },
+const testimonialsData = [
+  { quoteKey: 'home.testimonial1', name: 'Anastasia Volkov',  location: 'St. Petersburg', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=72&h=72&fit=crop' },
+  { quoteKey: 'home.testimonial2', name: 'Elena Morozova',    location: 'Moscow',         img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=72&h=72&fit=crop' },
+  { quoteKey: 'home.testimonial3', name: 'Sofia Ivanova',     location: 'Kazan',          img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=72&h=72&fit=crop' },
 ]
 
 const instagramImages = [
@@ -93,7 +93,7 @@ function HomeMobile() {
             </p>
             <Link to="/explore">
               <button className="w-[120px] h-[48px] border-[2px] border-[#1A1A1A] text-[14px] font-semibold text-[#1A1A1A]">
-                Explore
+                {t('home.explore')}
               </button>
             </Link>
           </div>
@@ -313,12 +313,12 @@ function HomeMobile() {
           <h2 className="text-[28px] font-semibold text-[#1A1A1A]">{t('home.testimonials')}</h2>
         </div>
         <div className="px-5 space-y-4">
-          {testimonials.map((item, idx) => (
+          {testimonialsData.map((item, idx) => (
             <div key={idx} className="bg-white rounded-[12px] shadow-[0_6px_28px_rgba(0,0,0,0.07)] p-7">
               <div className="flex gap-1 mb-5">
                 {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-4 h-4 text-[#C9A870]" />)}
               </div>
-              <p className="text-[14px] font-normal italic text-[#666666] leading-[1.6] mb-6">"{item.quote}"</p>
+              <p className="text-[14px] font-normal italic text-[#666666] leading-[1.6] mb-6">{t(item.quoteKey)}</p>
               <div className="flex items-center gap-3">
                 <img src={item.img} alt={item.name} className="w-14 h-14 rounded-full object-cover" />
                 <div>
@@ -422,7 +422,7 @@ function HomeDesktop() {
             </p>
             <Link to="/explore">
               <button className="border-[2px] border-[#1A1A1A] h-[48px] lg:h-[52px] w-[140px] lg:w-[160px] text-[14px] lg:text-[15px] font-semibold text-[#1A1A1A] tracking-[1.5px] hover:bg-[#1A1A1A] hover:text-white transition-all">
-                Explore
+                {t('home.explore')}
               </button>
             </Link>
           </div>
@@ -643,12 +643,12 @@ function HomeDesktop() {
         </div>
         <div className="px-6 md:px-[60px] lg:px-[120px]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-[56px] items-start">
-            {testimonials.map((item, idx) => (
+            {testimonialsData.map((item, idx) => (
               <div key={idx} className="bg-white rounded-[12px] shadow-[0_6px_28px_rgba(0,0,0,0.07)] p-8 md:p-10 lg:p-[52px]" style={{ marginTop: idx === 1 ? '-40px' : '0px' }}>
                 <div className="flex gap-[4px] mb-6">
                   {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />)}
                 </div>
-                <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal italic text-[#666666] leading-[1.75] mb-7 lg:mb-8">"{item.quote}"</p>
+                <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal italic text-[#666666] leading-[1.75] mb-7 lg:mb-8">{t(item.quoteKey)}</p>
                 <div className="flex items-center gap-4">
                   <img src={item.img} alt={item.name} className="w-[56px] h-[56px] lg:w-[72px] lg:h-[72px] rounded-full object-cover" />
                   <div>
