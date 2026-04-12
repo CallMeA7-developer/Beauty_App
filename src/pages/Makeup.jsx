@@ -666,7 +666,7 @@ function MakeupDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">refineSelection</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">{t('makeup.refineSelection')}</h3>
               {activeFilters > 0 && <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>}
             </div>
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
