@@ -1117,7 +1117,7 @@ function SkinCareDesktop() {
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function SkinCare() {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
