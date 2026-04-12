@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import i18n from '../i18n'
 import {
   IoMenuOutline,
   IoClose,
@@ -28,35 +30,6 @@ import { useCart } from '../contexts/CartContext'
 import { useWishlist } from '../contexts/WishlistContext'
 import AuthModal from './AuthModal'
 
-// ─── Shared Data ──────────────────────────────────────────────────────────────
-const desktopNavLinks = [
-  { label: 'Collections', path: '/collections' },
-  { label: 'Skincare',    path: '/skincare'    },
-  { label: 'Makeup',      path: '/makeup'      },
-  { label: 'Fragrance',   path: '/fragrance'   },
-  { label: 'Technology',  path: '/technology'  },
-  { label: 'Journal',     path: '/journal'     },
-]
-
-const drawerNavItems = [
-  { label: 'Home',            path: '/',                      bold: true  },
-  { label: 'Shop',            path: '/collections',           bold: true  },
-  { label: 'Skincare',        path: '/skincare',              bold: false },
-  { label: 'Makeup',          path: '/makeup',                bold: false },
-  { label: 'Fragrance',       path: '/fragrance',             bold: false },
-  { label: 'AI Consultation', path: '/ai-consultation',       bold: false, badge: 'NEW' },
-  { label: 'Virtual Try-On',  path: '/virtual-tryon',         bold: false },
-  { label: 'Technology',      path: '/technology',            bold: false },
-  { label: 'About',           path: '/advanced-formulations', bold: false },
-]
-
-const utilityActions = [
-  { icon: IoSearchOutline, label: 'Search Products', path: '/search',   count: null, isSearch: true },
-  { icon: IoPersonOutline, label: 'My Account',      path: '/account',  count: null },
-  { icon: IoHeartOutline,  label: 'Saved Items',     path: '/wishlist', count: '3'  },
-  { icon: IoBagOutline,    label: 'Cart',             path: '/cart',     count: '2'  },
-]
-
 const socialLinks = [
   { icon: IoLogoInstagram, href: 'https://instagram.com/shanloray' },
   { icon: IoLogoFacebook,  href: 'https://facebook.com/shanloray'  },
@@ -64,45 +37,10 @@ const socialLinks = [
   { icon: IoLogoYoutube,   href: 'https://youtube.com/shanloray'   },
 ]
 
-// ─── Search Data ──────────────────────────────────────────────────────────────
-const quickCategories = ['All', 'Skincare', 'Makeup', 'Fragrance', 'Tools', 'Collections', 'Ingredients']
-
-const recentSearches = [
-  'Vitamin C Serum', 'Anti-aging cream', 'Hydrating face mask',
-  'Retinol treatment', 'Eye cream for dark circles', 'Gentle cleanser',
-]
-
-const popularSearches = [
-  { term: 'Anti-Aging',    count: '2.4k searches', icon: IoTrendingUp },
-  { term: 'Vitamin C',     count: '1.8k searches', icon: IoFlame      },
-  { term: 'Hydration',     count: '2.1k searches', icon: IoSparkles   },
-  { term: 'Night Routine', count: '1.5k searches', icon: IoStarSharp  },
-]
-
-const trendingTopics = [
-  'Anti-Aging', 'Vitamin C', 'Hydration', 'Night Routine',
-  'Luxury Skincare', 'Retinol', 'SPF Protection', 'Eye Care',
-  'Sensitive Skin', 'Natural Ingredients', 'K-Beauty', 'Exfoliation',
-]
-
-const productSuggestions = [
-  { name: 'Age-Defying Serum',      brand: 'Shan Loray', price: '$124', reviews: 342, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=160&h=160&fit=crop' },
-  { name: 'Vitamin C Brightening',  brand: 'Shan Loray', price: '$95',  reviews: 521, image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=160&h=160&fit=crop' },
-  { name: 'Hydrating Essence',      brand: 'Shan Loray', price: '$78',  reviews: 467, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=160&h=160&fit=crop' },
-]
-
-const collections = [
-  { name: 'Anti-Aging Collection', items: '12 products', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=80&h=80&fit=crop' },
-  { name: 'Hydration Essentials',  items: '8 products',  image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=80&h=80&fit=crop' },
-  { name: 'Brightening Bundle',    items: '6 products',  image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=80&h=80&fit=crop' },
-]
-
-const ingredients  = ['Vitamin C (Ascorbic Acid)', 'Retinol', 'Hyaluronic Acid', 'Niacinamide', 'Peptides']
-const skinConcerns = ['Fine Lines & Wrinkles', 'Dark Spots', 'Dryness', 'Uneven Texture', 'Loss of Firmness']
-
 // ─── Search Overlay ───────────────────────────────────────────────────────────
 function SearchOverlay({ isOpen, onClose }) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { addToCart } = useCart()
   const [query, setQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
@@ -119,6 +57,19 @@ function SearchOverlay({ isOpen, onClose }) {
   const makeupCatsFilter    = ['Foundation', 'Concealer', 'Blush', 'Highlighter', 'Lipstick', 'Mascara']
   const fragranceFamsFilter = ['Floral', 'Woody', 'Citrus', 'Oriental', 'Fresh', 'Spicy']
 
+  const popularSearches = [
+    { term: t('search.antiAging'),    count: t('search.searches24k'), icon: IoTrendingUp },
+    { term: t('search.vitaminC'),     count: t('search.searches18k'), icon: IoFlame      },
+    { term: t('search.hydration'),    count: t('search.searches21k'), icon: IoSparkles   },
+    { term: t('search.nightRoutine'), count: t('search.searches15k'), icon: IoStarSharp  },
+  ]
+
+  const trendingTopics = [
+    'Anti-Aging', 'Vitamin C', 'Hydration', 'Night Routine',
+    'Luxury Skincare', 'Retinol', 'SPF Protection', 'Eye Care',
+    'Sensitive Skin', 'Natural Ingredients', 'K-Beauty', 'Exfoliation',
+  ]
+
   useEffect(() => {
     if (!isOpen) return
     setLoadingProducts(true)
@@ -129,7 +80,6 @@ function SearchOverlay({ isOpen, onClose }) {
     })
   }, [isOpen])
 
-  // Filter products based on query and category
   const results = query.trim().length >= 2
     ? allProducts.filter(p => {
         const q = query.toLowerCase()
@@ -139,14 +89,13 @@ function SearchOverlay({ isOpen, onClose }) {
           p.brand?.toLowerCase().includes(q) ||
           p.subcategory?.toLowerCase().includes(q) ||
           p.skin_concerns?.some(c => c.toLowerCase().includes(q)) ||
-          p.skin_types?.some(t => t.toLowerCase().includes(q)) ||
-          p.ingredients?.some(i => i.toLowerCase().includes(q)) ||
+          p.skin_types?.some(st => st.toLowerCase().includes(q)) ||
+          p.ingredients?.some(ing => ing.toLowerCase().includes(q)) ||
           p.fragrance_family?.toLowerCase().includes(q)
         )
       }).slice(0, 12)
     : []
 
-  // Suggestions (first 6 matches)
   const suggestions = query.trim().length >= 1
     ? allProducts.filter(p => {
         const q = query.toLowerCase()
@@ -210,7 +159,7 @@ function SearchOverlay({ isOpen, onClose }) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             onBlur={() => { if (query.trim()) saveRecent(query.trim()) }}
-            placeholder="Search products, skin types, ingredients, brands..."
+            placeholder={t('search.placeholder')}
             autoFocus
             className="w-full h-[52px] pl-[48px] pr-[44px] text-[15px] md:text-[17px] text-[#2B2B2B] bg-[#FDFBF7] border-2 border-[#E8E3D9] rounded-[12px] outline-none focus:border-[#8B7355] focus:bg-white transition-all"
           />
@@ -255,7 +204,6 @@ function SearchOverlay({ isOpen, onClose }) {
 
       <div className="px-4 md:px-[60px] lg:px-[120px] py-8 max-w-[1200px] mx-auto">
 
-        {/* Loading */}
         {loadingProducts && !isSearching && (
           <div className="flex justify-center py-10">
             <div className="flex gap-2">
@@ -268,7 +216,7 @@ function SearchOverlay({ isOpen, onClose }) {
         {isSearching && !loadingProducts && hasResults && (
           <div className="mb-10">
             <p className="text-[14px] text-[#666666] mb-5">
-              <span className="font-semibold text-[#1A1A1A]">{results.length}</span> results for <span className="font-semibold text-[#8B7355]">"{query}"</span>
+              <span className="font-semibold text-[#1A1A1A]">{results.length}</span> {t('search.results')} <span className="font-semibold text-[#8B7355]">"{query}"</span>
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {results.map(product => (
@@ -298,20 +246,19 @@ function SearchOverlay({ isOpen, onClose }) {
         {noResults && (
           <div className="text-center py-12 mb-8">
             <IoSearchOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-4" />
-            <h3 className="text-[20px] font-semibold text-[#1A1A1A] mb-2">No results for "{query}"</h3>
-            <p className="text-[14px] text-[#666666]">Try a different search term</p>
+            <h3 className="text-[20px] font-semibold text-[#1A1A1A] mb-2">{t('search.noResults')} "{query}"</h3>
+            <p className="text-[14px] text-[#666666]">{t('search.tryDifferent')}</p>
           </div>
         )}
 
         {/* Default State */}
         {!isSearching && !loadingProducts && (
           <div>
-            {/* Browse By */}
             <div className="mb-10">
-              <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A] mb-5">Browse By</h2>
+              <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A] mb-5">{t('search.browseBy')}</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">SKIN CONCERNS</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinConcerns')}</p>
                   <div className="flex flex-wrap gap-2">
                     {skinConcernsFilter.map(c => (
                       <button key={c} onClick={() => handleFilterClick(`/skincare?concern=${encodeURIComponent(c)}`)}
@@ -320,25 +267,25 @@ function SearchOverlay({ isOpen, onClose }) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">SKIN TYPES</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.skinTypes')}</p>
                   <div className="flex flex-wrap gap-2">
-                    {skinTypesFilter.map(t => (
-                      <button key={t} onClick={() => handleFilterClick(`/skincare?skinType=${encodeURIComponent(t)}`)}
-                        className="h-[30px] px-3 bg-[#EEF4FF] text-[#3B5BAD] text-[12px] font-medium rounded-full hover:bg-[#8B7355] hover:text-white transition-all">{t}</button>
+                    {skinTypesFilter.map(st => (
+                      <button key={st} onClick={() => handleFilterClick(`/skincare?skinType=${encodeURIComponent(st)}`)}
+                        className="h-[30px] px-3 bg-[#EEF4FF] text-[#3B5BAD] text-[12px] font-medium rounded-full hover:bg-[#8B7355] hover:text-white transition-all">{st}</button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">KEY INGREDIENTS</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.keyIngredients')}</p>
                   <div className="flex flex-wrap gap-2">
-                    {ingredientsFilter.map(i => (
-                      <button key={i} onClick={() => handleFilterClick(`/skincare?ingredient=${encodeURIComponent(i)}`)}
-                        className="h-[30px] px-3 bg-[#F0FAF0] text-[#2D7D3B] text-[12px] font-medium rounded-full hover:bg-[#8B7355] hover:text-white transition-all">{i}</button>
+                    {ingredientsFilter.map(ing => (
+                      <button key={ing} onClick={() => handleFilterClick(`/skincare?ingredient=${encodeURIComponent(ing)}`)}
+                        className="h-[30px] px-3 bg-[#F0FAF0] text-[#2D7D3B] text-[12px] font-medium rounded-full hover:bg-[#8B7355] hover:text-white transition-all">{ing}</button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">MAKEUP</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.makeup')}</p>
                   <div className="flex flex-wrap gap-2">
                     {makeupCatsFilter.map(m => (
                       <button key={m} onClick={() => handleFilterClick(`/makeup?subcategory=${encodeURIComponent(m)}`)}
@@ -347,7 +294,7 @@ function SearchOverlay({ isOpen, onClose }) {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">FRAGRANCE</p>
+                  <p className="text-[11px] font-semibold text-[#999999] tracking-[1.5px] mb-2">{t('search.fragrance')}</p>
                   <div className="flex flex-wrap gap-2">
                     {fragranceFamsFilter.map(f => (
                       <button key={f} onClick={() => handleFilterClick(`/fragrance?family=${encodeURIComponent(f)}`)}
@@ -358,13 +305,12 @@ function SearchOverlay({ isOpen, onClose }) {
               </div>
             </div>
 
-            {/* Recent Searches */}
             {recentSearches.length > 0 && (
               <div className="mb-10">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A]">Recent Searches</h2>
+                  <h2 className="text-[18px] md:text-[20px] font-medium text-[#1A1A1A]">{t('search.recentSearches')}</h2>
                   <button onClick={() => { setRecentSearches([]); localStorage.removeItem('shanloray_recent_searches') }}
-                    className="text-[13px] text-[#8B7355] hover:underline">Clear All</button>
+                    className="text-[13px] text-[#8B7355] hover:underline">{t('search.clearAll')}</button>
                 </div>
                 {recentSearches.map(search => (
                   <div key={search} onClick={() => handleTermClick(search)}
@@ -381,9 +327,8 @@ function SearchOverlay({ isOpen, onClose }) {
               </div>
             )}
 
-            {/* Popular Right Now */}
             <div className="mb-10">
-              <h2 className="text-[18px] md:text-[24px] font-medium text-[#1A1A1A] mb-5">Popular Right Now</h2>
+              <h2 className="text-[18px] md:text-[24px] font-medium text-[#1A1A1A] mb-5">{t('search.popularRightNow')}</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {popularSearches.map(item => (
                   <div key={item.term} onClick={() => handleTermClick(item.term)}
@@ -396,11 +341,10 @@ function SearchOverlay({ isOpen, onClose }) {
               </div>
             </div>
 
-            {/* Trending Topics */}
             <div className="bg-[#FDFBF7] rounded-[12px] p-6">
               <div className="flex items-center gap-2 mb-4">
                 <IoFlame className="w-[22px] h-[22px] text-[#C9A870]" />
-                <h2 className="text-[18px] font-medium text-[#1A1A1A]">Trending Topics</h2>
+                <h2 className="text-[18px] font-medium text-[#1A1A1A]">{t('search.trendingTopics')}</h2>
               </div>
               <div className="flex flex-wrap gap-3">
                 {trendingTopics.map(topic => (
@@ -418,10 +362,29 @@ function SearchOverlay({ isOpen, onClose }) {
   )
 }
 
-
 // ─── Mobile Drawer ────────────────────────────────────────────────────────────
-function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
+function MobileDrawer({ isOpen, onClose, onSearchOpen, currentLang, toggleLanguage }) {
   const location = useLocation()
+  const { t } = useTranslation()
+
+  const drawerNavItems = [
+    { label: t('nav.home'),           path: '/',                      bold: true  },
+    { label: t('nav.shop'),           path: '/collections',           bold: true  },
+    { label: t('nav.skincare'),       path: '/skincare',              bold: false },
+    { label: t('nav.makeup'),         path: '/makeup',                bold: false },
+    { label: t('nav.fragrance'),      path: '/fragrance',             bold: false },
+    { label: t('nav.aiConsultation'), path: '/ai-consultation',       bold: false, badge: t('nav.new') },
+    { label: t('nav.virtualTryOn'),   path: '/virtual-tryon',         bold: false },
+    { label: t('nav.technology'),     path: '/technology',            bold: false },
+    { label: t('nav.about'),          path: '/advanced-formulations', bold: false },
+  ]
+
+  const utilityActions = [
+    { icon: IoSearchOutline, label: t('nav.searchProducts'), path: '/search',   count: null, isSearch: true },
+    { icon: IoPersonOutline, label: t('nav.myAccount'),      path: '/account',  count: null },
+    { icon: IoHeartOutline,  label: t('nav.savedItems'),     path: '/wishlist', count: null },
+    { icon: IoBagOutline,    label: t('nav.cart'),           path: '/cart',     count: null },
+  ]
 
   return (
     <>
@@ -433,7 +396,6 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
 
-        {/* Header */}
         <div className="h-[80px] bg-white flex items-center justify-center relative flex-shrink-0">
           <Link to="/" onClick={onClose}>
             <span className="text-[20px] font-semibold tracking-[3px] text-[#1A1A1A]">SHAN LORAY</span>
@@ -443,7 +405,6 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
           </button>
         </div>
 
-        {/* Nav Items */}
         <div className="bg-white px-6 pt-4 pb-8 flex-shrink-0">
           <div className="flex flex-col gap-[18px]">
             {drawerNavItems.map((item, idx) => {
@@ -471,24 +432,17 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
           </div>
         </div>
 
-        {/* Gold Divider */}
         <div className="w-full h-[1px] bg-[#C9A870] flex-shrink-0" />
 
-        {/* Utility Actions */}
         <div className="bg-[#F5F1EA] px-5 py-6 flex-shrink-0">
           <div className="flex flex-col gap-3">
             {utilityActions.map((action, idx) => {
               if (action.isSearch) {
                 return (
-                  <button
-                    key={idx}
-                    onClick={() => { onClose(); onSearchOpen() }}
-                    className="bg-white rounded-[10px] px-5 py-[18px] flex items-center gap-4 shadow-[0_1px_6px_rgba(0,0,0,0.06)] w-full text-left"
-                  >
+                  <button key={idx} onClick={() => { onClose(); onSearchOpen() }}
+                    className="bg-white rounded-[10px] px-5 py-[18px] flex items-center gap-4 shadow-[0_1px_6px_rgba(0,0,0,0.06)] w-full text-left">
                     <action.icon className="w-[22px] h-[22px] text-[#555] flex-shrink-0" />
-                    <span className="text-[16px] font-normal text-[#555] font-['Cormorant_Garamond']">
-                      {action.label}
-                    </span>
+                    <span className="text-[16px] font-normal text-[#555] font-['Cormorant_Garamond']">{action.label}</span>
                   </button>
                 )
               }
@@ -496,10 +450,7 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
                 <Link key={idx} to={action.path} onClick={onClose}>
                   <div className="bg-white rounded-[10px] px-5 py-[18px] flex items-center gap-4 shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
                     <action.icon className="w-[22px] h-[22px] text-[#555] flex-shrink-0" />
-                    <span className="text-[16px] font-normal text-[#555]">
-                      {action.label}
-                      {action.count && <span className="text-[#C9A870]"> ({action.count})</span>}
-                    </span>
+                    <span className="text-[16px] font-normal text-[#555]">{action.label}</span>
                   </div>
                 </Link>
               )
@@ -507,24 +458,31 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
           </div>
         </div>
 
-        {/* Settings */}
         <div className="bg-[#EBE6DC] px-6 py-2 flex-shrink-0">
+          {/* Language Toggle in Mobile Drawer */}
+          <button onClick={toggleLanguage} className="w-full flex items-center justify-between py-4 border-b border-[#D4CFC6]">
+            <span className="text-[15px] font-normal text-[#2B2B2B]">
+              {currentLang === 'en' ? '🇬🇧 English' : '🇷🇺 Русский'}
+            </span>
+            <div className="flex items-center gap-2">
+              <span className={`text-[13px] font-medium ${currentLang === 'en' ? 'text-[#8B7355]' : 'text-[#999]'}`}>EN</span>
+              <span className="text-[#C9A870]">/</span>
+              <span className={`text-[13px] font-medium ${currentLang === 'ru' ? 'text-[#8B7355]' : 'text-[#999]'}`}>RU</span>
+            </div>
+          </button>
           <div className="flex items-center justify-between py-4 border-b border-[#D4CFC6]">
-            <span className="text-[15px] font-normal text-[#2B2B2B]">English</span>
-            <IoChevronForward className="w-4 h-4 text-[#888]" />
-          </div>
-          <div className="flex items-center justify-between py-4 border-b border-[#D4CFC6]">
-            <span className="text-[15px] font-normal text-[#2B2B2B]">USD $</span>
+            <span className="text-[15px] font-normal text-[#2B2B2B]">{currentLang === 'ru' ? 'RUB ₽' : 'USD $'}</span>
             <IoChevronForward className="w-4 h-4 text-[#888]" />
           </div>
           <div className="pt-4 pb-2">
-            <span className="text-[13px] font-normal text-[#808080]">Region: United States</span>
+            <span className="text-[13px] font-normal text-[#808080]">
+              {currentLang === 'ru' ? 'Регион: Россия' : 'Region: United States'}
+            </span>
           </div>
         </div>
 
         <div className="flex-1 bg-[#EBE6DC]" />
 
-        {/* Social Footer */}
         <div className="bg-[#2B2B2B] flex flex-col items-center justify-center py-7 flex-shrink-0">
           <div className="flex items-center gap-8 mb-4">
             {socialLinks.map(({ icon: Icon, href }) => (
@@ -533,7 +491,7 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
               </a>
             ))}
           </div>
-          <p className="text-[11px] font-light italic text-[#808080]">©©2024 Shan Loray</p>
+          <p className="text-[11px] font-light italic text-[#808080]">©2024 Shan Loray</p>
         </div>
 
         <div className="h-[34px] w-full bg-[#2B2B2B] flex items-center justify-center flex-shrink-0">
@@ -548,6 +506,7 @@ function MobileDrawer({ isOpen, onClose, onSearchOpen }) {
 export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, signOut } = useAuth()
   const { cartCount } = useCart()
   const { wishlistCount } = useWishlist()
@@ -555,6 +514,23 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [currentLang, setCurrentLang] = useState(localStorage.getItem('shanloray_language') || 'en')
+
+  const desktopNavLinks = [
+    { label: t('nav.collections'), path: '/collections' },
+    { label: t('nav.skincare'),    path: '/skincare'    },
+    { label: t('nav.makeup'),      path: '/makeup'      },
+    { label: t('nav.fragrance'),   path: '/fragrance'   },
+    { label: t('nav.technology'),  path: '/technology'  },
+    { label: t('nav.journal'),     path: '/journal'     },
+  ]
+
+  const toggleLanguage = () => {
+    const newLang = currentLang === 'en' ? 'ru' : 'en'
+    setCurrentLang(newLang)
+    i18n.changeLanguage(newLang)
+    localStorage.setItem('shanloray_language', newLang)
+  }
 
   const handleLogout = async () => {
     await signOut()
@@ -567,7 +543,7 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // ── Mobile ───────────────────────────────────────────────────────────────────
+  // ── Mobile ──────────────────────────────────────────────────────────────────
   if (isMobile) {
     return (
       <>
@@ -617,6 +593,8 @@ export default function Navbar() {
           isOpen={drawerOpen}
           onClose={() => setDrawerOpen(false)}
           onSearchOpen={() => setSearchOpen(true)}
+          currentLang={currentLang}
+          toggleLanguage={toggleLanguage}
         />
 
         <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
@@ -625,7 +603,7 @@ export default function Navbar() {
     )
   }
 
-  // ── Desktop + Tablet ─────────────────────────────────────────────────────────
+  // ── Desktop ─────────────────────────────────────────────────────────────────
   return (
     <>
       <header className="min-h-[64px] md:min-h-[72px] lg:min-h-[80px] bg-white border-b border-[#E8E3D9] flex items-center justify-between px-6 md:px-[40px] lg:px-[120px] sticky top-0 z-50">
@@ -654,7 +632,15 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-[16px] md:gap-[20px] lg:gap-[28px]">
-          <span className="hidden lg:inline text-[14px] font-light text-[#3D3D3D] font-['Cormorant_Garamond']">EN / RU</span>
+          {/* Language Toggle */}
+          <button
+            onClick={toggleLanguage}
+            className="hidden lg:flex items-center gap-[4px] cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <span className={`text-[14px] font-['Cormorant_Garamond'] transition-all ${currentLang === 'en' ? 'font-semibold text-[#1A1A1A]' : 'font-light text-[#999999]'}`}>EN</span>
+            <span className="text-[14px] font-light text-[#C9A870] mx-[2px]">/</span>
+            <span className={`text-[14px] font-['Cormorant_Garamond'] transition-all ${currentLang === 'ru' ? 'font-semibold text-[#1A1A1A]' : 'font-light text-[#999999]'}`}>RU</span>
+          </button>
           <div className="hidden lg:block w-[1px] h-4 bg-[#E8E3D9]" />
           <button onClick={() => setSearchOpen(true)}>
             <IoSearchOutline className="w-[22px] h-[22px] lg:w-[24px] lg:h-[24px] text-[#2B2B2B] cursor-pointer hover:text-[#C9A870] transition-colors" />
