@@ -942,7 +942,7 @@ function FragranceDesktop() {
 
 // ── Main Export ───────────────────────────────────────────────────────────────
 export default function Fragrance() {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640)
