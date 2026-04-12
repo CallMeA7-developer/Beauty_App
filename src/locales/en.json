@@ -438,6 +438,24 @@
       "tech": "Tech",
       "saved": "Saved",
       "profile": "Profile"
+    },
+    "stats": {
+      "accuracy": "98% Accuracy",
+      "accuracyLabel": "AI-Powered Analysis",
+      "scans": "10M+ Scans",
+      "scansLabel": "Trusted Worldwide",
+      "patent": "Patent-Pending",
+      "patentLabel": "Innovative Technology"
+    },
+    "journeySteps": {
+      "step1Title": "Skin Assessment",
+      "step1Desc": "AI-powered comprehensive analysis",
+      "step2Title": "Product Match",
+      "step2Desc": "Intelligent product recommendations",
+      "step3Title": "Routine Building",
+      "step3Desc": "Custom daily skincare regimen",
+      "step4Title": "Progress Tracking",
+      "step4Desc": "Monitor improvements over time"
     }
   }
 }
