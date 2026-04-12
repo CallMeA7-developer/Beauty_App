@@ -357,7 +357,14 @@ function SkinCareMobile() {
           onClick={() => setShowSortSheet(true)}
           className="w-full h-12 px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between mb-2"
         >
-          <span className="text-[14px] font-normal text-[#2B2B2B]">{t('skincare.sortBy')} {activeSort}</span>
+          <span className="text-[14px] font-normal text-[#2B2B2B]">{t('skincare.sortBy')} {
+                activeSort === 'Recommended' ? t('skincare.sortRecommended') :
+                activeSort === 'Best Selling' ? t('skincare.sortBestSelling') :
+                activeSort === 'Newest Arrivals' ? t('skincare.sortNewest') :
+                activeSort === 'Price: Low to High' ? t('skincare.sortPriceLow') :
+                activeSort === 'Price: High to Low' ? t('skincare.sortPriceHigh') :
+                activeSort === 'Highest Rated' ? t('skincare.sortTopRated') : activeSort
+              }</span>
           <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
         </button>
       </div>
@@ -458,11 +465,18 @@ function SkinCareMobile() {
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
-              {sortOptions.map((option) => (
-                <button key={option} onClick={() => { setActiveSort(option); setShowSortSheet(false) }}
+              {[
+                { key: 'Recommended',        label: t('skincare.sortRecommended') },
+                { key: 'Best Selling',        label: t('skincare.sortBestSelling') },
+                { key: 'Newest Arrivals',     label: t('skincare.sortNewest') },
+                { key: 'Price: Low to High',  label: t('skincare.sortPriceLow') },
+                { key: 'Price: High to Low',  label: t('skincare.sortPriceHigh') },
+                { key: 'Highest Rated',       label: t('skincare.sortTopRated') },
+              ].map(({ key, label }) => (
+                <button key={key} onClick={() => { setActiveSort(key); setShowSortSheet(false) }}
                   className="w-full h-12 flex items-center justify-between px-4 rounded-[8px] hover:bg-[#FAF8F5]">
-                  <span className={`text-[15px] ${activeSort === option ? 'font-medium text-[#8B7355]' : 'font-normal text-[#2B2B2B]'}`}>{option}</span>
-                  {activeSort === option && (
+                  <span className={`text-[15px] ${activeSort === key ? 'font-medium text-[#8B7355]' : 'font-normal text-[#2B2B2B]'}`}>{label}</span>
+                  {activeSort === key && (
                     <div className="w-5 h-5 rounded-full bg-[#8B7355] flex items-center justify-center">
                       <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
@@ -979,18 +993,32 @@ function SkinCareDesktop() {
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
                   className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all"
                 >
-                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">{activeSort}</span>
+                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">
+                    {activeSort === 'Recommended' ? t('skincare.sortRecommended') :
+                     activeSort === 'Best Selling' ? t('skincare.sortBestSelling') :
+                     activeSort === 'Newest Arrivals' ? t('skincare.sortNewest') :
+                     activeSort === 'Price: Low to High' ? t('skincare.sortPriceLow') :
+                     activeSort === 'Price: High to Low' ? t('skincare.sortPriceHigh') :
+                     activeSort === 'Highest Rated' ? t('skincare.sortTopRated') : activeSort}
+                  </span>
                   <IoChevronDown className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
                 </button>
                 {showSortDropdown && (
                   <div className="absolute top-full mt-2 right-0 w-[240px] bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-10">
-                    {sortOptions.map((option) => (
+                    {[
+                      { key: 'Recommended',        label: t('skincare.sortRecommended') },
+                      { key: 'Best Selling',        label: t('skincare.sortBestSelling') },
+                      { key: 'Newest Arrivals',     label: t('skincare.sortNewest') },
+                      { key: 'Price: Low to High',  label: t('skincare.sortPriceLow') },
+                      { key: 'Price: High to Low',  label: t('skincare.sortPriceHigh') },
+                      { key: 'Highest Rated',       label: t('skincare.sortTopRated') },
+                    ].map(({ key, label }) => (
                       <button
-                        key={option}
-                        onClick={() => { setActiveSort(option); setShowSortDropdown(false) }}
-                        className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === option ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}
+                        key={key}
+                        onClick={() => { setActiveSort(key); setShowSortDropdown(false) }}
+                        className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === key ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}
                       >
-                        {option}
+                        {label}
                       </button>
                     ))}
                   </div>
