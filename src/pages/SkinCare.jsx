@@ -34,10 +34,26 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 
 // ─── Translation helper for filter values ─────────────────────────────────────
+const filterTranslationsEN = {
+  'All Skin Types': 'All Skin Types', 'Dry': 'Dry', 'Oily': 'Oily',
+  'Combination': 'Combination', 'Sensitive': 'Sensitive', 'Mature': 'Mature',
+  'Anti-Aging': 'Anti-Aging', 'Hydration': 'Hydration', 'Brightening': 'Brightening',
+  'Acne Care': 'Acne Care', 'Redness Relief': 'Redness Relief', 'Dark Spots': 'Dark Spots',
+  'Retinol': 'Retinol', 'Vitamin C': 'Vitamin C', 'Hyaluronic Acid': 'Hyaluronic Acid',
+  'Niacinamide': 'Niacinamide', 'AHA/BHA': 'AHA/BHA', 'Ceramides': 'Ceramides',
+}
+const filterTranslationsRU = {
+  'All Skin Types': 'Все типы кожи', 'Dry': 'Сухая', 'Oily': 'Жирная',
+  'Combination': 'Комбинированная', 'Sensitive': 'Чувствительная', 'Mature': 'Зрелая',
+  'Anti-Aging': 'Антивозрастной', 'Hydration': 'Увлажнение', 'Brightening': 'Осветление',
+  'Acne Care': 'Уход при акне', 'Redness Relief': 'Снятие покраснений', 'Dark Spots': 'Тёмные пятна',
+  'Retinol': 'Ретинол', 'Vitamin C': 'Витамин C', 'Hyaluronic Acid': 'Гиалуроновая кислота',
+  'Niacinamide': 'Ниацинамид', 'AHA/BHA': 'AHA/BHA', 'Ceramides': 'Керамиды',
+}
 const useFilterTranslation = () => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
   const tf = (value) => {
-    const map = t('skincare.filterValues', { returnObjects: true })
+    const map = i18n.language === 'ru' ? filterTranslationsRU : filterTranslationsEN
     return map[value] || value
   }
   return tf
@@ -311,7 +327,7 @@ function SkinCareMobile() {
         {/* Left text */}
         <div className="relative z-10 px-5 py-10 w-[62%]">
           <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('skincare.scienceMeetsNature')}</p>
-          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">title</h1>
+          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">{t('skincare.title')}</h1>
           <p className="text-[13px] font-normal text-[#666666] mb-4">{t('skincare.subtitle')}</p>
           <div className="w-[48px] h-[2px] bg-[#C9A870]" />
         </div>
@@ -580,7 +596,7 @@ function SkinCareMobile() {
 
               {/* Skin Type */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">skinType</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.skinType')}</h3>
                 <div className="space-y-3">
                   {filterSkinTypes.map((type) => {
                     const isChecked = selectedSkinTypes.includes(type)
@@ -599,7 +615,7 @@ function SkinCareMobile() {
 
               {/* Skin Concerns */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">skinConcerns</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.skinConcerns')}</h3>
                 <div className="flex flex-wrap gap-2">
                   {filterConcerns.map((concern) => {
                     const isSelected = selectedConcerns.includes(concern)
@@ -850,7 +866,7 @@ function SkinCareDesktop() {
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('skincare.home')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('skincare.shop')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">title</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">{t('skincare.title')}</span>
       </div>
 
       {/* Main Content */}
@@ -860,7 +876,7 @@ function SkinCareDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">refineSelection</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">{t('skincare.refineSelection')}</h3>
               {activeFilters > 0 && (
                 <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">
                   {activeFilters}
@@ -872,7 +888,7 @@ function SkinCareDesktop() {
                 onClick={() => { setSelectedSubcategories([]) }}
                 className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedSubcategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
               >
-                All Skincare
+                {t('skincare.allSkincare')}
               </div>
               {subcategoryCards.map((cat) => {
                 const isSelected = selectedSubcategories.includes(cat.name)
@@ -912,7 +928,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">skinType</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.skinType')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {skinTypes.map((item) => {
                     const isChecked = selectedSkinTypes.includes(item)
@@ -928,7 +944,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">skinConcerns</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.skinConcerns')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {skinConcerns.map((item) => {
                     const isChecked = selectedConcerns.includes(item)
@@ -944,7 +960,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">ingredients</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.ingredients')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {ingredients.map((item) => {
                     const isChecked = selectedIngredients.includes(item)
@@ -979,7 +995,7 @@ function SkinCareDesktop() {
                 onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors mb-3"
               >
-                Clear All Filters
+                {t('skincare.clearAllFilters')}
               </button>
             </div>
           </div>
