@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   IoStarSharp,
@@ -151,6 +153,7 @@ function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, place
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function SkinCareMobile() {
+  const { t } = useTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort]           = useState('Recommended')
@@ -295,9 +298,9 @@ function SkinCareMobile() {
         </div>
         {/* Left text */}
         <div className="relative z-10 px-5 py-10 w-[62%]">
-          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">SCIENCE MEETS NATURE</p>
-          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">Skincare</h1>
-          <p className="text-[13px] font-normal text-[#666666] mb-4">Discover transformative formulas</p>
+          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('skincare.scienceMeetsNature')}</p>
+          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">title</h1>
+          <p className="text-[13px] font-normal text-[#666666] mb-4">{t('skincare.subtitle')}</p>
           <div className="w-[48px] h-[2px] bg-[#C9A870]" />
         </div>
       </div>
@@ -332,17 +335,17 @@ function SkinCareMobile() {
           allProducts={allProducts}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          placeholder="Search skincare products..."
+          placeholder={t('skincare.searchPlaceholder')}
           className="mb-3"
         />
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[13px] font-normal text-[#666666]">Showing {products.length} products</span>
+          <span className="text-[13px] font-normal text-[#666666]">{t('skincare.showing')} {products.length} {t('skincare.products')}</span>
           <button
             onClick={() => setShowFilterSheet(true)}
             className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]"
           >
             <IoFunnelOutline className="w-3.5 h-3.5 text-[#8B7355]" />
-            Filters
+            {t('skincare.filters')}
             {activeFilters > 0 && (
               <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#8B7355] rounded-full flex items-center justify-center">
                 <span className="text-[10px] font-medium text-white">{activeFilters}</span>
@@ -355,7 +358,7 @@ function SkinCareMobile() {
           onClick={() => setShowSortSheet(true)}
           className="w-full h-12 px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between mb-2"
         >
-          <span className="text-[14px] font-normal text-[#2B2B2B]">Sort: {activeSort}</span>
+          <span className="text-[14px] font-normal text-[#2B2B2B]">{t('skincare.sortBy')} {activeSort}</span>
           <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
         </button>
       </div>
@@ -364,7 +367,7 @@ function SkinCareMobile() {
       <div className="px-4 pb-6">
         {products.length === 0 ? (
           <div className="flex items-center justify-center min-h-[300px]">
-            <p className="text-[16px] text-[#666666]">No products found</p>
+            <p className="text-[16px] text-[#666666]">{t('skincare.noProducts')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4">
@@ -388,7 +391,7 @@ function SkinCareMobile() {
                 </div>
                 <p className="text-[11px] text-[#999999] mb-3">({product.reviews})</p>
                 <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">
-                  Add to Bag
+                  {t('skincare.addToBag')}
                 </button>
               </div>
             </Link>
@@ -401,37 +404,37 @@ function SkinCareMobile() {
             onClick={() => setDisplayCount(prev => prev + 10)}
             className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]"
           >
-            Load More ({products.length - displayCount} remaining)
+            {t('skincare.loadMore')} ({products.length - displayCount} {t('skincare.remaining')})
           </button>
         )}
       </div>
 
       {/* ── Newsletter ── */}
       <div className="bg-[#F5F0EB] px-5 py-10 text-center">
-        <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-2">Join the Skincare Revolution</h3>
-        <p className="text-[14px] font-normal text-[#666666] mb-5">Expert tips & exclusive offers</p>
+        <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-2">{t('skincare.newsletter')}</h3>
+        <p className="text-[14px] font-normal text-[#666666] mb-5">{t('skincare.newsletterDesc')}</p>
         <div className="flex gap-2">
-          <input type="email" placeholder="Enter your email" className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-12 px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px]">Subscribe</button>
+          <input type="email" placeholder={t('skincare.emailPlaceholder')} className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <button className="h-12 px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px]">{t('skincare.subscribe')}</button>
         </div>
       </div>
 
       {/* ── Footer ── */}
       <footer className="bg-[#2B2B2B] px-5 pt-10 pb-8">
         <h3 className="text-[18px] font-semibold text-white tracking-[2px] mb-1">SHAN LORAY</h3>
-        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">Timeless Luxury Beauty</p>
+        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">{t('skincare.timelessLuxury')}</p>
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div>
-            <h4 className="text-[13px] font-medium text-white mb-3">Shop</h4>
-            <div className="space-y-2">{['Skincare','Makeup','Fragrance'].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
+            <h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerShop')}</h4>
+            <div className="space-y-2">{[t('skincare.title'), 'Makeup', 'Fragrance'].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
           </div>
           <div>
-            <h4 className="text-[13px] font-medium text-white mb-3">Help</h4>
-            <div className="space-y-2">{['Contact','Shipping','Returns'].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
+            <h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerHelp')}</h4>
+            <div className="space-y-2">{[t('skincare.contact'), t('skincare.shipping'), t('skincare.returns')].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
           </div>
           <div>
-            <h4 className="text-[13px] font-medium text-white mb-3">About</h4>
-            <div className="space-y-2">{['Our Story','Ingredients','Sustainability'].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
+            <h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerAbout')}</h4>
+            <div className="space-y-2">{[t('skincare.ourStory'), t('skincare.ingredientsLink'), t('skincare.sustainability')].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
           </div>
         </div>
         <div className="flex justify-center gap-6 mb-6">
@@ -441,7 +444,7 @@ function SkinCareMobile() {
           <IoLogoYoutube   className="w-6 h-6 text-white" />
         </div>
         <div className="border-t border-[#3D3D3D] pt-5 text-center">
-          <p className="text-[11px] text-[#808080]">©2024 Shan Loray. All rights reserved.</p>
+          <p className="text-[11px] text-[#808080]">{t('skincare.copyright')}</p>
         </div>
       </footer>
 
@@ -452,7 +455,7 @@ function SkinCareMobile() {
           <div className="relative bg-white rounded-t-[20px] px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-[#E8E3D9] rounded-full mx-auto mb-5" />
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">Sort By</h3>
+              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">sortBy</h3>
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
@@ -486,7 +489,7 @@ function SkinCareMobile() {
             {/* Header */}
             <div className="min-h-[60px] px-5 flex items-center justify-between border-b border-[#E8E3D9] flex-shrink-0">
               <div className="flex items-center gap-2">
-                <h2 className="text-[22px] font-semibold text-[#1A1A1A]">Filters</h2>
+                <h2 className="text-[22px] font-semibold text-[#1A1A1A]">{t('skincare.filters')}</h2>
                 {activeFilters > 0 && (
                   <div className="w-[22px] h-[22px] bg-[#C9A870] rounded-full flex items-center justify-center">
                     <span className="text-[11px] font-semibold text-white">{activeFilters}</span>
@@ -503,7 +506,7 @@ function SkinCareMobile() {
 
               {/* Subcategory */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Product Category</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.productCategory')}</h3>
                 <div className="grid grid-cols-3 gap-3">
                   {subcategoryCards.map((cat) => {
                     const isSelected = selectedSubcategories.includes(cat.name)
@@ -551,7 +554,7 @@ function SkinCareMobile() {
 
               {/* Skin Type */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Type</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">skinType</h3>
                 <div className="space-y-3">
                   {filterSkinTypes.map((type) => {
                     const isChecked = selectedSkinTypes.includes(type)
@@ -570,7 +573,7 @@ function SkinCareMobile() {
 
               {/* Skin Concerns */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Concerns</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">skinConcerns</h3>
                 <div className="flex flex-wrap gap-2">
                   {filterConcerns.map((concern) => {
                     const isSelected = selectedConcerns.includes(concern)
@@ -586,7 +589,7 @@ function SkinCareMobile() {
 
               {/* Key Ingredients */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Key Ingredients</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.ingredients')}</h3>
                 <div className="flex flex-wrap gap-2">
                   {filterIngredients.map((ing) => {
                     const isSelected = selectedIngredients.includes(ing)
@@ -602,10 +605,10 @@ function SkinCareMobile() {
 
               {/* Brand */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Brand</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.brand')}</h3>
                 <div className="w-full h-[44px] bg-[#F5F1EA] rounded-[8px] px-4 flex items-center mb-4">
                   <IoSearchOutline className="w-[16px] h-[16px] text-[#999999] mr-2 flex-shrink-0" />
-                  <input type="text" placeholder="Search brands" className="flex-1 bg-transparent text-[14px] text-[#2B2B2B] outline-none" />
+                  <input type="text" placeholder={t('skincare.searchBrands')} className="flex-1 bg-transparent text-[14px] text-[#2B2B2B] outline-none" />
                 </div>
                 <div className="space-y-2">
                   {filterBrands.map((brand) => {
@@ -625,7 +628,7 @@ function SkinCareMobile() {
 
               {/* Rating */}
               <div className="px-5 py-5">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Rating</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.rating')}</h3>
                 <div className="space-y-2">
                   {filterRatings.map((r) => (
                     <button key={r.stars} onClick={() => setSelectedRating(prev => prev === r.stars ? null : r.stars)}
@@ -634,7 +637,7 @@ function SkinCareMobile() {
                         <div className="flex gap-0.5">
                           {[...Array(r.stars)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)}
                         </div>
-                        <span className="text-[13px] text-[#2B2B2B]">& up</span>
+                        <span className="text-[13px] text-[#2B2B2B]">{t('skincare.andUp')}</span>
                       </div>
                       <span className="text-[13px] text-[#999999]">({r.count})</span>
                     </button>
@@ -649,10 +652,10 @@ function SkinCareMobile() {
                 onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice('') }}
                 className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]"
               >
-                Clear All
+                {t('skincare.clearAll')}
               </button>
               <button onClick={() => { setShowFilterSheet(false) }} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
-                Apply Filters ({products.length} items)
+                {t('skincare.applyFilters')} ({products.length})
               </button>
             </div>
           </div>
@@ -665,6 +668,7 @@ function SkinCareMobile() {
 
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function SkinCareDesktop() {
+  const { t } = useTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort] = useState('Best Selling')
@@ -805,9 +809,9 @@ function SkinCareDesktop() {
       <div className="min-h-[300px] md:min-h-[340px] lg:min-h-[380px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px]">
         <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[200px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-20" />
         <div className="w-full max-w-[650px] relative z-10">
-          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">COMPLETE SKINCARE COLLECTION</p>
-          <h1 className="text-[40px] md:text-[52px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">Science Meets Nature</h1>
-          <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">From cleansing to protection, discover transformative skincare</p>
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('skincare.completeCollection')}</p>
+          <h1 className="text-[40px] md:text-[52px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">{t('skincare.heroTitle')}</h1>
+          <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">{t('skincare.heroDesc')}</p>
           <div className="w-[80px] md:w-[90px] lg:w-[100px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
@@ -817,9 +821,9 @@ function SkinCareDesktop() {
 
       {/* Breadcrumb */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Shop</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">Skincare</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('skincare.home')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('skincare.shop')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">title</span>
       </div>
 
       {/* Main Content */}
@@ -829,7 +833,7 @@ function SkinCareDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">REFINE SELECTION</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">refineSelection</h3>
               {activeFilters > 0 && (
                 <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">
                   {activeFilters}
@@ -861,7 +865,7 @@ function SkinCareDesktop() {
             </div>
             <div className="border-t border-[#E8E3D9] pt-5 lg:pt-[24px] space-y-4 lg:space-y-[20px]">
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Price Range</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.priceRange')}</h4>
                 <div className="flex items-center gap-[6px] lg:gap-[8px]">
                   <input
                     type="number"
@@ -881,7 +885,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Type</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">skinType</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {skinTypes.map((item) => {
                     const isChecked = selectedSkinTypes.includes(item)
@@ -897,7 +901,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Concerns</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">skinConcerns</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {skinConcerns.map((item) => {
                     const isChecked = selectedConcerns.includes(item)
@@ -913,7 +917,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Ingredients</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">ingredients</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {ingredients.map((item) => {
                     const isChecked = selectedIngredients.includes(item)
@@ -929,7 +933,7 @@ function SkinCareDesktop() {
                 </div>
               </div>
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Brand</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('skincare.brand')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {filterBrands.map((item) => {
                     const isChecked = selectedBrands.includes(item)
@@ -962,15 +966,15 @@ function SkinCareDesktop() {
             allProducts={allProducts}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            placeholder="Search skincare products..."
+            placeholder={t('skincare.searchPlaceholder')}
             className="mb-6"
           />
 
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-[48px]">
-            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">Showing {products.length} skincare products</span>
+            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">{t('skincare.showing')} {products.length} {t('skincare.skincareProducts')}</span>
             <div className="flex items-center gap-3 lg:gap-[16px]">
-              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">Sort by:</span>
+              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">{t('skincare.sortBy')}</span>
               <div className="relative">
                 <button
                   onClick={() => setShowSortDropdown(!showSortDropdown)}
@@ -998,7 +1002,7 @@ function SkinCareDesktop() {
 
           {products.length === 0 ? (
             <div className="flex items-center justify-center min-h-[400px]">
-              <p className="text-[16px] text-[#666666]">No products found</p>
+              <p className="text-[16px] text-[#666666]">{t('skincare.noProducts')}</p>
             </div>
           ) : (
             <>
@@ -1015,7 +1019,7 @@ function SkinCareDesktop() {
                   <p className="text-[20px] lg:text-[24px] font-semibold">{largeProducts[0].price}</p>
                 </div>
                 <div className="absolute top-[16px] lg:top-[20px] right-[16px] lg:right-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button className="px-[18px] lg:px-[24px] py-[10px] lg:py-[12px] bg-white text-[#8B7355] text-[13px] lg:text-[14px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)]">Add to Bag</button>
+                  <button className="px-[18px] lg:px-[24px] py-[10px] lg:py-[12px] bg-white text-[#8B7355] text-[13px] lg:text-[14px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)]">{t('skincare.addToBag')}</button>
                 </div>
               </div>
               <div className="p-5 lg:p-[24px]">
@@ -1100,7 +1104,7 @@ function SkinCareDesktop() {
                 onClick={() => setDisplayCount(prev => prev + 10)}
                 className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors"
               >
-                Load More ({products.length - displayCount} remaining)
+                {t('skincare.loadMore')} ({products.length - displayCount} {t('skincare.remaining')})
               </button>
             </div>
           )}
@@ -1114,6 +1118,7 @@ function SkinCareDesktop() {
 
 // ─── Main Export (Switcher) ───────────────────────────────────────────────────
 export default function SkinCare() {
+  const { t } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
@@ -1122,5 +1127,5 @@ export default function SkinCare() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  return isMobile ? <SkinCareMobile /> : <SkinCareDesktop />
+  return isMobile ? <SkinCareMobile key={i18n.language} /> : <SkinCareDesktop key={i18n.language} />
 }
