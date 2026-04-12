@@ -457,5 +457,43 @@
       "step4Title": "Progress Tracking",
       "step4Desc": "Monitor improvements over time"
     }
+  },
+  "journal": {
+    "tagline": "THE SHAN LORAY",
+    "title": "Journal",
+    "subtitle": "Beauty wisdom, skincare science, and lifestyle inspiration — curated for the modern woman.",
+    "searchPlaceholder": "Search articles...",
+    "home": "Home",
+    "breadcrumb": "Journal",
+    "featuredStory": "FEATURED STORY",
+    "latestStories": "LATEST STORIES",
+    "readArticle": "Read Article",
+    "readMore": "Read More",
+    "noResults": "No articles found for",
+    "clearFilters": "Clear filters",
+    "stayInspired": "STAY INSPIRED",
+    "newsletter": "Beauty Wisdom, Delivered",
+    "newsletterDesc": "Get the latest skincare tips, beauty trends, and exclusive Shan Loray content straight to your inbox.",
+    "emailPlaceholder": "Your email address",
+    "subscribe": "Subscribe",
+    "backToJournal": "Back to Journal",
+    "backBtn": "← Back to Journal",
+    "moreFrom": "MORE FROM",
+    "helpful": "Did you find this helpful?",
+    "like": "Like",
+    "thanks": "Thanks darling! 🌹",
+    "share": "Share",
+    "shareArticle": "Share this article",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "articleNotFound": "Article not found",
+    "categories": {
+      "all": "All",
+      "skincare": "Skincare",
+      "makeup": "Makeup",
+      "fragrance": "Fragrance",
+      "wellness": "Wellness",
+      "trends": "Trends"
+    }
   }
 }
