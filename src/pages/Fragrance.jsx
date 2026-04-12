@@ -762,9 +762,9 @@ function FragranceDesktop() {
                 </div>
               </div>
 
-              {/* Intensity */
+              {/* Intensity */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">intensity</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('fragrance.intensity')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {intensityLevels.map((level) => {
                     const isChecked = selectedIntensity.includes(level)
