@@ -135,6 +135,12 @@
     "ingredientsLink": "Ингредиенты",
     "sustainability": "Устойчивое развитие",
     "copyright": "©2024 Shan Loray. Все права защищены.",
-    "timelessLuxury": "Вечная роскошная красота"
+    "timelessLuxury": "Вечная роскошная красота",
+    "sortRecommended": "Рекомендуемые",
+    "sortBestSelling": "Хиты продаж",
+    "sortNewest": "Новинки",
+    "sortPriceLow": "Цена: по возрастанию",
+    "sortPriceHigh": "Цена: по убыванию",
+    "sortTopRated": "Лучшие оценки"
   }
 }
