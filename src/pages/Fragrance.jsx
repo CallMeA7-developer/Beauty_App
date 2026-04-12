@@ -744,7 +744,7 @@ function FragranceDesktop() {
                 </div>
               </div>
 
-              {/* Top Notes */
+              {/* Top Notes */}
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('fragrance.topNotes')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
