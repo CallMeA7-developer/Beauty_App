@@ -34,6 +34,17 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 
 // ─── Translation helper for filter values ─────────────────────────────────────
+const subcategoryTranslationsRU = {
+  'Cleansers': 'Очищающие средства',
+  'Exfoliators': 'Эксфолианты',
+  'Eye Care': 'Уход за глазами',
+  'Masks': 'Маски',
+  'Moisturizers': 'Увлажняющие средства',
+  'Serums': 'Сыворотки',
+  'Sunscreen': 'Солнцезащитные средства',
+  'Toners': 'Тоники',
+}
+
 const filterTranslationsEN = {
   'All Skin Types': 'All Skin Types', 'Dry': 'Dry', 'Oily': 'Oily',
   'Combination': 'Combination', 'Sensitive': 'Sensitive', 'Mature': 'Mature',
@@ -56,7 +67,10 @@ const useFilterTranslation = () => {
     const map = i18n.language === 'ru' ? filterTranslationsRU : filterTranslationsEN
     return map[value] || value
   }
-  return tf
+  const ts = (value) => {
+    return i18n.language === 'ru' ? (subcategoryTranslationsRU[value] || value) : value
+  }
+  return { tf, ts }
 }
 
 
@@ -181,7 +195,7 @@ function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, place
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function SkinCareMobile() {
   const { t } = useTranslation()
-  const tf = useFilterTranslation()
+  const { tf, ts } = useFilterTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort]           = useState('Recommended')
@@ -349,7 +363,7 @@ function SkinCareMobile() {
                 <div className="w-[60px] h-[60px] rounded-full overflow-hidden bg-[#F9F6F2]">
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                 </div>
-                <span className="text-[13px] font-medium text-[#1A1A1A] text-center">{cat.name}</span>
+                <span className="text-[13px] font-medium text-[#1A1A1A] text-center">{ts(cat.name)}</span>
                 <span className="text-[11px] font-light text-[#999999]">{cat.count}</span>
               </div>
             )
@@ -561,7 +575,7 @@ function SkinCareMobile() {
                         className={`rounded-[8px] p-3 flex flex-col items-center gap-2 border-2 transition-colors ${isSelected ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}
                       >
                         <img src={cat.image} alt={cat.name} className="w-[36px] h-[36px] rounded-full object-cover" />
-                        <span className="text-[11px] font-medium text-[#2B2B2B] text-center leading-tight">{cat.name}</span>
+                        <span className="text-[11px] font-medium text-[#2B2B2B] text-center leading-tight">{ts(cat.name)}</span>
                         <span className="text-[10px] text-[#999999]">{cat.count}</span>
                       </button>
                     )
@@ -711,7 +725,7 @@ function SkinCareMobile() {
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function SkinCareDesktop() {
   const { t } = useTranslation()
-  const tf = useFilterTranslation()
+  const { tf, ts } = useFilterTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort] = useState('Best Selling')
@@ -901,7 +915,7 @@ function SkinCareDesktop() {
                     }}
                     className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
                   >
-                    {cat.name} ({cat.count})
+                    {ts(cat.name)} ({cat.count})
                   </div>
                 )
               })}
