@@ -656,7 +656,7 @@ function MakeupDesktop() {
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('makeup.home')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('makeup.shop')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">title</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">{t('makeup.title')}</span>
       </div>
 
       {/* Main Content */}
@@ -719,7 +719,7 @@ function MakeupDesktop() {
               ))}
               <button onClick={() => { setSelectedCategories([]); setSelectedFinish([]); setSelectedCoverage([]); setSelectedSkinTones([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-                Clear All Filters
+                {t('makeup.clearAllFilters')}
               </button>
             </div>
           </div>
