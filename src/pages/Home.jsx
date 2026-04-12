@@ -89,7 +89,7 @@ function HomeMobile() {
             <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-3">{t('home.heroCollection')}</p>
             <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">{t('home.heroTitle')}</h1>
             <p className="text-[15px] font-normal text-[#666666] leading-[1.6] mb-5">
-              Discover a luminous transformation through our newest collection, where botanical elegance meets scientific precision
+              {t('home.heroSubtitle')}
             </p>
             <Link to="/explore">
               <button className="w-[120px] h-[48px] border-[2px] border-[#1A1A1A] text-[14px] font-semibold text-[#1A1A1A]">
@@ -112,7 +112,7 @@ function HomeMobile() {
             </div>
             <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-3">{t('home.aiTitle')}</h3>
             <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-4">
-              Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
+              {t('home.aiDesc')}
             </p>
             <Link to="/skin-analysis#upload-section">
               <span className="text-[13px] font-medium text-[#8B7355]">{t('home.beginAnalysis')}</span>
@@ -129,7 +129,7 @@ function HomeMobile() {
             </div>
             <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-3">{t('home.virtualTitle')}</h3>
             <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-4">
-              Experience our complete collection through cutting-edge augmented reality technology in real-time
+              {t('home.virtualDesc')}
             </p>
             <Link to="/virtual-tryon#tryon-section">
               <span className="text-[13px] font-medium text-[#8B7355]">{t('home.tryNow')}</span>
@@ -154,7 +154,7 @@ function HomeMobile() {
           <div className="bg-[#EBE6DC] rounded-[8px] p-8">
             <h4 className="text-[20px] font-semibold text-[#2B2B2B] mb-3">{t('home.artisanTools')}</h4>
             <p className="text-[14px] font-normal text-[#666666] leading-[1.6] mb-4">
-              Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
+              {t('home.artisanDesc')}
             </p>
             <Link to="/technology#how-it-works">
               <span className="text-[13px] font-medium text-[#8B7355]">{t('home.discoverTools')}</span>
@@ -237,7 +237,7 @@ function HomeMobile() {
                   }}
                   className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-semibold rounded-[4px]"
                 >
-                  Pre-Order Now
+                  {t('home.preOrder')}
                 </button>
                 <button
                   onClick={() => {
@@ -246,7 +246,7 @@ function HomeMobile() {
                   }}
                   className="w-full h-12 border-[2px] border-[#8B7355] text-[#8B7355] text-[14px] font-semibold rounded-[4px]"
                 >
-                  Notify Me
+                  {t('home.notifyMe')}
                 </button>
                 {notifyMessage && (
                   <p className="text-[13px] text-center text-[#8B7355] mt-2">
@@ -348,7 +348,7 @@ function HomeMobile() {
         <div className="flex justify-center px-5">
           <a href="https://instagram.com/shanloray" target="_blank" rel="noopener noreferrer">
             <button className="w-40 h-12 border-[2px] border-[#1A1A1A] text-[13px] font-medium text-[#1A1A1A]">
-              Follow Us on Instagram
+              {t('home.followInstagram')}
             </button>
           </a>
         </div>
@@ -418,7 +418,7 @@ function HomeDesktop() {
             <p className="text-[11px] md:text-[12px] lg:text-[13px] font-light italic text-[#C9A870] tracking-[4px] uppercase mb-4 md:mb-5 lg:mb-6">{t('home.heroCollection')}</p>
             <h1 className="text-[44px] md:text-[54px] lg:text-[68px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 md:mb-5 lg:mb-6">{t('home.heroTitle')}</h1>
             <p className="text-[15px] md:text-[17px] lg:text-[19px] font-normal text-[#666666] leading-[1.8] mb-6 md:mb-7 lg:mb-8">
-              Discover a luminous transformation through our newest collection, where botanical elegance meets scientific precision
+              {t('home.heroSubtitle')}
             </p>
             <Link to="/explore">
               <button className="border-[2px] border-[#1A1A1A] h-[48px] lg:h-[52px] w-[140px] lg:w-[160px] text-[14px] lg:text-[15px] font-semibold text-[#1A1A1A] tracking-[1.5px] hover:bg-[#1A1A1A] hover:text-white transition-all">
@@ -446,7 +446,7 @@ function HomeDesktop() {
               </div>
               <h3 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-5">{t('home.aiTitle')}</h3>
               <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] leading-[1.7] mb-5 lg:mb-6">
-                Advanced dermatological algorithms analyze your unique skin profile to create personalized treatment recommendations
+                {t('home.aiDesc')}
               </p>
               <Link to="/skin-analysis#upload-section">
                 <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('home.beginAnalysis')}</span>
@@ -464,7 +464,7 @@ function HomeDesktop() {
               </div>
               <h3 className="text-[26px] md:text-[30px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-4 lg:mb-5">{t('home.virtualTitle')}</h3>
               <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] leading-[1.7] mb-5 lg:mb-6">
-                Experience our complete collection through cutting-edge augmented reality technology in real-time
+                {t('home.virtualDesc')}
               </p>
               <Link to="/virtual-tryon#tryon-section">
                 <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('home.tryNow')}</span>
@@ -491,7 +491,7 @@ function HomeDesktop() {
             <div className="bg-[#EBE6DC] rounded-[12px] p-8 md:p-10 lg:p-[56px] min-h-[240px] md:min-h-[300px] lg:min-h-[380px] flex flex-col justify-center">
               <h4 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#2B2B2B] mb-4 lg:mb-5">{t('home.artisanTools')}</h4>
               <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal text-[#666666] leading-[1.75] mb-5 lg:mb-6">
-                Handcrafted precision instruments designed for the modern beauty ritual, combining traditional craftsmanship with contemporary innovation
+                {t('home.artisanDesc')}
               </p>
               <Link to="/technology#how-it-works">
                 <span className="text-[14px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('home.discoverTools')}</span>
@@ -570,7 +570,7 @@ function HomeDesktop() {
                     }}
                     className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#7a6448] transition-colors"
                   >
-                    Pre-Order Now
+                    {t('home.preOrder')}
                   </button>
                   <button
                     onClick={() => {
@@ -579,7 +579,7 @@ function HomeDesktop() {
                     }}
                     className="w-full h-[52px] lg:h-[56px] border-[2px] border-[#8B7355] bg-transparent text-[#8B7355] text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#8B7355] hover:text-white transition-all"
                   >
-                    Notify Me
+                    {t('home.notifyMe')}
                   </button>
                   {notifyMessage && (
                     <p className="text-[13px] text-center text-[#8B7355] mt-2">
@@ -695,7 +695,7 @@ function HomeDesktop() {
         <div className="text-center">
           <a href="https://instagram.com/shanloray" target="_blank" rel="noopener noreferrer">
             <button className="border-[2px] border-[#1A1A1A] h-[48px] lg:h-[52px] w-[200px] lg:w-[220px] text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all">
-              Follow Us on Instagram
+              {t('home.followInstagram')}
             </button>
           </a>
         </div>
