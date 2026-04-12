@@ -141,6 +141,26 @@
     "sortNewest": "Newest Arrivals",
     "sortPriceLow": "Price: Low to High",
     "sortPriceHigh": "Price: High to Low",
-    "sortTopRated": "Highest Rated"
+    "sortTopRated": "Highest Rated",
+    "filterValues": {
+      "All Skin Types": "All Skin Types",
+      "Dry": "Dry",
+      "Oily": "Oily",
+      "Combination": "Combination",
+      "Sensitive": "Sensitive",
+      "Mature": "Mature",
+      "Anti-Aging": "Anti-Aging",
+      "Hydration": "Hydration",
+      "Brightening": "Brightening",
+      "Acne Care": "Acne Care",
+      "Redness Relief": "Redness Relief",
+      "Dark Spots": "Dark Spots",
+      "Retinol": "Retinol",
+      "Vitamin C": "Vitamin C",
+      "Hyaluronic Acid": "Hyaluronic Acid",
+      "Niacinamide": "Niacinamide",
+      "AHA/BHA": "AHA/BHA",
+      "Ceramides": "Ceramides"
+    }
   }
 }
