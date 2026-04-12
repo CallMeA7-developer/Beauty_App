@@ -686,7 +686,7 @@ function FragranceDesktop() {
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('fragrance.home')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
         <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('fragrance.shop')}</span><span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">title</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">{t('fragrance.title')}</span>
       </div>
 
       {/* Main Content */}
@@ -696,7 +696,7 @@ function FragranceDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">refineSelection</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">{t('fragrance.refineSelection')}</h3>
               {activeFilters > 0 && <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>}
             </div>
 
@@ -782,7 +782,7 @@ function FragranceDesktop() {
 
               <button onClick={() => { setSelectedTypes([]); setSelectedFamilies([]); setSelectedTopNotes([]); setSelectedIntensity([]); setSelectedSizes([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-                Clear All Filters
+                {t('fragrance.clearAllFilters')}
               </button>
             </div>
           </div>
