@@ -92,6 +92,18 @@ const stats = [
 
 
 // ─── Translation-aware data builders ─────────────────────────────────────────
+const getStats = (t) => [
+  { icon: IoHardwareChipOutline, value: t('technology.stats.accuracy'), label: t('technology.stats.accuracyLabel') },
+  { icon: IoTrendingUpOutline,   value: t('technology.stats.scans'),    label: t('technology.stats.scansLabel')    },
+  { icon: IoFlaskOutline,        value: t('technology.stats.patent'),   label: t('technology.stats.patentLabel')   },
+]
+const getJourneySteps = (t) => [
+  { title: t('technology.journeySteps.step1Title'), desc: t('technology.journeySteps.step1Desc') },
+  { title: t('technology.journeySteps.step2Title'), desc: t('technology.journeySteps.step2Desc') },
+  { title: t('technology.journeySteps.step3Title'), desc: t('technology.journeySteps.step3Desc') },
+  { title: t('technology.journeySteps.step4Title'), desc: t('technology.journeySteps.step4Desc') },
+]
+
 const getCoreFeatures = (t) => [
   { icon: IoHardwareChipOutline, title: t('technology.features.aiConsultation'),      description: t('technology.features.aiConsultationDesc'),      gradient: 'from-[#E8E3F7] to-[#D5CAE8]' },
   { icon: IoCameraOutline,       title: t('technology.features.arTryOn'),             description: t('technology.features.arTryOnDesc'),             gradient: 'from-[#FFE8F0] to-[#FFDDE8]' },
@@ -141,6 +153,7 @@ const getDesktopBenefits = (t) => [
 function TechnologyMobile() {
   const { t } = useTranslation()
   const coreFeatures = getCoreFeatures(t)
+  const journeySteps = getJourneySteps(t)
   const aiBenefits = getAIBenefits(t)
   const scientificInnovations = getScientificInnovations(t)
   const mobileBenefits = getMobileBenefits(t)
@@ -387,6 +400,7 @@ function TechnologyMobile() {
 function TechnologyDesktop() {
   const { t } = useTranslation()
   const innovationCards = getInnovationCards(t)
+  const stats = getStats(t)
   const howItWorksSteps = getHowItWorksSteps(t)
   const desktopBenefits = getDesktopBenefits(t)
   return (
