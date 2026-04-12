@@ -141,6 +141,26 @@
     "sortNewest": "Новинки",
     "sortPriceLow": "Цена: по возрастанию",
     "sortPriceHigh": "Цена: по убыванию",
-    "sortTopRated": "Лучшие оценки"
+    "sortTopRated": "Лучшие оценки",
+    "filterValues": {
+      "All Skin Types": "Все типы кожи",
+      "Dry": "Сухая",
+      "Oily": "Жирная",
+      "Combination": "Комбинированная",
+      "Sensitive": "Чувствительная",
+      "Mature": "Зрелая",
+      "Anti-Aging": "Антивозрастной",
+      "Hydration": "Увлажнение",
+      "Brightening": "Осветление",
+      "Acne Care": "Уход при акне",
+      "Redness Relief": "Снятие покраснений",
+      "Dark Spots": "Тёмные пятна",
+      "Retinol": "Ретинол",
+      "Vitamin C": "Витамин C",
+      "Hyaluronic Acid": "Гиалуроновая кислота",
+      "Niacinamide": "Ниацинамид",
+      "AHA/BHA": "AHA/BHA",
+      "Ceramides": "Керамиды"
+    }
   }
 }
