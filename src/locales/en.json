@@ -135,6 +135,12 @@
     "ingredientsLink": "Ingredients",
     "sustainability": "Sustainability",
     "copyright": "©2024 Shan Loray. All rights reserved.",
-    "timelessLuxury": "Timeless Luxury Beauty"
+    "timelessLuxury": "Timeless Luxury Beauty",
+    "sortRecommended": "Recommended",
+    "sortBestSelling": "Best Selling",
+    "sortNewest": "Newest Arrivals",
+    "sortPriceLow": "Price: Low to High",
+    "sortPriceHigh": "Price: High to Low",
+    "sortTopRated": "Highest Rated"
   }
 }
