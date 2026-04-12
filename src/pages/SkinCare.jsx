@@ -32,6 +32,18 @@ import {
 import { getSkincareProducts, formatProductsForUI } from '../lib/productsService'
 import LoadingSpinner from '../components/LoadingSpinner'
 
+
+// ─── Translation helper for filter values ─────────────────────────────────────
+const useFilterTranslation = () => {
+  const { t } = useTranslation()
+  const tf = (value) => {
+    const map = t('skincare.filterValues', { returnObjects: true })
+    return map[value] || value
+  }
+  return tf
+}
+
+
 // ─── Local filter-only data (skincare-specific, not shared) ───────────────────
 const brandValues = ['Vegan', 'Cruelty-Free', 'Fragrance-Free', 'Organic']
 
@@ -153,6 +165,7 @@ function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, place
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function SkinCareMobile() {
   const { t } = useTranslation()
+  const tf = useFilterTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort]           = useState('Recommended')
@@ -577,7 +590,7 @@ function SkinCareMobile() {
                         <div className={`w-[20px] h-[20px] rounded-[4px] border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'bg-white border-[#E8E3D9]'}`}>
                           {isChecked && <IoCheckmark className="w-[13px] h-[13px] text-white" />}
                         </div>
-                        <span className="text-[14px] text-[#2B2B2B]">{type}</span>
+                        <span className="text-[14px] text-[#2B2B2B]">{tf(type)}</span>
                       </button>
                     )
                   })}
@@ -593,7 +606,7 @@ function SkinCareMobile() {
                     return (
                       <button key={concern} onClick={() => setSelectedConcerns(prev => isSelected ? prev.filter(c => c !== concern) : [...prev, concern])}
                         className={`px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>
-                        {concern}
+                        {tf(concern)}
                       </button>
                     )
                   })}
@@ -609,7 +622,7 @@ function SkinCareMobile() {
                     return (
                       <button key={ing} onClick={() => setSelectedIngredients(prev => isSelected ? prev.filter(i => i !== ing) : [...prev, ing])}
                         className={`px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>
-                        {ing}
+                        {tf(ing)}
                       </button>
                     )
                   })}
@@ -682,6 +695,7 @@ function SkinCareMobile() {
 // ─── Desktop + Tablet responsive ─────────────────────────────────────────────
 function SkinCareDesktop() {
   const { t } = useTranslation()
+  const tf = useFilterTranslation()
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeSort, setActiveSort] = useState('Best Selling')
@@ -907,7 +921,7 @@ function SkinCareDesktop() {
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                       </label>
                     )
                   })}
@@ -923,7 +937,7 @@ function SkinCareDesktop() {
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                       </label>
                     )
                   })}
@@ -939,7 +953,7 @@ function SkinCareDesktop() {
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                       </label>
                     )
                   })}
@@ -955,7 +969,7 @@ function SkinCareDesktop() {
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                       </label>
                     )
                   })}
