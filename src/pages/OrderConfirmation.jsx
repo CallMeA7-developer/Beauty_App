@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
@@ -9,12 +10,13 @@ import {
   IoGiftOutline,
   IoCardOutline,
 } from 'react-icons/io5'
-import { helpLinks } from '../data/checkout'
+import { helpLinks as helpLinksData } from '../data/checkout'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function OrderConfirmation() {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
@@ -25,7 +27,7 @@ export default function OrderConfirmation() {
   useEffect(() => {
     const fetchOrder = async () => {
       if (!user) {
-        setError('Please log in to view your order')
+        setError(t('orderConfirmation.errorLogin'))
         setLoading(false)
         return
       }
@@ -49,7 +51,7 @@ export default function OrderConfirmation() {
         if (fetchError) throw fetchError
 
         if (!data) {
-          setError('No order found')
+          setError(t('orderConfirmation.errorNotFound'))
           setLoading(false)
           return
         }
@@ -57,7 +59,7 @@ export default function OrderConfirmation() {
         setOrder(data)
       } catch (err) {
         console.error('Error fetching order:', err)
-        setError('Failed to load order')
+        setError(t('orderConfirmation.errorLoad'))
       } finally {
         setLoading(false)
       }
@@ -119,10 +121,10 @@ export default function OrderConfirmation() {
     return (
       <div className="bg-white font-['Cormorant_Garamond'] min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[18px] text-[#666666] mb-6">{error || 'Order not found'}</p>
+<p className="text-[18px] text-[#666666] mb-6">{error || t('orderConfirmation.orderNotFound')}</p>
           <Link to="/collections">
             <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-              Continue Shopping
+              {t('orderConfirmation.continueShopping')}
             </button>
           </Link>
         </div>
@@ -130,6 +132,13 @@ export default function OrderConfirmation() {
     )
   }
 
+  const helpLinks = helpLinksData.map(l => ({
+    ...l,
+    label: l.path === '/order-tracking' ? (i18n.language === 'ru' ? 'История заказов' : l.label) :
+           l.path === '/faq' ? (i18n.language === 'ru' ? 'Связаться с поддержкой' : l.label) :
+           l.path === '/terms-conditions' ? (i18n.language === 'ru' ? 'Возврат и обмен' : l.label) :
+           l.label
+  }))
   const orderItems = order.items || []
   const subtotal = order.subtotal || 0
   const shipping = order.shipping || 0
@@ -140,15 +149,15 @@ export default function OrderConfirmation() {
   const estimatedDelivery = calculateDeliveryDate(order.created_at, deliveryMethod)
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Success Hero ── */}
       <div className="min-h-[180px] md:min-h-[200px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center py-8 md:py-[40px] px-4">
         <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded-full bg-green-600 flex items-center justify-center mb-5 lg:mb-[24px] shadow-[0_8px_32px_rgba(123,168,93,0.3)]">
           <IoCheckmarkCircle className="w-[36px] h-[36px] md:w-[40px] md:h-[40px] lg:w-[44px] lg:h-[44px] text-white" />
         </div>
-        <h1 className="text-[28px] md:text-[32px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-[8px] text-center">Order Confirmed!</h1>
-        <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-4 lg:mb-[16px] text-center">Thank you for your purchase</p>
+        <h1 className="text-[28px] md:text-[32px] lg:text-[36px] font-semibold text-[#1A1A1A] mb-[8px] text-center">{t('orderConfirmation.orderConfirmed')}</h1>
+        <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-4 lg:mb-[16px] text-center">{t('orderConfirmation.thankYou')}</p>
         <div className="bg-[#FDFBF7] border border-[#E8E3D9] rounded-[24px] px-5 lg:px-[28px] py-[10px] lg:py-[12px]">
           <span className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#8B7355]">Order #{order.id.slice(0, 8).toUpperCase()}</span>
         </div>
@@ -158,7 +167,7 @@ export default function OrderConfirmation() {
       <div className="min-h-[52px] bg-[#FDFBF7] border-y border-[#E8E3D9] px-4 md:px-[60px] lg:px-[120px] flex items-center justify-center gap-[10px] lg:gap-[12px] py-3 text-center">
         <IoMailOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0" />
         <span className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#666666]">
-          A confirmation email has been sent to <span className="text-[#8B7355] font-medium">{user?.email || 'your email'}</span>
+          {t('orderConfirmation.emailSent')} <span className="text-[#8B7355] font-medium">{user?.email || t('orderConfirmation.yourEmail')}</span>
         </span>
       </div>
 
@@ -171,7 +180,7 @@ export default function OrderConfirmation() {
 
             {/* Order Details */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Order Details</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('orderConfirmation.orderDetails')}</h2>
 
               <div className="space-y-4 lg:space-y-[20px] mb-5 lg:mb-[24px]">
                 {orderItems.map((item, index) => (
@@ -196,23 +205,23 @@ export default function OrderConfirmation() {
               <div className="pt-5 lg:pt-[24px] border-t border-[#E8E3D9]">
                 <div className="space-y-3 lg:space-y-[12px] mb-4 lg:mb-[20px]">
                   <div className="flex justify-between">
-                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Subtotal</span>
+                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('orderConfirmation.subtotal')}</span>
                     <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Shipping ({deliveryMethod})</span>
+                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('orderConfirmation.shipping')} ({deliveryMethod})</span>
                     <span className={`text-[14px] lg:text-[16px] font-normal ${shipping === 0 ? 'text-green-600' : 'text-[#1A1A1A]'}`}>
-                      {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                      {shipping === 0 ? t('orderConfirmation.free') : `$${shipping.toFixed(2)}`}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Tax</span>
+                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('orderConfirmation.tax')}</span>
                     <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${tax.toFixed(2)}</span>
                   </div>
                 </div>
                 <div className="h-[1px] bg-[#E8E3D9] mb-4 lg:mb-[20px]" />
                 <div className="flex justify-between">
-                  <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">Total Paid</span>
+                  <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">{t('orderConfirmation.totalPaid')}</span>
                   <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">${total.toFixed(2)}</span>
                 </div>
               </div>
@@ -220,11 +229,11 @@ export default function OrderConfirmation() {
 
             {/* Delivery Info */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px]">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Delivery Information</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('orderConfirmation.deliveryInformation')}</h2>
 
               {/* Address */}
               <div className="mb-4 lg:mb-[20px]">
-                <div className="text-[12px] lg:text-[14px] font-medium text-[#666666] mb-3 lg:mb-[12px] uppercase tracking-[1px]">Shipping Address</div>
+                <div className="text-[12px] lg:text-[14px] font-medium text-[#666666] mb-3 lg:mb-[12px] uppercase tracking-[1px]">{t('orderConfirmation.shippingAddress')}</div>
                 <div className="text-[15px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{shippingAddress.name || 'N/A'}</div>
                 <div className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#666666] leading-[1.7]">
                   {shippingAddress.street || 'N/A'}<br />
@@ -240,24 +249,24 @@ export default function OrderConfirmation() {
 
               {/* Delivery Method */}
               <div className="mb-4 lg:mb-[20px]">
-                <div className="text-[12px] lg:text-[14px] font-medium text-[#666666] mb-3 lg:mb-[12px] uppercase tracking-[1px]">Delivery Method</div>
+                <div className="text-[12px] lg:text-[14px] font-medium text-[#666666] mb-3 lg:mb-[12px] uppercase tracking-[1px]">{t('orderConfirmation.deliveryMethod')}</div>
                 <div className="flex items-center gap-[8px] mb-[4px]">
                   <IoCarOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355]" />
                   <span className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A]">{deliveryMethod}</span>
                 </div>
-                <div className="text-[13px] lg:text-[15px] font-normal text-green-600">Estimated delivery: {estimatedDelivery}</div>
+                <div className="text-[13px] lg:text-[15px] font-normal text-green-600">{t('orderConfirmation.estimatedDelivery')} {estimatedDelivery}</div>
               </div>
 
               <div className="h-[1px] bg-[#E8E3D9] my-4 lg:my-[20px]" />
 
               {/* Payment */}
               <div>
-                <div className="text-[12px] lg:text-[14px] font-medium text-[#666666] mb-3 lg:mb-[12px] uppercase tracking-[1px]">Payment Method</div>
+                <div className="text-[12px] lg:text-[14px] font-medium text-[#666666] mb-3 lg:mb-[12px] uppercase tracking-[1px]">{t('orderConfirmation.paymentMethod')}</div>
                 <div className="flex items-center gap-3 lg:gap-[12px]">
                   <div className="flex items-center gap-[8px]">
                     <IoCardOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#666666]" />
                     <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">
-                      {order.payment_status === 'pending' ? 'Payment Pending' : 'Payment Processed'}
+                      {order.payment_status === 'pending' ? t('orderConfirmation.paymentPending') : t('orderConfirmation.paymentProcessed')}
                     </span>
                   </div>
                 </div>
@@ -272,23 +281,23 @@ export default function OrderConfirmation() {
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
               <Link to="/order-tracking">
                 <button className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors mb-4 lg:mb-[16px]">
-                  Track Your Order
+                  {t('orderConfirmation.trackYourOrder')}
                 </button>
               </Link>
               <Link to="/collections">
                 <button className="w-full h-[52px] lg:h-[56px] bg-white border-[1.5px] border-[#8B7355] text-[#8B7355] text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors mb-5 lg:mb-[24px]">
-                  Continue Shopping
+                  {t('orderConfirmation.continueShopping')}
                 </button>
               </Link>
               <div className="pt-4 lg:pt-[20px] border-t border-[#E8E3D9] flex items-center gap-3 lg:gap-[12px] cursor-pointer group">
                 <IoDownloadOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666] group-hover:text-[#8B7355] transition-colors" />
-                <span className="text-[13px] lg:text-[14px] font-medium text-[#8B7355] group-hover:underline">Download Order Receipt (PDF)</span>
+                <span className="text-[13px] lg:text-[14px] font-medium text-[#8B7355] group-hover:underline">{t('orderConfirmation.downloadReceipt')}</span>
               </div>
             </div>
 
             {/* Help Card */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px]">Need Help?</h3>
+              <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[16px]">{t('orderConfirmation.needHelp')}</h3>
               <div>
                 {helpLinks.map((item, index) => (
                   <div key={item.label}>
@@ -313,14 +322,14 @@ export default function OrderConfirmation() {
                 </div>
                 <div>
                   <div className="text-[14px] lg:text-[15px] font-semibold text-[#1A1A1A] mb-[6px]">
-                    You earned {Math.floor(total)} loyalty points!
+                    {t('orderConfirmation.loyaltyEarned')} {Math.floor(total)} {t('orderConfirmation.loyaltyPoints')}
                   </div>
                   <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[8px]">
-                    Points added to your account with this order.
+                    {t('orderConfirmation.loyaltyDesc')}
                   </div>
                   <Link to="/dashboard">
                     <span className="text-[12px] lg:text-[13px] font-medium text-[#8B7355] underline cursor-pointer hover:text-[#7a6448] transition-colors">
-                      View your rewards balance
+                      {t('orderConfirmation.viewRewards')}
                     </span>
                   </Link>
                 </div>
