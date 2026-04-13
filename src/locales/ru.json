@@ -1018,5 +1018,69 @@
     "saving": "Сохранение...",
     "saveChanges": "Сохранить изменения",
     "securityNote": "Ваши данные зашифрованы и защищены"
+  },
+  "editAddress": {
+    "home": "Главная",
+    "account": "Аккаунт",
+    "shippingAddresses": "Адреса доставки",
+    "editAddress": "Редактировать адрес",
+    "pageTitle": "Редактировать адрес доставки",
+    "pageSubtitle": "Обновите информацию для доставки",
+    "userAvatarAlt": "Аватар пользователя",
+    "eliteMember": "Элитный участник",
+    "pointsValue": "2,450 баллов",
+    "totalOrders": "Всего заказов",
+    "wishlistItems": "В избранном",
+    "reviewsWritten": "Отзывов написано",
+    "addressLabel": "Название адреса",
+    "fullName": "Полное имя",
+    "phoneNumber": "Номер телефона",
+    "addressLine1": "Адресная строка 1",
+    "addressLine2": "Адресная строка 2",
+    "optional": "Необязательно",
+    "addressLine2Placeholder": "Квартира, офис, блок и т.д.",
+    "city": "Город",
+    "stateRegion": "Штат / Регион",
+    "postalCode": "Почтовый индекс",
+    "country": "Страна",
+    "setAsDefault": "Сделать адресом доставки по умолчанию",
+    "cancel": "Отмена",
+    "saveAddress": "Сохранить адрес",
+    "securePrivate": "Безопасно и конфиденциально",
+    "securePrivateDesc": "Информация о вашем адресе зашифрована и никогда не передаётся третьим лицам.",
+    "countries": {
+      "United States": "США",
+      "Canada": "Канада",
+      "United Kingdom": "Великобритания",
+      "Australia": "Австралия",
+      "United Arab Emirates": "ОАЭ",
+      "Russia": "Россия",
+      "France": "Франция",
+      "Germany": "Германия"
+    },
+    "navItems": {
+      "Account Dashboard": "Личный кабинет",
+      "Order History": "История заказов",
+      "My Wishlist": "Моё избранное",
+      "Beauty Profile": "Профиль красоты",
+      "Loyalty Program": "Программа лояльности",
+      "My Routines": "Мои ритуалы",
+      "Reviews & Ratings": "Отзывы и оценки",
+      "Account Settings": "Настройки аккаунта",
+      "Shipping Addresses": "Адреса доставки",
+      "Payment Methods": "Способы оплаты",
+      "Notifications": "Уведомления",
+      "Privacy Settings": "Настройки конфиденциальности",
+      "Complete Analysis": "Пройти анализ"
+    },
+    "badges": {
+      "NEW": "НОВИНКА"
+    },
+    "tags": {
+      "NEW": "НОВИНКА",
+      "Saved": "Сохранено",
+      "Default": "По умолчанию"
+    }
   }
+}
 }
