@@ -877,5 +877,37 @@
       "guarantee": "30-Day Guarantee",
       "guaranteeSub": "Money-Back"
     }
+  },
+  "orderConfirmation": {
+    "errorLogin": "Please log in to view your order",
+    "errorNotFound": "No order found",
+    "errorLoad": "Failed to load order",
+    "orderNotFound": "Order not found",
+    "continueShopping": "Continue Shopping",
+    "orderConfirmed": "Order Confirmed!",
+    "thankYou": "Thank you for your purchase",
+    "emailSent": "A confirmation email has been sent to",
+    "yourEmail": "your email",
+    "orderDetails": "Order Details",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "FREE",
+    "tax": "Tax",
+    "totalPaid": "Total Paid",
+    "deliveryInformation": "Delivery Information",
+    "shippingAddress": "Shipping Address",
+    "na": "N/A",
+    "deliveryMethod": "Delivery Method",
+    "estimatedDelivery": "Estimated delivery:",
+    "paymentMethod": "Payment Method",
+    "paymentPending": "Payment Pending",
+    "paymentProcessed": "Payment Processed",
+    "trackYourOrder": "Track Your Order",
+    "downloadReceipt": "Download Order Receipt (PDF)",
+    "needHelp": "Need Help?",
+    "loyaltyEarned": "You earned",
+    "loyaltyPoints": "loyalty points!",
+    "loyaltyDesc": "Points added to your account with this order.",
+    "viewRewards": "View your rewards balance"
   }
 }
