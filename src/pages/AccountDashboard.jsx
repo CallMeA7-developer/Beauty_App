@@ -30,7 +30,7 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function AccountDashboard() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { user, signOut } = useAuth()
   const { wishlistItems } = useWishlist()
   const navigate = useNavigate()
@@ -234,7 +234,7 @@ export default function AccountDashboard() {
   ]
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Hero Welcome ── */}
       <div className="min-h-[140px] md:min-h-[170px] lg:min-h-[200px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-4 md:px-[60px] lg:px-[120px] py-6 md:py-0">
