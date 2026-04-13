@@ -495,48 +495,5 @@
       "wellness": "Wellness",
       "trends": "Trends"
     }
-  },
-"privacyPolicy": {
-  "legal": "LEGAL",
-  "title": "Privacy Policy",
-  "subtitle": "Your privacy is important to us. This policy explains how Shan Loray collects, uses, and protects your personal information.",
-  "lastUpdated": "Last updated: April 2026",
-
-  "breadcrumb": {
-    "home": "Home",
-    "account": "Account Settings",
-    "policy": "Privacy Policy"
-  },
-
-  "intro1_part1": "At ",
-  "intro1_part2": ", we are committed to protecting your privacy and handling your personal data with transparency and care. This Privacy Policy describes our practices for collecting, using, and safeguarding the information you share with us when using our website and services.",
-  "intro2": "By using our services, you agree to the collection and use of information in accordance with this policy. If you do not agree, please discontinue use of our services.",
-
-  "contactTitle": "Questions About Your Privacy?",
-  "contactDesc": "If you have any questions about this Privacy Policy or how we handle your data, please don't hesitate to contact us.",
-  "contactButton": "Email Privacy Team",
-
-  "sections": [
-    {
-      "title": "Information We Collect",
-      "content": [
-        {
-          "subtitle": "Personal Information",
-          "text": "When you create an account or make a purchase, we collect information such as your name, email address, phone number, and shipping address. This information is necessary to process your orders and provide our services."
-        },
-        {
-          "subtitle": "Skin Analysis Data",
-          "text": "When you use our AI Skin Analysis feature, we collect your skin profile data including skin type, concerns, and analysis results. This data is used solely to provide personalized product recommendations and track your skin journey over time."
-        },
-        {
-          "subtitle": "Usage Data",
-          "text": "We automatically collect certain information when you visit our website, including your IP address, browser type, pages visited, and time spent on pages. This helps us improve our services and user experience."
-        },
-        {
-          "subtitle": "Payment Information",
-          "text": "Payment details are processed securely through our payment providers. We do not store your full credit card numbers — only the last four digits and card type for your reference."
-        }
-      ]
-    }
-  ]
+  }
 }
