@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, Link } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
@@ -17,6 +18,7 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function BeautyJourney() {
+  const { t, i18n } = useTranslation()
   const { user } = useAuth()
   const { addToCart } = useCart()
   const navigate = useNavigate()
@@ -78,11 +80,9 @@ export default function BeautyJourney() {
       <div className="min-h-screen bg-white font-['Cormorant_Garamond'] flex items-center justify-center px-4">
         <div className="text-center max-w-[500px]">
           <IoSparklesOutline className="w-[64px] h-[64px] text-[#C9A870] mx-auto mb-6" />
-          <h2 className="text-[32px] lg:text-[40px] font-bold text-[#1A1A1A] mb-4">Sign In Required</h2>
-          <p className="text-[16px] text-[#666666] mb-8">Please sign in to view your beauty journey and personalized recommendations</p>
-          <button onClick={() => navigate('/')} className="px-8 h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-            Go to Home
-          </button>
+          <h2 className="text-[32px] lg:text-[40px] font-bold text-[#1A1A1A] mb-4">{t('beautyJourney.signInRequired')}</h2>
+          <p className="text-[16px] text-[#666666] mb-8">{t('beautyJourney.signInDesc')}</p>
+          <button onClick={() => navigate('/')} className="px-8 h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">{t('beautyJourney.goToHome')}</button>
         </div>
       </div>
     )
@@ -93,11 +93,9 @@ export default function BeautyJourney() {
       <div className="min-h-screen bg-white font-['Cormorant_Garamond'] flex items-center justify-center px-4">
         <div className="text-center max-w-[500px]">
           <IoSparklesOutline className="w-[64px] h-[64px] text-[#C9A870] mx-auto mb-6" />
-          <h2 className="text-[32px] lg:text-[40px] font-bold text-[#1A1A1A] mb-4">No Analysis Yet</h2>
-          <p className="text-[16px] text-[#666666] mb-8">Complete your skin analysis to unlock your personalized beauty journey and product recommendations</p>
-          <button onClick={() => navigate('/skin-analysis')} className="px-8 h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-            Start Skin Analysis
-          </button>
+          <h2 className="text-[32px] lg:text-[40px] font-bold text-[#1A1A1A] mb-4">{t('beautyJourney.noAnalysis')}</h2>
+          <p className="text-[16px] text-[#666666] mb-8">{t('beautyJourney.noAnalysisDesc')}</p>
+          <button onClick={() => navigate('/skin-analysis')} className="px-8 h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">{t('beautyJourney.startSkinAnalysis')}</button>
         </div>
       </div>
     )
@@ -106,10 +104,10 @@ export default function BeautyJourney() {
   const totalProducts = morningProducts.length + eveningProducts.length + targetedProducts.length
 
   const quickStats = [
-    { label: 'Skin Health Score', value: `${skinAnalysis.skin_score}/100`, icon: IoSparklesOutline },
-    { label: 'Recommended Products', value: totalProducts.toString(), icon: IoHeartOutline },
-    { label: 'Morning Routine', value: morningProducts.length.toString(), icon: IoWaterOutline },
-    { label: 'Evening Routine', value: eveningProducts.length.toString(), icon: IoTrophyOutline },
+    { label: t('beautyJourney.skinHealthScore'), value: `${skinAnalysis.skin_score}/100`, icon: IoSparklesOutline },
+    { label: t('beautyJourney.recommendedProducts'), value: totalProducts.toString(), icon: IoHeartOutline },
+    { label: t('beautyJourney.morningRoutineStat'), value: morningProducts.length.toString(), icon: IoWaterOutline },
+    { label: t('beautyJourney.eveningRoutineStat'), value: eveningProducts.length.toString(), icon: IoTrophyOutline },
   ]
 
   const formatDate = (dateString) => {
@@ -143,7 +141,7 @@ export default function BeautyJourney() {
             )}
             className="px-4 lg:px-5 h-[38px] lg:h-[42px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors"
           >
-            Add to Cart
+            {t('beautyJourney.addToCart')}
           </button>
         </div>
       </div>
@@ -151,14 +149,14 @@ export default function BeautyJourney() {
   )
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Hero Welcome ── */}
       <div className="min-h-[300px] md:min-h-[360px] lg:min-h-[420px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] flex flex-col md:flex-row items-center px-4 md:px-[60px] lg:px-[120px] py-8 md:py-0 gap-8 md:gap-0">
         <div className="w-full md:w-[500px] lg:w-[600px]">
-          <p className="text-[11px] md:text-[12px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">YOUR PERSONALIZED BEAUTY PROFILE</p>
-          <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">Welcome Back, {userName}</h1>
-          <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-6">Your beauty journey continues with personalized insights and recommendations</p>
+          <p className="text-[11px] md:text-[12px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('beautyJourney.tagline')}</p>
+          <h1 className="text-[36px] md:text-[48px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">{t('beautyJourney.welcome')} {userName}</h1>
+          <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-6">{t('beautyJourney.subtitle')}</p>
           <div className="w-[80px] md:w-[100px] lg:w-[120px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="flex-1 flex justify-center md:justify-end">
@@ -176,7 +174,7 @@ export default function BeautyJourney() {
               <div className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] lg:w-[80px] lg:h-[80px] bg-white rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
                 <div className="text-center">
                   <div className="text-[18px] md:text-[20px] lg:text-[24px] font-bold text-[#8B7355]">{skinAnalysis.skin_score}</div>
-                  <div className="text-[9px] md:text-[10px] lg:text-[11px] font-normal text-[#666666]">Score</div>
+                  <div className="text-[9px] md:text-[10px] lg:text-[11px] font-normal text-[#666666]">{t('beautyJourney.score')}</div>
                 </div>
               </div>
             </div>
@@ -199,24 +197,24 @@ export default function BeautyJourney() {
 
       {/* ── Beauty Profile ── */}
       <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-8 lg:mb-[48px]">Your Beauty Profile</h2>
+        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-8 lg:mb-[48px]">{t('beautyJourney.beautyProfile')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-4 lg:gap-[24px]">
           {/* Skin Type */}
           <div className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A]">Skin Type</h3>
-              <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">Confirmed</span>
+              <h3 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A]">{t('beautyJourney.skinType')}</h3>
+              <span className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium rounded-full">{t('beautyJourney.confirmed')}</span>
             </div>
-            <div className="text-[15px] lg:text-[18px] font-semibold text-[#8B7355] mb-2">{skinAnalysis.selected_skin_type || 'Not specified'}</div>
+            <div className="text-[15px] lg:text-[18px] font-semibold text-[#8B7355] mb-2">{skinAnalysis.selected_skin_type || t('beautyJourney.notSpecified')}</div>
             <p className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-3">{skinAnalysis.summary}</p>
-            <p className="text-[12px] lg:text-[13px] font-light italic text-[#999999]">Last Updated: {formatDate(skinAnalysis.created_at)}</p>
+            <p className="text-[12px] lg:text-[13px] font-light italic text-[#999999]">{t('beautyJourney.lastUpdated')} {formatDate(skinAnalysis.created_at)}</p>
           </div>
 
           {/* Skin Concerns */}
           <div className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
-            <h3 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] mb-4">Skin Concerns</h3>
+            <h3 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] mb-4">{t('beautyJourney.skinConcerns')}</h3>
             <div className="mb-4">
-              <p className="text-[13px] lg:text-[14px] font-medium text-[#666666] mb-2">Primary</p>
+              <p className="text-[13px] lg:text-[14px] font-medium text-[#666666] mb-2">{t('beautyJourney.primary')}</p>
               <div className="flex flex-wrap gap-2">
                 {skinAnalysis.selected_concern && (
                   <span className="px-3 py-1 bg-[#8B7355] text-white text-[12px] lg:text-[13px] rounded-full">{skinAnalysis.selected_concern}</span>
@@ -225,7 +223,7 @@ export default function BeautyJourney() {
             </div>
             {skinAnalysis.selected_specific_concerns && skinAnalysis.selected_specific_concerns.length > 0 && (
               <div>
-                <p className="text-[13px] lg:text-[14px] font-medium text-[#666666] mb-2">Specific Concerns</p>
+                <p className="text-[13px] lg:text-[14px] font-medium text-[#666666] mb-2">{t('beautyJourney.specificConcerns')}</p>
                 <div className="flex flex-wrap gap-2">
                   {skinAnalysis.selected_specific_concerns.map((concern) => (
                     <span key={concern} className="px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[12px] lg:text-[13px] rounded-full">{concern}</span>
@@ -237,7 +235,7 @@ export default function BeautyJourney() {
 
           {/* Analysis Cards */}
           <div className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
-            <h3 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] mb-4">Analysis Insights</h3>
+            <h3 className="text-[16px] lg:text-[20px] font-medium text-[#1A1A1A] mb-4">{t('beautyJourney.analysisInsights')}</h3>
             <div className="space-y-3">
               {skinAnalysis.analysis_cards && skinAnalysis.analysis_cards.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -254,8 +252,8 @@ export default function BeautyJourney() {
       {/* ── Morning Routine ── */}
       {morningProducts.length > 0 && (
         <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-          <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-3">Morning Routine</h2>
-          <p className="text-[14px] lg:text-[16px] text-[#666666] mb-8 lg:mb-[48px]">Your personalized morning skincare products</p>
+          <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-3">{t('beautyJourney.morningRoutine')}</h2>
+          <p className="text-[14px] lg:text-[16px] text-[#666666] mb-8 lg:mb-[48px]">{t('beautyJourney.morningRoutineDesc')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
             {morningProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -267,8 +265,8 @@ export default function BeautyJourney() {
       {/* ── Evening Routine ── */}
       {eveningProducts.length > 0 && (
         <div className="bg-[#F5F1EA] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-          <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-3">Evening Routine</h2>
-          <p className="text-[14px] lg:text-[16px] text-[#666666] mb-8 lg:mb-[48px]">Your personalized evening skincare products</p>
+          <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-3">{t('beautyJourney.eveningRoutine')}</h2>
+          <p className="text-[14px] lg:text-[16px] text-[#666666] mb-8 lg:mb-[48px]">{t('beautyJourney.eveningRoutineDesc')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
             {eveningProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -280,8 +278,8 @@ export default function BeautyJourney() {
       {/* ── Targeted Recommendations ── */}
       {targetedProducts.length > 0 && (
         <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-          <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-3">Targeted Treatments</h2>
-          <p className="text-[14px] lg:text-[16px] text-[#666666] mb-8 lg:mb-[48px]">Special products for your specific concerns</p>
+          <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-3">{t('beautyJourney.targetedTreatments')}</h2>
+          <p className="text-[14px] lg:text-[16px] text-[#666666] mb-8 lg:mb-[48px]">{t('beautyJourney.targetedDesc')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
             {targetedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -293,7 +291,7 @@ export default function BeautyJourney() {
 
       {/* ── Progress Tracking ── */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] mb-8 lg:mb-[48px]">Your Current Analysis</h2>
+        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] mb-8 lg:mb-[48px]">{t('beautyJourney.currentAnalysis')}</h2>
         <div className="bg-gradient-to-b from-[#FDFBF7] to-white rounded-[16px] border border-[#E8E3D9] p-5 md:p-8 lg:p-[40px]">
           <div className="flex flex-col items-center mb-8">
             <div className="w-[140px] h-[140px] md:w-[180px] md:h-[180px] lg:w-[220px] lg:h-[220px] rounded-full border-4 border-[#C9A870] flex items-center justify-center mb-4">
@@ -303,29 +301,29 @@ export default function BeautyJourney() {
               </div>
             </div>
             <div className="text-[20px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-2">{skinAnalysis.skin_label}</div>
-            <div className="text-[13px] lg:text-[15px] font-normal text-[#666666]">Analyzed on {formatDate(skinAnalysis.created_at)}</div>
+            <div className="text-[13px] lg:text-[15px] font-normal text-[#666666]">{t('beautyJourney.analyzedOn')} {formatDate(skinAnalysis.created_at)}</div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 mb-6">
             <div className="text-center">
               <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-1">{skinAnalysis.metrics?.hydration || 0}%</div>
-              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Hydration</div>
+              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{t('beautyJourney.hydration')}</div>
             </div>
             <div className="text-center">
               <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-1">{skinAnalysis.metrics?.texture || 0}%</div>
-              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Texture</div>
+              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{t('beautyJourney.texture')}</div>
             </div>
             <div className="text-center">
               <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-1">{skinAnalysis.metrics?.clarity || 0}%</div>
-              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Clarity</div>
+              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{t('beautyJourney.clarity')}</div>
             </div>
             <div className="text-center">
               <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-1">{skinAnalysis.metrics?.toneEvenness || 0}%</div>
-              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Tone Evenness</div>
+              <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{t('beautyJourney.toneEvenness')}</div>
             </div>
           </div>
           <div className="flex justify-center">
             <button onClick={() => navigate('/skin-analysis')} className="w-full sm:w-[200px] lg:w-[240px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-              Retake Analysis
+              {t('beautyJourney.retakeAnalysis')}
             </button>
           </div>
         </div>
