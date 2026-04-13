@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoPersonOutline,
@@ -29,6 +30,7 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function AccountDashboard() {
+  const { t } = useTranslation()
   const { user, signOut } = useAuth()
   const { wishlistItems } = useWishlist()
   const navigate = useNavigate()
@@ -202,8 +204,8 @@ export default function AccountDashboard() {
   const orderHistory = orders.slice(0, 5)
   const displayWishlist = wishlistItems?.slice(0, 4) || []
 
-  const membershipTier = loyaltyPoints >= 3000 ? 'Gold Member' : loyaltyPoints >= 2000 ? 'Elite Member' : 'Member'
-  const nextTier = loyaltyPoints >= 3000 ? 'Prestige' : loyaltyPoints >= 2000 ? 'Gold' : 'Elite'
+  const membershipTier = loyaltyPoints >= 3000 ? t('dashboard.memberGold') : loyaltyPoints >= 2000 ? t('dashboard.memberElite') : t('dashboard.member')
+  const nextTier = loyaltyPoints >= 3000 ? 'Prestige' : loyaltyPoints >= 2000 ? t('dashboard.memberGold') : t('dashboard.memberElite')
   const nextTierPoints = loyaltyPoints >= 3000 ? 5000 : loyaltyPoints >= 2000 ? 3000 : 2000
   const pointsToNext = Math.max(0, nextTierPoints - loyaltyPoints)
   const progressPercent = loyaltyPoints >= 3000 ? 100 : Math.min(100, (loyaltyPoints / nextTierPoints) * 100)
@@ -211,24 +213,24 @@ export default function AccountDashboard() {
   const skinAnalysisCompleted = !!skinAnalysis
 
   const navigationItems = [
-    { icon: IoPersonOutline, label: 'Account Dashboard', path: '/dashboard', active: true },
-    { icon: IoBagCheckOutline, label: 'Order History', path: '/order-tracking', active: false },
-    { icon: IoHeartOutline, label: 'My Wishlist', path: '/wishlist', active: false, badge: wishlistCount > 0 ? `${wishlistCount}` : null },
-    { icon: IoLocationOutline, label: 'Shipping Addresses', path: '/shipping-address', active: false },
-    { icon: IoCardOutline, label: 'Payment Methods', path: '/payment-methods', active: false },
-    { icon: IoSparkles, label: 'Beauty Profile', path: '/skin-analysis', active: false, tag: !skinAnalysisCompleted ? 'Complete Analysis' : null },
-    { icon: IoRibbonOutline, label: 'Loyalty Program', path: '/dashboard', active: false, badge: loyaltyPoints > 0 ? `${loyaltyPoints}` : null },
-    { icon: IoCalendarOutline, label: 'My Routines', path: '/beauty-journey', active: false },
-    { icon: IoStarSharp, label: 'Reviews & Ratings', path: '/dashboard', active: false },
-    { icon: IoSettingsOutline, label: 'Account Settings', path: '/privacy-settings', active: false },
-    { icon: IoNotificationsOutline, label: 'Notifications', path: '/notifications', active: false },
+    { icon: IoPersonOutline, label: t('dashboard.accountDashboard'), path: '/dashboard', active: true },
+    { icon: IoBagCheckOutline, label: t('dashboard.orderHistoryNav'), path: '/order-tracking', active: false },
+    { icon: IoHeartOutline, label: t('dashboard.myWishlist'), path: '/wishlist', active: false, badge: wishlistCount > 0 ? `${wishlistCount}` : null },
+    { icon: IoLocationOutline, label: t('dashboard.shippingAddresses'), path: '/shipping-address', active: false },
+    { icon: IoCardOutline, label: t('dashboard.paymentMethods'), path: '/payment-methods', active: false },
+    { icon: IoSparkles, label: t('dashboard.beautyProfileNav'), path: '/skin-analysis', active: false, tag: !skinAnalysisCompleted ? t('dashboard.completeAnalysis') : null },
+    { icon: IoRibbonOutline, label: t('dashboard.loyaltyProgramNav'), path: '/dashboard', active: false, badge: loyaltyPoints > 0 ? `${loyaltyPoints}` : null },
+    { icon: IoCalendarOutline, label: t('dashboard.myRoutines'), path: '/beauty-journey', active: false },
+    { icon: IoStarSharp, label: t('dashboard.reviewsRatings'), path: '/dashboard', active: false },
+    { icon: IoSettingsOutline, label: t('dashboard.accountSettingsNav'), path: '/privacy-settings', active: false },
+    { icon: IoNotificationsOutline, label: t('dashboard.notifications'), path: '/notifications', active: false },
   ]
 
   const settingsItems = [
-    { icon: IoLocationOutline, label: 'Shipping Addresses', path: '/shipping-address', count: addressesCount > 0 ? `${addressesCount} saved` : 'No addresses saved' },
-    { icon: IoCardOutline, label: 'Payment Methods', path: '/payment-methods', count: null },
-    { icon: IoNotificationsOutline, label: 'Notification Preferences', path: '/notifications', count: null },
-    { icon: IoShieldCheckmarkOutline, label: 'Privacy Settings', path: '/privacy-settings', count: null },
+    { icon: IoLocationOutline, label: t('dashboard.shippingAddresses'), path: '/shipping-address', count: addressesCount > 0 ? `${addressesCount} saved` : 'No addresses saved' },
+    { icon: IoCardOutline, label: t('dashboard.paymentMethods'), path: '/payment-methods', count: null },
+    { icon: IoNotificationsOutline, label: t('dashboard.notificationPrefs'), path: '/notifications', count: null },
+    { icon: IoShieldCheckmarkOutline, label: t('dashboard.privacySettings'), path: '/privacy-settings', count: null },
   ]
 
   return (
@@ -237,9 +239,9 @@ export default function AccountDashboard() {
       {/* ── Hero Welcome ── */}
       <div className="min-h-[140px] md:min-h-[170px] lg:min-h-[200px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-4 md:px-[60px] lg:px-[120px] py-6 md:py-0">
         <div className="max-w-[1200px] w-full">
-          <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-3 lg:mb-[16px]">Home / Account Dashboard</div>
-          <h1 className="text-[28px] md:text-[38px] lg:text-[48px] font-semibold text-[#1A1A1A]">Welcome Back, {userName}</h1>
-          <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">Manage your beauty journey with Shan Loray</p>
+          <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-3 lg:mb-[16px]">{t('dashboard.breadcrumb')}</div>
+          <h1 className="text-[28px] md:text-[38px] lg:text-[48px] font-semibold text-[#1A1A1A]">{t('dashboard.welcome')} {userName}</h1>
+          <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">{t('dashboard.subtitle')}</p>
         </div>
       </div>
 
@@ -270,7 +272,7 @@ export default function AccountDashboard() {
                 </div>
                 <div className="flex items-center gap-[8px]">
                   <IoSparkles className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
-                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} Points</span>
+                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} {t('dashboard.points')}</span>
                 </div>
               </div>
             </div>
@@ -299,15 +301,15 @@ export default function AccountDashboard() {
               <div className="grid grid-cols-3 gap-3 lg:gap-[16px]">
                 <div className="text-center">
                   <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{totalOrders}</div>
-                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Total Orders</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{t('dashboard.totalOrders')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{wishlistCount}</div>
-                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Wishlist Items</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{t('dashboard.wishlistItems')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{reviewsCount}</div>
-                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Reviews Written</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{t('dashboard.reviewsWritten')}</div>
                 </div>
               </div>
             </div>
@@ -318,7 +320,7 @@ export default function AccountDashboard() {
               className="w-full bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium py-3 lg:py-[12px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors flex items-center justify-center gap-[8px]"
             >
               <IoLogOutOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
-              Sign Out
+              {t('dashboard.signOut')}
             </button>
           </div>
 
@@ -328,13 +330,13 @@ export default function AccountDashboard() {
             {/* Personal Info */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Personal Information</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('dashboard.personalInfo')}</h3>
                 {!editMode && (
                   <button
                     onClick={() => setEditMode(true)}
                     className="flex items-center gap-[6px] text-[13px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer hover:underline"
                   >
-                    <IoCreateOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> Edit
+                    <IoCreateOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" /> {t('dashboard.edit')}
                   </button>
                 )}
               </div>
@@ -343,7 +345,7 @@ export default function AccountDashboard() {
                 <div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[24px] mb-5 lg:mb-[24px]">
                     <div>
-                      <label className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px] block">Full Name</label>
+                      <label className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px] block">{t('dashboard.fullName')}</label>
                       <input
                         type="text"
                         value={editFormData.full_name}
@@ -352,7 +354,7 @@ export default function AccountDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px] block">Phone</label>
+                      <label className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px] block">{t('dashboard.phone')}</label>
                       <input
                         type="text"
                         value={editFormData.phone}
@@ -361,7 +363,7 @@ export default function AccountDashboard() {
                       />
                     </div>
                     <div>
-                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">Email</div>
+                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">{t('dashboard.email')}</div>
                       <div className="text-[14px] lg:text-[16px] font-normal text-[#999999]">{userEmail}</div>
                     </div>
                     <div>
@@ -374,7 +376,7 @@ export default function AccountDashboard() {
                       onClick={handleSaveProfile}
                       className="flex-1 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium py-[10px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors"
                     >
-                      Save Changes
+                      {t('dashboard.saveChanges')}
                     </button>
                     <button
                       onClick={() => {
@@ -383,7 +385,7 @@ export default function AccountDashboard() {
                       }}
                       className="flex-1 border border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium py-[10px] rounded-[8px] cursor-pointer hover:bg-[#FDFBF7] transition-colors"
                     >
-                      Cancel
+                      {t('dashboard.cancel')}
                     </button>
                   </div>
                 </div>
@@ -391,25 +393,25 @@ export default function AccountDashboard() {
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[24px] mb-5 lg:mb-[24px]">
                     <div>
-                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">Full Name</div>
+                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">{t('dashboard.fullName')}</div>
                       <div className="text-[14px] lg:text-[16px] font-normal text-[#2B2B2B]">{profile?.full_name || userName}</div>
                     </div>
                     <div>
-                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">Email</div>
+                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">{t('dashboard.email')}</div>
                       <div className="text-[14px] lg:text-[16px] font-normal text-[#2B2B2B]">{userEmail}</div>
                     </div>
                     <div>
-                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">Phone</div>
-                      <div className="text-[14px] lg:text-[16px] font-normal text-[#2B2B2B]">{profile?.phone || 'Not set'}</div>
+                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">{t('dashboard.phone')}</div>
+                      <div className="text-[14px] lg:text-[16px] font-normal text-[#2B2B2B]">{profile?.phone || t('dashboard.notSet')}</div>
                     </div>
                     <div>
-                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">Birthday</div>
-                      <div className="text-[14px] lg:text-[16px] font-normal text-[#2B2B2B]">N/A</div>
+                      <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-[6px]">{t('dashboard.birthday')}</div>
+                      <div className="text-[14px] lg:text-[16px] font-normal text-[#2B2B2B]">{t('dashboard.na')}</div>
                     </div>
                   </div>
                   <div className="bg-[#FDFBF7] rounded-[8px] p-4 lg:p-[16px]">
                     <div className="flex items-center justify-between mb-3 lg:mb-[12px]">
-                      <span className="text-[13px] lg:text-[14px] font-normal text-[#666666]">Profile Completion</span>
+                      <span className="text-[13px] lg:text-[14px] font-normal text-[#666666]">{t('dashboard.profileCompletion')}</span>
                       <span className="text-[13px] lg:text-[14px] font-medium text-[#8B7355]">{profileCompletion}%</span>
                     </div>
                     <div className="w-full h-[7px] lg:h-[8px] bg-white rounded-full overflow-hidden">
@@ -423,9 +425,9 @@ export default function AccountDashboard() {
             {/* Current Orders */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Current Orders</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('dashboard.currentOrders')}</h3>
                 <Link to="/order-tracking">
-                  <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">View All</button>
+                  <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">{t('dashboard.viewAll')}</button>
                 </Link>
               </div>
               {currentOrders.length > 0 ? (
@@ -450,7 +452,7 @@ export default function AccountDashboard() {
                                   {firstItem?.product_name || 'Order'}
                                 </div>
                                 <div className="text-[11px] lg:text-[13px] font-light text-[#666666]">
-                                  Order #{order.id.slice(0, 8).toUpperCase()} · {new Date(order.created_at).toLocaleDateString()} · Qty: {order.items?.length || 0}
+                                  {t('dashboard.order')} #{order.id.slice(0, 8).toUpperCase()} · {new Date(order.created_at).toLocaleDateString()} · {t('dashboard.qty')} {order.items?.length || 0}
                                 </div>
                               </div>
                               <div className="bg-[#C9A870] text-white text-[10px] lg:text-[12px] font-normal px-[10px] lg:px-[12px] py-[4px] rounded-full flex-shrink-0">
@@ -460,11 +462,11 @@ export default function AccountDashboard() {
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-3 lg:mt-[16px]">
                               <div className="flex items-center gap-[6px] text-[12px] lg:text-[14px] font-normal text-[#666666]">
                                 <IoCalendarOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
-                                Est. Delivery: {new Date(new Date(order.created_at).getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                                {t('dashboard.estDelivery')} {new Date(new Date(order.created_at).getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}
                               </div>
                               <Link to={`/order-tracking?orderId=${order.id}`}>
                                 <button className="border border-[#8B7355] text-[#8B7355] text-[12px] lg:text-[14px] font-medium px-4 lg:px-[20px] py-[7px] lg:py-[8px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all self-start sm:self-auto">
-                                  Track Order
+                                  {t('dashboard.trackOrder')}
                                 </button>
                               </Link>
                             </div>
@@ -477,7 +479,7 @@ export default function AccountDashboard() {
               ) : (
                 <div className="text-center py-[40px]">
                   <IoBagCheckOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-[16px]" />
-                  <p className="text-[15px] text-[#666666]">No current orders</p>
+                  <p className="text-[15px] text-[#666666]">{t('dashboard.noCurrentOrders')}</p>
                 </div>
               )}
             </div>
@@ -507,7 +509,7 @@ export default function AccountDashboard() {
                             </span>
                             <Link to={`/order-tracking?orderId=${order.id}`}>
                               <button className="flex items-center gap-[6px] text-[12px] lg:text-[14px] font-normal text-[#8B7355] cursor-pointer hover:underline">
-                                Track
+                                {t('dashboard.track')}
                               </button>
                             </Link>
                           </div>
@@ -517,13 +519,13 @@ export default function AccountDashboard() {
                   </div>
                   <Link to="/order-tracking">
                     <button className="w-full mt-4 lg:mt-[20px] text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">
-                      View Full History
+                      {t('dashboard.viewFullHistory')}
                     </button>
                   </Link>
                 </>
               ) : (
                 <div className="text-center py-[20px]">
-                  <p className="text-[15px] text-[#666666]">No order history</p>
+                  <p className="text-[15px] text-[#666666]">{t('dashboard.noOrderHistory')}</p>
                 </div>
               )}
             </div>
@@ -531,11 +533,11 @@ export default function AccountDashboard() {
             {/* Wishlist */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Wishlist</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('dashboard.wishlist')}</h3>
                 {wishlistCount > 4 && (
                   <Link to="/wishlist">
                     <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">
-                      View All {wishlistCount} Items
+                      {t('dashboard.viewAllItems')} {wishlistCount}
                     </button>
                   </Link>
                 )}
@@ -568,10 +570,10 @@ export default function AccountDashboard() {
               ) : (
                 <div className="text-center py-[40px]">
                   <IoHeartOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-[16px]" />
-                  <p className="text-[15px] text-[#666666] mb-[16px]">Your wishlist is empty</p>
+                  <p className="text-[15px] text-[#666666] mb-[16px]">{t('dashboard.wishlistEmpty')}</p>
                   <Link to="/collections">
                     <button className="bg-[#8B7355] text-white text-[14px] font-medium px-[24px] py-[10px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                      Browse Products
+                      {t('dashboard.browseProducts')}
                     </button>
                   </Link>
                 </div>
@@ -582,17 +584,17 @@ export default function AccountDashboard() {
             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F1EA] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-start justify-between mb-5 lg:mb-[24px]">
                 <div>
-                  <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-[8px]">Beauty Profile</h3>
+                  <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-[8px]">{t('dashboard.beautyProfile')}</h3>
                   {skinAnalysis && (
                     <div className="flex items-center gap-[8px] text-[12px] lg:text-[14px] font-normal text-[#666666]">
                       <IoSparkles className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] text-[#C9A870]" />
-                      Last Analysis: {new Date(skinAnalysis.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {t('dashboard.lastAnalysis')} {new Date(skinAnalysis.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </div>
                   )}
                 </div>
                 <Link to="/skin-analysis">
                   <button className="bg-[#8B7355] text-white text-[12px] lg:text-[14px] font-medium px-4 lg:px-[24px] py-[8px] lg:py-[10px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors whitespace-nowrap">
-                    {skinAnalysis ? 'New Analysis' : 'Start Analysis'}
+                    {skinAnalysis ? t('dashboard.newAnalysis') : t('dashboard.startAnalysis')}
                   </button>
                 </Link>
               </div>
@@ -600,40 +602,40 @@ export default function AccountDashboard() {
                 <>
                   <div className="bg-white rounded-[8px] p-4 lg:p-[20px] mb-5 lg:mb-[24px]">
                     <div className="flex items-center justify-between mb-3">
-                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A]">Skin Score</div>
+                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A]">{t('dashboard.skinScore')}</div>
                       <div className="text-[24px] lg:text-[28px] font-bold text-[#8B7355]">{skinAnalysis.skin_score}/100</div>
                     </div>
                     {skinAnalysis.skin_label && (
-                      <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Status: <span className="text-[#8B7355] font-medium">{skinAnalysis.skin_label}</span></div>
+                      <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{t('dashboard.status')} <span className="text-[#8B7355] font-medium">{skinAnalysis.skin_label}</span></div>
                     )}
                   </div>
                   <div className="grid grid-cols-2 gap-3 lg:gap-[20px] mb-5 lg:mb-[24px]">
                     <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
                       <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.hydration || 0}%</div>
-                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Hydration</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">{t('dashboard.hydration')}</div>
                     </div>
                     <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
                       <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.texture || 0}%</div>
-                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Texture</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">{t('dashboard.texture')}</div>
                     </div>
                     <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
                       <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.clarity || 0}%</div>
-                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Clarity</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">{t('dashboard.clarity')}</div>
                     </div>
                     <div className="bg-white rounded-[8px] p-3 lg:p-[20px] text-center">
                       <div className="text-[20px] md:text-[24px] lg:text-[28px] font-bold text-[#8B7355] mb-[4px]">{skinAnalysis.metrics?.toneEvenness || 0}%</div>
-                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">Tone Evenness</div>
+                      <div className="text-[11px] md:text-[12px] lg:text-[13px] font-normal text-[#666666] leading-tight">{t('dashboard.toneEvenness')}</div>
                     </div>
                   </div>
                   {skinAnalysis.summary && (
                     <div className="bg-white rounded-[8px] p-4 lg:p-[16px] mb-5 lg:mb-[24px]">
-                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[8px]">Summary</div>
+                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[8px]">{t('dashboard.summary')}</div>
                       <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] leading-relaxed">{skinAnalysis.summary}</div>
                     </div>
                   )}
                   {skinAnalysis.analysis_cards && skinAnalysis.analysis_cards.length > 0 && (
                     <div className="bg-white rounded-[8px] p-4 lg:p-[16px]">
-                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[8px]">Analysis Insights</div>
+                      <div className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-[8px]">{t('dashboard.analysisInsights')}</div>
                       <div className="flex gap-[8px] flex-wrap">
                         {skinAnalysis.analysis_cards.map((card, index) => (
                           <div key={index} className="bg-[#FDFBF7] text-[#8B7355] text-[12px] lg:text-[13px] font-normal px-[10px] lg:px-[12px] py-[5px] lg:py-[6px] rounded-full border border-[#E8E3D9]">
@@ -647,7 +649,7 @@ export default function AccountDashboard() {
               ) : (
                 <div className="text-center py-[40px]">
                   <IoSparkles className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-[16px]" />
-                  <p className="text-[15px] text-[#666666] mb-[16px]">Complete your skin analysis to see results</p>
+                  <p className="text-[15px] text-[#666666] mb-[16px]">{t('dashboard.completeSkinAnalysis')}</p>
                   <Link to="/skin-analysis">
                     <button className="bg-[#8B7355] text-white text-[14px] font-medium px-[24px] py-[10px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
                       Start Analysis
@@ -661,17 +663,17 @@ export default function AccountDashboard() {
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center gap-3 lg:gap-[12px] mb-4 lg:mb-[20px]">
                 <IoRibbonOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#C9A870]" />
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Loyalty Program</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('dashboard.loyaltyProgram')}</h3>
               </div>
               <div className="text-center mb-5 lg:mb-[24px]">
                 <div className="text-[26px] md:text-[28px] lg:text-[32px] font-bold text-[#8B7355] mb-[4px]">{loyaltyPoints.toLocaleString()} Points</div>
-                <div className="text-[13px] lg:text-[14px] font-normal text-[#666666]">Current Balance</div>
+                <div className="text-[13px] lg:text-[14px] font-normal text-[#666666]">{t('dashboard.currentBalance')}</div>
               </div>
               {loyaltyPoints < 5000 && (
                 <div className="bg-[#FDFBF7] rounded-[8px] p-4 lg:p-[20px] mb-4 lg:mb-[20px]">
                   <div className="flex items-center justify-between mb-3 lg:mb-[12px]">
                     <span className="text-[13px] lg:text-[14px] font-normal text-[#666666]">{membershipTier} to {nextTier}</span>
-                    <span className="text-[13px] lg:text-[14px] font-medium text-[#8B7355]">{pointsToNext.toLocaleString()} points away</span>
+                    <span className="text-[13px] lg:text-[14px] font-medium text-[#8B7355]">{pointsToNext.toLocaleString()} {t('dashboard.pointsAway')}</span>
                   </div>
                   <div className="w-full h-[7px] lg:h-[8px] bg-white rounded-full overflow-hidden">
                     <div className="h-full bg-[#C9A870] rounded-full" style={{ width: `${progressPercent}%` }} />
@@ -683,10 +685,10 @@ export default function AccountDashboard() {
             {/* Saved Routines */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Saved Routines</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('dashboard.savedRoutines')}</h3>
                 {skinAnalysis && (
                   <Link to="/beauty-journey">
-                    <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">View All Routines</button>
+                    <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">{t('dashboard.viewAllRoutines')}</button>
                   </Link>
                 )}
               </div>
@@ -694,9 +696,9 @@ export default function AccountDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[20px]">
                   {/* Morning Ritual */}
                   <div className="border border-[#E8E3D9] rounded-[8px] p-4 lg:p-[20px] hover:border-[#C9A870] transition-colors">
-                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">Morning Ritual</h4>
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{t('dashboard.morningRitual')}</h4>
                     <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-4 lg:mb-[16px]">
-                      {morningProducts.length} products
+                      {morningProducts.length} {t('dashboard.products')}
                     </div>
                     <div className="flex gap-[6px] lg:gap-[8px]">
                       {morningProducts.slice(0, 3).map((product, idx) => (
@@ -706,9 +708,9 @@ export default function AccountDashboard() {
                   </div>
                   {/* Evening Care */}
                   <div className="border border-[#E8E3D9] rounded-[8px] p-4 lg:p-[20px] hover:border-[#C9A870] transition-colors">
-                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">Evening Care</h4>
+                    <h4 className="text-[15px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{t('dashboard.eveningCare')}</h4>
                     <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-4 lg:mb-[16px]">
-                      {eveningProducts.length} products
+                      {eveningProducts.length} {t('dashboard.products')}
                     </div>
                     <div className="flex gap-[6px] lg:gap-[8px]">
                       {eveningProducts.slice(0, 3).map((product, idx) => (
@@ -720,10 +722,10 @@ export default function AccountDashboard() {
               ) : (
                 <div className="text-center py-[40px]">
                   <IoCalendarOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-[16px]" />
-                  <p className="text-[15px] text-[#666666] mb-[16px]">Complete your skin analysis to create your personalized routine</p>
+                  <p className="text-[15px] text-[#666666] mb-[16px]">{t('dashboard.completeForRoutine')}</p>
                   <Link to="/beauty-journey">
                     <button className="bg-[#8B7355] text-white text-[14px] font-medium px-[24px] py-[10px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                      Start Journey
+                      {t('dashboard.startJourney')}
                     </button>
                   </Link>
                 </div>
@@ -733,9 +735,9 @@ export default function AccountDashboard() {
             {/* Recent Reviews */}
             <div id="reviews" className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">Recent Reviews</h3>
+                <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A]">{t('dashboard.recentReviews')}</h3>
                 {reviews.length > 2 && (
-                  <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">View All Reviews</button>
+                  <button className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer hover:underline">{t('dashboard.viewAllReviews')}</button>
                 )}
               </div>
               {reviews.length > 0 ? (
@@ -774,12 +776,12 @@ export default function AccountDashboard() {
               ) : (
                 <div className="text-center py-[40px] mb-5 lg:mb-[24px]">
                   <IoStarSharp className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-[16px]" />
-                  <p className="text-[15px] text-[#666666]">You haven't written any reviews yet</p>
+                  <p className="text-[15px] text-[#666666]">{t('dashboard.noReviews')}</p>
                 </div>
               )}
               <Link to="/collections">
                 <button className="w-full bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium py-3 lg:py-[12px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                  Write a Review
+                  {t('dashboard.writeReview')}
                 </button>
               </Link>
             </div>
