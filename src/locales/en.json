@@ -803,6 +803,19 @@
     "continueToPayment": "Continue to Payment",
     "backToDelivery": "Back to Delivery Information",
     "secureCheckout": "Secure Checkout",
-    "moneyBack": "Money-Back"
+    "moneyBack": "Money-Back",
+    "options": {
+      "standard": "Standard Delivery",
+      "standardTime": "3–5 Business Days",
+      "standardDesc": "Free delivery on all orders over $75",
+      "express": "Express Delivery",
+      "expressTime": "1–2 Business Days",
+      "sameDay": "Same-Day Delivery",
+      "sameDayTime": "Order by 2:00 PM for same-day",
+      "sameDayDesc": "Available in select locations",
+      "international": "International Shipping",
+      "internationalTime": "7–14 Business Days",
+      "internationalDesc": "View international rates"
+    }
   }
 }
