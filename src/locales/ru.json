@@ -779,5 +779,30 @@
     "pleaseSelectAddress": "Пожалуйста, выберите или добавьте адрес доставки",
     "pleaseFillFields": "Пожалуйста, заполните все обязательные поля",
     "failedToSave": "Не удалось сохранить адрес"
+  },
+  "deliveryMethods": {
+    "home": "Главная",
+    "shoppingBasket": "Корзина",
+    "checkout": "Оформление заказа",
+    "selectDeliveryMethod": "Выберите способ доставки",
+    "deliveryInstructions": "Инструкции по доставке",
+    "optional": "(необязательно)",
+    "instructionsPlaceholder": "Добавьте особые инструкции по доставке...",
+    "signatureConfirmation": "Подтверждение подписью",
+    "signatureDesc": "Доступно для заказов на сумму от $500",
+    "realTimeTracking": "Отслеживание в реальном времени",
+    "trackingDesc": "Отслеживайте заказ на каждом этапе",
+    "orderSummary": "Сводка заказа",
+    "subtotal": "Подытог",
+    "shipping": "Доставка",
+    "free": "БЕСПЛАТНО",
+    "estimatedTax": "Расчётный налог",
+    "orderTotal": "Итого",
+    "promoPlaceholder": "Промокод",
+    "apply": "Применить",
+    "continueToPayment": "Перейти к оплате",
+    "backToDelivery": "Назад к информации о доставке",
+    "secureCheckout": "Безопасная оплата",
+    "moneyBack": "Возврат денег"
   }
 }
