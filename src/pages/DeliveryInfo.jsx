@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
@@ -15,6 +16,7 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function DeliveryInfo() {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
   const { cartItems } = useCart()
@@ -80,7 +82,7 @@ export default function DeliveryInfo() {
 
   const handleSaveAddress = async () => {
     if (!formData.full_name || !formData.phone || !formData.street || !formData.city || !formData.state || !formData.postal_code) {
-      alert('Please fill in all required fields')
+      alert(t('deliveryInfo.pleaseFillFields'))
       return
     }
 
@@ -95,7 +97,7 @@ export default function DeliveryInfo() {
 
     if (error) {
       console.error('Error saving address:', error)
-      alert('Failed to save address')
+      alert(t('deliveryInfo.failedToSave'))
       return
     }
 
@@ -117,7 +119,7 @@ export default function DeliveryInfo() {
 
   const handleContinue = () => {
     if (!selectedAddress) {
-      alert('Please select or add a delivery address')
+      alert(t('deliveryInfo.pleaseSelectAddress'))
       return
     }
 
@@ -143,15 +145,15 @@ export default function DeliveryInfo() {
   const labelClass = "text-[13px] lg:text-[14px] font-medium text-[#666666] mb-[8px] block"
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Breadcrumb ── */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-        <Link to="/"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span></Link>
+        <Link to="/"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('deliveryInfo.home')}</span></Link>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <Link to="/cart"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Shopping Basket</span></Link>
+        <Link to="/cart"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('deliveryInfo.shoppingBasket')}</span></Link>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">Checkout</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">{t('deliveryInfo.checkout')}</span>
       </div>
 
       {/* ── Progress Steps ── */}
@@ -189,12 +191,12 @@ export default function DeliveryInfo() {
 
             {/* Delivery Info Card */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Delivery Information</h2>
+              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">{t('deliveryInfo.deliveryInformation')}</h2>
 
               {/* Saved Addresses */}
               {addresses.length > 0 && (
                 <div className="mb-6 lg:mb-[32px]">
-                  <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">Saved Addresses</div>
+                  <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">{t('deliveryInfo.savedAddresses')}</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px] mb-4 lg:mb-[16px]">
                     {addresses.map((addr) => (
                       <div
@@ -227,7 +229,7 @@ export default function DeliveryInfo() {
                     className="w-full h-[44px] lg:h-[48px] border-[1.5px] border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[8px] cursor-pointer hover:border-[#8B7355] transition-colors"
                   >
                     <IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                    <span className="text-[14px] lg:text-[15px] font-medium text-[#666666]">Add New Address</span>
+                    <span className="text-[14px] lg:text-[15px] font-medium text-[#666666]">{t('deliveryInfo.addNewAddress')}</span>
                   </button>
                 </div>
               )}
@@ -236,11 +238,11 @@ export default function DeliveryInfo() {
               {showAddressForm && (
                 <div className="mb-5 lg:mb-[24px]">
                   <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">
-                    {addresses.length > 0 ? 'Add New Address' : 'Enter Delivery Address'}
+  {addresses.length > 0 ? t('deliveryInfo.addNewAddress') : t('deliveryInfo.enterDeliveryAddress')}
                   </div>
                   <div className="space-y-4 lg:space-y-[16px]">
                     <div>
-                      <label className={labelClass}>Address Label</label>
+                      <label className={labelClass}>{t('deliveryInfo.addressLabel')}</label>
                       <select
                         name="label"
                         value={formData.label}
@@ -254,35 +256,35 @@ export default function DeliveryInfo() {
                       </select>
                     </div>
                     <div>
-                      <label className={labelClass}>Full Name</label>
+                      <label className={labelClass}>{t('deliveryInfo.fullName')}</label>
                       <input
                         type="text"
                         name="full_name"
                         value={formData.full_name}
                         onChange={handleInputChange}
-                        placeholder="Enter your full name"
+                        placeholder={t('deliveryInfo.fullNamePlaceholder')}
                         className={inputClass}
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Phone Number</label>
+                      <label className={labelClass}>{t('deliveryInfo.phoneNumber')}</label>
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="Enter your phone number"
+                        placeholder={t('deliveryInfo.phonePlaceholder')}
                         className={inputClass}
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Street Address</label>
+                      <label className={labelClass}>{t('deliveryInfo.streetAddress')}</label>
                       <input
                         type="text"
                         name="street"
                         value={formData.street}
                         onChange={handleInputChange}
-                        placeholder="Street address, apartment, suite, etc."
+                        placeholder={t('deliveryInfo.streetPlaceholder')}
                         className={inputClass}
                       />
                     </div>
@@ -294,7 +296,7 @@ export default function DeliveryInfo() {
                           name="city"
                           value={formData.city}
                           onChange={handleInputChange}
-                          placeholder="City"
+                          placeholder={t('deliveryInfo.cityPlaceholder')}
                           className={inputClass}
                         />
                       </div>
@@ -305,7 +307,7 @@ export default function DeliveryInfo() {
                           name="state"
                           value={formData.state}
                           onChange={handleInputChange}
-                          placeholder="State/Province"
+                          placeholder={t('deliveryInfo.statePlaceholder')}
                           className={inputClass}
                         />
                       </div>
@@ -318,7 +320,7 @@ export default function DeliveryInfo() {
                           name="postal_code"
                           value={formData.postal_code}
                           onChange={handleInputChange}
-                          placeholder="Postal Code"
+                          placeholder={t('deliveryInfo.postalPlaceholder')}
                           className={inputClass}
                         />
                       </div>
@@ -349,14 +351,14 @@ export default function DeliveryInfo() {
                         className="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-[#E8E3D9] cursor-pointer accent-[#8B7355]"
                       />
                       <label htmlFor="is_default" className="text-[13px] lg:text-[14px] font-normal text-[#666666] cursor-pointer">
-                        Set as default address
+                        {t('deliveryInfo.setDefault')}
                       </label>
                     </div>
                     <button
                       onClick={handleSaveAddress}
                       className="w-full h-[48px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors"
                     >
-                      Save Address
+                      {t('deliveryInfo.saveAddress')}
                     </button>
                     {addresses.length > 0 && (
                       <button
@@ -378,8 +380,8 @@ export default function DeliveryInfo() {
                   <span className="text-[16px] lg:text-[18px] font-semibold text-[#999999]">2</span>
                 </div>
                 <div>
-                  <div className="text-[17px] lg:text-[20px] font-semibold text-[#999999]">Delivery Method</div>
-                  <div className="text-[13px] lg:text-[14px] font-normal text-[#999999]">Select shipping option</div>
+                  <div className="text-[17px] lg:text-[20px] font-semibold text-[#999999]">{t('deliveryInfo.deliveryMethod')}</div>
+                  <div className="text-[13px] lg:text-[14px] font-normal text-[#999999]">{t('deliveryInfo.selectShipping')}</div>
                 </div>
               </div>
             </div>
@@ -391,8 +393,8 @@ export default function DeliveryInfo() {
                   <span className="text-[16px] lg:text-[18px] font-semibold text-[#999999]">3</span>
                 </div>
                 <div>
-                  <div className="text-[17px] lg:text-[20px] font-semibold text-[#999999]">Payment</div>
-                  <div className="text-[13px] lg:text-[14px] font-normal text-[#999999]">Complete your purchase</div>
+                  <div className="text-[17px] lg:text-[20px] font-semibold text-[#999999]">{t('deliveryInfo.payment')}</div>
+                  <div className="text-[13px] lg:text-[14px] font-normal text-[#999999]">{t('deliveryInfo.completePayment')}</div>
                 </div>
               </div>
             </div>
@@ -401,7 +403,7 @@ export default function DeliveryInfo() {
           {/* ── Right — Order Summary ── */}
           <div className="w-full lg:w-[360px] lg:flex-shrink-0">
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] lg:sticky lg:top-[24px]">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Order Summary</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('deliveryInfo.orderSummary')}</h2>
 
               {/* Items */}
               <div className="mb-5 lg:mb-[24px] space-y-4 lg:space-y-[16px]">
@@ -424,20 +426,20 @@ export default function DeliveryInfo() {
               {/* Pricing */}
               <div className="space-y-3 lg:space-y-[12px] mb-5 lg:mb-[24px]">
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Subtotal</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('deliveryInfo.subtotal')}</span>
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Shipping</span>
-                  <span className="text-[14px] lg:text-[16px] font-normal text-green-600">FREE</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('deliveryInfo.shipping')}</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-green-600">{t('deliveryInfo.free')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Estimated Tax</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('deliveryInfo.estimatedTax')}</span>
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${tax.toFixed(2)}</span>
                 </div>
                 {giftOption && (
                   <div className="flex justify-between">
-                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Gift Wrapping</span>
+                    <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('deliveryInfo.giftWrapping')}</span>
                     <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">$12.00</span>
                   </div>
                 )}
@@ -445,14 +447,14 @@ export default function DeliveryInfo() {
 
               <div className="h-[1px] bg-[#E8E3D9] mb-5 lg:mb-[24px]" />
               <div className="flex justify-between mb-5 lg:mb-[24px]">
-                <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">Order Total</span>
+                <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">{t('deliveryInfo.orderTotal')}</span>
                 <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">${total.toFixed(2)}</span>
               </div>
 
               {/* Promo */}
               <div className="flex gap-[8px] mb-5 lg:mb-[24px]">
-                <input type="text" placeholder="Promo code" className="flex-1 h-[40px] px-[14px] lg:px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
-                <button className="h-[40px] px-4 lg:px-[20px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">Apply</button>
+                <input type="text" placeholder={t('deliveryInfo.promoPlaceholder')} className="flex-1 h-[40px] px-[14px] lg:px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
+<button className="h-[40px] px-4 lg:px-[20px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">{t('deliveryInfo.apply')}</button>
               </div>
 
               {/* Gift option */}
@@ -465,7 +467,7 @@ export default function DeliveryInfo() {
                   className="w-[18px] h-[18px] cursor-pointer accent-[#8B7355]"
                 />
                 <label htmlFor="giftOption" className="text-[13px] lg:text-[14px] font-normal text-[#666666] cursor-pointer">
-                  Add gift message and wrapping (+$12)
+                  {t('deliveryInfo.giftOption')}
                 </label>
               </div>
 
@@ -475,11 +477,11 @@ export default function DeliveryInfo() {
                   onClick={handleContinue}
                   className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors"
                 >
-                  Continue to Delivery Method
+                  {t('deliveryInfo.continueToDelivery')}
                 </button>
                 <Link to="/cart">
                   <button className="w-full text-[13px] lg:text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
-                    Return to Cart
+                    {t('deliveryInfo.returnToCart')}
                   </button>
                 </Link>
               </div>
@@ -488,15 +490,15 @@ export default function DeliveryInfo() {
               <div className="flex items-center justify-around pt-5 lg:pt-[24px] border-t border-[#E8E3D9]">
                 <div className="flex flex-col items-center gap-[6px] lg:gap-[8px]">
                   <IoLockClosedOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">Secure Checkout</span>
+                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">{t('deliveryInfo.secureCheckout')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-[6px] lg:gap-[8px]">
                   <IoShieldCheckmarkOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">Money-Back</span>
+                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">{t('deliveryInfo.moneyBack')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-[6px] lg:gap-[8px]">
                   <IoCardOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">All Cards</span>
+                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">{t('deliveryInfo.allCards')}</span>
                 </div>
               </div>
             </div>
