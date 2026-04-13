@@ -1018,5 +1018,69 @@
     "saving": "Saving...",
     "saveChanges": "Save Changes",
     "securityNote": "Your information is encrypted and secure"
+  },
+  "editAddress": {
+    "home": "Home",
+    "account": "Account",
+    "shippingAddresses": "Shipping Addresses",
+    "editAddress": "Edit Address",
+    "pageTitle": "Edit Shipping Address",
+    "pageSubtitle": "Update your delivery information",
+    "userAvatarAlt": "User Avatar",
+    "eliteMember": "Elite Member",
+    "pointsValue": "2,450 Points",
+    "totalOrders": "Total Orders",
+    "wishlistItems": "Wishlist Items",
+    "reviewsWritten": "Reviews Written",
+    "addressLabel": "Address Label",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "addressLine1": "Address Line 1",
+    "addressLine2": "Address Line 2",
+    "optional": "Optional",
+    "addressLine2Placeholder": "Apartment, suite, unit, etc.",
+    "city": "City",
+    "stateRegion": "State / Region",
+    "postalCode": "Postal Code",
+    "country": "Country",
+    "setAsDefault": "Set as default shipping address",
+    "cancel": "Cancel",
+    "saveAddress": "Save Address",
+    "securePrivate": "Secure & Private",
+    "securePrivateDesc": "Your address information is encrypted and never shared with third parties.",
+    "countries": {
+      "United States": "United States",
+      "Canada": "Canada",
+      "United Kingdom": "United Kingdom",
+      "Australia": "Australia",
+      "United Arab Emirates": "United Arab Emirates",
+      "Russia": "Russia",
+      "France": "France",
+      "Germany": "Germany"
+    },
+    "navItems": {
+      "Account Dashboard": "Account Dashboard",
+      "Order History": "Order History",
+      "My Wishlist": "My Wishlist",
+      "Beauty Profile": "Beauty Profile",
+      "Loyalty Program": "Loyalty Program",
+      "My Routines": "My Routines",
+      "Reviews & Ratings": "Reviews & Ratings",
+      "Account Settings": "Account Settings",
+      "Shipping Addresses": "Shipping Addresses",
+      "Payment Methods": "Payment Methods",
+      "Notifications": "Notifications",
+      "Privacy Settings": "Privacy Settings",
+      "Complete Analysis": "Complete Analysis"
+    },
+    "badges": {
+      "NEW": "NEW"
+    },
+    "tags": {
+      "NEW": "NEW",
+      "Saved": "Saved",
+      "Default": "Default"
+    }
   }
+}
 }
