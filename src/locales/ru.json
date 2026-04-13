@@ -877,5 +877,37 @@
       "guarantee": "30-дневная гарантия",
       "guaranteeSub": "Возврат денег"
     }
+  },
+  "orderConfirmation": {
+    "errorLogin": "Пожалуйста, войдите для просмотра заказа",
+    "errorNotFound": "Заказ не найден",
+    "errorLoad": "Не удалось загрузить заказ",
+    "orderNotFound": "Заказ не найден",
+    "continueShopping": "Продолжить покупки",
+    "orderConfirmed": "Заказ подтверждён!",
+    "thankYou": "Спасибо за вашу покупку",
+    "emailSent": "Письмо с подтверждением отправлено на",
+    "yourEmail": "ваш email",
+    "orderDetails": "Детали заказа",
+    "subtotal": "Подытог",
+    "shipping": "Доставка",
+    "free": "БЕСПЛАТНО",
+    "tax": "Налог",
+    "totalPaid": "Итого оплачено",
+    "deliveryInformation": "Информация о доставке",
+    "shippingAddress": "Адрес доставки",
+    "na": "Н/Д",
+    "deliveryMethod": "Способ доставки",
+    "estimatedDelivery": "Ожидаемая доставка:",
+    "paymentMethod": "Способ оплаты",
+    "paymentPending": "Ожидает оплаты",
+    "paymentProcessed": "Оплата проведена",
+    "trackYourOrder": "Отследить заказ",
+    "downloadReceipt": "Скачать квитанцию (PDF)",
+    "needHelp": "Нужна помощь?",
+    "loyaltyEarned": "Вы заработали",
+    "loyaltyPoints": "баллов лояльности!",
+    "loyaltyDesc": "Баллы добавлены на ваш счёт с этим заказом.",
+    "viewRewards": "Просмотреть баланс наград"
   }
 }
