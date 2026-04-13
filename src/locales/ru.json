@@ -790,5 +790,98 @@
       ]
     }
   ]
+},
+  "profile": {
+  "user": "Пользователь",
+  "hero": {
+    "userAvatar": "Аватар пользователя",
+    "label": "ВАШ БЬЮТИ ПРОФИЛЬ",
+    "memberSince": "Премиум-участник с",
+    "loyaltyPoints": "Бонусные баллы",
+    "redeem": "Использовать"
+  },
+  "breadcrumb": {
+    "home": "Главная",
+    "myProfile": "Мой профиль"
+  },
+  "quickAccess": {
+    "title": "Быстрый доступ",
+    "orders": "Заказы",
+    "wishlist": "Избранное",
+    "beautyProfile": "Бьюти-профиль",
+    "routines": "Рутины"
+  },
+  "menu": {
+    "myAccount": "Мой аккаунт",
+    "beauty": "Красота",
+    "settingsSection": "Настройки",
+    "accountDashboard": "Панель аккаунта",
+    "orderHistory": "История заказов",
+    "myWishlist": "Моё избранное",
+    "shippingAddresses": "Адреса доставки",
+    "paymentMethods": "Способы оплаты",
+    "beautyProfile": "Бьюти-профиль",
+    "loyaltyProgram": "Программа лояльности",
+    "myRoutines": "Мои рутины",
+    "reviewsRatings": "Отзывы и рейтинги",
+    "accountSettings": "Настройки аккаунта",
+    "notifications": "Уведомления",
+    "itemsBadge": "{{count}} товаров",
+    "itemsBadge_one": "{{count}} товар",
+    "itemsBadge_few": "{{count}} товара",
+    "itemsBadge_many": "{{count}} товаров",
+    "pointsBadge": "{{count}} баллов",
+    "pointsBadge_one": "{{count}} балл",
+    "pointsBadge_few": "{{count}} балла",
+    "pointsBadge_many": "{{count}} баллов"
+  },
+  "signOut": "Выйти",
+  "skin": {
+    "title": "Обзор состояния кожи",
+    "retake": "Пройти анализ заново",
+    "overallScore": "Общий балл",
+    "hydration": "Увлажнение",
+    "texture": "Текстура",
+    "clarity": "Чистота",
+    "toneEvenness": "Ровность тона",
+    "summary": "Итог",
+    "emptyTitle": "Пройдите анализ кожи",
+    "emptyDesc": "Получите персональные рекомендации и полезные сведения о вашем уникальном профиле кожи",
+    "start": "Начать анализ кожи"
+  },
+  "orders": {
+    "title": "Последние заказы",
+    "viewAll": "Посмотреть все заказы",
+    "emptyTitle": "Пока нет заказов",
+    "emptyDesc": "Начните знакомство с нашей тщательно подобранной коллекцией",
+    "shopNow": "Перейти к покупкам",
+    "statusDelivered": "Доставлен",
+    "statusShipped": "Отправлен",
+    "statusProcessing": "Обрабатывается",
+    "statusPending": "В ожидании",
+    "orderItems": "Товары заказа",
+    "orderItemsCount": "{{count}} товар",
+    "orderItemsCount_one": "{{count}} товар",
+    "orderItemsCount_few": "{{count}} товара",
+    "orderItemsCount_many": "{{count}} товаров",
+    "track": "Отследить"
+  },
+  "loyalty": {
+    "title": "Программа лояльности",
+    "goldMember": "Золотой участник",
+    "eliteMember": "Элитный участник",
+    "member": "Участник",
+    "currentPoints": "Текущие баллы",
+    "goldAchieved": "Золотой статус достигнут!",
+    "progressToGold": "Прогресс до золотого статуса",
+    "congratulations": "Поздравляем!",
+    "pointsToGo": "Осталось {{count}} баллов",
+    "pointsToGo_one": "Остался {{count}} балл",
+    "pointsToGo_few": "Осталось {{count}} балла",
+    "pointsToGo_many": "Осталось {{count}} баллов",
+    "eliteThreshold": "Элитный (2,000)",
+    "goldThreshold": "Золотой (3,000)",
+    "redeemPoints": "Использовать баллы"
+  }
 }
 }
