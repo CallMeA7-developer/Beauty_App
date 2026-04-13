@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
@@ -22,14 +23,30 @@ import { supabase } from '../lib/supabase'
 const SECURITY_ICONS = {
   lock: IoLockClosedOutline, shield: IoShieldCheckmarkOutline, check: IoCheckmarkCircle,
 }
-const securityFeatures = securityFeaturesData.map(f => ({ ...f, icon: SECURITY_ICONS[f.iconKey] }))
+const useSecurityFeatures = (t) => securityFeaturesData.map(f => ({
+  ...f,
+  icon: SECURITY_ICONS[f.iconKey],
+  title: f.iconKey === 'lock' ? t('payment.securityFeatures.ssl') :
+         f.iconKey === 'shield' ? t('payment.securityFeatures.pci') :
+         t('payment.securityFeatures.guarantee'),
+  subtitle: f.iconKey === 'lock' ? t('payment.securityFeatures.sslSub') :
+            f.iconKey === 'shield' ? t('payment.securityFeatures.pciSub') :
+            t('payment.securityFeatures.guaranteeSub'),
+}))
 
 export default function Payment() {
+  const { t, i18n } = useTranslation()
+  const securityFeatures = useSecurityFeatures(t)
   const navigate = useNavigate()
   const { user, loading: authLoading, openAuthModal } = useAuth()
   const { cartItems } = useCart()
   const { checkoutSession } = useCheckout()
-  const steps = getCheckoutSteps(3)
+  const steps = getCheckoutSteps(3).map(s => ({
+    ...s,
+    label: s.step === 1 ? t('deliveryInfo.deliveryInformation') :
+           s.step === 2 ? t('deliveryInfo.deliveryMethod') :
+           t('deliveryInfo.payment')
+  }))
 
   const [savedCards, setSavedCards] = useState([])
   const [selectedCard, setSelectedCard] = useState(null)
@@ -88,12 +105,12 @@ export default function Payment() {
 
   const handleAddCard = async () => {
     if (!formData.card_holder_name || !formData.card_number || !formData.expiry_month || !formData.expiry_year) {
-      setError('Please fill in all required fields')
+      setError(t('payment.errorFillFields'))
       return
     }
 
     if (formData.card_number.length < 4) {
-      setError('Please enter a valid card number')
+      setError(t('payment.errorCardNumber'))
       return
     }
 
@@ -126,7 +143,7 @@ export default function Payment() {
       setShowAddCardForm(false)
       setError('')
     } else {
-      setError('Failed to add payment method')
+      setError(t('payment.errorFailedAdd'))
     }
   }
 
@@ -144,11 +161,11 @@ export default function Payment() {
 
   const handlePlaceOrder = async () => {
     if (!agreeTerms) {
-      setError('Please agree to the Terms & Conditions to continue')
+      setError(t('payment.errorAgreeTerms'))
       return
     }
     if (!selectedCard) {
-      setError('Please select a payment method')
+      setError(t('payment.errorSelectPayment'))
       return
     }
 
@@ -163,7 +180,7 @@ export default function Payment() {
     }))
 
     if (itemsSnapshot.length === 0) {
-      setError('Your cart is empty. Please add items before placing an order.')
+      setError(t('payment.errorCartEmpty'))
       return
     }
 
@@ -220,7 +237,7 @@ export default function Payment() {
 
     } catch (err) {
       console.error('Order placement error:', err)
-      setError('Failed to place order. Please try again.')
+      setError(t('payment.errorPlaceOrder'))
       setProcessing(false)
     }
   }
@@ -243,11 +260,11 @@ export default function Payment() {
       <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7] px-4">
         <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-8 max-w-[400px] w-full text-center">
           <IoLockClosedOutline className="w-[48px] h-[48px] text-[#C9A870] mx-auto mb-[16px]" />
-          <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-[12px]">Login Required</h2>
-          <p className="text-[14px] text-[#666666] mb-[24px]">Please log in to continue with your order</p>
+          <h2 className="text-[24px] font-semibold text-[#1A1A1A] mb-[12px]">{t('payment.loginRequired')}</h2>
+          <p className="text-[14px] text-[#666666] mb-[24px]">{t('payment.loginDesc')}</p>
           <Link to="/collections">
             <button className="w-full h-[48px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-              Go to Shop
+              {t('payment.goToShop')}
             </button>
           </Link>
         </div>
@@ -259,7 +276,7 @@ export default function Payment() {
   const labelClass = "text-[12px] lg:text-[14px] font-medium text-[#666666] mb-[6px] lg:mb-[8px] block"
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
       {error && (
         <div className="fixed top-[80px] left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-4 rounded-[8px] shadow-lg max-w-[400px] w-[90%]">
           <p className="text-[14px] font-medium">{error}</p>
@@ -267,11 +284,11 @@ export default function Payment() {
       )}
 
       <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-        <Link to="/"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span></Link>
+        <Link to="/"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('payment.home')}</span></Link>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <Link to="/cart"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Shopping Basket</span></Link>
+        <Link to="/cart"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('payment.shoppingBasket')}</span></Link>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">Checkout</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">{t('payment.checkout')}</span>
       </div>
 
       <div className="min-h-[90px] md:min-h-[110px] lg:min-h-[120px] bg-gradient-to-b from-[#FDFBF7] to-white px-4 md:px-[60px] lg:px-[120px] flex items-center justify-center">
@@ -309,11 +326,11 @@ export default function Payment() {
           <div className="flex-1 min-w-0">
 
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Select Payment Method</h2>
+              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">{t('payment.selectPaymentMethod')}</h2>
 
               {savedCards.length > 0 && !showAddCardForm && (
                 <>
-                  <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">Saved Cards</div>
+                  <div className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-4 lg:mb-[16px]">{t('payment.savedCards')}</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-[16px] mb-4 lg:mb-[16px]">
                     {savedCards.map((card) => {
                       const brandStyles = getCardBrandStyles(card.card_brand)
@@ -338,11 +355,11 @@ export default function Payment() {
                                 {brandStyles.label}
                               </div>
                               <div className="text-[16px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[4px]">•••• •••• •••• {card.card_last_four}</div>
-                              <div className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-[4px]">Valid until {card.expiry_month}/{card.expiry_year}</div>
+                              <div className="text-[13px] lg:text-[14px] font-normal text-[#666666] mb-[4px]">{t('payment.validUntil')} {card.expiry_month}/{card.expiry_year}</div>
                               <div className="text-[12px] lg:text-[13px] font-normal text-[#999999]">{card.card_holder_name}</div>
                               {card.is_default && (
                                 <div className="inline-block bg-[#F5F1EA] text-[#8B7355] text-[10px] lg:text-[11px] font-medium px-[8px] py-[3px] rounded-full mt-2">
-                                  Default
+                                  {t('payment.default')}
                                 </div>
                               )}
                             </div>
@@ -356,7 +373,7 @@ export default function Payment() {
                     className="w-full h-[44px] lg:h-[48px] border-[1.5px] border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[8px] cursor-pointer hover:border-[#8B7355] transition-colors"
                   >
                     <IoAddOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                    <span className="text-[14px] lg:text-[15px] font-medium text-[#666666]">Add New Payment Method</span>
+                    <span className="text-[14px] lg:text-[15px] font-medium text-[#666666]">{t('payment.addNewPayment')}</span>
                   </button>
                 </>
               )}
@@ -364,35 +381,35 @@ export default function Payment() {
               {showAddCardForm && (
                 <div className="border-l-4 border-[#C9A870] pl-5 lg:pl-[24px]">
                   <h3 className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">
-                    Add New Card
+                    {t('payment.addNewCard')}
                   </h3>
                   <div className="space-y-4 lg:space-y-[16px]">
                     <div>
-                      <label className={labelClass}>Card Holder Name</label>
+                      <label className={labelClass}>{t('payment.cardHolderName')}</label>
                       <input
                         type="text"
                         name="card_holder_name"
                         value={formData.card_holder_name}
                         onChange={handleInputChange}
-                        placeholder="Name on card"
+                        placeholder={t('payment.cardHolderPlaceholder')}
                         className={inputClass}
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Card Number</label>
+                      <label className={labelClass}>{t('payment.cardNumber')}</label>
                       <input
                         type="text"
                         name="card_number"
                         value={formData.card_number}
                         onChange={handleInputChange}
-                        placeholder="1234 5678 9012 3456"
+                        placeholder={t('payment.cardNumberPlaceholder')}
                         maxLength="19"
                         className={inputClass}
                       />
-                      <p className="text-[11px] text-[#999999] mt-[6px]">Only the last 4 digits will be saved</p>
+                      <p className="text-[11px] text-[#999999] mt-[6px]">{t('payment.cardNumberHint')}</p>
                     </div>
                     <div>
-                      <label className={labelClass}>Card Brand</label>
+                      <label className={labelClass}>{t('payment.cardBrand')}</label>
                       <div className="relative">
                         <select
                           name="card_brand"
@@ -409,7 +426,7 @@ export default function Payment() {
                     </div>
                     <div className="grid grid-cols-2 gap-4 lg:gap-[16px]">
                       <div>
-                        <label className={labelClass}>Expiry Month</label>
+                        <label className={labelClass}>{t('payment.expiryMonth')}</label>
                         <input
                           type="text"
                           name="expiry_month"
@@ -421,7 +438,7 @@ export default function Payment() {
                         />
                       </div>
                       <div>
-                        <label className={labelClass}>Expiry Year</label>
+                        <label className={labelClass}>{t('payment.expiryYear')}</label>
                         <input
                           type="text"
                           name="expiry_year"
@@ -438,14 +455,14 @@ export default function Payment() {
                         onClick={handleAddCard}
                         className="flex-1 h-[48px] lg:h-[52px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors"
                       >
-                        Save Card
+                        {t('payment.saveCard')}
                       </button>
                       {savedCards.length > 0 && (
                         <button
                           onClick={() => setShowAddCardForm(false)}
                           className="flex-1 h-[48px] lg:h-[52px] bg-white border border-[#E8E3D9] text-[#666666] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all"
                         >
-                          Cancel
+                          {t('payment.cancel')}
                         </button>
                       )}
                     </div>
@@ -471,16 +488,16 @@ export default function Payment() {
                     Processing...
                   </span>
                 ) : (
-                  'Place Order'
+                  t('payment.placeOrder')
                 )}
               </button>
               {!selectedCard && (
-                <p className="text-[12px] text-red-500 mt-2 text-center">Please select a payment method</p>
+                <p className="text-[12px] text-red-500 mt-2 text-center">{t('payment.selectPaymentHint')}</p>
               )}
             </div>
 
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h2 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[20px]">Billing Address</h2>
+              <h2 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[20px]">{t('payment.billingAddress')}</h2>
               <div className="space-y-3 lg:space-y-[12px]">
                 <div
                   onClick={() => setSameAddress(true)}
@@ -491,7 +508,7 @@ export default function Payment() {
                   <div className={`w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] rounded-full border-[2px] flex items-center justify-center flex-shrink-0 ${sameAddress ? 'border-[#8B7355]' : 'border-[#E8E3D9]'}`}>
                     {sameAddress && <div className="w-[8px] h-[8px] lg:w-[10px] lg:h-[10px] rounded-full bg-[#8B7355]" />}
                   </div>
-                  <span className="text-[14px] lg:text-[15px] font-normal text-[#1A1A1A]">Same as delivery address</span>
+                  <span className="text-[14px] lg:text-[15px] font-normal text-[#1A1A1A]">{t('payment.sameAsDelivery')}</span>
                 </div>
                 <div
                   onClick={() => setSameAddress(false)}
@@ -502,7 +519,7 @@ export default function Payment() {
                   <div className={`w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] rounded-full border-[2px] flex items-center justify-center flex-shrink-0 ${!sameAddress ? 'border-[#8B7355]' : 'border-[#E8E3D9]'}`}>
                     {!sameAddress && <div className="w-[8px] h-[8px] lg:w-[10px] lg:h-[10px] rounded-full bg-[#8B7355]" />}
                   </div>
-                  <span className="text-[14px] lg:text-[15px] font-normal text-[#1A1A1A]">Use different billing address</span>
+                  <span className="text-[14px] lg:text-[15px] font-normal text-[#1A1A1A]">{t('payment.differentBilling')}</span>
                 </div>
               </div>
             </div>
@@ -520,7 +537,7 @@ export default function Payment() {
 
           <div className="w-full lg:w-[360px] lg:flex-shrink-0">
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] lg:sticky lg:top-[24px]">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Order Summary</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('payment.orderSummary')}</h2>
 
               <div className="mb-5 lg:mb-[24px] space-y-4 lg:space-y-[16px]">
                 {cartItems.map((item, index) => (
@@ -541,30 +558,30 @@ export default function Payment() {
 
               <div className="space-y-3 lg:space-y-[12px] mb-5 lg:mb-[24px]">
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Subtotal</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('payment.subtotal')}</span>
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Shipping</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('payment.shipping')}</span>
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">
-                    {shipping === 0 ? <span className="text-green-600">FREE</span> : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? <span className="text-green-600">{t('payment.free')}</span> : `$${shipping.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Estimated Tax</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('payment.estimatedTax')}</span>
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${tax.toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="h-[1px] bg-[#E8E3D9] mb-5 lg:mb-[24px]" />
               <div className="flex justify-between mb-5 lg:mb-[24px]">
-                <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">Order Total</span>
+                <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">{t('payment.orderTotal')}</span>
                 <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">${total.toFixed(2)}</span>
               </div>
 
               <div className="flex gap-[8px] mb-5 lg:mb-[24px]">
-                <input type="text" placeholder="Promo code" className="flex-1 h-[40px] px-[14px] lg:px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
-                <button className="h-[40px] px-4 lg:px-[20px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">Apply</button>
+                <input type="text" placeholder={t('payment.promoPlaceholder')} className="flex-1 h-[40px] px-[14px] lg:px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
+<button className="h-[40px] px-4 lg:px-[20px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">{t('payment.apply')}</button>
               </div>
 
               <div className="flex items-start gap-[12px] mb-5 lg:mb-[24px]">
@@ -576,7 +593,7 @@ export default function Payment() {
                   className="w-[18px] h-[18px] mt-[2px] flex-shrink-0 cursor-pointer accent-[#8B7355]"
                 />
                 <label htmlFor="terms" className="text-[13px] lg:text-[14px] font-normal text-[#666666] cursor-pointer leading-[1.5]">
-                  I agree to the <a href="/terms-conditions" target="_blank" className="text-[#8B7355] underline cursor-pointer hover:text-[#7a6448]">Terms & Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-[#8B7355] underline cursor-pointer hover:text-[#7a6448]">Privacy Policy</a>
+                  {t('payment.termsAgree')} <a href="/terms-conditions" target="_blank" className="text-[#8B7355] underline cursor-pointer hover:text-[#7a6448]">{t('payment.termsLink')}</a> {t('payment.and')} <a href="/privacy-policy" target="_blank" className="text-[#8B7355] underline cursor-pointer hover:text-[#7a6448]">{t('payment.privacyLink')}</a>
                 </label>
               </div>
 
@@ -584,7 +601,7 @@ export default function Payment() {
                 <Link to="/delivery-methods">
                   <button className="w-full flex items-center justify-center gap-[8px] text-[13px] lg:text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
                     <IoArrowBackOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
-                    Back to Delivery Methods
+                    {t('payment.backToDelivery')}
                   </button>
                 </Link>
               </div>
@@ -592,11 +609,11 @@ export default function Payment() {
               <div className="flex items-center justify-around pt-5 lg:pt-[24px] border-t border-[#E8E3D9]">
                 <div className="flex flex-col items-center gap-[6px] lg:gap-[8px]">
                   <IoLockClosedOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">Secure Checkout</span>
+                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">{t('payment.secureCheckout')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-[6px] lg:gap-[8px]">
                   <IoShieldCheckmarkOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">Money-Back</span>
+                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">{t('payment.moneyBack')}</span>
                 </div>
               </div>
             </div>
