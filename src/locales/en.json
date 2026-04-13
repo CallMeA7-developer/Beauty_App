@@ -1018,5 +1018,141 @@
     "saving": "Saving...",
     "saveChanges": "Save Changes",
     "securityNote": "Your information is encrypted and secure"
+  },
+  "faq": {
+  "supportCenter": "SUPPORT CENTER",
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to the most common questions about orders, products, returns and more.",
+  "trackMyOrder": "Track My Order",
+  "stillHaveQuestions": "Still have questions?",
+  "supportAvailability": "Our support team is available Monday–Friday, 9am–6pm",
+  "emailSupport": "Email Support",
+  "categories": {
+    "all": "All",
+    "ordersShipping": "Orders & Shipping",
+    "returnsRefunds": "Returns & Refunds",
+    "payments": "Payments",
+    "productsSkincare": "Products & Skincare",
+    "accountLoyalty": "Account & Loyalty",
+    "deliveryAddress": "Delivery Address"
+  },
+  "sections": {
+    "ordersShipping": {
+      "questions": {
+        "trackOrder": {
+          "q": "How do I track my order?",
+          "a": "Once your order is placed, you can track it in real-time from your Account → Order History page. You will also receive an email with tracking details."
+        },
+        "deliveryTime": {
+          "q": "How long does delivery take?",
+          "a": "Standard delivery takes 3–5 business days. Express delivery takes 1–2 business days. Same-day delivery is available in select areas."
+        },
+        "internationalShipping": {
+          "q": "Do you ship internationally?",
+          "a": "Yes, we ship worldwide. International delivery times vary between 7–14 business days depending on your location."
+        },
+        "shippingCosts": {
+          "q": "What are the shipping costs?",
+          "a": "Standard shipping is free on orders over $100. Express delivery costs $15, and same-day delivery costs $25."
+        }
+      }
+    },
+    "returnsRefunds": {
+      "questions": {
+        "returnPolicy": {
+          "q": "What is your return policy?",
+          "a": "We offer a 30-day return policy on all unopened products in their original packaging. Simply contact our support team to initiate a return."
+        },
+        "refundTime": {
+          "q": "How long do refunds take?",
+          "a": "Refunds are processed within 5–7 business days after we receive your return. The amount will be credited back to your original payment method."
+        },
+        "exchangeProduct": {
+          "q": "Can I exchange a product?",
+          "a": "Yes, exchanges are available for the same product in a different variant (e.g., size or shade). Contact our support team to arrange an exchange."
+        },
+        "nonReturnable": {
+          "q": "What items cannot be returned?",
+          "a": "Opened skincare and makeup products cannot be returned for hygiene reasons. Gift cards and custom orders are also non-returnable."
+        }
+      }
+    },
+    "payments": {
+      "questions": {
+        "paymentMethods": {
+          "q": "What payment methods do you accept?",
+          "a": "We accept all major credit and debit cards (Visa, Mastercard, Amex), as well as digital wallets. All payments are securely processed."
+        },
+        "paymentSecurity": {
+          "q": "Is my payment information secure?",
+          "a": "Absolutely. We use industry-standard SSL encryption and never store your full card details. All transactions are processed through secure payment gateways."
+        },
+        "multiplePayments": {
+          "q": "Can I use multiple payment methods?",
+          "a": "Currently we support one payment method per order. You can save multiple cards in your account for convenience."
+        },
+        "installments": {
+          "q": "Do you offer installment payment options?",
+          "a": "Yes, installment options are available at checkout for eligible orders. The available plans will be displayed based on your order total."
+        }
+      }
+    },
+    "productsSkincare": {
+      "questions": {
+        "findProducts": {
+          "q": "How do I find the right products for my skin?",
+          "a": "Use our free AI Skin Analysis tool to get a personalized skin profile and product recommendations tailored to your unique skin type and concerns."
+        },
+        "crueltyFree": {
+          "q": "Are your products cruelty-free?",
+          "a": "Yes, all Shan Loray products are cruelty-free and never tested on animals. We are committed to ethical and sustainable beauty."
+        },
+        "naturalIngredients": {
+          "q": "Are the ingredients natural?",
+          "a": "We use a blend of clinically proven active ingredients and natural botanicals. Full ingredient lists are available on each product page."
+        },
+        "storeProducts": {
+          "q": "How should I store my products?",
+          "a": "Store products in a cool, dry place away from direct sunlight. Some serums and vitamin C products benefit from refrigeration."
+        }
+      }
+    },
+    "accountLoyalty": {
+      "questions": {
+        "loyaltyProgram": {
+          "q": "How does the Loyalty Program work?",
+          "a": "You earn 1 loyalty point for every $1 spent. Points can be redeemed for discounts on future orders. Reach 2,000 points for Elite status and 3,000 for Gold status."
+        },
+        "updateAccount": {
+          "q": "How do I update my account information?",
+          "a": "Go to Account → Account Dashboard → Edit Profile to update your name, email, and other personal details."
+        },
+        "forgotPassword": {
+          "q": "I forgot my password. What should I do?",
+          "a": "Click \"Forgot Password\" on the login screen and we will send you a reset link to your registered email address."
+        },
+        "multipleAddresses": {
+          "q": "Can I have multiple shipping addresses?",
+          "a": "Yes, you can save multiple shipping addresses in your account under Account → Shipping Addresses and choose your preferred one at checkout."
+        }
+      }
+    },
+    "deliveryAddress": {
+      "questions": {
+        "changeAddress": {
+          "q": "Can I change my delivery address after ordering?",
+          "a": "Address changes are possible within 1 hour of placing an order. Contact our support team immediately and we will do our best to update it before dispatch."
+        },
+        "notHome": {
+          "q": "What if I am not home during delivery?",
+          "a": "The courier will leave a delivery notice and attempt re-delivery. You can also arrange collection from your nearest courier depot."
+        },
+        "poBox": {
+          "q": "Do you deliver to P.O. boxes?",
+          "a": "We deliver to P.O. boxes for standard shipping only. Express and same-day delivery require a physical address."
+        }
+      }
+    }
   }
+}
 }
