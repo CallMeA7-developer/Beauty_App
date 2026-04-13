@@ -641,7 +641,7 @@
     "manageButton": "Manage Privacy Settings"
   }
 },
-  "termsConditions": {
+"termsConditions": {
   "legal": "LEGAL",
   "title": "Terms & Conditions",
   "subtitle": "Please read these terms carefully before using our services or making a purchase on the Shan Loray website.",
@@ -682,7 +682,112 @@
           "text": "You must be at least 18 years of age to use our services and make purchases. By using our website, you represent and warrant that you meet this requirement."
         }
       ]
+    },
+    {
+      "title": "Orders & Purchases",
+      "content": [
+        {
+          "subtitle": "Order Acceptance",
+          "text": "All orders are subject to availability and acceptance. We reserve the right to refuse or cancel any order at our discretion, including orders that appear to be placed by resellers or distributors."
+        },
+        {
+          "subtitle": "Pricing",
+          "text": "All prices are listed in USD and are subject to change without notice. We make every effort to ensure accurate pricing, but in the event of an error, we reserve the right to cancel the order or contact you to arrange a corrected order."
+        },
+        {
+          "subtitle": "Payment",
+          "text": "Payment is required at the time of purchase. We accept major credit and debit cards. All transactions are processed securely through our payment providers."
+        },
+        {
+          "subtitle": "Order Confirmation",
+          "text": "After placing an order, you will receive an email confirmation with your order details. This confirmation does not constitute acceptance of your order — acceptance occurs when your order is dispatched."
+        }
+      ]
+    },
+    {
+      "title": "Shipping & Delivery",
+      "content": [
+        {
+          "subtitle": "Delivery Times",
+          "text": "Estimated delivery times are provided for guidance only and are not guaranteed. We are not responsible for delays caused by customs, postal services, or other factors beyond our control."
+        },
+        {
+          "subtitle": "Shipping Costs",
+          "text": "Shipping costs are calculated at checkout based on your location and chosen delivery method. Free shipping thresholds may apply and are subject to change."
+        },
+        {
+          "subtitle": "Risk of Loss",
+          "text": "Title and risk of loss for products pass to you upon delivery to the shipping carrier. We are not responsible for lost or stolen packages after they have been delivered."
+        }
+      ]
+    },
+    {
+      "title": "Returns & Refunds",
+      "content": [
+        {
+          "subtitle": "Return Policy",
+          "text": "We accept returns of unopened, unused products in their original packaging within 30 days of delivery. Products that have been opened cannot be returned for hygiene reasons."
+        },
+        {
+          "subtitle": "Refund Process",
+          "text": "Approved refunds will be processed to your original payment method within 5-7 business days of receiving the returned item. Shipping costs are non-refundable unless the return is due to our error."
+        },
+        {
+          "subtitle": "Defective Products",
+          "text": "If you receive a defective or damaged product, please contact us within 7 days of delivery. We will arrange a replacement or full refund at no additional cost to you."
+        }
+      ]
+    },
+    {
+      "title": "Intellectual Property",
+      "content": [
+        {
+          "subtitle": "Ownership",
+          "text": "All content on the Shan Loray website, including text, images, logos, and product descriptions, is owned by or licensed to Shan Loray and is protected by copyright and intellectual property laws."
+        },
+        {
+          "subtitle": "Permitted Use",
+          "text": "You may view and download content from our website for personal, non-commercial use only. Any other use, including reproduction, distribution, or modification, requires our prior written consent."
+        },
+        {
+          "subtitle": "User Content",
+          "text": "By submitting reviews, photos, or other content to our website, you grant Shan Loray a non-exclusive, royalty-free license to use, display, and distribute such content in connection with our services."
+        }
+      ]
+    },
+    {
+      "title": "Limitation of Liability",
+      "content": [
+        {
+          "subtitle": "Disclaimer",
+          "text": "Our products and services are provided \"as is\" without warranties of any kind, either express or implied. We do not warrant that our website will be error-free or uninterrupted."
+        },
+        {
+          "subtitle": "Limitation",
+          "text": "To the fullest extent permitted by law, Shan Loray shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our products or services."
+        },
+        {
+          "subtitle": "Governing Law",
+          "text": "These Terms & Conditions are governed by and construed in accordance with applicable laws. Any disputes arising under these terms shall be subject to the exclusive jurisdiction of the competent courts."
+        }
+      ]
+    },
+    {
+      "title": "Payment Terms",
+      "content": [
+        {
+          "subtitle": "Secure Payments",
+          "text": "All payment information is encrypted and processed securely. We do not store your full payment card details on our servers."
+        },
+        {
+          "subtitle": "Loyalty Points",
+          "text": "Loyalty points are awarded on qualifying purchases and may be redeemed for discounts on future orders. Points have no cash value and cannot be transferred. We reserve the right to modify or discontinue the loyalty program at any time."
+        },
+        {
+          "subtitle": "Promotional Offers",
+          "text": "Promotional discounts and offers are subject to their own terms and conditions. They cannot be combined with other offers unless explicitly stated and are valid for a limited time only."
+        }
+      ]
     }
   ]
-}
 }
