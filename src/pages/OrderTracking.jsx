@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   IoBagOutline,
@@ -31,6 +32,7 @@ import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function OrderTracking() {
+  const { t, i18n } = useTranslation()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const { wishlistItems } = useWishlist()
@@ -45,7 +47,7 @@ export default function OrderTracking() {
   useEffect(() => {
     const fetchOrders = async () => {
       if (!user) {
-        setError('Please log in to view your orders')
+        setError(t('orderTracking.errorLogin'))
         setLoading(false)
         return
       }
@@ -74,7 +76,7 @@ export default function OrderTracking() {
         }
 
         if (!mainOrder) {
-          setError('No order found')
+          setError(t('orderTracking.errorNotFound'))
           setLoading(false)
           return
         }
@@ -85,7 +87,7 @@ export default function OrderTracking() {
         setRecentOrders(recentOrdersData)
       } catch (err) {
         console.error('Error fetching orders:', err)
-        setError('Failed to load orders')
+        setError(t('orderTracking.errorLoad'))
       } finally {
         setLoading(false)
       }
@@ -165,25 +167,25 @@ export default function OrderTracking() {
 
     return [
       {
-        label: 'Order Confirmed',
+        label: t('orderTracking.stageOrderConfirmed'),
         time: formatTime(orderDate),
         completed: true,
         active: false
       },
       {
-        label: 'Processing',
+        label: t('orderTracking.stageProcessing'),
         time: formatTime(oneHourLater),
         completed: isProcessing,
         active: !isProcessing
       },
       {
-        label: 'In Transit',
-        time: isInTransit ? formatTime(oneHourLater) : 'Pending',
+        label: t('orderTracking.stageInTransit'),
+        time: isInTransit ? formatTime(oneHourLater) : t('orderTracking.pending'),
         completed: isDelivered,
         active: isInTransit && !isDelivered
       },
       {
-        label: 'Delivered',
+        label: t('orderTracking.stageDelivered'),
         time: isDelivered ? formatTime(deliveryDate) : formatTime(deliveryDate),
         completed: isDelivered,
         active: false
@@ -214,9 +216,9 @@ export default function OrderTracking() {
       }
     }
 
-    if (now >= deliveryDate) return 'Delivered'
-    if (now >= oneHourLater) return 'In Transit'
-    return 'Processing'
+    if (now >= deliveryDate) return t('orderTracking.statusDelivered')
+    if (now >= oneHourLater) return t('orderTracking.statusInTransit')
+    return t('orderTracking.statusProcessing')
   }
 
   if (loading) {
@@ -227,10 +229,10 @@ export default function OrderTracking() {
     return (
       <div className="bg-white font-['Cormorant_Garamond'] min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[18px] text-[#666666] mb-6">{error || 'Order not found'}</p>
+<p className="text-[18px] text-[#666666] mb-6">{error || t('orderTracking.orderNotFound')}</p>
           <Link to="/collections">
             <button className="h-[48px] px-[32px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-              Continue Shopping
+              {t('orderTracking.continueShopping')}
             </button>
           </Link>
         </div>
@@ -262,24 +264,24 @@ export default function OrderTracking() {
   }).length
 
   const navigationItems = [
-    { icon: IoPersonOutline, label: 'Account Dashboard', path: '/dashboard', active: false },
-    { icon: IoBagCheckOutline, label: 'Order History', path: '/order-tracking', active: true },
-    { icon: IoHeartOutline, label: 'My Wishlist', path: '/wishlist', active: false, badge: wishlistCount > 0 ? `${wishlistCount}` : null },
-    { icon: IoLocationOutline, label: 'Shipping Addresses', path: '/shipping-address', active: false },
-    { icon: IoCardOutline, label: 'Payment Methods', path: '/payment-methods', active: false },
+    { icon: IoPersonOutline, label: t('orderTracking.accountDashboard'), path: '/dashboard', active: false },
+    { icon: IoBagCheckOutline, label: t('orderTracking.orderHistory'), path: '/order-tracking', active: true },
+    { icon: IoHeartOutline, label: t('orderTracking.myWishlist'), path: '/wishlist', active: false, badge: wishlistCount > 0 ? `${wishlistCount}` : null },
+    { icon: IoLocationOutline, label: t('orderTracking.shippingAddresses'), path: '/shipping-address', active: false },
+    { icon: IoCardOutline, label: t('orderTracking.paymentMethods'), path: '/payment-methods', active: false },
   ]
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Hero ── */}
       <div className="min-h-[140px] md:min-h-[170px] lg:min-h-[200px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-4 md:px-[60px] lg:px-[120px] py-6 md:py-0">
         <div className="max-w-[1200px] w-full">
           <div className="text-[12px] lg:text-[13px] font-light text-[#666666] mb-3 lg:mb-[16px]">
-            Home / Account Dashboard / Track Order
+            {t('orderTracking.breadcrumb')}
           </div>
-          <h1 className="text-[28px] md:text-[38px] lg:text-[48px] font-semibold text-[#1A1A1A]">Track Your Order</h1>
-          <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">Real-time tracking information for your Shan Loray orders</p>
+          <h1 className="text-[28px] md:text-[38px] lg:text-[48px] font-semibold text-[#1A1A1A]">{t('orderTracking.title')}</h1>
+          <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">{t('orderTracking.subtitle')}</p>
         </div>
       </div>
 
@@ -307,11 +309,11 @@ export default function OrderTracking() {
                 <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-[4px]">{userName}</h2>
                 <p className="text-[13px] lg:text-[14px] text-[#666666] mb-3">{userEmail}</p>
                 <div className="bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium px-[14px] lg:px-[16px] py-[5px] lg:py-[6px] rounded-full mb-4 lg:mb-[16px]">
-                  {loyaltyPoints >= 3000 ? 'Gold Member' : loyaltyPoints >= 2000 ? 'Elite Member' : 'Member'}
+                  {loyaltyPoints >= 3000 ? t('orderTracking.memberGold') : loyaltyPoints >= 2000 ? t('orderTracking.memberElite') : t('orderTracking.member')}
                 </div>
                 <div className="flex items-center gap-[8px]">
                   <IoSparkles className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870]" />
-                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} Points</span>
+                  <span className="text-[17px] lg:text-[20px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} {t('orderTracking.points')}</span>
                 </div>
               </div>
             </div>
@@ -338,15 +340,15 @@ export default function OrderTracking() {
               <div className="grid grid-cols-3 gap-3 lg:gap-[16px]">
                 <div className="text-center">
                   <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{totalOrders}</div>
-                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Total Orders</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{t('orderTracking.totalOrders')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{inTransit}</div>
-                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">In Transit</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{t('orderTracking.inTransit')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-[20px] lg:text-[24px] font-semibold text-[#8B7355] mb-[4px]">{delivered}</div>
-                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">Delivered</div>
+                  <div className="text-[10px] lg:text-[11px] font-light text-[#666666] leading-tight">{t('orderTracking.delivered')}</div>
                 </div>
               </div>
             </div>
@@ -360,7 +362,7 @@ export default function OrderTracking() {
               <div className="mb-5 lg:mb-[32px]">
                 <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-[4px]">#{order.id.slice(0, 8).toUpperCase()}</h3>
                 <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">
-                  Placed on {new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  {t('orderTracking.placedOn')} {new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </p>
               </div>
 
@@ -413,11 +415,11 @@ export default function OrderTracking() {
 
             {/* Shipping Details */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Shipping Details</h3>
+              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('orderTracking.shippingDetails')}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-[32px] mb-5 lg:mb-[24px]">
                 <div>
                   <div className="mb-4 lg:mb-[20px]">
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Order ID</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">{t('orderTracking.orderId')}</div>
                     <div className="flex items-center gap-[8px]">
                       <span className="text-[13px] md:text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">{order.id}</span>
                       <IoCopyOutline
@@ -427,11 +429,11 @@ export default function OrderTracking() {
                     </div>
                   </div>
                   <div className="mb-4 lg:mb-[20px]">
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Delivery Method</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">{t('orderTracking.deliveryMethod')}</div>
                     <div className="text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">{deliveryMethod}</div>
                   </div>
                   <div>
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Status</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">{t('orderTracking.status')}</div>
                     <div className={`text-white text-[12px] lg:text-[13px] font-medium px-[10px] lg:px-[12px] py-[5px] lg:py-[6px] rounded-full inline-block ${
                       orderStatus === 'Delivered' ? 'bg-green-600' : 'bg-[#C9A870]'
                     }`}>
@@ -441,14 +443,14 @@ export default function OrderTracking() {
                 </div>
                 <div>
                   <div className="mb-4 lg:mb-[20px]">
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Estimated Delivery</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">{t('orderTracking.estimatedDelivery')}</div>
                     <div className="flex items-center gap-[8px]">
                       <IoCalendarOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
                       <span className="text-[14px] lg:text-[16px] font-medium text-[#2B2B2B]">{estimatedDelivery}</span>
                     </div>
                   </div>
                   <div>
-                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">Shipping Address</div>
+                    <div className="text-[12px] lg:text-[13px] font-normal text-[#666666] mb-[6px] lg:mb-[8px]">{t('orderTracking.shippingAddress')}</div>
                     <div className="flex items-start gap-[8px]">
                       <IoLocationOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355] mt-[2px] flex-shrink-0" />
                       <div className="text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] leading-[1.6]">
@@ -466,7 +468,7 @@ export default function OrderTracking() {
 
             {/* Order Items */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[24px]">Order Items</h3>
+              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[24px]">{t('orderTracking.orderItems')}</h3>
               <div className="space-y-4 lg:space-y-[20px]">
                 {orderItems.map((item, index) => (
                   <div key={index}>
@@ -480,7 +482,7 @@ export default function OrderTracking() {
                         <div className="text-[11px] lg:text-[12px] font-light italic text-[#8B7355] mb-[4px]">{item.brand}</div>
                         <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-[8px]">{item.product_name}</h4>
                         <div className="flex items-center gap-4 lg:gap-[24px]">
-                          <span className="text-[13px] lg:text-[14px] font-normal text-[#666666]">Qty: {item.quantity}</span>
+                          <span className="text-[13px] lg:text-[14px] font-normal text-[#666666]">{t('orderTracking.qty')} {item.quantity}</span>
                           <span className="text-[15px] lg:text-[16px] font-semibold text-[#2B2B2B]">${(parseFloat(item.price) * item.quantity).toFixed(2)}</span>
                         </div>
                       </div>
@@ -493,7 +495,7 @@ export default function OrderTracking() {
 
             {/* Delivery Updates */}
             <div className="bg-[#FDFBF7] rounded-[12px] p-5 md:p-6 lg:p-[32px] mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Recent Updates</h3>
+              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('orderTracking.recentUpdates')}</h3>
               <div className="space-y-5 lg:space-y-[24px]">
                 {trackingStages.filter(stage => stage.completed || stage.active).reverse().map((stage, index, arr) => (
                   <div key={index} className="flex gap-3 lg:gap-[16px]">
@@ -509,10 +511,10 @@ export default function OrderTracking() {
                       <div className="text-[11px] lg:text-[13px] font-normal text-[#666666] mb-[4px]">{stage.time}</div>
                       <div className="text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] mb-[4px]">{stage.label}</div>
                       <div className="text-[11px] lg:text-[13px] font-light text-[#999999]">
-                        {stage.label === 'Order Confirmed' && 'Your order has been received and confirmed'}
-                        {stage.label === 'Processing' && 'Your order is being prepared for shipment'}
-                        {stage.label === 'In Transit' && 'Your order is on its way'}
-                        {stage.label === 'Delivered' && 'Your order has been delivered'}
+                        {stage.label === t('orderTracking.stageOrderConfirmed') && t('orderTracking.updateOrderConfirmed')}
+                        {stage.label === t('orderTracking.stageProcessing') && t('orderTracking.updateProcessing')}
+                        {stage.label === t('orderTracking.stageInTransit') && t('orderTracking.updateInTransit')}
+                        {stage.label === t('orderTracking.stageDelivered') && t('orderTracking.updateDelivered')}
                       </div>
                     </div>
                   </div>
@@ -527,8 +529,8 @@ export default function OrderTracking() {
                   <IoMailOutline className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px] text-[#8B7355]" />
                 </div>
                 <div>
-                  <h3 className="text-[16px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-[4px]">Need Help?</h3>
-                  <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">Our customer service team is here to assist you</p>
+                  <h3 className="text-[16px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-[4px]">{t('orderTracking.needHelp')}</h3>
+                  <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">{t('orderTracking.needHelpDesc')}</p>
                 </div>
               </div>
 
@@ -538,15 +540,15 @@ export default function OrderTracking() {
                   <button onClick={() => setShowSupport(false)} className="absolute top-3 right-3 text-[#999999] hover:text-[#1A1A1A] transition-colors">
                     <IoClose className="w-[20px] h-[20px]" />
                   </button>
-                  <p className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-4">Reach us through any channel:</p>
+                  <p className="text-[13px] lg:text-[14px] font-medium text-[#1A1A1A] mb-4">{t('orderTracking.reachUs')}</p>
                   <div className="space-y-3">
                     <a href="#" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
                       <div className="w-[36px] h-[36px] bg-white rounded-full flex items-center justify-center flex-shrink-0">
                         <IoCallOutline className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
                       <div>
-                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Phone Support</div>
-                        <div className="text-[12px] text-[#666666] group-hover:text-white">Call us</div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">{t('orderTracking.phoneSupport')}</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">{t('orderTracking.callUs')}</div>
                       </div>
                     </a>
                     <a href="#" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
@@ -554,8 +556,8 @@ export default function OrderTracking() {
                         <IoMailOutline className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
                       <div>
-                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Email Support</div>
-                        <div className="text-[12px] text-[#666666] group-hover:text-white">Send us an email</div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">{t('orderTracking.emailSupport')}</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">{t('orderTracking.sendEmail')}</div>
                       </div>
                     </a>
                     <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
@@ -563,8 +565,8 @@ export default function OrderTracking() {
                         <IoLogoWhatsapp className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
                       <div>
-                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">WhatsApp</div>
-                        <div className="text-[12px] text-[#666666] group-hover:text-white">Chat with us</div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">{t('orderTracking.whatsapp')}</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">{t('orderTracking.chatUs')}</div>
                       </div>
                     </a>
                     <a href="#" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
@@ -572,8 +574,8 @@ export default function OrderTracking() {
                         <IoLogoInstagram className="w-[18px] h-[18px] text-[#8B7355]" />
                       </div>
                       <div>
-                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">Instagram</div>
-                        <div className="text-[12px] text-[#666666] group-hover:text-white">Message us</div>
+                        <div className="text-[13px] font-medium text-[#1A1A1A] group-hover:text-white">{t('orderTracking.instagram')}</div>
+                        <div className="text-[12px] text-[#666666] group-hover:text-white">{t('orderTracking.messageUs')}</div>
                       </div>
                     </a>
                   </div>
@@ -585,12 +587,12 @@ export default function OrderTracking() {
                   onClick={() => setShowSupport(!showSupport)}
                   className="flex-1 flex items-center justify-center gap-[8px] bg-[#8B7355] text-white text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
                   <IoChatbubbleEllipsesOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
-                  Contact Support
+                  {t('orderTracking.contactSupport')}
                 </button>
                 <Link to="/faq" className="flex-1">
                   <button className="w-full flex items-center justify-center gap-[8px] bg-white border border-[#8B7355] text-[#8B7355] text-[13px] lg:text-[15px] font-medium h-[44px] lg:h-[48px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
                     <IoHelpCircleOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px]" />
-                    View FAQs
+                    {t('orderTracking.viewFAQs')}
                   </button>
                 </Link>
               </div>
@@ -598,7 +600,7 @@ export default function OrderTracking() {
 
             {/* Recent Orders */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px]">
-              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[24px]">Your Recent Orders</h3>
+              <h3 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-4 lg:mb-[24px]">{t('orderTracking.recentOrders')}</h3>
               <div className="space-y-[12px] lg:space-y-[16px] mb-4 lg:mb-[20px]">
                 {recentOrders.map((recentOrder) => {
                   const status = getOrderStatus(recentOrder.created_at, recentOrder.delivery_method)
@@ -620,7 +622,7 @@ export default function OrderTracking() {
                         </div>
                         <Link to={`/order-tracking?orderId=${recentOrder.id}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                           <button className="border border-[#8B7355] text-[#8B7355] text-[12px] lg:text-[14px] font-medium px-3 lg:px-[16px] py-[5px] lg:py-[6px] rounded-[8px] cursor-pointer hover:bg-[#8B7355] hover:text-white transition-all">
-                            Track
+                            {t('orderTracking.track')}
                           </button>
                         </Link>
                       </div>
@@ -630,7 +632,7 @@ export default function OrderTracking() {
               </div>
               <Link to="/dashboard">
                 <button className="w-full text-[13px] lg:text-[15px] font-medium text-[#8B7355] cursor-pointer flex items-center justify-center gap-[6px] hover:underline">
-                  View All Orders
+                  {t('orderTracking.viewAllOrders')}
                   <IoChevronForward className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
                 </button>
               </Link>
