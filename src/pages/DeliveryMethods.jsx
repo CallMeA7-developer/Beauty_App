@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
@@ -28,11 +29,17 @@ const DELIVERY_ICONS = {
 const deliveryOptions = deliveryOptionsData.map(o => ({ ...o, icon: DELIVERY_ICONS[o.iconKey] }))
 
 export default function DeliveryMethods() {
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
   const { cartItems } = useCart()
   const { checkoutSession, updateCheckoutSession } = useCheckout()
-  const steps = getCheckoutSteps(2)
+  const steps = getCheckoutSteps(2).map(s => ({
+    ...s,
+    label: s.step === 1 ? t('deliveryInfo.deliveryInformation') :
+           s.step === 2 ? t('deliveryInfo.deliveryMethod') :
+           t('deliveryInfo.payment')
+  }))
 
   const [selectedOption, setSelectedOption] = useState(checkoutSession.selectedDeliveryMethod || 1)
   const [loading, setLoading] = useState(true)
@@ -72,15 +79,15 @@ export default function DeliveryMethods() {
   }
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Breadcrumb ── */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-        <Link to="/"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span></Link>
+        <Link to="/"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('deliveryMethods.home')}</span></Link>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <Link to="/cart"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Shopping Basket</span></Link>
+        <Link to="/cart"><span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('deliveryMethods.shoppingBasket')}</span></Link>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">Checkout</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">{t('deliveryMethods.checkout')}</span>
       </div>
 
       {/* ── Progress Steps ── */}
@@ -122,7 +129,7 @@ export default function DeliveryMethods() {
 
             {/* Delivery Method Selection */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
-              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">Select Delivery Method</h2>
+              <h2 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#1A1A1A] mb-6 lg:mb-[32px]">{t('deliveryMethods.selectDeliveryMethod')}</h2>
 
               <div className="space-y-3 md:space-y-4 lg:space-y-[16px]">
                 {deliveryOptions.map((option) => {
@@ -178,10 +185,10 @@ export default function DeliveryMethods() {
             {/* Delivery Instructions */}
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] mb-5 md:mb-6 lg:mb-[32px]">
               <label className="text-[14px] lg:text-[16px] font-medium text-[#666666] mb-3 lg:mb-[12px] block">
-                Delivery Instructions <span className="font-light text-[#999999]">(Optional)</span>
+                {t('deliveryMethods.deliveryInstructions')} <span className="font-light text-[#999999]">{t('deliveryMethods.optional')}</span>
               </label>
               <textarea
-                placeholder="Add any special delivery instructions..."
+                placeholder={t('deliveryMethods.instructionsPlaceholder')}
                 className="w-full min-h-[90px] lg:min-h-[100px] p-[14px] lg:p-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[14px] lg:text-[15px] font-light italic text-[#999999] placeholder:text-[#999999] resize-none outline-none focus:border-[#8B7355] transition-colors"
               />
             </div>
@@ -191,15 +198,15 @@ export default function DeliveryMethods() {
               <div className="bg-[#FDFBF7] rounded-[8px] p-4 lg:p-[16px] flex gap-4 lg:gap-[16px]">
                 <IoShieldCheckmarkOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355] flex-shrink-0" />
                 <div>
-                  <div className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">Signature Confirmation</div>
-                  <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Available for orders over $500</div>
+                  <div className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{t('deliveryMethods.signatureConfirmation')}</div>
+                  <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{t('deliveryMethods.signatureDesc')}</div>
                 </div>
               </div>
               <div className="bg-[#FDFBF7] rounded-[8px] p-4 lg:p-[16px] flex gap-4 lg:gap-[16px]">
                 <IoLocationOutline className="w-[24px] h-[24px] lg:w-[28px] lg:h-[28px] text-[#8B7355] flex-shrink-0" />
                 <div>
-                  <div className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">Real-Time Tracking</div>
-                  <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">Track your order every step</div>
+                  <div className="text-[14px] lg:text-[16px] font-semibold text-[#1A1A1A] mb-[4px]">{t('deliveryMethods.realTimeTracking')}</div>
+                  <div className="text-[12px] lg:text-[13px] font-normal text-[#666666]">{t('deliveryMethods.trackingDesc')}</div>
                 </div>
               </div>
             </div>
@@ -208,7 +215,7 @@ export default function DeliveryMethods() {
           {/* ── Right — Order Summary ── */}
           <div className="w-full lg:w-[360px] lg:flex-shrink-0">
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px] lg:sticky lg:top-[24px]">
-              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Order Summary</h2>
+              <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">{t('deliveryMethods.orderSummary')}</h2>
 
               {/* Items */}
               <div className="mb-5 lg:mb-[24px] space-y-4 lg:space-y-[16px]">
@@ -231,17 +238,17 @@ export default function DeliveryMethods() {
               {/* Pricing */}
               <div className="space-y-3 lg:space-y-[12px] mb-5 lg:mb-[24px]">
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Subtotal</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('deliveryMethods.subtotal')}</span>
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Shipping</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('deliveryMethods.shipping')}</span>
                   <span className={`text-[14px] lg:text-[16px] font-normal ${shipping === 0 ? 'text-green-600' : 'text-[#1A1A1A]'}`}>
-                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? t('deliveryMethods.free') : `$${shipping.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">Estimated Tax</span>
+                  <span className="text-[14px] lg:text-[16px] font-normal text-[#666666]">{t('deliveryMethods.estimatedTax')}</span>
                   <span className="text-[14px] lg:text-[16px] font-normal text-[#1A1A1A]">${tax.toFixed(2)}</span>
                 </div>
               </div>
@@ -249,15 +256,15 @@ export default function DeliveryMethods() {
               <div className="h-[1px] bg-[#E8E3D9] mb-5 lg:mb-[24px]" />
 
               <div className="flex justify-between mb-5 lg:mb-[24px]">
-                <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">Order Total</span>
+                <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">{t('deliveryMethods.orderTotal')}</span>
                 <span className="text-[18px] md:text-[20px] lg:text-[22px] font-semibold text-[#1A1A1A]">${total.toFixed(2)}</span>
               </div>
 
               {/* Promo */}
               <div className="flex gap-[8px] mb-5 lg:mb-[24px]">
-                <input type="text" placeholder="Promo code" className="flex-1 h-[40px] px-[14px] lg:px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
+                <input type="text" placeholder={t('deliveryMethods.promoPlaceholder')} className="flex-1 h-[40px] px-[14px] lg:px-[16px] border-[1.5px] border-[#E8E3D9] rounded-[8px] text-[13px] lg:text-[15px] font-normal outline-none focus:border-[#8B7355] transition-colors" />
                 <button className="h-[40px] px-4 lg:px-[20px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors">
-                  Apply
+                  {t('deliveryMethods.apply')}
                 </button>
               </div>
 
@@ -267,12 +274,12 @@ export default function DeliveryMethods() {
                   onClick={handleContinue}
                   className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors"
                 >
-                  Continue to Payment
+                  {t('deliveryMethods.continueToPayment')}
                 </button>
                 <Link to="/checkout">
                   <button className="w-full flex items-center justify-center gap-[8px] text-[13px] lg:text-[14px] font-medium text-[#666666] cursor-pointer hover:text-[#8B7355] transition-colors">
                     <IoArrowBackOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
-                    Back to Delivery Information
+                    {t('deliveryMethods.backToDelivery')}
                   </button>
                 </Link>
               </div>
@@ -281,11 +288,11 @@ export default function DeliveryMethods() {
               <div className="flex items-center justify-around pt-5 lg:pt-[24px] border-t border-[#E8E3D9]">
                 <div className="flex flex-col items-center gap-[6px] lg:gap-[8px]">
                   <IoLockClosedOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">Secure Checkout</span>
+                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">{t('deliveryMethods.secureCheckout')}</span>
                 </div>
                 <div className="flex flex-col items-center gap-[6px] lg:gap-[8px]">
                   <IoShieldCheckmarkOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#666666]" />
-                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">Money-Back</span>
+                  <span className="text-[11px] lg:text-[12px] font-light text-[#666666]">{t('deliveryMethods.moneyBack')}</span>
                 </div>
               </div>
             </div>
