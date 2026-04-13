@@ -26,10 +26,26 @@ const DELIVERY_ICONS = {
   rocket: IoRocketOutline, globe: IoGlobeOutline,
 }
 
-const deliveryOptions = deliveryOptionsData.map(o => ({ ...o, icon: DELIVERY_ICONS[o.iconKey] }))
+const useDeliveryOptions = (t) => deliveryOptionsData.map(o => ({
+  ...o,
+  icon: DELIVERY_ICONS[o.iconKey],
+  title: o.id === 1 ? t('deliveryMethods.options.standard') :
+         o.id === 2 ? t('deliveryMethods.options.express') :
+         o.id === 3 ? t('deliveryMethods.options.sameDay') :
+         t('deliveryMethods.options.international'),
+  time: o.id === 1 ? t('deliveryMethods.options.standardTime') :
+        o.id === 2 ? t('deliveryMethods.options.expressTime') :
+        o.id === 3 ? t('deliveryMethods.options.sameDayTime') :
+        t('deliveryMethods.options.internationalTime'),
+  description: o.id === 1 ? t('deliveryMethods.options.standardDesc') :
+               o.id === 3 ? t('deliveryMethods.options.sameDayDesc') :
+               o.id === 4 ? t('deliveryMethods.options.internationalDesc') :
+               o.description,
+}))
 
 export default function DeliveryMethods() {
   const { t, i18n } = useTranslation()
+  const deliveryOptions = useDeliveryOptions(t)
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
   const { cartItems } = useCart()
