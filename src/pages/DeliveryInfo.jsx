@@ -21,7 +21,12 @@ export default function DeliveryInfo() {
   const { user, loading: authLoading } = useAuth()
   const { cartItems } = useCart()
   const { updateCheckoutSession } = useCheckout()
-  const steps = getCheckoutSteps(1)
+  const steps = getCheckoutSteps(1).map(s => ({
+    ...s,
+    label: s.step === 1 ? t('deliveryInfo.deliveryInformation') :
+           s.step === 2 ? t('deliveryInfo.deliveryMethod') :
+           t('deliveryInfo.payment')
+  }))
 
   const [addresses, setAddresses] = useState([])
   const [loading, setLoading] = useState(true)
