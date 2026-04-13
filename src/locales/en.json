@@ -1340,5 +1340,45 @@
     "2": "Consider using a password manager to store secure passwords.",
     "3": "Update your password regularly for better account protection."
   }
+},
+  "privacyPage": {
+  "title": "Privacy Settings",
+  "subtitle": "Manage your data privacy and security preferences",
+  "guest": "Guest",
+  "dataControls": "Data Privacy Controls",
+  "download": "Download My Data",
+  "delete": "Request Account Deletion",
+  "save": "Save Preferences",
+  "navItems": {
+    "Account Dashboard": "Account Dashboard",
+    "Order History": "Order History",
+    "My Wishlist": "My Wishlist",
+    "Shipping Addresses": "Shipping Addresses",
+    "Payment Methods": "Payment Methods",
+    "Beauty Profile": "Beauty Profile",
+    "Loyalty Program": "Loyalty Program",
+    "My Routines": "My Routines",
+    "Reviews & Ratings": "Reviews & Ratings",
+    "Account Settings": "Account Settings",
+    "Notifications": "Notifications"
+  },
+  "controls": {
+    "personal-data": {
+      "title": "Personal Data Usage",
+      "desc": "Allow Shan Loray to personalize your experience"
+    },
+    "marketing": {
+      "title": "Marketing Communications",
+      "desc": "Receive personalized product recommendations"
+    },
+    "cookies": {
+      "title": "Cookies & Tracking",
+      "desc": "Accept cookies for better experience"
+    },
+    "third-party": {
+      "title": "Third-Party Sharing",
+      "desc": "Share data with trusted partners"
+    }
+  }
 }
 }
