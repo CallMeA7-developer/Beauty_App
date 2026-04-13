@@ -796,5 +796,87 @@
       ]
     }
   ]
+},
+  "profile": {
+  "user": "User",
+  "hero": {
+    "userAvatar": "User Avatar",
+    "label": "YOUR BEAUTY PROFILE",
+    "memberSince": "Elite Member Since",
+    "loyaltyPoints": "Loyalty Points",
+    "redeem": "Redeem"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "myProfile": "My Profile"
+  },
+  "quickAccess": {
+    "title": "Quick Access",
+    "orders": "Orders",
+    "wishlist": "Wishlist",
+    "beautyProfile": "Beauty Profile",
+    "routines": "Routines"
+  },
+  "menu": {
+    "myAccount": "My Account",
+    "beauty": "Beauty",
+    "settingsSection": "Settings",
+    "accountDashboard": "Account Dashboard",
+    "orderHistory": "Order History",
+    "myWishlist": "My Wishlist",
+    "shippingAddresses": "Shipping Addresses",
+    "paymentMethods": "Payment Methods",
+    "beautyProfile": "Beauty Profile",
+    "loyaltyProgram": "Loyalty Program",
+    "myRoutines": "My Routines",
+    "reviewsRatings": "Reviews & Ratings",
+    "accountSettings": "Account Settings",
+    "notifications": "Notifications",
+    "itemsBadge": "{{count}} items",
+    "pointsBadge": "{{count}} pts"
+  },
+  "signOut": "Sign Out",
+  "skin": {
+    "title": "Skin Health Overview",
+    "retake": "Retake Analysis",
+    "overallScore": "Overall Score",
+    "hydration": "Hydration",
+    "texture": "Texture",
+    "clarity": "Clarity",
+    "toneEvenness": "Tone Evenness",
+    "summary": "Summary",
+    "emptyTitle": "Complete Your Skin Analysis",
+    "emptyDesc": "Get personalized insights and recommendations for your unique skin profile",
+    "start": "Start Skin Analysis"
+  },
+  "orders": {
+    "title": "Recent Orders",
+    "viewAll": "View All Orders",
+    "emptyTitle": "No Orders Yet",
+    "emptyDesc": "Start exploring our curated collection",
+    "shopNow": "Shop Now",
+    "statusDelivered": "Delivered",
+    "statusShipped": "Shipped",
+    "statusProcessing": "Processing",
+    "statusPending": "Pending",
+    "orderItems": "Order Items",
+    "orderItemsCount": "{{count}} item",
+    "orderItemsCount_other": "{{count}} items",
+    "track": "Track"
+  },
+  "loyalty": {
+    "title": "Loyalty Program",
+    "goldMember": "Gold Member",
+    "eliteMember": "Elite Member",
+    "member": "Member",
+    "currentPoints": "Current Points",
+    "goldAchieved": "Gold Status Achieved!",
+    "progressToGold": "Progress to Gold Status",
+    "congratulations": "Congratulations!",
+    "pointsToGo": "{{count}} pts to go",
+    "eliteThreshold": "Elite (2,000)",
+    "goldThreshold": "Gold (3,000)",
+    "redeemPoints": "Redeem Points"
+  }
 }
 }
