@@ -1266,5 +1266,79 @@
     "biWeekly": "Bi-weekly",
     "monthly": "Monthly"
   }
+},
+  "passwordPage": {
+  "user": "User",
+  "userAvatar": "User Avatar",
+  "points": "Points",
+  "title": "Change Password",
+  "subtitle": "Update your account security credentials",
+  "infoBanner": "Protect your account by choosing a strong, unique password that you don't use elsewhere.",
+  "updatePassword": "Update Password",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "forgotPassword": "Forgot password?",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "passwordsMatch": "Passwords match",
+  "passwordRequirements": "Password Requirements",
+  "securityTipsTitle": "Security Tips",
+  "cancel": "Cancel",
+  "updatePasswordButton": "Update Password",
+  "lastPasswordChange": "Last password change: November 15, 2024",
+  "securityBadge": "All password changes are encrypted and secured with industry-standard protocols.",
+  "breadcrumb": {
+    "home": "Home",
+    "accountDashboard": "Account Dashboard",
+    "changePassword": "Change Password"
+  },
+  "membership": {
+    "gold": "Gold Member",
+    "elite": "Elite Member",
+    "member": "Member"
+  },
+  "navItems": {
+    "Account Dashboard": "Account Dashboard",
+    "Order History": "Order History",
+    "My Wishlist": "My Wishlist",
+    "Shipping Addresses": "Shipping Addresses",
+    "Payment Methods": "Payment Methods",
+    "Beauty Profile": "Beauty Profile",
+    "Loyalty Program": "Loyalty Program",
+    "My Routines": "My Routines",
+    "Reviews & Ratings": "Reviews & Ratings",
+    "Account Settings": "Account Settings",
+    "Notifications": "Notifications"
+  },
+  "stats": {
+    "totalOrders": "Total Orders",
+    "wishlistItems": "Wishlist Items",
+    "reviewsWritten": "Reviews Written"
+  },
+  "placeholders": {
+    "currentPassword": "Enter current password",
+    "newPassword": "Enter new password",
+    "confirmPassword": "Confirm new password"
+  },
+  "strength": {
+    "label": "Strength",
+    "weak": "Weak",
+    "medium": "Medium",
+    "strong": "Strong"
+  },
+  "requirements": {
+    "minLength": "At least 8 characters long",
+    "upperLower": "Contains uppercase and lowercase letters",
+    "number": "Includes at least one number",
+    "special": "Contains at least one special character (@$!%*?&)",
+    "notSame": "Not the same as current password",
+    "match": "Passwords match"
+  },
+  "securityTips": {
+    "0": "Use a different password for every account.",
+    "1": "Avoid using personal information like birthdays or names.",
+    "2": "Consider using a password manager to store secure passwords.",
+    "3": "Update your password regularly for better account protection."
+  }
 }
 }
