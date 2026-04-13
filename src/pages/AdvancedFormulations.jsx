@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import {
   IoCheckmarkCircle,
@@ -19,6 +20,7 @@ import {
 } from 'react-icons/io5'
 
 export default function AdvancedFormulations() {
+  const { t, i18n } = useTranslation()
   const location  = useLocation()
   const navigate  = useNavigate()
   const [showPdfPopup, setShowPdfPopup] = useState(false)
@@ -31,10 +33,10 @@ export default function AdvancedFormulations() {
   }, [location])
 
   const innovationPillars = [
-    { icon: IoFlaskOutline, title: 'Patented Technology', stat: '45+ Patents', desc: 'Exclusive delivery systems and breakthrough formulations' },
-    { icon: IoGridOutline, title: 'Clinical Research', stat: '20+ Years', desc: 'Evidence-based skincare backed by rigorous testing' },
-    { icon: IoLeafOutline, title: 'Sustainable Science', stat: '98% Natural Origin', desc: 'Clean beauty without compromising efficacy' },
-    { icon: IoShieldCheckmarkOutline, title: 'Purity Standards', stat: '100% Safe', desc: 'Dermatologist-tested and hypoallergenic formulas' },
+    { icon: IoFlaskOutline, title: t('formulations.pillars.patentedTech'), stat: t('formulations.pillars.patentedTechStat'), desc: t('formulations.pillars.patentedTechDesc') },
+    { icon: IoGridOutline, title: t('formulations.pillars.clinicalResearch'), stat: t('formulations.pillars.clinicalResearchStat'), desc: t('formulations.pillars.clinicalResearchDesc') },
+    { icon: IoLeafOutline, title: t('formulations.pillars.sustainableScience'), stat: t('formulations.pillars.sustainableScienceStat'), desc: t('formulations.pillars.sustainableScienceDesc') },
+    { icon: IoShieldCheckmarkOutline, title: t('formulations.pillars.purityStandards'), stat: t('formulations.pillars.purityStandardsStat'), desc: t('formulations.pillars.purityStandardsDesc') },
   ]
 
   const signatureIngredients = [
@@ -52,12 +54,12 @@ export default function AdvancedFormulations() {
   ]
 
   const certifications = [
-    { name: 'Cruelty-Free', icon: IoRibbonOutline },
-    { name: 'Dermatologist-Tested', icon: IoMedkitOutline },
-    { name: 'Clinically Proven', icon: IoCheckmarkCircle },
-    { name: 'Sustainable Sourcing', icon: IoLeafOutline },
-    { name: 'Hypoallergenic', icon: IoShieldCheckmarkOutline },
-    { name: 'Non-Toxic', icon: IoWaterOutline },
+    { name: t('formulations.certs.crueltyFree'), icon: IoRibbonOutline },
+    { name: t('formulations.certs.dermTested'), icon: IoMedkitOutline },
+    { name: t('formulations.certs.clinicallyProven'), icon: IoCheckmarkCircle },
+    { name: t('formulations.certs.sustainableSourcing'), icon: IoLeafOutline },
+    { name: t('formulations.certs.hypoallergenic'), icon: IoShieldCheckmarkOutline },
+    { name: t('formulations.certs.nonToxic'), icon: IoWaterOutline },
   ]
 
   const publications = [
@@ -79,25 +81,25 @@ export default function AdvancedFormulations() {
   ]
 
   const timelineMilestones = [
-    { year: '2004', event: 'Founded Research Lab', desc: 'Established state-of-the-art facility' },
-    { year: '2008', event: 'First Patent', desc: 'Revolutionary peptide delivery system' },
-    { year: '2012', event: 'Marine Complex', desc: 'Breakthrough in marine-derived actives' },
-    { year: '2016', event: 'Bio-Retinol Discovery', desc: 'Plant-based retinol alternative' },
-    { year: '2020', event: 'Sustainability Certification', desc: 'Achieved carbon-neutral production' },
-    { year: '2024', event: 'AI-Powered Formulation', desc: 'Machine learning in development' },
+    { year: '2004', event: t('formulations.timeline_items.2004'), desc: t('formulations.timeline_items.2004desc') },
+    { year: '2008', event: t('formulations.timeline_items.2008'), desc: t('formulations.timeline_items.2008desc') },
+    { year: '2012', event: t('formulations.timeline_items.2012'), desc: t('formulations.timeline_items.2012desc') },
+    { year: '2016', event: t('formulations.timeline_items.2016'), desc: t('formulations.timeline_items.2016desc') },
+    { year: '2020', event: t('formulations.timeline_items.2020'), desc: t('formulations.timeline_items.2020desc') },
+    { year: '2024', event: t('formulations.timeline_items.2024'), desc: t('formulations.timeline_items.2024desc') },
   ]
 
   const faqItems = [
-    { question: 'What makes Shan Loray formulations unique?', answer: 'Our formulations combine patented delivery systems with clinically-proven active ingredients at optimal concentrations. Every product undergoes rigorous testing and is backed by scientific research.' },
-    { question: 'Are your products suitable for sensitive skin?', answer: 'Yes, all our products are dermatologist-tested and hypoallergenic. We use clean, non-irritating ingredients and avoid common sensitizers like synthetic fragrances and harsh alcohols.' },
-    { question: 'How do you ensure ingredient purity and quality?', answer: 'We source ingredients from certified suppliers and conduct thorough testing including stability, safety, and efficacy assessments. Every batch is tested for purity and potency before release.' },
-    { question: 'What is your approach to sustainable formulation?', answer: 'We prioritize natural-origin ingredients, sustainable sourcing practices, and eco-friendly production methods. Our formulations are 98% natural origin while maintaining clinical efficacy.' },
+    { question: t('formulations.faqItems.q1'), answer: t('formulations.faqItems.a1') },
+    { question: t('formulations.faqItems.q2'), answer: t('formulations.faqItems.a2') },
+    { question: t('formulations.faqItems.q3'), answer: t('formulations.faqItems.a3') },
+    { question: t('formulations.faqItems.q4'), answer: t('formulations.faqItems.a4') },
   ]
 
   const relatedPages = [
-    { title: 'Virtual Try-On', desc: 'Experience products with AR technology', image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=380&h=280&fit=crop', path: '/virtual-tryon' },
-    { title: 'Skin Analysis', desc: 'AI-powered skin assessment tool', image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=380&h=280&fit=crop', path: '/skin-analysis' },
-    { title: 'Beauty Journey', desc: 'Track your personalized skincare progress', image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=380&h=280&fit=crop', path: '/beauty-journey' },
+    { title: t('formulations.related.virtualTryOn'), desc: t('formulations.related.virtualTryOnDesc'), image: 'https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=380&h=280&fit=crop', path: '/virtual-tryon' },
+    { title: t('formulations.related.skinAnalysis'), desc: t('formulations.related.skinAnalysisDesc'), image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=380&h=280&fit=crop', path: '/skin-analysis' },
+    { title: t('formulations.related.beautyJourney'), desc: t('formulations.related.beautyJourneyDesc'), image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=380&h=280&fit=crop', path: '/beauty-journey' },
   ]
 
   const sourcingItems = [
@@ -108,21 +110,21 @@ export default function AdvancedFormulations() {
   ]
 
   const testingProtocols = [
-    { title: 'Stability Testing', desc: 'Long-term product integrity assessment', icon: IoFlaskOutline },
-    { title: 'Dermatological Testing', desc: 'Clinical evaluation on diverse skin types', icon: IoMedkitOutline },
-    { title: 'Patch Testing', desc: 'Allergy and sensitivity screening', icon: IoShieldCheckmarkOutline },
-    { title: 'Efficacy Trials', desc: 'Measurable results documentation', icon: IoBarChartOutline },
+    { title: t('formulations.testing.stability'), desc: t('formulations.testing.stabilityDesc'), icon: IoFlaskOutline },
+    { title: t('formulations.testing.dermatological'), desc: t('formulations.testing.dermatologicalDesc'), icon: IoMedkitOutline },
+    { title: t('formulations.testing.patch'), desc: t('formulations.testing.patchDesc'), icon: IoShieldCheckmarkOutline },
+    { title: t('formulations.testing.efficacy'), desc: t('formulations.testing.efficacyDesc'), icon: IoBarChartOutline },
   ]
 
   return (
-    <div className="bg-white font-['Cormorant_Garamond']">
+    <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Hero ── */}
       <div className="min-h-[340px] md:min-h-[440px] lg:min-h-[560px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-4 md:px-[60px] lg:px-[120px] py-10 md:py-0">
         <div className="w-full md:w-[520px] lg:w-[680px] relative z-10">
-          <p className="text-[11px] md:text-[12px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">SCIENCE-DRIVEN SKINCARE INNOVATION</p>
-          <h1 className="text-[36px] md:text-[52px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-5">Advanced Formulations</h1>
-          <p className="text-[13px] md:text-[16px] lg:text-[20px] font-normal text-[#666666] leading-[1.6] mb-6 lg:mb-8">Where Science Meets Luxury Beauty. Discover cutting-edge ingredient technology, clinical research breakthroughs, and formulation excellence.</p>
+          <p className="text-[11px] md:text-[12px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('formulations.tagline')}</p>
+          <h1 className="text-[36px] md:text-[52px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-5">{t('formulations.title')}</h1>
+          <p className="text-[13px] md:text-[16px] lg:text-[20px] font-normal text-[#666666] leading-[1.6] mb-6 lg:mb-8">{t('formulations.heroDesc')}</p>
           <div className="w-[100px] md:w-[130px] lg:w-[160px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[140px] top-1/2 -translate-y-1/2">
@@ -132,16 +134,16 @@ export default function AdvancedFormulations() {
 
       {/* ── Breadcrumb ── */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Home</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('formulations.home')}</span>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">Technology</span>
+        <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer whitespace-nowrap">{t('formulations.technology')}</span>
         <span className="hidden sm:inline text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">Advanced Formulations</span>
+        <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">{t('formulations.breadcrumb')}</span>
       </div>
 
       {/* ── Innovation Pillars ── */}
       <div id='our-story' className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Our Innovation Pillars</h2>
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.innovationPillars')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-[24px]">
           {innovationPillars.map((pillar) => (
             <div key={pillar.title} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px] flex flex-col items-center hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] transition-all duration-300">
@@ -156,8 +158,8 @@ export default function AdvancedFormulations() {
 
       {/* ── Signature Ingredients ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#FDFBF7]">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-3">Signature Active Ingredients</h2>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Clinically-proven actives at optimal concentrations</p>
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-3">{t('formulations.signatureIngredients')}</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">{t('formulations.signatureSubtitle')}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-[24px]">
           {signatureIngredients.map((ingredient) => (
             <div key={ingredient.name} className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
@@ -193,15 +195,15 @@ export default function AdvancedFormulations() {
             <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=580&h=420&fit=crop" alt="Formulation Technology" className="w-full h-[260px] md:h-[340px] lg:h-[420px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.1)]" />
           </div>
           <div className="flex-1">
-            <h2 className="text-[22px] md:text-[30px] lg:text-[40px] font-medium text-[#1A1A1A] mb-4">Multi-Layer Delivery System</h2>
+            <h2 className="text-[22px] md:text-[30px] lg:text-[40px] font-medium text-[#1A1A1A] mb-4">{t('formulations.deliverySystem')}</h2>
             <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] leading-[1.7] mb-6">
-              Our patented encapsulation technology ensures active ingredients penetrate deep into the skin layers while maintaining stability and potency.
+              {t('formulations.deliveryDesc')}
             </p>
             <div className="space-y-3 lg:space-y-4 mb-6">
               {[
-                { layer: 'Surface Layer', desc: 'Immediate hydration and protection' },
-                { layer: 'Mid Layer', desc: 'Active ingredient delivery and absorption' },
-                { layer: 'Deep Layer', desc: 'Long-term cellular repair and renewal' },
+                { layer: t('formulations.surfaceLayer'), desc: t('formulations.surfaceLayerDesc') },
+                { layer: t('formulations.midLayer'), desc: t('formulations.midLayerDesc') },
+                { layer: t('formulations.deepLayer'), desc: t('formulations.deepLayerDesc') },
               ].map((layer) => (
                 <div key={layer.layer} className="flex items-start gap-3 bg-[#F5F1EA] rounded-[8px] p-3 lg:p-[16px]">
                   <IoBeakerOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0 mt-1" />
@@ -218,8 +220,8 @@ export default function AdvancedFormulations() {
 
       {/* ── Clinical Results ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#FDFBF7]">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-3">Clinical Results</h2>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Proven efficacy through rigorous clinical testing</p>
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-3">{t('formulations.clinicalResults')}</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">{t('formulations.clinicalSubtitle')}</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-[24px]">
           {clinicalResults.map((result) => (
             <div key={result.metric} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden">
@@ -227,7 +229,7 @@ export default function AdvancedFormulations() {
               <div className="p-4 lg:p-[24px]">
                 <h3 className="text-[14px] lg:text-[18px] font-medium text-[#1A1A1A] mb-2 lg:mb-3">{result.metric}</h3>
                 <div className="text-[26px] md:text-[30px] lg:text-[36px] font-bold text-[#8B7355] mb-2">{result.improvement}</div>
-                <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">Measured after {result.timeline}</p>
+                <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">{t('formulations.measuredAfter')} {result.timeline}</p>
               </div>
             </div>
           ))}
@@ -240,7 +242,7 @@ export default function AdvancedFormulations() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
         <div className="absolute inset-0 flex items-center px-4 md:px-[60px] lg:px-[120px]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-[48px] w-full py-8">
-            {[{ stat: '20+', label: 'Years of Research' }, { stat: '45+', label: 'Patents Awarded' }, { stat: '150+', label: 'Scientific Publications' }, { stat: '30+', label: 'Research Partnerships' }].map((item) => (
+            {[{ stat: '20+', label: t('formulations.yearsResearch') }, { stat: '45+', label: t('formulations.patentsAwarded') }, { stat: '150+', label: t('formulations.publications') }, { stat: '30+', label: t('formulations.researchPartnerships') }].map((item) => (
               <div key={item.label} className="text-center">
                 <div className="text-[36px] md:text-[44px] lg:text-[56px] font-bold text-white mb-2">{item.stat}</div>
                 <div className="text-[13px] md:text-[14px] lg:text-[16px] font-normal text-white/90">{item.label}</div>
@@ -252,7 +254,7 @@ export default function AdvancedFormulations() {
 
       {/* ── Certifications ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Quality Certifications</h2>
+        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.certifications')}</h2>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-5 lg:gap-[32px]">
           {certifications.map((cert) => (
             <div key={cert.name} className="flex flex-col items-center">
@@ -267,18 +269,18 @@ export default function AdvancedFormulations() {
 
       {/* ── Global Sourcing ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#FDFBF7]">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-8 lg:mb-[56px]">Global Ingredient Sourcing</h2>
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-8 lg:mb-[56px]">{t('formulations.globalSourcing')}</h2>
         <div className="flex flex-col md:flex-row gap-8 lg:gap-[48px]">
           <div className="w-full md:w-[420px] lg:w-[600px] flex-shrink-0">
             <img src="https://images.unsplash.com/photo-1589519160732-57fc498494f8?w=600&h=400&fit=crop" alt="Global Sourcing" className="w-full h-[220px] md:h-[300px] lg:h-[400px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.1)] mb-4" />
             <div className="flex items-center gap-3">
               <IoGlobeOutline className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px] text-[#8B7355]" />
-              <span className="text-[13px] lg:text-[15px] font-medium text-[#666666]">Sustainably sourced from 25+ countries</span>
+              <span className="text-[13px] lg:text-[15px] font-medium text-[#666666]">{t('formulations.sourcingCountries')}</span>
             </div>
           </div>
           <div className="flex-1">
             <p className="text-[13px] md:text-[15px] lg:text-[18px] font-normal text-[#666666] leading-[1.7] mb-6">
-              We partner with ethical suppliers worldwide to source the finest natural ingredients. From Swiss Alpine botanicals to deep-sea marine extracts, every ingredient is carefully selected for purity, potency, and sustainability.
+              {t('formulations.sourcingDesc')}
             </p>
             <div className="space-y-3 lg:space-y-4">
               {sourcingItems.map((source) => (
@@ -297,8 +299,8 @@ export default function AdvancedFormulations() {
 
       {/* ── Publications ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] mb-3">Scientific Publications</h2>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-8 lg:mb-[48px]">Our research contributions to dermatological science</p>
+        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] mb-3">{t('formulations.scientificPublications')}</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-8 lg:mb-[48px]">{t('formulations.pubSubtitle')}</p>
         <div className="space-y-4">
           {publications.map((pub) => (
             <div key={pub.title} className="bg-[#FDFBF7] rounded-[12px] border border-[#E8E3D9] p-4 md:p-5 lg:p-[28px]">
@@ -312,7 +314,7 @@ export default function AdvancedFormulations() {
                   onClick={() => { setPdfTitle(pub.title); setShowPdfPopup(true) }}
                   className="flex items-center gap-2 px-4 lg:px-5 h-[40px] lg:h-[44px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors flex-shrink-0">
                   <IoDownloadOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
-                  Download
+                  {t('formulations.download')}
                 </button>
               </div>
             </div>
@@ -322,7 +324,7 @@ export default function AdvancedFormulations() {
 
       {/* ── Expert Team ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#F5F1EA]">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Meet Our Scientific Team</h2>
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.expertTeam')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-[32px]">
           {experts.map((expert) => (
             <div key={expert.name} className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[32px]">
@@ -342,7 +344,7 @@ export default function AdvancedFormulations() {
 
       {/* ── Hero Products ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Hero Product Technologies</h2>
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.heroProducts')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-[32px]">
           {heroProducts.map((product) => (
             <div key={product.name} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
@@ -350,17 +352,17 @@ export default function AdvancedFormulations() {
               <div className="p-4 md:p-5 lg:p-[28px]">
                 <h3 className="text-[16px] md:text-[17px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.name}</h3>
                 <div className="mb-3 lg:mb-4">
-                  <p className="text-[11px] lg:text-[13px] font-medium text-[#666666] mb-1">Key Actives</p>
+                  <p className="text-[11px] lg:text-[13px] font-medium text-[#666666] mb-1">{t('formulations.keyActives')}</p>
                   <p className="text-[13px] lg:text-[15px] font-normal text-[#8B7355]">{product.keyActives}</p>
                 </div>
                 <div className="mb-4 lg:mb-5">
-                  <p className="text-[11px] lg:text-[13px] font-medium text-[#666666] mb-1">Technology</p>
+                  <p className="text-[11px] lg:text-[13px] font-medium text-[#666666] mb-1">{t('formulations.technologyLabel')}</p>
                   <p className="text-[13px] lg:text-[15px] font-normal text-[#8B7355]">{product.technology}</p>
                 </div>
                 <button
                   onClick={() => navigate(product.path)}
                   className="w-full h-[44px] lg:h-[48px] bg-[#8B7355] text-white text-[13px] lg:text-[14px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
-                  Learn More <IoChevronForward className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
+                  {t('formulations.learnMore')} <IoChevronForward className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
                 </button>
               </div>
             </div>
@@ -370,7 +372,7 @@ export default function AdvancedFormulations() {
 
       {/* ── Testing Protocols ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#FDFBF7]">
-        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Rigorous Testing Protocols</h2>
+        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.testingProtocols')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-[24px]">
           {testingProtocols.map((test) => (
             <div key={test.title} className="bg-white rounded-[12px] border border-[#E8E3D9] p-4 lg:p-[28px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] transition-all duration-300">
@@ -384,7 +386,7 @@ export default function AdvancedFormulations() {
 
       {/* ── Timeline ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Innovation Timeline</h2>
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.timeline')}</h2>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4 lg:gap-[16px]">
           {timelineMilestones.map((milestone) => (
             <div key={milestone.year} className="flex flex-col items-center">
@@ -403,7 +405,7 @@ export default function AdvancedFormulations() {
 
       {/* ── FAQ ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#FDFBF7]">
-        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Frequently Asked Questions</h2>
+        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.faq')}</h2>
         <div className="max-w-[900px] mx-auto space-y-4">
           {faqItems.map((item) => (
             <div key={item.question} className="bg-white rounded-[12px] border border-[#E8E3D9] p-4 md:p-5 lg:p-[28px]">
@@ -416,7 +418,7 @@ export default function AdvancedFormulations() {
 
       {/* ── Related Pages ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Explore More Technology</h2>
+        <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.exploreMore')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-[32px]">
           {relatedPages.map((page) => (
             <Link key={page.title} to={page.path}>
@@ -426,7 +428,7 @@ export default function AdvancedFormulations() {
                   <h3 className="text-[16px] md:text-[18px] lg:text-[22px] font-semibold text-[#1A1A1A] mb-2">{page.title}</h3>
                   <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-4 lg:mb-5">{page.desc}</p>
                   <div className="flex items-center gap-2 text-[#8B7355] text-[13px] lg:text-[15px] font-medium">
-                    Explore <IoChevronForward className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
+                    {t('formulations.explore')} <IoChevronForward className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
                   </div>
                 </div>
               </div>
@@ -443,13 +445,13 @@ export default function AdvancedFormulations() {
             <div className="flex items-center justify-center w-[64px] h-[64px] bg-[#F5F1EA] rounded-full mx-auto mb-5">
               <IoDownloadOutline className="w-[28px] h-[28px] text-[#8B7355]" />
             </div>
-            <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A] text-center mb-3">Read the PDF</h3>
+            <h3 className="text-[20px] lg:text-[24px] font-semibold text-[#1A1A1A] text-center mb-3">{t('formulations.pdfTitle')}</h3>
             <p className="text-[14px] lg:text-[15px] font-normal text-[#666666] text-center mb-2 leading-[1.6]">{pdfTitle}</p>
-            <p className="text-[13px] font-light text-[#999999] text-center mb-6">This publication is available for reading. PDF download will be available soon.</p>
+            <p className="text-[13px] font-light text-[#999999] text-center mb-6">{t('formulations.pdfDesc')}</p>
             <button
               onClick={() => setShowPdfPopup(false)}
               className="w-full h-[48px] lg:h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-              Close
+              {t('formulations.close')}
             </button>
           </div>
         </div>
@@ -457,12 +459,12 @@ export default function AdvancedFormulations() {
 
       {/* ── Newsletter ── */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-0 lg:min-h-[200px] flex flex-col items-center justify-center">
-        <h3 className="text-[20px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">Stay Updated on Formulation Science</h3>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-5 lg:mb-6 text-center">Get exclusive insights on new ingredients and clinical research</p>
+        <h3 className="text-[20px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">{t('formulations.newsletter')}</h3>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-5 lg:mb-6 text-center">{t('formulations.newsletterDesc')}</p>
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-          <input type="email" placeholder="Enter your email" className="w-full sm:w-[280px] lg:w-[360px] h-[48px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <input type="email" placeholder={t('formulations.emailPlaceholder')} className="w-full sm:w-[280px] lg:w-[360px] h-[48px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
           <button className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 lg:px-[32px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-            Subscribe
+            {t('formulations.subscribe')}
           </button>
         </div>
       </div>
