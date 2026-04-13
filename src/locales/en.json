@@ -508,66 +508,82 @@
     "policy": "Privacy Policy"
   },
 
-  "intro1": "At Shan Loray, we are committed to protecting your privacy and handling your personal data with transparency and care.",
+  "intro1": "At Shan Loray, we are committed to protecting your privacy and handling your personal data with transparency and care. This Privacy Policy describes our practices for collecting, using, and safeguarding the information you share with us.",
   "intro2": "By using our services, you agree to the collection and use of information in accordance with this policy.",
 
   "contactTitle": "Questions About Your Privacy?",
-  "contactDesc": "If you have any questions about this policy, contact us anytime.",
+  "contactDesc": "If you have any questions about this Privacy Policy or how we handle your data, please contact us.",
   "contactButton": "Email Privacy Team",
 
   "sections": {
     "collect": {
       "title": "Information We Collect",
       "items": [
-        { "subtitle": "Personal Information", "text": "We collect your name, email, phone and address." },
-        { "subtitle": "Skin Analysis Data", "text": "Used for personalized recommendations." },
-        { "subtitle": "Usage Data", "text": "We collect analytics like IP and behavior." },
-        { "subtitle": "Payment Information", "text": "Handled securely via providers." }
+        {
+          "subtitle": "Personal Information",
+          "text": "When you create an account or make a purchase, we collect information such as your name, email address, phone number, and shipping address. This information is necessary to process your orders and provide our services."
+        },
+        {
+          "subtitle": "Skin Analysis Data",
+          "text": "When you use our AI Skin Analysis feature, we collect your skin profile data including skin type, concerns, and analysis results."
+        },
+        {
+          "subtitle": "Usage Data",
+          "text": "We automatically collect certain information when you visit our website, including your IP address, browser type, pages visited, and time spent on pages."
+        },
+        {
+          "subtitle": "Payment Information",
+          "text": "Payment details are processed securely through our payment providers. We do not store your full credit card numbers."
+        }
       ]
     },
+
     "use": {
       "title": "How We Use Your Information",
       "items": [
-        { "subtitle": "Orders", "text": "Processing purchases." },
-        { "subtitle": "Personalization", "text": "Tailored experience." },
-        { "subtitle": "Communication", "text": "Emails and updates." },
-        { "subtitle": "Improvement", "text": "Service optimization." }
+        { "subtitle": "Order Processing", "text": "We process and fulfill your orders." },
+        { "subtitle": "Personalization", "text": "We provide tailored recommendations." },
+        { "subtitle": "Communication", "text": "We send updates and promotions." },
+        { "subtitle": "Service Improvement", "text": "We analyze usage data to improve services." }
       ]
     },
+
     "security": {
       "title": "Data Protection & Security",
       "items": [
-        { "subtitle": "Encryption", "text": "SSL protection." },
-        { "subtitle": "Access", "text": "Restricted access." },
-        { "subtitle": "Retention", "text": "Stored as needed." },
-        { "subtitle": "Breach", "text": "Notification if needed." }
+        { "subtitle": "Encryption", "text": "All data is protected using SSL encryption." },
+        { "subtitle": "Access Controls", "text": "Only authorized personnel can access your data." },
+        { "subtitle": "Data Retention", "text": "We retain data only as long as necessary." },
+        { "subtitle": "Breach Notification", "text": "We will notify users in case of breach." }
       ]
     },
+
     "sharing": {
       "title": "Sharing Your Information",
       "items": [
-        { "subtitle": "Partners", "text": "Trusted services only." },
-        { "subtitle": "No Selling", "text": "We never sell data." },
-        { "subtitle": "Legal", "text": "If required by law." }
+        { "subtitle": "Third-Party Providers", "text": "We share data with partners like payment and shipping providers." },
+        { "subtitle": "No Data Selling", "text": "We never sell your data." },
+        { "subtitle": "Legal Requirements", "text": "We may disclose data if required by law." }
       ]
     },
+
     "rights": {
       "title": "Your Rights & Choices",
       "items": [
-        { "subtitle": "Access", "text": "Update your data." },
-        { "subtitle": "Deletion", "text": "Request removal." },
-        { "subtitle": "Opt-out", "text": "Stop marketing." },
-        { "subtitle": "Cookies", "text": "Control settings." }
+        { "subtitle": "Access & Correction", "text": "You can update your data anytime." },
+        { "subtitle": "Data Deletion", "text": "You can request deletion." },
+        { "subtitle": "Marketing Opt-Out", "text": "You can unsubscribe." },
+        { "subtitle": "Cookie Preferences", "text": "You can control cookies." }
       ]
     },
+
     "cookies": {
       "title": "Cookies & Tracking",
       "items": [
-        { "subtitle": "Essential", "text": "Required cookies." },
-        { "subtitle": "Analytics", "text": "Improve experience." },
-        { "subtitle": "Preferences", "text": "Remember settings." }
+        { "subtitle": "Essential Cookies", "text": "Required for functionality." },
+        { "subtitle": "Analytics Cookies", "text": "Help improve experience." },
+        { "subtitle": "Preference Cookies", "text": "Store settings." }
       ]
     }
   }
-}
 }
