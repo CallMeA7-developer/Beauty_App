@@ -779,5 +779,30 @@
     "pleaseSelectAddress": "Please select or add a delivery address",
     "pleaseFillFields": "Please fill in all required fields",
     "failedToSave": "Failed to save address"
+  },
+  "deliveryMethods": {
+    "home": "Home",
+    "shoppingBasket": "Shopping Basket",
+    "checkout": "Checkout",
+    "selectDeliveryMethod": "Select Delivery Method",
+    "deliveryInstructions": "Delivery Instructions",
+    "optional": "(Optional)",
+    "instructionsPlaceholder": "Add any special delivery instructions...",
+    "signatureConfirmation": "Signature Confirmation",
+    "signatureDesc": "Available for orders over $500",
+    "realTimeTracking": "Real-Time Tracking",
+    "trackingDesc": "Track your order every step",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "FREE",
+    "estimatedTax": "Estimated Tax",
+    "orderTotal": "Order Total",
+    "promoPlaceholder": "Promo code",
+    "apply": "Apply",
+    "continueToPayment": "Continue to Payment",
+    "backToDelivery": "Back to Delivery Information",
+    "secureCheckout": "Secure Checkout",
+    "moneyBack": "Money-Back"
   }
 }
