@@ -497,331 +497,645 @@
     }
   },
   "privacyPolicy": {
-  "legal": "LEGAL",
-  "title": "Privacy Policy",
-  "subtitle": "Your privacy is important to us. This policy explains how Shan Loray collects, uses, and protects your personal information.",
-  "lastUpdated": "Last updated: April 2026",
-  "breadcrumb": {
-    "home": "Home",
-    "accountSettings": "Account Settings",
-    "privacyPolicy": "Privacy Policy"
-  },
-  "intro": {
-    "paragraph1": {
-      "part1": "At ",
-      "brand": "Shan Loray",
-      "part2": ", we are committed to protecting your privacy and handling your personal data with transparency and care. This Privacy Policy describes our practices for collecting, using, and safeguarding the information you share with us when using our website and services."
+    "legal": "LEGAL",
+    "title": "Privacy Policy",
+    "subtitle": "Your privacy is important to us. This policy explains how Shan Loray collects, uses, and protects your personal information.",
+    "lastUpdated": "Last updated: April 2026",
+    "breadcrumb": {
+      "home": "Home",
+      "accountSettings": "Account Settings",
+      "privacyPolicy": "Privacy Policy"
     },
-    "paragraph2": "By using our services, you agree to the collection and use of information in accordance with this policy. If you do not agree, please discontinue use of our services."
-  },
-  "sections": [
-    {
-      "title": "Information We Collect",
-      "content": [
-        {
-          "subtitle": "Personal Information",
-          "text": "When you create an account or make a purchase, we collect information such as your name, email address, phone number, and shipping address. This information is necessary to process your orders and provide our services."
-        },
-        {
-          "subtitle": "Skin Analysis Data",
-          "text": "When you use our AI Skin Analysis feature, we collect your skin profile data including skin type, concerns, and analysis results. This data is used solely to provide personalized product recommendations and track your skin journey over time."
-        },
-        {
-          "subtitle": "Usage Data",
-          "text": "We automatically collect certain information when you visit our website, including your IP address, browser type, pages visited, and time spent on pages. This helps us improve our services and user experience."
-        },
-        {
-          "subtitle": "Payment Information",
-          "text": "Payment details are processed securely through our payment providers. We do not store your full credit card numbers — only the last four digits and card type for your reference."
-        }
-      ]
+    "intro": {
+      "paragraph1": {
+        "part1": "At ",
+        "brand": "Shan Loray",
+        "part2": ", we are committed to protecting your privacy and handling your personal data with transparency and care. This Privacy Policy describes our practices for collecting, using, and safeguarding the information you share with us when using our website and services."
+      },
+      "paragraph2": "By using our services, you agree to the collection and use of information in accordance with this policy. If you do not agree, please discontinue use of our services."
     },
-    {
-      "title": "How We Use Your Information",
-      "content": [
-        {
-          "subtitle": "Order Processing",
-          "text": "We use your personal information to process and fulfill your orders, send order confirmations, and provide shipping updates."
-        },
-        {
-          "subtitle": "Personalization",
-          "text": "Your skin analysis data and purchase history allow us to offer personalized product recommendations, beauty routines, and tailored content that matches your unique needs."
-        },
-        {
-          "subtitle": "Communication",
-          "text": "We may send you emails about your orders, account activity, and promotional offers. You can opt out of marketing emails at any time while still receiving transactional messages."
-        },
-        {
-          "subtitle": "Service Improvement",
-          "text": "We analyze usage patterns and feedback to improve our website, products, and services. All data used for this purpose is aggregated and anonymized."
-        }
-      ]
-    },
-    {
-      "title": "Data Protection & Security",
-      "content": [
-        {
-          "subtitle": "Encryption",
-          "text": "All data transmitted between your browser and our servers is encrypted using industry-standard SSL/TLS protocols. Sensitive information is stored using advanced encryption methods."
-        },
-        {
-          "subtitle": "Access Controls",
-          "text": "Access to your personal data is strictly limited to authorized personnel who need it to provide our services. All staff with data access are bound by confidentiality agreements."
-        },
-        {
-          "subtitle": "Data Retention",
-          "text": "We retain your personal information for as long as your account is active or as needed to provide services. You may request deletion of your account and associated data at any time."
-        },
-        {
-          "subtitle": "Breach Notification",
-          "text": "In the unlikely event of a data breach that affects your personal information, we will notify you promptly in accordance with applicable laws and regulations."
-        }
-      ]
-    },
-    {
-      "title": "Sharing Your Information",
-      "content": [
-        {
-          "subtitle": "Third-Party Service Providers",
-          "text": "We share necessary data with trusted partners who help us operate our business, including payment processors, shipping carriers, and analytics providers. These partners are bound by strict data protection agreements."
-        },
-        {
-          "subtitle": "No Data Selling",
-          "text": "We never sell, rent, or trade your personal information to third parties for their marketing purposes. Your data is used only to provide and improve our services to you."
-        },
-        {
-          "subtitle": "Legal Requirements",
-          "text": "We may disclose your information if required by law, court order, or government regulation, or if we believe disclosure is necessary to protect our rights or the safety of others."
-        }
-      ]
-    },
-    {
-      "title": "Your Rights & Choices",
-      "content": [
-        {
-          "subtitle": "Access & Correction",
-          "text": "You have the right to access, update, or correct your personal information at any time through your account settings or by contacting our support team."
-        },
-        {
-          "subtitle": "Data Deletion",
-          "text": "You may request the deletion of your account and personal data. Please note that some information may be retained for legal or legitimate business purposes."
-        },
-        {
-          "subtitle": "Marketing Opt-Out",
-          "text": "You can unsubscribe from marketing communications at any time by clicking the unsubscribe link in any email or updating your notification preferences in your account settings."
-        },
-        {
-          "subtitle": "Cookie Preferences",
-          "text": "You can control cookie settings through your browser preferences. Note that disabling certain cookies may affect the functionality of our website."
-        }
-      ]
-    },
-    {
-      "title": "Cookies & Tracking",
-      "content": [
-        {
-          "subtitle": "Essential Cookies",
-          "text": "We use essential cookies to enable core functionality such as authentication, shopping cart, and security features. These cannot be disabled as the site would not function without them."
-        },
-        {
-          "subtitle": "Analytics Cookies",
-          "text": "With your consent, we use analytics cookies to understand how visitors interact with our website, helping us improve the user experience and content."
-        },
-        {
-          "subtitle": "Preference Cookies",
-          "text": "These cookies remember your settings and preferences, such as your language and region, to provide a more personalized experience on return visits."
-        }
-      ]
+    "sections": [
+      {
+        "title": "Information We Collect",
+        "content": [
+          {
+            "subtitle": "Personal Information",
+            "text": "When you create an account or make a purchase, we collect information such as your name, email address, phone number, and shipping address. This information is necessary to process your orders and provide our services."
+          },
+          {
+            "subtitle": "Skin Analysis Data",
+            "text": "When you use our AI Skin Analysis feature, we collect your skin profile data including skin type, concerns, and analysis results. This data is used solely to provide personalized product recommendations and track your skin journey over time."
+          },
+          {
+            "subtitle": "Usage Data",
+            "text": "We automatically collect certain information when you visit our website, including your IP address, browser type, pages visited, and time spent on pages. This helps us improve our services and user experience."
+          },
+          {
+            "subtitle": "Payment Information",
+            "text": "Payment details are processed securely through our payment providers. We do not store your full credit card numbers — only the last four digits and card type for your reference."
+          }
+        ]
+      },
+      {
+        "title": "How We Use Your Information",
+        "content": [
+          {
+            "subtitle": "Order Processing",
+            "text": "We use your personal information to process and fulfill your orders, send order confirmations, and provide shipping updates."
+          },
+          {
+            "subtitle": "Personalization",
+            "text": "Your skin analysis data and purchase history allow us to offer personalized product recommendations, beauty routines, and tailored content that matches your unique needs."
+          },
+          {
+            "subtitle": "Communication",
+            "text": "We may send you emails about your orders, account activity, and promotional offers. You can opt out of marketing emails at any time while still receiving transactional messages."
+          },
+          {
+            "subtitle": "Service Improvement",
+            "text": "We analyze usage patterns and feedback to improve our website, products, and services. All data used for this purpose is aggregated and anonymized."
+          }
+        ]
+      },
+      {
+        "title": "Data Protection & Security",
+        "content": [
+          {
+            "subtitle": "Encryption",
+            "text": "All data transmitted between your browser and our servers is encrypted using industry-standard SSL/TLS protocols. Sensitive information is stored using advanced encryption methods."
+          },
+          {
+            "subtitle": "Access Controls",
+            "text": "Access to your personal data is strictly limited to authorized personnel who need it to provide our services. All staff with data access are bound by confidentiality agreements."
+          },
+          {
+            "subtitle": "Data Retention",
+            "text": "We retain your personal information for as long as your account is active or as needed to provide services. You may request deletion of your account and associated data at any time."
+          },
+          {
+            "subtitle": "Breach Notification",
+            "text": "In the unlikely event of a data breach that affects your personal information, we will notify you promptly in accordance with applicable laws and regulations."
+          }
+        ]
+      },
+      {
+        "title": "Sharing Your Information",
+        "content": [
+          {
+            "subtitle": "Third-Party Service Providers",
+            "text": "We share necessary data with trusted partners who help us operate our business, including payment processors, shipping carriers, and analytics providers. These partners are bound by strict data protection agreements."
+          },
+          {
+            "subtitle": "No Data Selling",
+            "text": "We never sell, rent, or trade your personal information to third parties for their marketing purposes. Your data is used only to provide and improve our services to you."
+          },
+          {
+            "subtitle": "Legal Requirements",
+            "text": "We may disclose your information if required by law, court order, or government regulation, or if we believe disclosure is necessary to protect our rights or the safety of others."
+          }
+        ]
+      },
+      {
+        "title": "Your Rights & Choices",
+        "content": [
+          {
+            "subtitle": "Access & Correction",
+            "text": "You have the right to access, update, or correct your personal information at any time through your account settings or by contacting our support team."
+          },
+          {
+            "subtitle": "Data Deletion",
+            "text": "You may request the deletion of your account and personal data. Please note that some information may be retained for legal or legitimate business purposes."
+          },
+          {
+            "subtitle": "Marketing Opt-Out",
+            "text": "You can unsubscribe from marketing communications at any time by clicking the unsubscribe link in any email or updating your notification preferences in your account settings."
+          },
+          {
+            "subtitle": "Cookie Preferences",
+            "text": "You can control cookie settings through your browser preferences. Note that disabling certain cookies may affect the functionality of our website."
+          }
+        ]
+      },
+      {
+        "title": "Cookies & Tracking",
+        "content": [
+          {
+            "subtitle": "Essential Cookies",
+            "text": "We use essential cookies to enable core functionality such as authentication, shopping cart, and security features. These cannot be disabled as the site would not function without them."
+          },
+          {
+            "subtitle": "Analytics Cookies",
+            "text": "With your consent, we use analytics cookies to understand how visitors interact with our website, helping us improve the user experience and content."
+          },
+          {
+            "subtitle": "Preference Cookies",
+            "text": "These cookies remember your settings and preferences, such as your language and region, to provide a more personalized experience on return visits."
+          }
+        ]
+      }
+    ],
+    "contact": {
+      "title": "Questions About Your Privacy?",
+      "description": "If you have any questions about this Privacy Policy or how we handle your data, please don't hesitate to contact us.",
+      "emailButton": "Email Privacy Team",
+      "manageButton": "Manage Privacy Settings"
     }
-  ],
-  "contact": {
-    "title": "Questions About Your Privacy?",
-    "description": "If you have any questions about this Privacy Policy or how we handle your data, please don't hesitate to contact us.",
-    "emailButton": "Email Privacy Team",
-    "manageButton": "Manage Privacy Settings"
-  }
-},
+  },
   "termsConditions": {
-  "legal": "LEGAL",
-  "title": "Terms & Conditions",
-  "subtitle": "Please read these terms carefully before using our services or making a purchase on the Shan Loray website.",
-  "lastUpdated": "Last updated: April 2026",
-
-  "breadcrumb": {
-    "home": "Home",
-    "current": "Terms & Conditions"
+    "legal": "LEGAL",
+    "title": "Terms & Conditions",
+    "subtitle": "Please read these terms carefully before using our services or making a purchase on the Shan Loray website.",
+    "lastUpdated": "Last updated: April 2026",
+    "breadcrumb": {
+      "home": "Home",
+      "current": "Terms & Conditions"
+    },
+    "intro": {
+      "part1": "Welcome to ",
+      "part2": ". These Terms & Conditions govern your use of our website and the purchase of products from us. By placing an order, you confirm that you have read, understood, and agree to be bound by these terms.",
+      "part3": "If you have any questions about these terms, please contact our customer support team before making a purchase."
+    },
+    "footer": {
+      "title": "Need Clarification?",
+      "desc": "If you have any questions about our Terms & Conditions, our team is happy to help.",
+      "privacy": "View Privacy Policy",
+      "faq": "Visit FAQ"
+    },
+    "sections": [
+      {
+        "title": "Acceptance of Terms",
+        "content": [
+          {
+            "subtitle": "Agreement to Terms",
+            "text": "By accessing or using the Shan Loray website and services, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services."
+          },
+          {
+            "subtitle": "Changes to Terms",
+            "text": "We reserve the right to modify these terms at any time. We will notify users of significant changes via email or a prominent notice on our website. Continued use of our services after changes constitutes acceptance of the new terms."
+          },
+          {
+            "subtitle": "Eligibility",
+            "text": "You must be at least 18 years of age to use our services and make purchases. By using our website, you represent and warrant that you meet this requirement."
+          }
+        ]
+      },
+      {
+        "title": "Orders & Purchases",
+        "content": [
+          {
+            "subtitle": "Order Acceptance",
+            "text": "All orders are subject to availability and acceptance. We reserve the right to refuse or cancel any order at our discretion, including orders that appear to be placed by resellers or distributors."
+          },
+          {
+            "subtitle": "Pricing",
+            "text": "All prices are listed in USD and are subject to change without notice. We make every effort to ensure accurate pricing, but in the event of an error, we reserve the right to cancel the order or contact you to arrange a corrected order."
+          },
+          {
+            "subtitle": "Payment",
+            "text": "Payment is required at the time of purchase. We accept major credit and debit cards. All transactions are processed securely through our payment providers."
+          },
+          {
+            "subtitle": "Order Confirmation",
+            "text": "After placing an order, you will receive an email confirmation with your order details. This confirmation does not constitute acceptance of your order — acceptance occurs when your order is dispatched."
+          }
+        ]
+      },
+      {
+        "title": "Shipping & Delivery",
+        "content": [
+          {
+            "subtitle": "Delivery Times",
+            "text": "Estimated delivery times are provided for guidance only and are not guaranteed. We are not responsible for delays caused by customs, postal services, or other factors beyond our control."
+          },
+          {
+            "subtitle": "Shipping Costs",
+            "text": "Shipping costs are calculated at checkout based on your location and chosen delivery method. Free shipping thresholds may apply and are subject to change."
+          },
+          {
+            "subtitle": "Risk of Loss",
+            "text": "Title and risk of loss for products pass to you upon delivery to the shipping carrier. We are not responsible for lost or stolen packages after they have been delivered."
+          }
+        ]
+      },
+      {
+        "title": "Returns & Refunds",
+        "content": [
+          {
+            "subtitle": "Return Policy",
+            "text": "We accept returns of unopened, unused products in their original packaging within 30 days of delivery. Products that have been opened cannot be returned for hygiene reasons."
+          },
+          {
+            "subtitle": "Refund Process",
+            "text": "Approved refunds will be processed to your original payment method within 5-7 business days of receiving the returned item. Shipping costs are non-refundable unless the return is due to our error."
+          },
+          {
+            "subtitle": "Defective Products",
+            "text": "If you receive a defective or damaged product, please contact us within 7 days of delivery. We will arrange a replacement or full refund at no additional cost to you."
+          }
+        ]
+      },
+      {
+        "title": "Intellectual Property",
+        "content": [
+          {
+            "subtitle": "Ownership",
+            "text": "All content on the Shan Loray website, including text, images, logos, and product descriptions, is owned by or licensed to Shan Loray and is protected by copyright and intellectual property laws."
+          },
+          {
+            "subtitle": "Permitted Use",
+            "text": "You may view and download content from our website for personal, non-commercial use only. Any other use, including reproduction, distribution, or modification, requires our prior written consent."
+          },
+          {
+            "subtitle": "User Content",
+            "text": "By submitting reviews, photos, or other content to our website, you grant Shan Loray a non-exclusive, royalty-free license to use, display, and distribute such content in connection with our services."
+          }
+        ]
+      },
+      {
+        "title": "Limitation of Liability",
+        "content": [
+          {
+            "subtitle": "Disclaimer",
+            "text": "Our products and services are provided \"as is\" without warranties of any kind, either express or implied. We do not warrant that our website will be error-free or uninterrupted."
+          },
+          {
+            "subtitle": "Limitation",
+            "text": "To the fullest extent permitted by law, Shan Loray shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our products or services."
+          },
+          {
+            "subtitle": "Governing Law",
+            "text": "These Terms & Conditions are governed by and construed in accordance with applicable laws. Any disputes arising under these terms shall be subject to the exclusive jurisdiction of the competent courts."
+          }
+        ]
+      },
+      {
+        "title": "Payment Terms",
+        "content": [
+          {
+            "subtitle": "Secure Payments",
+            "text": "All payment information is encrypted and processed securely. We do not store your full payment card details on our servers."
+          },
+          {
+            "subtitle": "Loyalty Points",
+            "text": "Loyalty points are awarded on qualifying purchases and may be redeemed for discounts on future orders. Points have no cash value and cannot be transferred. We reserve the right to modify or discontinue the loyalty program at any time."
+          },
+          {
+            "subtitle": "Promotional Offers",
+            "text": "Promotional discounts and offers are subject to their own terms and conditions. They cannot be combined with other offers unless explicitly stated and are valid for a limited time only."
+          }
+        ]
+      }
+    ]
   },
-
-  "intro": {
-    "part1": "Welcome to ",
-    "part2": ". These Terms & Conditions govern your use of our website and the purchase of products from us. By placing an order, you confirm that you have read, understood, and agree to be bound by these terms.",
-    "part3": "If you have any questions about these terms, please contact our customer support team before making a purchase."
-  },
-
-  "footer": {
-    "title": "Need Clarification?",
-    "desc": "If you have any questions about our Terms & Conditions, our team is happy to help.",
-    "privacy": "View Privacy Policy",
-    "faq": "Visit FAQ"
-  },
-
-  "sections": [
-    {
-      "title": "Acceptance of Terms",
-      "content": [
-        {
-          "subtitle": "Agreement to Terms",
-          "text": "By accessing or using the Shan Loray website and services, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services."
-        },
-        {
-          "subtitle": "Changes to Terms",
-          "text": "We reserve the right to modify these terms at any time. We will notify users of significant changes via email or a prominent notice on our website. Continued use of our services after changes constitutes acceptance of the new terms."
-        },
-        {
-          "subtitle": "Eligibility",
-          "text": "You must be at least 18 years of age to use our services and make purchases. By using our website, you represent and warrant that you meet this requirement."
-        }
-      ]
-    },
-
-    {
-      "title": "Orders & Purchases",
-      "content": [
-        {
-          "subtitle": "Order Acceptance",
-          "text": "All orders are subject to availability and acceptance. We reserve the right to refuse or cancel any order at our discretion, including orders that appear to be placed by resellers or distributors."
-        },
-        {
-          "subtitle": "Pricing",
-          "text": "All prices are listed in USD and are subject to change without notice. We make every effort to ensure accurate pricing, but in the event of an error, we reserve the right to cancel the order or contact you to arrange a corrected order."
-        },
-        {
-          "subtitle": "Payment",
-          "text": "Payment is required at the time of purchase. We accept major credit and debit cards. All transactions are processed securely through our payment providers."
-        },
-        {
-          "subtitle": "Order Confirmation",
-          "text": "After placing an order, you will receive an email confirmation with your order details. This confirmation does not constitute acceptance of your order — acceptance occurs when your order is dispatched."
-        }
-      ]
-    },
-
-    {
-      "title": "Shipping & Delivery",
-      "content": [
-        {
-          "subtitle": "Delivery Times",
-          "text": "Estimated delivery times are provided for guidance only and are not guaranteed. We are not responsible for delays caused by customs, postal services, or other factors beyond our control."
-        },
-        {
-          "subtitle": "Shipping Costs",
-          "text": "Shipping costs are calculated at checkout based on your location and chosen delivery method. Free shipping thresholds may apply and are subject to change."
-        },
-        {
-          "subtitle": "Risk of Loss",
-          "text": "Title and risk of loss for products pass to you upon delivery to the shipping carrier. We are not responsible for lost or stolen packages after they have been delivered."
-        }
-      ]
-    },
-
-    {
-      "title": "Returns & Refunds",
-      "content": [
-        {
-          "subtitle": "Return Policy",
-          "text": "We accept returns of unopened, unused products in their original packaging within 30 days of delivery. Products that have been opened cannot be returned for hygiene reasons."
-        },
-        {
-          "subtitle": "Refund Process",
-          "text": "Approved refunds will be processed to your original payment method within 5-7 business days of receiving the returned item. Shipping costs are non-refundable unless the return is due to our error."
-        },
-        {
-          "subtitle": "Defective Products",
-          "text": "If you receive a defective or damaged product, please contact us within 7 days of delivery. We will arrange a replacement or full refund at no additional cost to you."
-        }
-      ]
-    },
-
-    {
-      "title": "Intellectual Property",
-      "content": [
-        {
-          "subtitle": "Ownership",
-          "text": "All content on the Shan Loray website, including text, images, logos, and product descriptions, is owned by or licensed to Shan Loray and is protected by copyright and intellectual property laws."
-        },
-        {
-          "subtitle": "Permitted Use",
-          "text": "You may view and download content from our website for personal, non-commercial use only. Any other use, including reproduction, distribution, or modification, requires our prior written consent."
-        },
-        {
-          "subtitle": "User Content",
-          "text": "By submitting reviews, photos, or other content to our website, you grant Shan Loray a non-exclusive, royalty-free license to use, display, and distribute such content in connection with our services."
-        }
-      ]
-    },
-
-    {
-      "title": "Limitation of Liability",
-      "content": [
-        {
-          "subtitle": "Disclaimer",
-          "text": "Our products and services are provided \"as is\" without warranties of any kind, either express or implied. We do not warrant that our website will be error-free or uninterrupted."
-        },
-        {
-          "subtitle": "Limitation",
-          "text": "To the fullest extent permitted by law, Shan Loray shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our products or services."
-        },
-        {
-          "subtitle": "Governing Law",
-          "text": "These Terms & Conditions are governed by and construed in accordance with applicable laws. Any disputes arising under these terms shall be subject to the exclusive jurisdiction of the competent courts."
-        }
-      ]
-    },
-
-    {
-      "title": "Payment Terms",
-      "content": [
-        {
-          "subtitle": "Secure Payments",
-          "text": "All payment information is encrypted and processed securely. We do not store your full payment card details on our servers."
-        },
-        {
-          "subtitle": "Loyalty Points",
-          "text": "Loyalty points are awarded on qualifying purchases and may be redeemed for discounts on future orders. Points have no cash value and cannot be transferred. We reserve the right to modify or discontinue the loyalty program at any time."
-        },
-        {
-          "subtitle": "Promotional Offers",
-          "text": "Promotional discounts and offers are subject to their own terms and conditions. They cannot be combined with other offers unless explicitly stated and are valid for a limited time only."
-        }
-      ]
-    }
-  ]
-},
   "profile": {
-  "user": "User",
-  "hero": {
-    "userAvatar": "User Avatar",
-    "label": "YOUR BEAUTY PROFILE",
-    "memberSince": "Elite Member Since",
-    "loyaltyPoints": "Loyalty Points",
-    "redeem": "Redeem"
+    "user": "User",
+    "hero": {
+      "userAvatar": "User Avatar",
+      "label": "YOUR BEAUTY PROFILE",
+      "memberSince": "Elite Member Since",
+      "loyaltyPoints": "Loyalty Points",
+      "redeem": "Redeem"
+    },
+    "breadcrumb": {
+      "home": "Home",
+      "myProfile": "My Profile"
+    },
+    "quickAccess": {
+      "title": "Quick Access",
+      "orders": "Orders",
+      "wishlist": "Wishlist",
+      "beautyProfile": "Beauty Profile",
+      "routines": "Routines"
+    },
+    "menu": {
+      "myAccount": "My Account",
+      "beauty": "Beauty",
+      "settingsSection": "Settings",
+      "accountDashboard": "Account Dashboard",
+      "orderHistory": "Order History",
+      "myWishlist": "My Wishlist",
+      "shippingAddresses": "Shipping Addresses",
+      "paymentMethods": "Payment Methods",
+      "beautyProfile": "Beauty Profile",
+      "loyaltyProgram": "Loyalty Program",
+      "myRoutines": "My Routines",
+      "reviewsRatings": "Reviews & Ratings",
+      "accountSettings": "Account Settings",
+      "notifications": "Notifications",
+      "itemsBadge": "{{count}} items",
+      "pointsBadge": "{{count}} pts"
+    },
+    "signOut": "Sign Out",
+    "skin": {
+      "title": "Skin Health Overview",
+      "retake": "Retake Analysis",
+      "overallScore": "Overall Score",
+      "hydration": "Hydration",
+      "texture": "Texture",
+      "clarity": "Clarity",
+      "toneEvenness": "Tone Evenness",
+      "summary": "Summary",
+      "emptyTitle": "Complete Your Skin Analysis",
+      "emptyDesc": "Get personalized insights and recommendations for your unique skin profile",
+      "start": "Start Skin Analysis"
+    },
+    "orders": {
+      "title": "Recent Orders",
+      "viewAll": "View All Orders",
+      "emptyTitle": "No Orders Yet",
+      "emptyDesc": "Start exploring our curated collection",
+      "shopNow": "Shop Now",
+      "statusDelivered": "Delivered",
+      "statusShipped": "Shipped",
+      "statusProcessing": "Processing",
+      "statusPending": "Pending",
+      "orderItems": "Order Items",
+      "orderItemsCount": "{{count}} item",
+      "orderItemsCount_other": "{{count}} items",
+      "track": "Track"
+    },
+    "loyalty": {
+      "title": "Loyalty Program",
+      "goldMember": "Gold Member",
+      "eliteMember": "Elite Member",
+      "member": "Member",
+      "currentPoints": "Current Points",
+      "goldAchieved": "Gold Status Achieved!",
+      "progressToGold": "Progress to Gold Status",
+      "congratulations": "Congratulations!",
+      "pointsToGo": "{{count}} pts to go",
+      "eliteThreshold": "Elite (2,000)",
+      "goldThreshold": "Gold (3,000)",
+      "redeemPoints": "Redeem Points"
+    }
   },
-  "breadcrumb": {
-    "home": "Home",
-    "myProfile": "My Profile"
-  },
-  "quickAccess": {
-    "title": "Quick Access",
-    "orders": "Orders",
-    "wishlist": "Wishlist",
+  "dashboard": {
+    "breadcrumb": "Home / Account Dashboard",
+    "welcome": "Welcome back,",
+    "subtitle": "Manage your beauty profile and orders",
+    "points": "pts",
+    "member": "Member",
+    "memberElite": "Elite Member",
+    "memberGold": "Gold Member",
+    "totalOrders": "Total Orders",
+    "wishlistItems": "Wishlist Items",
+    "reviewsWritten": "Reviews Written",
+    "personalInfo": "Personal Information",
+    "edit": "Edit",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "birthday": "Birthday",
+    "notSet": "Not set",
+    "na": "N/A",
+    "profileCompletion": "Profile Completion",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "currentOrders": "Current Orders",
+    "viewAll": "View All",
+    "order": "Order",
+    "qty": "Qty",
+    "estDelivery": "Est. Delivery:",
+    "trackOrder": "Track Order",
+    "noCurrentOrders": "No current orders",
+    "orderHistory": "Order History",
+    "track": "Track",
+    "viewFullHistory": "View Full History",
+    "noOrderHistory": "No order history yet",
+    "wishlist": "My Wishlist",
+    "viewAllItems": "View All",
+    "wishlistEmpty": "Your wishlist is empty",
+    "browseProducts": "Browse Products",
     "beautyProfile": "Beauty Profile",
-    "routines": "Routines"
-  },
-  "menu": {
-    "myAccount": "My Account",
-    "beauty": "Beauty",
-    "settingsSection": "Settings",
+    "lastAnalysis": "Last analysis:",
+    "newAnalysis": "New Analysis",
+    "startAnalysis": "Start Analysis",
+    "skinScore": "Skin Score",
+    "status": "Status:",
+    "hydration": "Hydration",
+    "texture": "Texture",
+    "clarity": "Clarity",
+    "toneEvenness": "Tone Evenness",
+    "summary": "Summary",
+    "analysisInsights": "Analysis Insights",
+    "completeSkinAnalysis": "Complete your skin analysis to see personalized insights",
+    "loyaltyProgram": "Loyalty Program",
+    "currentBalance": "Current Balance",
+    "pointsAway": "pts to next tier",
+    "savedRoutines": "Saved Routines",
+    "viewAllRoutines": "View All",
+    "morningRitual": "Morning Ritual",
+    "eveningCare": "Evening Care",
+    "products": "products",
+    "completeForRoutine": "Complete your skin analysis to get personalized routines",
+    "startJourney": "Start Your Journey",
+    "recentReviews": "Recent Reviews",
+    "viewAllReviews": "View All Reviews",
+    "noReviews": "No reviews yet",
+    "writeReview": "Write a Review",
     "accountDashboard": "Account Dashboard",
+    "orderHistoryNav": "Order History",
+    "myWishlist": "My Wishlist",
+    "shippingAddresses": "Shipping Addresses",
+    "paymentMethods": "Payment Methods",
+    "beautyProfileNav": "Beauty Profile",
+    "loyaltyProgramNav": "Loyalty Program",
+    "myRoutines": "My Routines",
+    "reviewsRatings": "Reviews & Ratings",
+    "accountSettingsNav": "Account Settings",
+    "notifications": "Notifications",
+    "notificationPrefs": "Notification Preferences",
+    "privacySettings": "Privacy Settings",
+    "completeAnalysis": "Complete",
+    "signOut": "Sign Out"
+  },
+  "orderTracking": {
+    "title": "Order Tracking",
+    "subtitle": "Track your orders in real time",
+    "breadcrumb": "Home / Order Tracking",
+    "accountDashboard": "Account Dashboard",
+    "orderHistory": "Order History",
+    "myWishlist": "My Wishlist",
+    "shippingAddresses": "Shipping Addresses",
+    "paymentMethods": "Payment Methods",
+    "member": "Member",
+    "memberElite": "Elite Member",
+    "memberGold": "Gold Member",
+    "points": "pts",
+    "totalOrders": "Total Orders",
+    "viewAllOrders": "View All Orders",
+    "recentOrders": "Recent Orders",
+    "orderId": "Order ID",
+    "orderItems": "Order Items",
+    "placedOn": "Placed on",
+    "estimatedDelivery": "Estimated Delivery",
+    "deliveryMethod": "Delivery Method",
+    "shippingAddress": "Shipping Address",
+    "shippingDetails": "Shipping Details",
+    "qty": "Qty",
+    "status": "Status",
+    "pending": "Pending",
+    "inTransit": "In Transit",
+    "delivered": "Delivered",
+    "statusProcessing": "Processing",
+    "statusInTransit": "In Transit",
+    "statusDelivered": "Delivered",
+    "stageOrderConfirmed": "Order Confirmed",
+    "stageProcessing": "Processing",
+    "stageInTransit": "In Transit",
+    "stageDelivered": "Delivered",
+    "updateOrderConfirmed": "Your order has been confirmed",
+    "updateProcessing": "Your order is being prepared",
+    "updateInTransit": "Your order is on its way",
+    "updateDelivered": "Your order has been delivered",
+    "recentUpdates": "Recent Updates",
+    "track": "Track",
+    "continueShopping": "Continue Shopping",
+    "needHelp": "Need Help?",
+    "needHelpDesc": "Our support team is here to assist you",
+    "contactSupport": "Contact Support",
+    "reachUs": "Reach Us",
+    "callUs": "Call Us",
+    "chatUs": "Chat With Us",
+    "messageUs": "Message Us",
+    "sendEmail": "Send Email",
+    "emailSupport": "support@shanloray.com",
+    "phoneSupport": "+1 (800) 123-4567",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "viewFAQs": "View FAQs",
+    "orderNotFound": "Order not found",
+    "errorLogin": "Please sign in to view your orders",
+    "errorLoad": "Failed to load orders",
+    "errorNotFound": "Order not found"
+  },
+  "beautyJourney": {
+    "tagline": "YOUR BEAUTY JOURNEY",
+    "welcome": "Your Beauty Journey",
+    "subtitle": "Personalized routines and recommendations based on your skin analysis",
+    "beautyProfile": "Beauty Profile",
+    "currentAnalysis": "Current Analysis",
+    "skinHealthScore": "Skin Health Score",
+    "score": "Score",
+    "hydration": "Hydration",
+    "texture": "Texture",
+    "clarity": "Clarity",
+    "toneEvenness": "Tone Evenness",
+    "skinType": "Skin Type",
+    "skinConcerns": "Skin Concerns",
+    "specificConcerns": "Specific Concerns",
+    "primary": "Primary",
+    "analysisInsights": "Analysis Insights",
+    "analyzedOn": "Analyzed on",
+    "lastUpdated": "Last updated",
+    "retakeAnalysis": "Retake Analysis",
+    "morningRoutine": "Morning Routine",
+    "morningRoutineDesc": "Start your day with these carefully selected products",
+    "morningRoutineStat": "AM Ritual",
+    "eveningRoutine": "Evening Routine",
+    "eveningRoutineDesc": "End your day with these restorative products",
+    "eveningRoutineStat": "PM Care",
+    "targetedTreatments": "Targeted Treatments",
+    "targetedDesc": "Specialized treatments for your specific concerns",
+    "recommendedProducts": "Recommended Products",
+    "addToCart": "Add to Cart",
+    "confirmed": "Added!",
+    "noAnalysis": "No Skin Analysis Found",
+    "noAnalysisDesc": "Complete your skin analysis to get personalized beauty routines and product recommendations",
+    "startSkinAnalysis": "Start Skin Analysis",
+    "signInRequired": "Sign In Required",
+    "signInDesc": "Please sign in to view your personalized beauty journey",
+    "goToHome": "Go to Home",
+    "notSpecified": "Not specified"
+  },
+  "deliveryInfo": {
+    "home": "Home",
+    "shoppingBasket": "Shopping Basket",
+    "checkout": "Checkout",
+    "deliveryInformation": "Delivery Information",
+    "deliveryMethod": "Delivery Method",
+    "payment": "Payment",
+    "deliveryInformationTitle": "Delivery Information",
+    "enterDeliveryAddress": "Enter Delivery Address",
+    "savedAddresses": "Saved Addresses",
+    "addNewAddress": "Add New Address",
+    "addressLabel": "Address Label",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "phoneNumber": "Phone Number",
+    "phonePlaceholder": "+1 (555) 000-0000",
+    "streetAddress": "Street Address",
+    "streetPlaceholder": "Enter your street address",
+    "cityPlaceholder": "City",
+    "statePlaceholder": "State",
+    "postalPlaceholder": "Postal Code",
+    "saveAddress": "Save Address",
+    "setDefault": "Set as Default",
+    "pleaseSelectAddress": "Please select a delivery address",
+    "pleaseFillFields": "Please fill in all required fields",
+    "failedToSave": "Failed to save address",
+    "continueToDelivery": "Continue to Delivery Method",
+    "returnToCart": "Return to Cart",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "estimatedTax": "Estimated Tax",
+    "orderTotal": "Order Total",
+    "free": "Free",
+    "promoPlaceholder": "Enter promo code",
+    "apply": "Apply",
+    "giftOption": "Gift Option",
+    "giftWrapping": "Add gift wrapping",
+    "secureCheckout": "Secure Checkout",
+    "moneyBack": "30-Day Money Back Guarantee",
+    "allCards": "All major cards accepted",
+    "completePayment": "Complete Payment",
+    "selectShipping": "Select Shipping"
+  },
+  "deliveryMethods": {
+    "home": "Home",
+    "shoppingBasket": "Shopping Basket",
+    "checkout": "Checkout",
+    "selectDeliveryMethod": "Select Delivery Method",
+    "backToDelivery": "Back to Delivery Info",
+    "continueToPayment": "Continue to Payment",
+    "deliveryInstructions": "Delivery Instructions",
+    "instructionsPlaceholder": "Add any special delivery instructions...",
+    "optional": "Optional",
+    "signatureConfirmation": "Signature Confirmation",
+    "signatureDesc": "Require signature upon delivery",
+    "realTimeTracking": "Real-Time Tracking",
+    "trackingDesc": "Track your order every step of the way",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "estimatedTax": "Estimated Tax",
+    "orderTotal": "Order Total",
+    "free": "Free",
+    "promoPlaceholder": "Enter promo code",
+    "apply": "Apply",
+    "secureCheckout": "Secure Checkout",
+    "moneyBack": "30-Day Money Back Guarantee",
+    "options": {
+      "standard": "Standard Delivery",
+      "standardDesc": "Delivered in 5-7 business days",
+      "standardTime": "5-7 Business Days",
+      "express": "Express Delivery",
+      "expressTime": "2-3 Business Days",
+      "sameDay": "Same Day Delivery",
+      "sameDayDesc": "Order before 12pm for same day delivery",
+      "sameDayTime": "Today",
+      "international": "International Delivery",
+      "internationalDesc": "Delivered in 10-14 business days",
+      "internationalTime": "10-14 Business Days"
+    }
+  },
+  "editProfile": {
+    "breadcrumb": "Home / Edit Profile",
+    "title": "Edit Profile",
+    "subtitle": "Update your personal information",
+    "accountDashboard": "Account Dashboard",
+    "accountSettings": "Account Settings",
     "orderHistory": "Order History",
     "myWishlist": "My Wishlist",
     "shippingAddresses": "Shipping Addresses",
@@ -830,53 +1144,480 @@
     "loyaltyProgram": "Loyalty Program",
     "myRoutines": "My Routines",
     "reviewsRatings": "Reviews & Ratings",
-    "accountSettings": "Account Settings",
     "notifications": "Notifications",
-    "itemsBadge": "{{count}} items",
-    "pointsBadge": "{{count}} pts"
-  },
-  "signOut": "Sign Out",
-  "skin": {
-    "title": "Skin Health Overview",
-    "retake": "Retake Analysis",
-    "overallScore": "Overall Score",
-    "hydration": "Hydration",
-    "texture": "Texture",
-    "clarity": "Clarity",
-    "toneEvenness": "Tone Evenness",
-    "summary": "Summary",
-    "emptyTitle": "Complete Your Skin Analysis",
-    "emptyDesc": "Get personalized insights and recommendations for your unique skin profile",
-    "start": "Start Skin Analysis"
-  },
-  "orders": {
-    "title": "Recent Orders",
-    "viewAll": "View All Orders",
-    "emptyTitle": "No Orders Yet",
-    "emptyDesc": "Start exploring our curated collection",
-    "shopNow": "Shop Now",
-    "statusDelivered": "Delivered",
-    "statusShipped": "Shipped",
-    "statusProcessing": "Processing",
-    "statusPending": "Pending",
-    "orderItems": "Order Items",
-    "orderItemsCount": "{{count}} item",
-    "orderItemsCount_other": "{{count}} items",
-    "track": "Track"
-  },
-  "loyalty": {
-    "title": "Loyalty Program",
-    "goldMember": "Gold Member",
-    "eliteMember": "Elite Member",
     "member": "Member",
-    "currentPoints": "Current Points",
-    "goldAchieved": "Gold Status Achieved!",
-    "progressToGold": "Progress to Gold Status",
-    "congratulations": "Congratulations!",
-    "pointsToGo": "{{count}} pts to go",
-    "eliteThreshold": "Elite (2,000)",
-    "goldThreshold": "Gold (3,000)",
-    "redeemPoints": "Redeem Points"
+    "memberElite": "Elite Member",
+    "memberGold": "Gold Member",
+    "points": "pts",
+    "changePhoto": "Change Photo",
+    "removePhoto": "Remove Photo",
+    "photoHint": "JPG, PNG or GIF. Max 5MB.",
+    "personalDetails": "Personal Details",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email Address",
+    "emailVerified": "Verified",
+    "phoneNumber": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "gender": "Gender",
+    "genderFemale": "Female",
+    "genderMale": "Male",
+    "genderNonBinary": "Non-binary",
+    "genderPreferNot": "Prefer not to say",
+    "preferredLanguage": "Preferred Language",
+    "communicationPrefs": "Communication Preferences",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDesc": "Receive order updates and promotions",
+    "smsNotifications": "SMS Notifications",
+    "smsNotificationsDesc": "Receive text updates on your orders",
+    "marketingComms": "Marketing Communications",
+    "marketingCommsDesc": "Receive personalized beauty tips and offers",
+    "managePrivacy": "Manage Privacy Settings",
+    "securityNote": "For security reasons, password changes are handled separately",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "successMessage": "Profile updated successfully!"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about our products and services",
+    "supportCenter": "Support Center",
+    "stillHaveQuestions": "Still have questions?",
+    "supportAvailability": "Our support team is available Monday to Friday, 9am - 6pm EST",
+    "emailSupport": "Email Support",
+    "trackMyOrder": "Track My Order",
+    "categories": {
+      "all": "All"
+    },
+    "sections": {
+      "ordersShipping": {
+        "questions": {
+          "deliveryTime": {
+            "q": "How long does delivery take?",
+            "a": "Standard delivery takes 5-7 business days. Express delivery takes 2-3 business days. Same-day delivery is available for orders placed before 12pm."
+          },
+          "trackOrder": {
+            "q": "How can I track my order?",
+            "a": "Once your order ships, you will receive a tracking number via email. You can also track your order in your account dashboard under Order Tracking."
+          },
+          "shippingCosts": {
+            "q": "What are the shipping costs?",
+            "a": "Standard shipping is free on orders over $75. Express shipping is $15. Same-day delivery is $25. International shipping rates vary by destination."
+          },
+          "internationalShipping": {
+            "q": "Do you ship internationally?",
+            "a": "Yes, we ship to over 50 countries worldwide. International orders typically take 10-14 business days and may be subject to customs duties."
+          }
+        }
+      },
+      "returnsRefunds": {
+        "questions": {
+          "returnPolicy": {
+            "q": "What is your return policy?",
+            "a": "We accept returns of unopened, unused products within 30 days of delivery. Products must be in their original packaging."
+          },
+          "refundTime": {
+            "q": "How long does a refund take?",
+            "a": "Refunds are processed within 5-7 business days after we receive your returned item. The amount will be credited to your original payment method."
+          },
+          "exchangeProduct": {
+            "q": "Can I exchange a product?",
+            "a": "Yes, we offer exchanges for unopened products within 30 days. Please contact our support team to initiate an exchange."
+          },
+          "nonReturnable": {
+            "q": "Are there non-returnable items?",
+            "a": "Opened or used products cannot be returned for hygiene reasons. Gift cards and promotional items are also non-returnable."
+          }
+        }
+      },
+      "payments": {
+        "questions": {
+          "paymentMethods": {
+            "q": "What payment methods do you accept?",
+            "a": "We accept all major credit and debit cards (Visa, Mastercard, Amex), PayPal, and Apple Pay."
+          },
+          "paymentSecurity": {
+            "q": "Is my payment information secure?",
+            "a": "Yes, all payments are processed through PCI-compliant payment processors. We never store your full card details on our servers."
+          },
+          "installments": {
+            "q": "Can I pay in installments?",
+            "a": "Yes, we offer installment payment options through our payment partners. Select the installment option at checkout."
+          },
+          "multiplePayments": {
+            "q": "Can I use multiple payment methods?",
+            "a": "Currently we support one payment method per order. However, you can use loyalty points in combination with a payment method."
+          }
+        }
+      },
+      "deliveryAddress": {
+        "questions": {
+          "changeAddress": {
+            "q": "Can I change my delivery address after ordering?",
+            "a": "Address changes are possible within 1 hour of placing your order. Please contact our support team immediately."
+          },
+          "poBox": {
+            "q": "Do you deliver to PO Boxes?",
+            "a": "We can deliver to PO Boxes for standard shipping. Express and same-day delivery require a physical address."
+          },
+          "notHome": {
+            "q": "What happens if I am not home for delivery?",
+            "a": "The courier will leave a delivery notice. You can reschedule delivery or collect from a local depot."
+          }
+        }
+      },
+      "productsSkincare": {
+        "questions": {
+          "findProducts": {
+            "q": "How do I find the right products for my skin?",
+            "a": "Use our AI Skin Analysis tool to get personalized product recommendations based on your unique skin profile."
+          },
+          "naturalIngredients": {
+            "q": "Are your products made with natural ingredients?",
+            "a": "Our products combine the best of nature and science. We use high-quality botanical ingredients enhanced with cutting-edge biotechnology."
+          },
+          "crueltyFree": {
+            "q": "Are your products cruelty-free?",
+            "a": "Yes, all Shan Loray products are 100% cruelty-free. We never test on animals and are certified by leading cruelty-free organizations."
+          },
+          "storeProducts": {
+            "q": "Can I find your products in stores?",
+            "a": "Currently, Shan Loray products are available exclusively online to ensure freshness and authenticity."
+          }
+        }
+      },
+      "accountLoyalty": {
+        "questions": {
+          "updateAccount": {
+            "q": "How do I update my account information?",
+            "a": "You can update your account information in your profile settings. Go to Account Dashboard and click on Edit Profile."
+          },
+          "loyaltyProgram": {
+            "q": "How does the loyalty program work?",
+            "a": "Earn 1 point for every $1 spent. Points can be redeemed for discounts on future purchases. Reach 2,000 points for Elite status and 3,000 for Gold status."
+          },
+          "forgotPassword": {
+            "q": "I forgot my password. What should I do?",
+            "a": "Click the Forgot Password link on the login page. We will send a password reset link to your registered email address."
+          },
+          "multipleAddresses": {
+            "q": "Can I save multiple shipping addresses?",
+            "a": "Yes, you can save multiple shipping addresses in your account. Set one as your default address for faster checkout."
+          }
+        }
+      }
+    }
+  },
+  "notificationsPage": {
+    "title": "Notification Preferences",
+    "subtitle": "Manage how and when you receive updates from Shan Loray",
+    "breadcrumb": {
+      "home": "Home",
+      "accountDashboard": "Account Dashboard",
+      "notificationPreferences": "Notification Preferences"
+    },
+    "guest": "Guest",
+    "membership": {
+      "member": "Member",
+      "elite": "Elite Member",
+      "gold": "Gold Member"
+    },
+    "points": "Loyalty Points",
+    "pointsShort": "pts",
+    "stats": {
+      "totalOrders": "Total Orders",
+      "wishlistItems": "Wishlist Items",
+      "reviewsWritten": "Reviews Written"
+    },
+    "userAvatar": "User Avatar",
+    "infoBanner": "Stay informed about your orders, beauty tips, and exclusive offers",
+    "sections": {
+      "email": "Email Notifications",
+      "push": "Push Notifications",
+      "sms": "SMS Notifications",
+      "newsletter": "Newsletter"
+    },
+    "pushDescription": "Enable browser notifications to receive real-time updates",
+    "emailFrequencyPreference": "Email Frequency Preference",
+    "frequencyOptions": {
+      "daily": "Daily",
+      "multiplePerWeek": "Multiple per week",
+      "weekly": "Weekly",
+      "biWeekly": "Bi-weekly",
+      "monthly": "Monthly"
+    },
+    "smsNotice": "Standard message rates may apply",
+    "privacyNotice": "We respect your privacy. You can update these preferences at any time.",
+    "savePreferences": "Save Preferences",
+    "resetToDefault": "Reset to Default"
+  },
+  "orderConfirmation": {
+    "orderConfirmed": "Order Confirmed!",
+    "thankYou": "Thank you for your purchase",
+    "emailSent": "A confirmation email has been sent to",
+    "yourEmail": "your email address",
+    "orderDetails": "Order Details",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "totalPaid": "Total Paid",
+    "free": "Free",
+    "deliveryInformation": "Delivery Information",
+    "shippingAddress": "Shipping Address",
+    "deliveryMethod": "Delivery Method",
+    "estimatedDelivery": "Estimated Delivery",
+    "paymentMethod": "Payment Method",
+    "paymentProcessed": "Payment Processed",
+    "paymentPending": "Payment Pending",
+    "loyaltyEarned": "Loyalty Points Earned",
+    "loyaltyPoints": "points",
+    "loyaltyDesc": "Points will be added to your account within 24 hours",
+    "viewRewards": "View Rewards",
+    "trackYourOrder": "Track Your Order",
+    "continueShopping": "Continue Shopping",
+    "downloadReceipt": "Download Receipt",
+    "needHelp": "Need Help?",
+    "orderNotFound": "Order not found",
+    "errorLogin": "Please sign in to view your order",
+    "errorLoad": "Failed to load order details",
+    "errorNotFound": "Order not found"
+  },
+  "passwordPage": {
+    "title": "Change Password",
+    "subtitle": "Keep your account secure with a strong password",
+    "breadcrumb": {
+      "home": "Home",
+      "accountDashboard": "Account Dashboard",
+      "changePassword": "Change Password"
+    },
+    "membership": {
+      "member": "Member",
+      "elite": "Elite Member",
+      "gold": "Gold Member"
+    },
+    "points": "pts",
+    "stats": {
+      "totalOrders": "Total Orders",
+      "wishlistItems": "Wishlist Items",
+      "reviewsWritten": "Reviews Written"
+    },
+    "userAvatar": "User Avatar",
+    "infoBanner": "For your security, please enter your current password to make changes",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "placeholders": {
+      "currentPassword": "Enter current password",
+      "newPassword": "Enter new password",
+      "confirmPassword": "Confirm new password"
+    },
+    "passwordRequirements": "Password Requirements",
+    "requirements": {
+      "minLength": "At least 8 characters",
+      "upperLower": "Upper and lowercase letters",
+      "number": "At least one number",
+      "special": "At least one special character",
+      "notSame": "Different from current password",
+      "match": "Passwords must match"
+    },
+    "strength": {
+      "label": "Password Strength",
+      "weak": "Weak",
+      "medium": "Medium",
+      "strong": "Strong"
+    },
+    "passwordsMatch": "Passwords match",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "securityBadge": "Secured",
+    "securityTipsTitle": "Security Tips",
+    "forgotPassword": "Forgot Password?",
+    "updatePassword": "Update Password",
+    "updatePasswordButton": "Update Password",
+    "lastPasswordChange": "Last password change",
+    "cancel": "Cancel",
+    "user": "User"
+  },
+  "payment": {
+    "home": "Home",
+    "shoppingBasket": "Shopping Basket",
+    "checkout": "Checkout",
+    "secureCheckout": "Secure Checkout",
+    "selectPaymentMethod": "Select Payment Method",
+    "selectPaymentHint": "Choose your preferred payment method",
+    "savedCards": "Saved Cards",
+    "addNewCard": "Add New Card",
+    "addNewPayment": "Add New Payment Method",
+    "cardNumber": "Card Number",
+    "cardNumberPlaceholder": "1234 5678 9012 3456",
+    "cardNumberHint": "Enter 16-digit card number",
+    "cardHolderName": "Cardholder Name",
+    "cardHolderPlaceholder": "Name on card",
+    "cardBrand": "Card Type",
+    "expiryMonth": "Month",
+    "expiryYear": "Year",
+    "validUntil": "Valid Until",
+    "saveCard": "Save card for future use",
+    "default": "Default",
+    "billingAddress": "Billing Address",
+    "sameAsDelivery": "Same as delivery address",
+    "differentBilling": "Use different billing address",
+    "termsAgree": "I agree to the",
+    "termsLink": "Terms & Conditions",
+    "and": "and",
+    "privacyLink": "Privacy Policy",
+    "placeOrder": "Place Order",
+    "backToDelivery": "Back to Delivery",
+    "cancel": "Cancel",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "estimatedTax": "Estimated Tax",
+    "orderTotal": "Order Total",
+    "free": "Free",
+    "promoPlaceholder": "Enter promo code",
+    "apply": "Apply",
+    "moneyBack": "30-Day Money Back Guarantee",
+    "loginRequired": "Login Required",
+    "loginDesc": "Please sign in to complete your purchase",
+    "goToShop": "Go to Shop",
+    "securityFeatures": {
+      "ssl": "SSL Encrypted",
+      "sslSub": "256-bit encryption",
+      "pci": "PCI Compliant",
+      "pciSub": "Secure payments",
+      "guarantee": "Money Back",
+      "guaranteeSub": "30-day guarantee"
+    },
+    "errorSelectPayment": "Please select a payment method",
+    "errorCardNumber": "Please enter a valid card number",
+    "errorFillFields": "Please fill in all required fields",
+    "errorAgreeTerms": "Please agree to the terms and conditions",
+    "errorCartEmpty": "Your cart is empty",
+    "errorPlaceOrder": "Failed to place order. Please try again.",
+    "errorFailedAdd": "Failed to add payment method"
+  },
+  "privacyPage": {
+    "title": "Privacy Settings",
+    "subtitle": "Control how your data is used",
+    "guest": "Guest",
+    "dataControls": "Data Controls",
+    "download": "Download My Data",
+    "delete": "Delete My Account",
+    "save": "Save Settings"
+  },
+  "formulations": {
+    "home": "Home",
+    "breadcrumb": "Advanced Formulations",
+    "technologyLabel": "INNOVATION IN BEAUTY",
+    "title": "Advanced Formulations",
+    "heroDesc": "Discover the science behind our revolutionary skincare formulations",
+    "tagline": "SCIENCE & INNOVATION",
+    "innovationPillars": "Innovation Pillars",
+    "pillars": {
+      "clinicalResearch": "Clinical Research",
+      "clinicalResearchDesc": "Backed by rigorous clinical trials and dermatological studies",
+      "clinicalResearchStat": "15+ Years",
+      "patentedTech": "Patented Technology",
+      "patentedTechDesc": "Proprietary delivery systems for maximum efficacy",
+      "patentedTechStat": "28 Patents",
+      "purityStandards": "Purity Standards",
+      "purityStandardsDesc": "Highest quality ingredients, rigorously tested for safety",
+      "purityStandardsStat": "99.9% Pure",
+      "sustainableScience": "Sustainable Science",
+      "sustainableScienceDesc": "Eco-conscious formulations with minimal environmental impact",
+      "sustainableScienceStat": "Carbon Neutral"
+    },
+    "signatureIngredients": "Signature Ingredients",
+    "signatureSubtitle": "Our most powerful active ingredients",
+    "keyActives": "Key Actives",
+    "deliverySystem": "Delivery System",
+    "deliveryDesc": "Advanced encapsulation technology for deeper penetration",
+    "surfaceLayer": "Surface Layer",
+    "surfaceLayerDesc": "Immediate hydration and protection",
+    "midLayer": "Mid Layer",
+    "midLayerDesc": "Active ingredient penetration",
+    "deepLayer": "Deep Layer",
+    "deepLayerDesc": "Cellular regeneration and repair",
+    "technology": "Technology",
+    "clinicalResults": "Clinical Results",
+    "clinicalSubtitle": "Proven results from our clinical studies",
+    "measuredAfter": "Measured after 8 weeks",
+    "testingProtocols": "Testing Protocols",
+    "testing": {
+      "dermatological": "Dermatological Testing",
+      "dermatologicalDesc": "Tested by certified dermatologists",
+      "efficacy": "Efficacy Testing",
+      "efficacyDesc": "Clinically proven results",
+      "patch": "Patch Testing",
+      "patchDesc": "Safety tested for all skin types",
+      "stability": "Stability Testing",
+      "stabilityDesc": "Tested for long-term stability"
+    },
+    "certifications": "Certifications",
+    "certs": {
+      "dermTested": "Dermatologist Tested",
+      "crueltyFree": "Cruelty Free",
+      "hypoallergenic": "Hypoallergenic",
+      "clinicallyProven": "Clinically Proven",
+      "nonToxic": "Non-Toxic",
+      "sustainableSourcing": "Sustainable Sourcing"
+    },
+    "globalSourcing": "Global Sourcing",
+    "sourcingDesc": "We source the finest ingredients from around the world",
+    "sourcingCountries": "Sourcing Countries",
+    "timeline": "Our Journey",
+    "timeline_items": {
+      "2004": "Founded",
+      "2004desc": "Shan Loray was founded with a vision to revolutionize luxury skincare",
+      "2008": "First Patent",
+      "2008desc": "Received our first patent for bio-active delivery technology",
+      "2012": "Global Expansion",
+      "2012desc": "Expanded to 30 countries with our signature formulations",
+      "2016": "Clinical Research",
+      "2016desc": "Established our dedicated clinical research laboratory",
+      "2020": "Sustainability",
+      "2020desc": "Achieved carbon-neutral certification across all product lines",
+      "2024": "AI Innovation",
+      "2024desc": "Launched AI-powered personalization platform"
+    },
+    "yearsResearch": "Years of Research",
+    "patentsAwarded": "Patents Awarded",
+    "expertTeam": "Expert Team",
+    "researchPartnerships": "Research Partnerships",
+    "scientificPublications": "Scientific Publications",
+    "publications": "Publications",
+    "pubSubtitle": "Our research published in leading scientific journals",
+    "heroProducts": "Hero Products",
+    "faq": "FAQ",
+    "faqItems": {
+      "q1": "What makes Shan Loray formulations unique?",
+      "a1": "Our proprietary bio-active delivery system ensures ingredients penetrate deeper for maximum efficacy.",
+      "q2": "Are your products suitable for sensitive skin?",
+      "a2": "Yes, all our products are dermatologist tested and suitable for sensitive skin types.",
+      "q3": "How long does it take to see results?",
+      "a3": "Most customers see visible improvements within 14 days of consistent use.",
+      "q4": "Are your ingredients sustainably sourced?",
+      "a4": "Yes, we partner with ethical suppliers and use sustainably sourced ingredients."
+    },
+    "related": {
+      "skinAnalysis": "AI Skin Analysis",
+      "skinAnalysisDesc": "Get personalized recommendations",
+      "virtualTryOn": "Virtual Try-On",
+      "virtualTryOnDesc": "See products in action",
+      "beautyJourney": "Beauty Journey",
+      "beautyJourneyDesc": "Your personalized routine"
+    },
+    "newsletter": "Stay Updated on Innovation",
+    "newsletterDesc": "Get the latest research and formulation insights",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "pdfTitle": "Download Research Paper",
+    "pdfDesc": "Access our full clinical research documentation",
+    "download": "Download PDF",
+    "learnMore": "Learn More",
+    "explore": "Explore",
+    "exploreMore": "Explore More",
+    "close": "Close"
   }
-}
 }
