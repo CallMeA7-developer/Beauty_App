@@ -332,7 +332,7 @@ function SkinCareMobile() {
         {/* Right botanical image */}
         <div className="absolute right-0 top-0 bottom-0 w-[50%]">
           <img
-            src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=400&h=400&fit=crop"
+            src="https://uluuktwfarfvqmnhpvtw.supabase.co/storage/v1/object/public/images/6.jpeg"
             alt="Botanical"
             className="w-full h-full object-cover"
           />
@@ -864,7 +864,7 @@ function SkinCareDesktop() {
 
       {/* Hero */}
       <div className="min-h-[300px] md:min-h-[340px] lg:min-h-[380px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px]">
-        <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[200px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-20" />
+        <img src="https://uluuktwfarfvqmnhpvtw.supabase.co/storage/v1/object/public/images/6.jpeg" alt="" className="absolute top-0 right-0 w-[200px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-20" />
         <div className="w-full max-w-[650px] relative z-10">
           <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('skincare.completeCollection')}</p>
           <h1 className="text-[40px] md:text-[52px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">{t('skincare.heroTitle')}</h1>
@@ -872,7 +872,7 @@ function SkinCareDesktop() {
           <div className="w-[80px] md:w-[90px] lg:w-[100px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
-          <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=320&h=320&fit=crop" alt="" className="w-[260px] h-[260px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
+          <img src="https://uluuktwfarfvqmnhpvtw.supabase.co/storage/v1/object/public/images/6.jpeg" alt="" className="w-[260px] h-[260px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
 
