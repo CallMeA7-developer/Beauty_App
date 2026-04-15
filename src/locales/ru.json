@@ -1630,5 +1630,30 @@
     "explore": "Исследовать",
     "exploreMore": "Узнать больше",
     "close": "Закрыть"
-  }
+  },
+  "shoppingBasket": {
+  "home": "Главная",
+  "title": "Корзина",
+  "itemsInBasket": "товаров в корзине",
+  "emptyBasket": "Ваша корзина пуста",
+  "startShopping": "Начать покупки",
+  "saveForLater": "Сохранить на потом",
+  "continueShopping": "Продолжить покупки",
+  "freeShipping": "Бесплатная стандартная доставка",
+  "freeShippingDesc": "При заказе от $75",
+  "easyReturns": "Простой возврат",
+  "easyReturnsDesc": "Политика возврата 30 дней",
+  "orderSummary": "Состав заказа",
+  "qty": "Кол-во",
+  "subtotal": "Подытог",
+  "shipping": "Доставка",
+  "free": "Бесплатно",
+  "standardDelivery": "Стандартная доставка (3–5 дней)",
+  "estimatedTax": "Ориентировочный налог",
+  "orderTotal": "Итого",
+  "promoPlaceholder": "Введите промокод",
+  "apply": "Применить",
+  "proceedToCheckout": "Перейти к оформлению",
+  "secureCheckout": "Безопасная оплата"
+}
 }
