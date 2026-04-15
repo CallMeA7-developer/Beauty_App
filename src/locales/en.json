@@ -1619,5 +1619,30 @@
     "explore": "Explore",
     "exploreMore": "Explore More",
     "close": "Close"
-  }
+  },
+  "shoppingBasket": {
+  "home": "Home",
+  "title": "Shopping Basket",
+  "itemsInBasket": "items in your basket",
+  "emptyBasket": "Your basket is empty",
+  "startShopping": "Start Shopping",
+  "saveForLater": "Save for later",
+  "continueShopping": "Continue Shopping",
+  "freeShipping": "Free Standard Shipping",
+  "freeShippingDesc": "On orders over $75",
+  "easyReturns": "Easy Returns",
+  "easyReturnsDesc": "30-day return policy",
+  "orderSummary": "Order Summary",
+  "qty": "Qty",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping",
+  "free": "Free",
+  "standardDelivery": "Standard Delivery (3–5 days)",
+  "estimatedTax": "Estimated Tax",
+  "orderTotal": "Order Total",
+  "promoPlaceholder": "Enter promo code",
+  "apply": "Apply",
+  "proceedToCheckout": "Proceed to Checkout",
+  "secureCheckout": "Secure Checkout"
+}
 }
