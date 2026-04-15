@@ -278,7 +278,7 @@ function MakeupMobile() {
       {/* Hero */}
       <div className="relative min-h-[280px] bg-[#F5F0EB] overflow-hidden flex items-center">
         <div className="absolute right-0 top-0 bottom-0 w-[55%]">
-          <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=600&h=600&fit=crop" alt="Makeup collection" className="w-full h-full object-cover" />
+          <img src="https://uluuktwfarfvqmnhpvtw.supabase.co/storage/v1/object/public/images/11.jpeg" alt="Makeup collection" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#F5F0EB] via-[#F5F0EB]/30 to-transparent" />
         </div>
         <div className="relative z-10 px-5 py-10 w-[62%]">
@@ -640,7 +640,7 @@ function MakeupDesktop() {
     <div className="bg-white font-['Cormorant_Garamond']">
       {/* Hero */}
       <div className="min-h-[300px] md:min-h-[380px] lg:min-h-[480px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px]">
-        <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[180px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-20" />
+        <img src="https://uluuktwfarfvqmnhpvtw.supabase.co/storage/v1/object/public/images/11.jpeg" alt="" className="absolute top-0 right-0 w-[180px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-20" />
         <div className="w-full max-w-[650px] relative z-10">
           <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('makeup.luxuryCollection')}</p>
           <h1 className="text-[42px] md:text-[60px] lg:text-[80px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">{t('makeup.heroTitle')}</h1>
@@ -648,7 +648,7 @@ function MakeupDesktop() {
           <div className="w-[90px] md:w-[105px] lg:w-[120px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
-          <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=320&h=320&fit=crop" alt="" className="w-[320px] h-[320px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
+          <img src="https://uluuktwfarfvqmnhpvtw.supabase.co/storage/v1/object/public/images/11.jpeg" alt="" className="w-[320px] h-[320px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
 
