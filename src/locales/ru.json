@@ -1810,5 +1810,104 @@
   "ingredients": "Ингредиенты",
   "sustainability": "Устойчивость",
   "copyright": "© 2024 Shan Loray. Все права защищены."
+},
+  "shippingAddress": {
+  "user": "Пользователь",
+  "loading": "Загрузка...",
+  "breadcrumb": {
+    "home": "Главная",
+    "accountDashboard": "Панель аккаунта",
+    "shippingAddresses": "Адреса доставки"
+  },
+  "hero": {
+    "title": "Адреса доставки",
+    "subtitle": "Управляйте своими адресами доставки"
+  },
+  "sidebar": {
+    "userAvatar": "Аватар пользователя",
+    "member": "участник",
+    "points": "баллов",
+    "tiers": {
+      "member": "Обычный",
+      "elite": "Элитный",
+      "gold": "Золотой"
+    }
+  },
+  "nav": {
+    "accountDashboard": "Панель аккаунта",
+    "orderHistory": "История заказов",
+    "myWishlist": "Моё избранное",
+    "shippingAddresses": "Адреса доставки",
+    "paymentMethods": "Способы оплаты",
+    "beautyProfile": "Бьюти-профиль",
+    "loyaltyProgram": "Программа лояльности",
+    "myRoutines": "Мои рутины",
+    "reviewsRatings": "Отзывы и рейтинги",
+    "accountSettings": "Настройки аккаунта",
+    "notifications": "Уведомления",
+    "pointsBadge": "{{count}} баллов"
+  },
+  "stats": {
+    "totalOrders": "Всего заказов",
+    "wishlistItems": "В избранном",
+    "reviewsWritten": "Написано отзывов"
+  },
+  "actions": {
+    "addNewAddress": "Добавить новый адрес",
+    "updateAddress": "Обновить адрес",
+    "saveAddress": "Сохранить адрес",
+    "cancel": "Отмена",
+    "setDefault": "Сделать основным",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "deleteConfirm": "Вы уверены, что хотите удалить этот адрес?"
+  },
+  "form": {
+    "newTitle": "Новый адрес",
+    "editTitle": "Редактировать адрес",
+    "validation": "Пожалуйста, заполните все обязательные поля",
+    "addressLabel": "Метка адреса",
+    "recipientName": "Имя получателя",
+    "streetAddress": "Улица и номер дома",
+    "city": "Город",
+    "stateProvince": "Штат / Провинция",
+    "postalCode": "Почтовый индекс",
+    "country": "Страна",
+    "phoneNumber": "Номер телефона",
+    "setDefault": "Сделать адресом по умолчанию",
+    "placeholders": {
+      "fullName": "Полное имя",
+      "streetAddress": "Адрес",
+      "city": "Город",
+      "state": "Штат",
+      "zip": "Индекс",
+      "phone": "+1 (555) 000-0000"
+    },
+    "options": {
+      "home": "Дом",
+      "work": "Работа",
+      "office": "Офис",
+      "other": "Другое"
+    },
+    "countries": {
+      "us": "Соединённые Штаты",
+      "canada": "Канада",
+      "uk": "Великобритания",
+      "australia": "Австралия",
+      "uae": "Объединённые Арабские Эмираты"
+    }
+  },
+  "empty": {
+    "title": "Сохранённых адресов пока нет",
+    "description": "Добавьте свой первый адрес доставки, чтобы начать",
+    "addAddress": "Добавить адрес"
+  },
+  "addressCard": {
+    "default": "По умолчанию"
+  },
+  "security": {
+    "title": "Безопасно и конфиденциально",
+    "description": "Информация о ваших адресах зашифрована и никогда не передаётся третьим лицам."
+  }
 }
 }
