@@ -416,7 +416,7 @@ function HomeDesktop() {
       {/* Bento Collections */}
       <section className="w-full px-6 md:px-[60px] lg:px-[120px] py-16 md:py-20 lg:py-[96px]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
-          <Link to="/skincare" className="md:col-span-1 lg:col-span-3 relative min-h-[400px] md:min-h-[560px] lg:min-h-[820px] rounded-[12px] overflow-hidden cursor-pointer group block">
+          <Link to="/skincare" className="md:col-span-1 lg:col-span-3 relative min-h-[400px] md:min-h-[560px] lg:h-[600px] rounded-[12px] overflow-hidden cursor-pointer group block">
             <img src={`${SUPABASE_STORAGE}/3.jpeg`} alt="Botanical Serums Collection" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-8 md:bottom-10 lg:bottom-[48px] left-8 md:left-10 lg:left-[48px]">
@@ -424,10 +424,10 @@ function HomeDesktop() {
             </div>
           </Link>
           <div className="md:col-span-1 lg:col-span-3 flex flex-col gap-5">
-            <Link to="/makeup" className="min-h-[260px] md:min-h-[320px] lg:min-h-[400px] rounded-[12px] overflow-hidden cursor-pointer group block">
+            <Link to="/makeup" className="min-h-[260px] md:min-h-[320px] lg:h-[280px] rounded-[12px] overflow-hidden cursor-pointer group block">
               <img src={`${SUPABASE_STORAGE}/11.jpeg`} alt="Artisan Tools" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </Link>
-            <div className="bg-[#EBE6DC] rounded-[12px] p-8 md:p-10 lg:p-[56px] min-h-[240px] md:min-h-[300px] lg:min-h-[380px] flex flex-col justify-center">
+            <div className="bg-[#EBE6DC] rounded-[12px] p-8 md:p-10 lg:p-[40px] lg:h-[300px] flex flex-col justify-center">
               <h4 className="text-[22px] md:text-[24px] lg:text-[28px] font-semibold text-[#2B2B2B] mb-4 lg:mb-5">{t('home.artisanTools')}</h4>
               <p className="text-[14px] md:text-[15px] lg:text-[17px] font-normal text-[#666666] leading-[1.75] mb-5 lg:mb-6">{t('home.artisanDesc')}</p>
               <Link to="/technology#how-it-works">
