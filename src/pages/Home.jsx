@@ -577,31 +577,31 @@ function HomeDesktop() {
       </section>
 
       {/* Instagram Gallery */}
-      <section className="w-full bg-white py-16 md:py-20 lg:py-[80px]">
-        <div className="text-center mb-12 md:mb-14 lg:mb-[64px]">
+      <section className="w-full bg-white py-10 md:py-14 lg:py-[60px]">
+        <div className="text-center mb-8 md:mb-10 lg:mb-[40px]">
           <h2 className="text-[28px] md:text-[32px] lg:text-[36px] font-normal text-[#1A1A1A]">@shanloray</h2>
         </div>
-        <div className="px-6 md:px-[60px] lg:px-[120px] mb-12 lg:mb-[64px]">
-          <div className="grid grid-cols-3 md:grid-cols-4 gap-[4px]">
-            <div className="col-span-1 md:col-span-2 row-span-2 relative overflow-hidden cursor-pointer aspect-square md:aspect-auto md:min-h-[300px]">
+        <div className="px-6 md:px-[60px] lg:px-[120px] mb-8 lg:mb-[40px]">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-[4px]" style={{ height: '500px' }}>
+            <div className="col-span-1 md:col-span-2 row-span-2 relative overflow-hidden cursor-pointer">
               <img src={`${SUPABASE_STORAGE}/5.jpeg`} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
-            <div className="row-span-2 relative overflow-hidden cursor-pointer min-h-[150px] md:min-h-[300px]">
+            <div className="row-span-2 relative overflow-hidden cursor-pointer">
               <img src={`${SUPABASE_STORAGE}/6.jpeg`} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
-            <div className="relative overflow-hidden cursor-pointer aspect-square">
+            <div className="relative overflow-hidden cursor-pointer">
               <img src={`${SUPABASE_STORAGE}/7.jpeg`} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
-            <div className="relative overflow-hidden cursor-pointer aspect-square">
+            <div className="relative overflow-hidden cursor-pointer">
               <img src={`${SUPABASE_STORAGE}/10.jpeg`} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
-            <div className="row-span-2 relative overflow-hidden cursor-pointer min-h-[150px] md:min-h-[300px]">
+            <div className="row-span-2 relative overflow-hidden cursor-pointer">
               <img src={`${SUPABASE_STORAGE}/12.jpeg`} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
-            <div className="row-span-2 relative overflow-hidden cursor-pointer min-h-[150px] md:min-h-[300px]">
+            <div className="row-span-2 relative overflow-hidden cursor-pointer">
               <img src={`${SUPABASE_STORAGE}/13.jpeg`} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
-            <div className="col-span-1 md:col-span-2 row-span-2 relative overflow-hidden cursor-pointer aspect-square md:aspect-auto md:min-h-[300px]">
+            <div className="col-span-1 md:col-span-2 row-span-2 relative overflow-hidden cursor-pointer">
               <img src={`${SUPABASE_STORAGE}/17.jpeg`} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
           </div>
