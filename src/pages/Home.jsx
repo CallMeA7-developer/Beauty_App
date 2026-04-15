@@ -533,8 +533,8 @@ function HomeDesktop() {
       </section>
 
       {/* Brand Story */}
-      <section className="w-full min-h-[500px] md:min-h-[600px] lg:min-h-[720px] relative overflow-hidden">
-        <div className="flex flex-col md:flex-row min-h-[500px] md:min-h-[600px] lg:min-h-[720px]">
+      <section className="w-full min-h-[500px] md:min-h-[500px] lg:h-[520px] relative overflow-hidden">
+        <div className="flex flex-col md:flex-row min-h-[500px] md:min-h-[500px] lg:h-[520px]">
           <div className="bg-[#F7F3EB] flex flex-col justify-center px-8 md:px-[60px] lg:px-[160px] py-14 md:py-0 w-full md:w-[58%]">
             <p className="text-[12px] md:text-[13px] font-light uppercase text-[#C9A870] tracking-[3px] mb-5 lg:mb-6">{t('home.philosophy')}</p>
             <h2 className="text-[36px] md:text-[44px] lg:text-[52px] font-bold text-[#1A1A1A] leading-[1.15] mb-6 lg:mb-8">{t('home.scienceMeetsNature')}</h2>
