@@ -319,11 +319,7 @@ function WishlistMobile() {
   const { wishlistItems, wishlistCount, loading, removeFromWishlist } = useWishlist()
   const [sortOpen, setSortOpen]         = useState(false)
   const [shareOpen, setShareOpen]       = useState(false)
-  const [selectedSort, setSelectedSort] = useState('')
-
-  useEffect(() => {
-    setSelectedSort(t('wishlist.sort.newest'))
-  }, [i18n.language])
+  const [selectedSort, setSelectedSort] = useState('newest')
 
   const handleRemove = async (productId) => await removeFromWishlist(productId)
   const handleAddToBag = async (product) => {
@@ -361,22 +357,25 @@ function WishlistMobile() {
             className="w-full h-10 px-4 border-[1.5px] border-[#E8E3D9] rounded-lg flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <IoSwapVerticalOutline className="w-4 h-4 text-[#666666]" />
-              <span className="text-[14px] font-medium text-[#666666]">{selectedSort || t('wishlist.sort.newest')}</span>
+              <span className="text-[14px] font-medium text-[#666666]">
+                {selectedSort === 'newest' ? t('wishlist.sort.newestAdded') :
+                 selectedSort === 'low_high' ? t('wishlist.sort.priceLow') :
+                 selectedSort === 'high_low' ? t('wishlist.sort.priceHigh') :
+                 t('wishlist.sort.highestRated')}
+              </span>
             </div>
             <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
           </button>
           {sortOpen && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-30">
               {[
-                { label: t('wishlist.sort.priceLow') },
-                { label: t('wishlist.sort.priceHigh') },
-                { label: t('wishlist.sort.newest') },
-                { label: t('wishlist.sort.bestSellers') },
-                { label: t('wishlist.sort.mostPopular') },
-                { label: t('wishlist.sort.highestRated') },
-              ].map(({ label }) => (
-                <button key={label} onClick={() => { setSelectedSort(label); setSortOpen(false) }}
-                  className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors border-b border-[#F5F1EA] last:border-b-0 ${selectedSort === label ? 'text-[#8B7355] font-medium bg-[#FDFBF7]' : 'text-[#2B2B2B]'}`}>
+                { value: 'newest',        label: t('wishlist.sort.newestAdded') },
+                { value: 'low_high',      label: t('wishlist.sort.priceLow') },
+                { value: 'high_low',      label: t('wishlist.sort.priceHigh') },
+                { value: 'highest_rated', label: t('wishlist.sort.highestRated') },
+              ].map(({ value, label }) => (
+                <button key={value} onClick={() => { setSelectedSort(value); setSortOpen(false) }}
+                  className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors border-b border-[#F5F1EA] last:border-b-0 ${selectedSort === value ? 'text-[#8B7355] font-medium bg-[#FDFBF7]' : 'text-[#2B2B2B]'}`}>
                   {label}
                 </button>
               ))}
@@ -403,7 +402,13 @@ function WishlistMobile() {
           </div>
         ) : (
           <div className="space-y-5">
-            {wishlistItems.map((item) => {
+            {[...wishlistItems].sort((a, b) => {
+              const pa = a.products, pb = b.products
+              if (selectedSort === 'low_high') return parseFloat(pa.price) - parseFloat(pb.price)
+              if (selectedSort === 'high_low') return parseFloat(pb.price) - parseFloat(pa.price)
+              if (selectedSort === 'highest_rated') return (pb.rating || 0) - (pa.rating || 0)
+              return new Date(b.created_at) - new Date(a.created_at)
+            }).map((item) => {
               const product = item.products
               return (
                 <div key={item.id} className="bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-4">
