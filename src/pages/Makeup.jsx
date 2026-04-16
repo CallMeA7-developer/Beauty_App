@@ -503,10 +503,10 @@ function MakeupMobile() {
                   <h3 className="text-[16px] font-medium text-[#2B2B2B]">{t('makeup.priceRange')}</h3>
                   <span className="text-[14px] font-medium text-[#8B7355]">${minPrice || 0} – ${maxPrice || 500}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none" />
-                  <span className="text-[14px] text-[#666666]">—</span>
-                  <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none" />
+                <div className="flex items-center gap-3 w-full">
+                  <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="w-full h-[44px] px-4 border border-[#E8E3D9] rounded-[8px] text-[14px] outline-none focus:border-[#8B7355]" />
+                  <span className="text-[14px] text-[#666666] flex-shrink-0">—</span>
+                  <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="w-full h-[44px] px-4 border border-[#E8E3D9] rounded-[8px] text-[14px] outline-none focus:border-[#8B7355]" />
                 </div>
               </div>
 
