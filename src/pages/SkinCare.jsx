@@ -315,10 +315,21 @@ function SkinCareMobile() {
     return acc
   }, {})
 
+  const categoryImageMap = {
+    'Cleansers':    'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop',
+    'Exfoliators':  'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=80&h=80&fit=crop',
+    'Eye Care':     'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=80&h=80&fit=crop',
+    'Masks':        'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=80&h=80&fit=crop',
+    'Moisturizers': 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=80&h=80&fit=crop',
+    'Serums':       'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop',
+    'Sunscreen':    'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop',
+    'Toners':       'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=80&h=80&fit=crop',
+  }
+
   const subcategoryCards = Object.entries(subcategoryCounts).map(([name, count]) => ({
     name,
     count,
-    image: skincareCategories.find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop'
+    image: categoryImageMap[name] || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop'
   })).sort((a, b) => a.name.localeCompare(b.name))
 
   const products = getFilteredAndSortedProducts()
@@ -458,44 +469,7 @@ function SkinCareMobile() {
         )}
       </div>
 
-      {/* ── Newsletter ── */}
-      <div className="bg-[#F5F0EB] px-5 py-10 text-center">
-        <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-2">{t('skincare.newsletter')}</h3>
-        <p className="text-[14px] font-normal text-[#666666] mb-5">{t('skincare.newsletterDesc')}</p>
-        <div className="flex gap-2">
-          <input type="email" placeholder={t('skincare.emailPlaceholder')} className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-12 px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px]">{t('skincare.subscribe')}</button>
-        </div>
-      </div>
 
-      {/* ── Footer ── */}
-      <footer className="bg-[#2B2B2B] px-5 pt-10 pb-8">
-        <h3 className="text-[18px] font-semibold text-white tracking-[2px] mb-1">SHAN LORAY</h3>
-        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">{t('skincare.timelessLuxury')}</p>
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div>
-            <h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerShop')}</h4>
-            <div className="space-y-2">{[t('skincare.title'), 'Makeup', 'Fragrance'].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
-          </div>
-          <div>
-            <h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerHelp')}</h4>
-            <div className="space-y-2">{[t('skincare.contact'), t('skincare.shipping'), t('skincare.returns')].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
-          </div>
-          <div>
-            <h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerAbout')}</h4>
-            <div className="space-y-2">{[t('skincare.ourStory'), t('skincare.ingredientsLink'), t('skincare.sustainability')].map((l) => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div>
-          </div>
-        </div>
-        <div className="flex justify-center gap-6 mb-6">
-          <IoLogoInstagram className="w-6 h-6 text-white" />
-          <IoLogoFacebook  className="w-6 h-6 text-white" />
-          <IoLogoPinterest className="w-6 h-6 text-white" />
-          <IoLogoYoutube   className="w-6 h-6 text-white" />
-        </div>
-        <div className="border-t border-[#3D3D3D] pt-5 text-center">
-          <p className="text-[11px] text-[#808080]">{t('skincare.copyright')}</p>
-        </div>
-      </footer>
 
       {/* ── Sort Sheet ── */}
       {showSortSheet && (
@@ -662,10 +636,6 @@ function SkinCareMobile() {
               {/* Brand */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.brand')}</h3>
-                <div className="w-full h-[44px] bg-[#F5F1EA] rounded-[8px] px-4 flex items-center mb-4">
-                  <IoSearchOutline className="w-[16px] h-[16px] text-[#999999] mr-2 flex-shrink-0" />
-                  <input type="text" placeholder={t('skincare.searchBrands')} className="flex-1 bg-transparent text-[14px] text-[#2B2B2B] outline-none" />
-                </div>
                 <div className="space-y-2">
                   {filterBrands.map((brand) => {
                     const isChecked = selectedBrands.includes(brand)
@@ -682,30 +652,12 @@ function SkinCareMobile() {
                 </div>
               </div>
 
-              {/* Rating */}
-              <div className="px-5 py-5">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('skincare.rating')}</h3>
-                <div className="space-y-2">
-                  {filterRatings.map((r) => (
-                    <button key={r.stars} onClick={() => setSelectedRating(prev => prev === r.stars ? null : r.stars)}
-                      className={`flex items-center justify-between w-full h-[36px] px-3 rounded-[4px] transition-colors ${selectedRating === r.stars ? 'bg-[#FDFBF7]' : ''}`}>
-                      <div className="flex items-center gap-2">
-                        <div className="flex gap-0.5">
-                          {[...Array(r.stars)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)}
-                        </div>
-                        <span className="text-[13px] text-[#2B2B2B]">{t('skincare.andUp')}</span>
-                      </div>
-                      <span className="text-[13px] text-[#999999]">({r.count})</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
 
             {/* Footer */}
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
               <button
-                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice('') }}
+                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice('') }}
                 className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]"
               >
                 {t('skincare.clearAll')}
