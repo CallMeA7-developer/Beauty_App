@@ -451,26 +451,7 @@ function WishlistMobile() {
         <button className="flex-1 h-12 border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] font-semibold rounded-lg">{t('wishlist.clearWishlist')}</button>
       </div>
 
-      {/* Bottom Nav */}
-      <div className="bg-white border-t border-[#E8E3D9] flex items-center justify-around px-4 h-[64px] flex-shrink-0">
-        <Link to="/" className="flex flex-col items-center gap-1">
-          <IoHomeOutline className="w-6 h-6 text-[#666666]" />
-          <span className="text-[11px] text-[#666666]">{t('wishlist.nav.home')}</span>
-        </Link>
-        <Link to="/search" className="flex flex-col items-center gap-1">
-          <IoSearchOutline className="w-6 h-6 text-[#666666]" />
-          <span className="text-[11px] text-[#666666]">{t('wishlist.nav.search')}</span>
-        </Link>
-        <button className="flex flex-col items-center gap-1 relative">
-          <IoHeart className="w-6 h-6 text-[#8B7355]" />
-          <span className="text-[11px] text-[#8B7355]">{t('wishlist.nav.wishlist')}</span>
-          <div className="absolute top-0 right-0 w-2 h-2 bg-[#C84848] rounded-full" />
-        </button>
-        <Link to="/account" className="flex flex-col items-center gap-1">
-          <IoPersonOutline className="w-6 h-6 text-[#666666]" />
-          <span className="text-[11px] text-[#666666]">{t('wishlist.nav.account')}</span>
-        </Link>
-      </div>
+
 
       <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
