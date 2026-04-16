@@ -223,11 +223,9 @@ function MakeupMobile() {
   const [showSortSheet, setShowSortSheet]       = useState(false)
   const [showFilterSheet, setShowFilterSheet]   = useState(false)
   const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedShades, setSelectedShades]         = useState([])
   const [selectedFinish, setSelectedFinish]         = useState([])
-  const [selectedSkinTypes, setSelectedSkinTypes]   = useState([])
-  const [selectedBrands, setSelectedBrands]         = useState([])
-  const [selectedRating, setSelectedRating]         = useState(null)
+  const [selectedCoverage, setSelectedCoverage]     = useState([])
+  const [selectedSkinTones, setSelectedSkinTones]   = useState([])
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [displayCount, setDisplayCount] = useState(10)
@@ -235,7 +233,23 @@ function MakeupMobile() {
 
   const [searchParams] = useSearchParams()
 
-  const activeFilters = selectedCategories.length + selectedShades.length + selectedFinish.length + selectedSkinTypes.length + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
+  const activeFilters = selectedCategories.length + selectedFinish.length + selectedCoverage.length + selectedSkinTones.length + (minPrice || maxPrice ? 1 : 0)
+
+  const categoryImageMap = {
+    'Foundation':  'https://images.unsplash.com/photo-1631214524020-7e18db9a8f92?w=80&h=80&fit=crop',
+    'Concealer':   'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=80&h=80&fit=crop',
+    'Powder':      'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=80&h=80&fit=crop',
+    'Blush':       'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=80&h=80&fit=crop',
+    'Highlighter': 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop',
+    'Eyeshadow':   'https://images.unsplash.com/photo-1583241475880-083f84372725?w=80&h=80&fit=crop',
+    'Eyeliner':    'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=80&h=80&fit=crop',
+    'Mascara':     'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=80&h=80&fit=crop',
+    'Eyebrow':     'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=80&h=80&fit=crop',
+    'Lipstick':    'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=80&h=80&fit=crop',
+    'Lip Gloss':   'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=80&h=80&fit=crop',
+    'Lip Liner':   'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=80&h=80&fit=crop',
+    'Lip Care':    'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=80&h=80&fit=crop',
+  }
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
@@ -258,20 +272,48 @@ function MakeupMobile() {
     fetchProducts()
   }, [])
 
-  useEffect(() => { setDisplayCount(10) }, [selectedCategories, selectedShades, selectedFinish, selectedSkinTypes, selectedBrands, selectedRating, minPrice, maxPrice])
+  useEffect(() => { setDisplayCount(10) }, [selectedCategories, selectedFinish, selectedCoverage, selectedSkinTones, minPrice, maxPrice])
 
   if (loading) return <LoadingSpinner />
 
-  const products = getFilteredAndSorted(allProducts, { selectedCategories, selectedSkinTypes, selectedBrands, selectedRating, minPrice, maxPrice, activeSort }).filter(p =>
-    !searchQuery.trim() || p.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const products = getFilteredAndSorted(allProducts, {
+    selectedCategories, selectedSkinTypes: [], selectedBrands: [],
+    selectedRating: null, minPrice, maxPrice, activeSort,
+    selectedFinish, selectedCoverage, selectedSkinTones
+  }).filter(p => !searchQuery.trim() || p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+
   const mobileProducts = products.slice(0, displayCount)
 
-  const subcategoryCounts = allProducts.reduce((acc, p) => { if (p.subcategory) acc[p.subcategory] = (acc[p.subcategory] || 0) + 1; return acc }, {})
-  const subcategoryCards = Object.entries(subcategoryCounts).map(([name, count]) => ({
-    name, count,
-    image: makeupCategories.find(c => c.name === name)?.image || 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=80&h=80&fit=crop'
-  })).sort((a, b) => a.name.localeCompare(b.name))
+  const subcategoryCounts = allProducts.reduce((acc, p) => {
+    if (p.subcategory) acc[p.subcategory] = (acc[p.subcategory] || 0) + 1
+    return acc
+  }, {})
+
+  const getSubcategoryCard = (name) => ({
+    name,
+    count: subcategoryCounts[name] || 0,
+    image: categoryImageMap[name] || 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=80&h=80&fit=crop'
+  })
+
+  const faceCards = faceCategories.map(getSubcategoryCard)
+  const eyesCards = eyesCategories.map(getSubcategoryCard)
+  const lipsCards = lipsCategories.map(getSubcategoryCard)
+
+  const CategoryCard = ({ cat }) => {
+    const isSelected = selectedCategories.includes(cat.name)
+    return (
+      <div
+        onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
+        className={`w-[110px] flex-shrink-0 bg-white border-2 rounded-[12px] p-3 flex flex-col items-center gap-2 cursor-pointer transition-colors ${isSelected ? 'border-[#8B7355] bg-[#F5F1EA]' : 'border-[#E8E3D9] hover:border-[#C9A870]'}`}
+      >
+        <div className="w-[56px] h-[56px] rounded-full overflow-hidden bg-[#F9F6F2]">
+          <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+        </div>
+        <span className="text-[12px] font-medium text-[#1A1A1A] text-center leading-tight">{ts(cat.name)}</span>
+        <span className="text-[11px] font-light text-[#999999]">{cat.count}</span>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -289,22 +331,34 @@ function MakeupMobile() {
         </div>
       </div>
 
-      {/* Category Cards */}
-      <div className="bg-white px-4 py-5 overflow-x-auto border-b border-[#E8E3D9]" style={{ scrollbarWidth: 'none' }}>
-        <div className="flex gap-3 w-max">
-          {subcategoryCards.map((cat) => {
-            const isSelected = selectedCategories.includes(cat.name)
-            return (
-              <div key={cat.name} onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
-                className={`w-[130px] bg-white border-2 rounded-[12px] p-4 flex flex-col items-center gap-2 cursor-pointer transition-colors ${isSelected ? 'border-[#8B7355] bg-[#F5F1EA]' : 'border-[#E8E3D9] hover:border-[#C9A870]'}`}>
-                <div className="w-[64px] h-[64px] rounded-full overflow-hidden bg-[#F9F6F2]">
-                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
-                </div>
-                <span className="text-[14px] font-medium text-[#1A1A1A]">{ts(cat.name)}</span>
-                <span className="text-[12px] font-light text-[#999999]">{cat.count}</span>
-              </div>
-            )
-          })}
+      {/* Category Cards — grouped by Face, Eyes, Lips */}
+      <div className="bg-white border-b border-[#E8E3D9] py-5">
+        {/* Face */}
+        <div className="mb-4">
+          <h4 className="text-[13px] font-semibold text-[#8B7355] tracking-[1px] uppercase px-4 mb-3">{t('makeup.face')}</h4>
+          <div className="overflow-x-auto px-4" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-3 w-max">
+              {faceCards.map((cat) => <CategoryCard key={cat.name} cat={cat} />)}
+            </div>
+          </div>
+        </div>
+        {/* Eyes */}
+        <div className="mb-4">
+          <h4 className="text-[13px] font-semibold text-[#8B7355] tracking-[1px] uppercase px-4 mb-3">{t('makeup.eyes')}</h4>
+          <div className="overflow-x-auto px-4" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-3 w-max">
+              {eyesCards.map((cat) => <CategoryCard key={cat.name} cat={cat} />)}
+            </div>
+          </div>
+        </div>
+        {/* Lips */}
+        <div>
+          <h4 className="text-[13px] font-semibold text-[#8B7355] tracking-[1px] uppercase px-4 mb-3">{t('makeup.lips')}</h4>
+          <div className="overflow-x-auto px-4" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-3 w-max">
+              {lipsCards.map((cat) => <CategoryCard key={cat.name} cat={cat} />)}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -366,36 +420,10 @@ function MakeupMobile() {
         )}
         {products.length > displayCount && (
           <button onClick={() => setDisplayCount(prev => prev + 10)} className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]">
-            Load More ({products.length - displayCount} remaining)
+            {t('makeup.loadMore')} ({products.length - displayCount} {t('makeup.remaining')})
           </button>
         )}
       </div>
-
-      {/* Newsletter */}
-      <div className="bg-[#F5F0EB] px-5 py-10 text-center">
-        <h3 className="text-[24px] font-semibold text-[#1A1A1A] mb-2">{t('makeup.newsletter')}</h3>
-        <p className="text-[14px] font-normal text-[#666666] mb-5">{t('makeup.newsletterDesc')}</p>
-        <div className="flex gap-2">
-          <input type="email" placeholder={t('makeup.emailPlaceholder')} className="flex-1 h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-12 px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px]">{t('makeup.subscribe')}</button>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-[#2B2B2B] px-5 pt-10 pb-8">
-        <h3 className="text-[18px] font-semibold text-white tracking-[2px] mb-1">SHAN LORAY</h3>
-        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">{t('makeup.timelessLuxury')}</p>
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('makeup.shop')}</h4><div className="space-y-2">{['Skincare','Makeup','Fragrance'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerHelp')}</h4><div className="space-y-2">{['Contact','Shipping','Returns'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerAbout')}</h4><div className="space-y-2">{['Our Story','Ingredients','Sustainability'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-        </div>
-        <div className="flex justify-center gap-6 mb-6">
-          <IoLogoInstagram className="w-6 h-6 text-white" /><IoLogoFacebook className="w-6 h-6 text-white" />
-          <IoLogoPinterest className="w-6 h-6 text-white" /><IoLogoYoutube className="w-6 h-6 text-white" />
-        </div>
-        <div className="border-t border-[#3D3D3D] pt-5 text-center"><p className="text-[11px] text-[#808080]">{t('makeup.copyright')}</p></div>
-      </footer>
 
       {/* Sort Sheet */}
       {showSortSheet && (
@@ -404,16 +432,16 @@ function MakeupMobile() {
           <div className="relative bg-white rounded-t-[20px] px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-[#E8E3D9] rounded-full mx-auto mb-5" />
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">sortBy</h3>
+              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">{t('makeup.sortBy')}</h3>
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
               {[
-                { key: 'Best Selling',        label: t('makeup.sortBestSelling') },
-                { key: 'Newest',              label: t('makeup.sortNewest') },
-                { key: 'Price: Low to High',  label: t('makeup.sortPriceLow') },
-                { key: 'Price: High to Low',  label: t('makeup.sortPriceHigh') },
-                { key: 'Most Popular',        label: t('makeup.sortMostPopular') },
+                { key: 'Best Selling',       label: t('makeup.sortBestSelling') },
+                { key: 'Newest',             label: t('makeup.sortNewest') },
+                { key: 'Price: Low to High', label: t('makeup.sortPriceLow') },
+                { key: 'Price: High to Low', label: t('makeup.sortPriceHigh') },
+                { key: 'Most Popular',       label: t('makeup.sortMostPopular') },
               ].map(({ key, label }) => (
                 <button key={key} onClick={() => { setActiveSort(key); setShowSortSheet(false) }} className="w-full h-12 flex items-center justify-between px-4 rounded-[8px] hover:bg-[#FAF8F5]">
                   <span className={`text-[15px] ${activeSort === key ? 'font-medium text-[#8B7355]' : 'font-normal text-[#2B2B2B]'}`}>{label}</span>
@@ -425,7 +453,7 @@ function MakeupMobile() {
         </div>
       )}
 
-      {/* Filter Sheet */}
+      {/* Filter Sheet — matching desktop filters */}
       {showFilterSheet && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowFilterSheet(false)} />
@@ -438,31 +466,42 @@ function MakeupMobile() {
               </div>
               <button onClick={() => setShowFilterSheet(false)}><IoClose className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
+
             <div className="overflow-y-auto flex-1">
 
-              {/* Product Category */}
+              {/* Product Category — grouped with horizontal scroll */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.productCategory')}</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {subcategoryCards.map((cat) => {
-                    const isSelected = selectedCategories.includes(cat.name)
-                    return (
-                      <button key={cat.name} onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
-                        className={`rounded-[8px] p-3 flex flex-col items-center justify-center gap-2 border-2 transition-colors ${isSelected ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}>
-                        <img src={cat.image} alt={cat.name} className="w-[40px] h-[40px] rounded-full object-cover" />
-                        <span className="text-[13px] font-medium text-[#2B2B2B] text-center">{ts(cat.name)}</span>
-                        <span className="text-[11px] font-normal text-[#999999]">{cat.count}</span>
-                      </button>
-                    )
-                  })}
-                </div>
+                {[
+                  { label: t('makeup.face'), cards: faceCards },
+                  { label: t('makeup.eyes'), cards: eyesCards },
+                  { label: t('makeup.lips'), cards: lipsCards },
+                ].map(({ label, cards }) => (
+                  <div key={label} className="mb-4">
+                    <p className="text-[12px] font-semibold text-[#8B7355] tracking-[1px] uppercase mb-2">{label}</p>
+                    <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+                      <div className="flex gap-2 w-max">
+                        {cards.map((cat) => {
+                          const isSelected = selectedCategories.includes(cat.name)
+                          return (
+                            <button key={cat.name} onClick={() => setSelectedCategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
+                              className={`w-[90px] flex-shrink-0 rounded-[8px] p-2 flex flex-col items-center gap-1 border-2 transition-colors ${isSelected ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}>
+                              <img src={cat.image} alt={cat.name} className="w-[36px] h-[36px] rounded-full object-cover" />
+                              <span className="text-[11px] font-medium text-[#2B2B2B] text-center leading-tight">{ts(cat.name)}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               {/* Price Range */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[16px] font-medium text-[#2B2B2B]">{t('makeup.priceRange')}</h3>
-                  <span className="text-[14px] font-medium text-[#8B7355]">${'$'}{minPrice || 0} – ${'$'}{maxPrice || 500}</span>
+                  <span className="text-[14px] font-medium text-[#8B7355]">${minPrice || 0} – ${maxPrice || 500}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none" />
@@ -471,34 +510,15 @@ function MakeupMobile() {
                 </div>
               </div>
 
-              {/* Shade Selection */}
+              {/* Finish */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <div className="mb-4">
-                  <h3 className="text-[16px] font-medium text-[#2B2B2B]">{t('makeup.shadeSelection')}</h3>
-                  <p className="text-[12px] text-[#999999]">{shadeColors.length} {t('makeup.shadesAvailable')}</p>
-                </div>
-                <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-                  {shadeColors.map((shade) => {
-                    const isSelected = selectedShades.includes(shade.name)
-                    return (
-                      <button key={shade.name} onClick={() => setSelectedShades(prev => isSelected ? prev.filter(s => s !== shade.name) : [...prev, shade.name])} className="flex flex-col items-center gap-2 flex-shrink-0">
-                        <div className={`w-[44px] h-[44px] rounded-full transition-all ${isSelected ? 'ring-2 ring-[#8B7355] ring-offset-2' : ''}`} style={{ backgroundColor: shade.color }} />
-                        <span className="text-[10px] text-[#666666]">{shade.name}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Finish Type */}
-              <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.finishType')}</h3>
-                <div className="flex gap-3 flex-wrap">
-                  {filterFinishTypes.map((finish) => {
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.finish')}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {finishTypes.map((finish) => {
                     const isSelected = selectedFinish.includes(finish)
                     return (
                       <button key={finish} onClick={() => setSelectedFinish(prev => isSelected ? prev.filter(f => f !== finish) : [...prev, finish])}
-                        className={`px-5 h-[34px] rounded-[8px] text-[14px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B]'}`}>
+                        className={`px-4 h-[36px] rounded-[8px] text-[14px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B]'}`}>
                         {tf(finish)}
                       </button>
                     )
@@ -506,71 +526,48 @@ function MakeupMobile() {
                 </div>
               </div>
 
-              {/* Skin Type */}
+              {/* Coverage */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.skinType')}</h3>
-                <div className="space-y-3">
-                  {filterSkinTypes.map((type) => {
-                    const isChecked = selectedSkinTypes.includes(type)
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.coverage')}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {coverageTypes.map((cov) => {
+                    const isSelected = selectedCoverage.includes(cov)
                     return (
-                      <button key={type} onClick={() => setSelectedSkinTypes(prev => isChecked ? prev.filter(t => t !== type) : [...prev, type])} className="flex items-center gap-3 w-full">
-                        <div className={`w-[20px] h-[20px] rounded-[4px] border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'bg-white border-[#E8E3D9]'}`}>
-                          {isChecked && <IoCheckmark className="w-[13px] h-[13px] text-white" />}
-                        </div>
-                        <span className="text-[14px] font-normal text-[#2B2B2B]">{tf(type)}</span>
+                      <button key={cov} onClick={() => setSelectedCoverage(prev => isSelected ? prev.filter(c => c !== cov) : [...prev, cov])}
+                        className={`px-4 h-[36px] rounded-[8px] text-[14px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B]'}`}>
+                        {tf(cov)}
                       </button>
                     )
                   })}
                 </div>
               </div>
 
-              {/* Brand */}
-              <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.brand')}</h3>
-                <div className="w-full h-[44px] bg-[#F5F1EA] rounded-[8px] px-4 flex items-center mb-4">
-                  <IoSearchOutline className="w-[16px] h-[16px] text-[#999999] mr-2 flex-shrink-0" />
-                  <input type="text" placeholder={t('makeup.searchBrands')} className="flex-1 bg-transparent text-[14px] text-[#2B2B2B] outline-none" />
-                </div>
-                <div className="space-y-2">
-                  {filterBrands.map((brand) => {
-                    const isChecked = selectedBrands.includes(brand)
-                    return (
-                      <button key={brand} onClick={() => setSelectedBrands(prev => isChecked ? prev.filter(b => b !== brand) : [...prev, brand])} className="flex items-center gap-3 h-[40px] w-full">
-                        <div className={`w-[20px] h-[20px] rounded-[4px] border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'bg-white border-[#E8E3D9]'}`}>
-                          {isChecked && <IoCheckmark className="w-[13px] h-[13px] text-white" />}
-                        </div>
-                        <span className="text-[14px] text-[#2B2B2B]">{brand}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Rating */}
+              {/* Skin Tone */}
               <div className="px-5 py-5">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.rating')}</h3>
-                <div className="space-y-2">
-                  {filterRatings.map((r) => (
-                    <button key={r.stars} onClick={() => setSelectedRating(prev => prev === r.stars ? null : r.stars)}
-                      className={`flex items-center justify-between w-full h-[36px] px-3 rounded-[4px] transition-colors ${selectedRating === r.stars ? 'bg-[#FDFBF7]' : ''}`}>
-                      <div className="flex items-center gap-2">
-                        <div className="flex gap-0.5">{[...Array(r.stars)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)}</div>
-                        <span className="text-[13px] text-[#2B2B2B]">{t('makeup.andUp')}</span>
-                      </div>
-                      <span className="text-[13px] text-[#999999]">({r.count})</span>
-                    </button>
-                  ))}
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('makeup.skinTone')}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skinTones.map((tone) => {
+                    const isSelected = selectedSkinTones.includes(tone)
+                    return (
+                      <button key={tone} onClick={() => setSelectedSkinTones(prev => isSelected ? prev.filter(t => t !== tone) : [...prev, tone])}
+                        className={`px-4 h-[36px] rounded-[8px] text-[14px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-white border border-[#E8E3D9] text-[#2B2B2B]'}`}>
+                        {tf(tone)}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             </div>
+
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
-              <button onClick={() => { setSelectedCategories([]); setSelectedShades([]); setSelectedFinish([]); setSelectedSkinTypes([]); setSelectedBrands([]); setSelectedRating(null); setMinPrice(''); setMaxPrice('') }}
+              <button onClick={() => { setSelectedCategories([]); setSelectedFinish([]); setSelectedCoverage([]); setSelectedSkinTones([]); setMinPrice(''); setMaxPrice('') }}
                 className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]">{t('makeup.clearAll')}</button>
               <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">{t('makeup.applyFilters')} ({products.length})</button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   )
 }
