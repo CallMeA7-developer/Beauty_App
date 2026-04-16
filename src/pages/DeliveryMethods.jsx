@@ -106,20 +106,30 @@ export default function DeliveryMethods() {
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] whitespace-nowrap">{t('deliveryMethods.checkout')}</span>
       </div>
 
-      {/* ── Progress Steps ── */}
+            {/* ── Progress Steps ── */}
       <div className="min-h-[90px] md:min-h-[110px] lg:min-h-[120px] bg-gradient-to-b from-[#FDFBF7] to-white px-4 md:px-[60px] lg:px-[120px] flex items-center justify-center">
         <div className="max-w-[1200px] w-full">
-          <div className="flex items-center">
+          {/* Mobile: show only active step */}
+          <div className="flex md:hidden items-center justify-center">
+            {steps.filter(item => item.active).map(item => (
+              <div key={item.step} className="flex items-center gap-[12px]">
+                <div className="w-[44px] h-[44px] rounded-full bg-[#8B7355] flex items-center justify-center flex-shrink-0">
+                  <span className="text-[18px] font-semibold text-white">{item.step}</span>
+                </div>
+                <span className="text-[18px] font-semibold text-[#8B7355]">{item.label}</span>
+              </div>
+            ))}
+          </div>
+          {/* Desktop/Tablet: show all steps */}
+          <div className="hidden md:flex items-center">
             {steps.map((item, index) => (
               <div key={item.step} className="flex items-center flex-1 min-w-0">
                 <div className="flex items-center gap-[8px] md:gap-[12px] lg:gap-[16px] min-w-0">
                   <div className={`w-[36px] h-[36px] md:w-[42px] md:h-[42px] lg:w-[48px] lg:h-[48px] rounded-full flex-shrink-0 flex items-center justify-center transition-all ${
-                    item.active    ? 'bg-[#8B7355] text-white'
-                    : item.completed ? 'bg-green-600 text-white'
-                    : 'bg-white border-[2px] border-[#E8E3D9] text-[#999999]'
+                    item.active ? 'bg-[#8B7355] text-white' : item.completed ? 'bg-green-600 text-white' : 'bg-white border-[2px] border-[#E8E3D9] text-[#999999]'
                   }`}>
                     {item.completed
-                      ? <IoCheckmarkCircle className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] lg:w-[28px] lg:h-[28px]" />
+                      ? <IoCheckmarkCircle className="w-[22px] h-[22px] lg:w-[28px] lg:h-[28px]" />
                       : <span className="text-[15px] md:text-[17px] lg:text-[20px] font-semibold">{item.step}</span>
                     }
                   </div>
