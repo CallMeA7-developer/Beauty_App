@@ -176,7 +176,8 @@ export default function DeliveryInfo() {
                       : <span className="text-[15px] md:text-[17px] lg:text-[20px] font-semibold">{item.step}</span>
                     }
                   </div>
-                  <div className={`text-[12px] md:text-[15px] lg:text-[18px] font-semibold truncate ${item.active ? 'text-[#8B7355]' : 'text-[#999999]'}`}>
+                  {/* On mobile: only show label for active step */}
+                  <div className={`text-[12px] md:text-[15px] lg:text-[18px] font-semibold truncate ${item.active ? 'text-[#8B7355]' : 'text-[#999999]'} ${item.active ? '' : 'hidden md:block'}`}>
                     {item.label}
                   </div>
                 </div>
