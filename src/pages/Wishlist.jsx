@@ -446,10 +446,19 @@ function WishlistMobile() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white border-t border-[#E8E3D9] px-5 py-4 flex items-center gap-3 flex-shrink-0">
-        <button className="flex-1 h-12 bg-[#8B7355] text-white text-[14px] font-semibold rounded-lg">{t('wishlist.moveAllToBag')}</button>
-        <button className="flex-1 h-12 border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] font-semibold rounded-lg">{t('wishlist.clearWishlist')}</button>
-      </div>
+      {wishlistItems.length > 0 && (
+        <div className="bg-[#F5F1EA] px-5 py-4 flex items-center justify-between gap-3 flex-shrink-0">
+          <button onClick={async () => { for (const item of wishlistItems) { await removeFromWishlist(item.products.id) } }}
+            className="text-[14px] font-medium text-[#C84848] underline hover:text-[#a83030] transition-colors">
+            {t('wishlist.clearAllItems')}
+          </button>
+          <Link to="/collections">
+            <button className="h-[44px] px-6 bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] font-medium rounded-[8px] hover:border-[#8B7355] hover:text-[#8B7355] transition-all">
+              {t('wishlist.continueShopping')}
+            </button>
+          </Link>
+        </div>
+      )}
 
 
 
