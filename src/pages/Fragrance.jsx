@@ -238,7 +238,7 @@ function FragranceMobile() {
 
   const toggle = (arr, setArr, val) => setArr(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val])
 
-  const activeFilters = selectedTypes.length + selectedFamilies.length + selectedTopNotes.length + selectedMiddleNotes.length + selectedBaseNotes.length + (selectedOccasion ? 1 : 0) + (intensityLevel !== null ? 1 : 0) + selectedBrands.length + (selectedRating ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
+  const activeFilters = selectedTypes.length + selectedFamilies.length + selectedTopNotes.length + (intensityLevel !== null ? 1 : 0) + (minPrice || maxPrice ? 1 : 0)
 
   const clearAll = () => {
     setSelectedTypes([]); setSelectedFamilies([]); setSelectedTopNotes([])
@@ -381,21 +381,7 @@ function FragranceMobile() {
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="bg-[#2B2B2B] px-5 pt-10 pb-8">
-        <h3 className="text-[18px] font-semibold text-white tracking-[2px] mb-1">SHAN LORAY</h3>
-        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-8">{t('fragrance.timelessLuxury')}</p>
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('fragrance.shop')}</h4><div className="space-y-2">{['Skincare','Makeup','Fragrance'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerHelp')}</h4><div className="space-y-2">{['Contact','Shipping','Returns'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-          <div><h4 className="text-[13px] font-medium text-white mb-3">{t('skincare.footerAbout')}</h4><div className="space-y-2">{['Our Story','Ingredients','Sustainability'].map(l => <p key={l} className="text-[12px] text-[#C4B5A0]">{l}</p>)}</div></div>
-        </div>
-        <div className="flex justify-center gap-6 mb-6">
-          <IoLogoInstagram className="w-6 h-6 text-white" /><IoLogoFacebook className="w-6 h-6 text-white" />
-          <IoLogoPinterest className="w-6 h-6 text-white" /><IoLogoYoutube className="w-6 h-6 text-white" />
-        </div>
-        <div className="border-t border-[#3D3D3D] pt-5 text-center"><p className="text-[11px] text-[#808080]">{t('fragrance.copyright')}</p></div>
-      </footer>
+
 
       {/* Sort Sheet */}
       {showSortSheet && (
@@ -428,10 +414,14 @@ function FragranceMobile() {
       {showFilterSheet && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
           <div className="absolute inset-0 bg-black/50" onClick={() => setShowFilterSheet(false)} />
-          <div className="relative bg-white rounded-t-[20px] flex flex-col" style={{ maxHeight: '95vh' }}>
-            <div className="min-h-[76px] px-5 py-5 flex items-center justify-between border-b border-[#E8E3D9] flex-shrink-0">
-              <h2 className="text-[22px] font-semibold text-[#1A1A1A]">{t('fragrance.filters')}</h2>
-              <button onClick={() => setShowFilterSheet(false)} className="w-11 h-11 flex items-center justify-center"><IoClose className="w-6 h-6 text-[#8B7355]" /></button>
+          <div className="relative bg-white rounded-t-[24px] shadow-[0_-4px_24px_rgba(0,0,0,0.12)] flex flex-col" style={{ maxHeight: '92vh' }}>
+            <div className="flex items-center justify-center pt-3 pb-1 flex-shrink-0"><div className="w-10 h-1 bg-[#E8E3D9] rounded-full" /></div>
+            <div className="min-h-[60px] px-5 flex items-center justify-between border-b border-[#E8E3D9] flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <h2 className="text-[22px] font-semibold text-[#1A1A1A]">{t('fragrance.filters')}</h2>
+                {activeFilters > 0 && <div className="w-[22px] h-[22px] bg-[#C9A870] rounded-full flex items-center justify-center"><span className="text-[11px] font-semibold text-white">{activeFilters}</span></div>}
+              </div>
+              <button onClick={() => setShowFilterSheet(false)}><IoClose className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="flex-1 overflow-y-auto px-5 py-5">
 
@@ -460,10 +450,10 @@ function FragranceMobile() {
                   <h3 className="text-[16px] font-semibold text-[#2B2B2B]">{t('fragrance.priceRange')}</h3>
                   <span className="text-[14px] font-medium text-[#8B7355]">${minPrice || 0} – ${maxPrice || 500}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none" />
-                  <span className="text-[14px] text-[#666666]">—</span>
-                  <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none" />
+                <div className="flex items-center gap-3 w-full">
+                  <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="w-full h-[44px] px-4 border border-[#E8E3D9] rounded-[8px] text-[14px] outline-none focus:border-[#8B7355]" />
+                  <span className="text-[14px] text-[#666666] flex-shrink-0">—</span>
+                  <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="w-full h-[44px] px-4 border border-[#E8E3D9] rounded-[8px] text-[14px] outline-none focus:border-[#8B7355]" />
                 </div>
               </div>
               <div className="w-full h-px bg-[#E8E3D9] mb-6" />
@@ -485,81 +475,18 @@ function FragranceMobile() {
               </div>
               <div className="w-full h-px bg-[#E8E3D9] mb-6" />
 
-              {/* Scent Notes */}
+              {/* Top Notes */}
               <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.scentNotes')}</h3>
-                {[{ label: t('fragrance.topNotes'), key: 'top', notes: filterTopNotes, sel: selectedTopNotes, setSel: setSelectedTopNotes },
-                  { label: t('fragrance.middleNotes'), key: 'middle', notes: filterMiddleNotes, sel: selectedMiddleNotes, setSel: setSelectedMiddleNotes },
-                  { label: t('fragrance.baseNotes'), key: 'base', notes: filterBaseNotes, sel: selectedBaseNotes, setSel: setSelectedBaseNotes }
-                ].map(({ label, key, notes, sel, setSel }) => (
-                  <div key={key} className="mb-2">
-                    <button onClick={() => setExpandedNotes(p => ({ ...p, [key]: !p[key] }))} className="flex items-center justify-between w-full py-3 border-b border-[#E8E3D9]">
-                      <span className="text-[14px] font-medium text-[#2B2B2B]">{label}</span>
-                      {expandedNotes[key] ? <IoChevronUp className="w-5 h-5 text-[#8B7355]" /> : <IoChevronDown className="w-5 h-5 text-[#8B7355]" />}
-                    </button>
-                    {expandedNotes[key] && (
-                      <div className="pt-3 space-y-3 pb-1">
-                        {notes.map((note) => {
-                          const isChecked = sel.includes(note)
-                          return (
-                            <button key={note} onClick={() => toggle(sel, setSel, note)} className="flex items-center gap-2.5 w-full">
-                              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#E8E3D9]'}`}>
-                                {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
-                              </div>
-                              <span className="text-[13px] text-[#2B2B2B]">{tf(note)}</span>
-                            </button>
-                          )
-                        })}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="w-full h-px bg-[#E8E3D9] mb-6" />
-
-              {/* Occasion */}
-              <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.occasion')}</h3>
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.topNotes')}</h3>
                 <div className="space-y-3">
-                  {filterOccasions.map((occ) => (
-                    <button key={occ} onClick={() => setSelectedOccasion(prev => prev === occ ? null : occ)} className="flex items-center gap-2.5 w-full">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedOccasion === occ ? 'border-[#C9A870]' : 'border-[#E8E3D9]'}`}>
-                        {selectedOccasion === occ && <div className="w-2.5 h-2.5 bg-[#C9A870] rounded-full" />}
-                      </div>
-                      <span className="text-[14px] text-[#2B2B2B]">{tf(occ)}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="w-full h-px bg-[#E8E3D9] mb-6" />
-
-              {/* Intensity */}
-              <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.intensityLongevity')}</h3>
-                <div className="flex gap-1 mb-2">
-                  {filterIntensityLevels.map((level, idx) => (
-                    <button key={level} onClick={() => setIntensityLevel(prev => prev === idx ? null : idx)}
-                      className={`flex-1 h-2 rounded-sm transition-colors ${intensityLevel !== null && idx <= intensityLevel ? 'bg-[#C9A870]' : 'bg-[#F5F1EA]'}`} />
-                  ))}
-                </div>
-                <div className="flex justify-between">
-                  {filterIntensityLevels.map((level) => <span key={level} className="text-[11px] text-[#666666] text-center flex-1 leading-tight">{tf(level)}</span>)}
-                </div>
-              </div>
-              <div className="w-full h-px bg-[#E8E3D9] mb-6" />
-
-              {/* Brand */}
-              <div className="mb-6">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.brand')}</h3>
-                <div className="space-y-3">
-                  {filterBrands.map((brand) => {
-                    const isChecked = selectedBrands.includes(brand)
+                  {filterTopNotes.map((note) => {
+                    const isChecked = selectedTopNotes.includes(note)
                     return (
-                      <button key={brand} onClick={() => toggle(selectedBrands, setSelectedBrands, brand)} className="flex items-center gap-2.5 w-full">
-                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#E8E3D9]'}`}>
-                          {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
+                      <button key={note} onClick={() => toggle(selectedTopNotes, setSelectedTopNotes, note)} className="flex items-center gap-2.5 w-full">
+                        <div className={`w-[16px] h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
+                          {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[14px] text-[#2B2B2B]">{brand}</span>
+                        <span className="text-[14px] text-[#2B2B2B]">{tf(note)}</span>
                       </button>
                     )
                   })}
@@ -567,35 +494,34 @@ function FragranceMobile() {
               </div>
               <div className="w-full h-px bg-[#E8E3D9] mb-6" />
 
-              {/* Rating */}
-              <div className="mb-4">
-                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.customerRating')}</h3>
+              {/* Intensity */}
+              <div className="mb-6">
+                <h3 className="text-[16px] font-semibold text-[#2B2B2B] mb-4">{t('fragrance.intensity')}</h3>
                 <div className="space-y-3">
-                  {filterRatings.map((r) => (
-                    <button key={r.stars} onClick={() => setSelectedRating(prev => prev === r.stars ? null : r.stars)} className="flex items-center gap-2.5 w-full">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${selectedRating === r.stars ? 'border-[#C9A870]' : 'border-[#E8E3D9]'}`}>
-                        {selectedRating === r.stars && <div className="w-2.5 h-2.5 bg-[#C9A870] rounded-full" />}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {[...Array(5)].map((_, i) => <IoStarSharp key={i} className={`w-4 h-4 ${i < r.stars ? 'text-[#C9A870]' : 'text-[#E8E3D9]'}`} />)}
-                        <span className="text-[13px] text-[#2B2B2B] ml-1">{t('fragrance.andUp')}</span>
-                        <span className="text-[13px] text-[#999999]">({r.count})</span>
-                      </div>
-                    </button>
-                  ))}
+                  {intensityLevels.map((level) => {
+                    const isChecked = intensityLevel === level
+                    return (
+                      <button key={level} onClick={() => setIntensityLevel(prev => prev === level ? null : level)} className="flex items-center gap-2.5 w-full">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'border-[#C9A870]' : 'border-[#E8E3D9]'}`}>
+                          {isChecked && <div className="w-2.5 h-2.5 bg-[#C9A870] rounded-full" />}
+                        </div>
+                        <span className="text-[14px] text-[#2B2B2B]">{tf(level)}</span>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
+
             </div>
 
-            <div className="px-5 py-5 bg-white border-t border-[#E8E3D9] flex-shrink-0">
-              <div className="flex items-center gap-3">
-                <button onClick={clearAll} className="flex-1 min-h-[52px] bg-white border-2 border-[#E8E3D9] rounded-[10px] flex items-center justify-center">
-                  <span className="text-[14px] font-medium text-[#8B7355]">clearFilters</span>
-                </button>
-                <button onClick={() => setShowFilterSheet(false)} className="flex-1 min-h-[52px] bg-[#8B7355] rounded-[10px] flex items-center justify-center">
-                  <span className="text-[14px] font-medium text-white">{t('fragrance.applyFilters')} ({products.length})</span>
-                </button>
-              </div>
+            <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
+              <button onClick={() => { setSelectedTypes([]); setSelectedFamilies([]); setSelectedTopNotes([]); setIntensityLevel(null); setMinPrice(''); setMaxPrice('') }}
+                className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]">
+                {t('fragrance.clearAllFilters')}
+              </button>
+              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
+                {t('fragrance.applyFilters')} ({products.length})
+              </button>
             </div>
           </div>
         </div>
