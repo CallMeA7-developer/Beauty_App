@@ -318,7 +318,6 @@ function WishlistMobile() {
   const { addToCart } = useCart()
   const { wishlistItems, wishlistCount, loading, removeFromWishlist } = useWishlist()
   const [sortOpen, setSortOpen]         = useState(false)
-  const [filterOpen, setFilterOpen]     = useState(false)
   const [shareOpen, setShareOpen]       = useState(false)
   const [selectedSort, setSelectedSort] = useState('')
 
@@ -347,16 +346,8 @@ function WishlistMobile() {
   return (
     <div key={i18n.language} className="w-full min-h-screen bg-[#FDFBF7] font-['Cormorant_Garamond'] flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-[#E8E3D9] px-5 h-[60px] flex items-center justify-between flex-shrink-0">
-        <Link to="/dashboard">
-          <div className="w-11 h-11 flex items-center justify-center">
-            <IoChevronBackOutline className="w-6 h-6 text-[#2B2B2B]" />
-          </div>
-        </Link>
+      <div className="bg-white border-b border-[#E8E3D9] px-5 h-[60px] flex items-center justify-center flex-shrink-0">
         <div className="font-bold text-[20px] text-[#1A1A1A] tracking-[2px]">SHAN LORAY</div>
-        <button onClick={() => setShareOpen(true)} className="w-11 h-11 flex items-center justify-center">
-          <IoShareSocialOutline className="w-6 h-6 text-[#8B7355]" />
-        </button>
       </div>
 
       {/* Title */}
@@ -365,16 +356,40 @@ function WishlistMobile() {
         <p className="text-[16px] font-normal text-[#666666]">{wishlistCount} {wishlistCount === 1 ? t('wishlist.savedTreasure') : t('wishlist.savedTreasures')}</p>
       </div>
 
-      {/* Filter & Sort Bar */}
+      {/* Sort & Share Bar */}
       <div className="bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] px-5 py-3 flex items-center justify-between gap-3 flex-shrink-0">
-        <button onClick={() => setSortOpen(true)} className="h-10 px-4 border-[1.5px] border-[#E8E3D9] rounded-lg flex items-center gap-2">
-          <IoSwapVerticalOutline className="w-4 h-4 text-[#666666]" />
-          <span className="text-[14px] font-medium text-[#666666]">{t('wishlist.sort.label')}</span>
-        </button>
-        <span className="text-[14px] font-normal text-[#666666]">{selectedSort}</span>
-        <button onClick={() => setFilterOpen(true)} className="h-10 px-4 border-[1.5px] border-[#C9A870] bg-[#FDFBF7] rounded-lg flex items-center gap-2">
-          <IoFunnelOutline className="w-4 h-4 text-[#8B7355]" />
-          <span className="text-[14px] font-medium text-[#8B7355]">{t('wishlist.filter')}</span>
+        {/* Sort Dropdown */}
+        <div className="relative flex-1">
+          <button onClick={() => setSortOpen(!sortOpen)}
+            className="w-full h-10 px-4 border-[1.5px] border-[#E8E3D9] rounded-lg flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <IoSwapVerticalOutline className="w-4 h-4 text-[#666666]" />
+              <span className="text-[14px] font-medium text-[#666666]">{selectedSort || t('wishlist.sort.newest')}</span>
+            </div>
+            <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
+          </button>
+          {sortOpen && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-30">
+              {[
+                { label: t('wishlist.sort.priceLow') },
+                { label: t('wishlist.sort.priceHigh') },
+                { label: t('wishlist.sort.newest') },
+                { label: t('wishlist.sort.bestSellers') },
+                { label: t('wishlist.sort.mostPopular') },
+                { label: t('wishlist.sort.highestRated') },
+              ].map(({ label }) => (
+                <button key={label} onClick={() => { setSelectedSort(label); setSortOpen(false) }}
+                  className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors border-b border-[#F5F1EA] last:border-b-0 ${selectedSort === label ? 'text-[#8B7355] font-medium bg-[#FDFBF7]' : 'text-[#2B2B2B]'}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {/* Share Button */}
+        <button onClick={() => setShareOpen(true)} className="h-10 px-4 border-[1.5px] border-[#C9A870] bg-[#FDFBF7] rounded-lg flex items-center gap-2 flex-shrink-0">
+          <IoShareSocialOutline className="w-4 h-4 text-[#8B7355]" />
+          <span className="text-[14px] font-medium text-[#8B7355]">{t('wishlist.shareWishlist')}</span>
         </button>
       </div>
 
@@ -455,9 +470,7 @@ function WishlistMobile() {
         </Link>
       </div>
 
-      <SortSheet   isOpen={sortOpen}   onClose={() => setSortOpen(false)}   selected={selectedSort} onSelect={setSelectedSort} />
-      <FilterSheet isOpen={filterOpen} onClose={() => setFilterOpen(false)} />
-      <ShareModal  isOpen={shareOpen}  onClose={() => setShareOpen(false)}  />
+      <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   )
 }
