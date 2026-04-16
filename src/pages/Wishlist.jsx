@@ -345,10 +345,7 @@ function WishlistMobile() {
 
   return (
     <div key={i18n.language} className="w-full min-h-screen bg-[#FDFBF7] font-['Cormorant_Garamond'] flex flex-col">
-      {/* Header */}
-      <div className="bg-white border-b border-[#E8E3D9] px-5 h-[60px] flex items-center justify-center flex-shrink-0">
-        <div className="font-bold text-[20px] text-[#1A1A1A] tracking-[2px]">SHAN LORAY</div>
-      </div>
+
 
       {/* Title */}
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] px-6 py-6 flex-shrink-0">
