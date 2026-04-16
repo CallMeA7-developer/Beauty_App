@@ -1898,5 +1898,30 @@
     "title": "Secure & Private",
     "description": "Your address information is encrypted and never shared with third parties."
   }
+},
+  "footer": {
+  "tagline": "Timeless Luxury Beauty",
+  "description": "Crafting exceptional beauty experiences through the perfect union of science and nature.",
+  "shop": "Shop",
+  "support": "Support",
+  "stayConnected": "Stay Connected",
+  "skincare": "Skincare",
+  "makeup": "Makeup",
+  "fragrance": "Fragrance",
+  "tools": "Tools",
+  "giftSets": "Gift Sets",
+  "newArrivals": "New Arrivals",
+  "contactUs": "Contact Us",
+  "shipping": "Shipping",
+  "returns": "Returns",
+  "faqs": "FAQs",
+  "trackOrder": "Track Order",
+  "sizeGuide": "Size Guide",
+  "emailPlaceholder": "Enter your email",
+  "subscribe": "Subscribe",
+  "copyright": "© 2024 Shan Loray. All rights reserved.",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "cookiePolicy": "Cookie Policy"
 }
 }
