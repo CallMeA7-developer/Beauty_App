@@ -164,7 +164,19 @@ export default function DeliveryInfo() {
       {/* ── Progress Steps ── */}
       <div className="min-h-[90px] md:min-h-[110px] lg:min-h-[120px] bg-gradient-to-b from-[#FDFBF7] to-white px-4 md:px-[60px] lg:px-[120px] flex items-center justify-center">
         <div className="max-w-[1200px] w-full">
-          <div className="flex items-center">
+          {/* Mobile: show only active step */}
+          <div className="flex md:hidden items-center justify-center">
+            {steps.filter(item => item.active).map(item => (
+              <div key={item.step} className="flex items-center gap-[12px]">
+                <div className="w-[44px] h-[44px] rounded-full bg-[#8B7355] flex items-center justify-center flex-shrink-0">
+                  <span className="text-[18px] font-semibold text-white">{item.step}</span>
+                </div>
+                <span className="text-[18px] font-semibold text-[#8B7355]">{item.label}</span>
+              </div>
+            ))}
+          </div>
+          {/* Desktop/Tablet: show all steps */}
+          <div className="hidden md:flex items-center">
             {steps.map((item, index) => (
               <div key={item.step} className="flex items-center flex-1 min-w-0">
                 <div className="flex items-center gap-[8px] md:gap-[12px] lg:gap-[16px] min-w-0">
@@ -176,8 +188,7 @@ export default function DeliveryInfo() {
                       : <span className="text-[15px] md:text-[17px] lg:text-[20px] font-semibold">{item.step}</span>
                     }
                   </div>
-                  {/* On mobile: only show label for active step */}
-                  <div className={`text-[12px] md:text-[15px] lg:text-[18px] font-semibold truncate ${item.active ? 'text-[#8B7355]' : 'text-[#999999]'} ${item.active ? '' : 'hidden md:block'}`}>
+                  <div className={`text-[12px] md:text-[15px] lg:text-[18px] font-semibold truncate ${item.active ? 'text-[#8B7355]' : 'text-[#999999]'}`}>
                     {item.label}
                   </div>
                 </div>
