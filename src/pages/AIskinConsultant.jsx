@@ -311,44 +311,14 @@ function AISkinConsultantMobile() {
         <h3 className="text-[28px] font-medium text-[#1A1A1A] text-center mb-2">Ready to Transform Your Skin?</h3>
         <p className="text-[14px] font-normal text-[#666666] text-center mb-6">Join thousands who've discovered their routine</p>
         <div className="w-full space-y-3">
-          <button className="w-full min-h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-lg">Start Free Analysis</button>
-          <button className="w-full min-h-[52px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-lg">Talk to Expert</button>
+          <button
+            onClick={() => navigate('/skin-analysis')}
+            className="w-full min-h-[52px] bg-[#8B7355] text-white text-[15px] font-medium rounded-lg hover:bg-[#7a6448] transition-colors">
+            Start Free Analysis
+          </button>
+          {/* Talk to Expert — temporarily hidden */}
         </div>
       </div>
-
-      {/* ── Footer ── */}
-      <footer className="bg-[#2B2B2B] px-5 pt-12 pb-8">
-        <h4 className="text-[18px] font-semibold text-white tracking-[2px] mb-1">SHAN LORAY</h4>
-        <p className="text-[12px] font-light italic text-[#C4B5A0] mb-4">Timeless Luxury Beauty</p>
-        <p className="text-[13px] font-normal text-[#A0A0A0] leading-relaxed mb-8">Crafting exceptional beauty experiences through the perfect union of science and nature.</p>
-        <div className="grid grid-cols-2 gap-8 mb-8">
-          <div>
-            <h5 className="text-[14px] font-medium text-white mb-4">Shop</h5>
-            <div className="space-y-3">{['Skincare','Makeup','Fragrance','Tools'].map((l) => <div key={l} className="text-[13px] text-[#C4B5A0]">{l}</div>)}</div>
-          </div>
-          <div>
-            <h5 className="text-[14px] font-medium text-white mb-4">Support</h5>
-            <div className="space-y-3">{['Contact Us','Shipping','Returns','FAQs'].map((l) => <div key={l} className="text-[13px] text-[#C4B5A0]">{l}</div>)}</div>
-          </div>
-        </div>
-        <div className="mb-8">
-          <h5 className="text-[14px] font-medium text-white mb-4">Stay Connected</h5>
-          <input type="email" placeholder="Enter your email" className="w-full h-12 px-4 bg-white text-[13px] text-[#2B2B2B] rounded-md mb-3 outline-none" />
-          <button className="w-full h-12 bg-[#8B7355] text-white text-[13px] font-medium rounded-md mb-5">Subscribe</button>
-          <div className="flex gap-6">
-            <IoLogoInstagram className="w-6 h-6 text-[#C4B5A0]" />
-            <IoLogoFacebook  className="w-6 h-6 text-[#C4B5A0]" />
-            <IoLogoPinterest className="w-6 h-6 text-[#C4B5A0]" />
-            <IoLogoYoutube   className="w-6 h-6 text-[#C4B5A0]" />
-          </div>
-        </div>
-        <div className="pt-6 border-t border-[#3D3D3D] text-center">
-          <p className="text-[12px] text-[#808080] mb-3">© 2024 Shan Loray. All rights reserved.</p>
-          <div className="flex justify-center gap-6">
-            {['Privacy Policy','Terms'].map((l) => <span key={l} className="text-[12px] text-[#808080]">{l}</span>)}
-          </div>
-        </div>
-      </footer>
 
     </div>
 
