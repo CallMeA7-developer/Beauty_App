@@ -203,6 +203,111 @@ function TechnologyMobile() {
         </div>
       </div>
 
+      {/* AI Powered Analysis */}
+      <div className="bg-[#FDFBF7] px-5 py-6">
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.aiAnalysis')}</h3>
+        <img
+          src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=200&fit=crop"
+          alt="AI Analysis"
+          className="w-full h-[180px] object-cover rounded-xl mb-4"
+        />
+        <div className="space-y-3 mb-4">
+          {[
+            { icon: IoFlaskOutline,           title: t('technology.aiBenefits.instantAnalysis'),     desc: t('technology.aiBenefits.instantAnalysisDesc') },
+            { icon: IoSparklesOutline,        title: t('technology.aiBenefits.personalizedResults'),  desc: t('technology.aiBenefits.personalizedResultsDesc') },
+            { icon: IoCheckmarkCircleOutline, title: t('technology.aiBenefits.expertRecs'),           desc: t('technology.aiBenefits.expertRecsDesc') },
+          ].map((benefit, idx) => (
+            <div key={idx} className="bg-white rounded-lg p-4 flex items-start gap-3">
+              <benefit.icon className="w-6 h-6 text-[#8B7355] flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="text-[14px] font-medium text-[#1A1A1A] mb-1">{benefit.title}</h4>
+                <p className="text-[12px] font-normal text-[#666666]">{benefit.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <Link to="/ai-consultation" onClick={() => window.scrollTo(0, 0)}>
+          <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
+            <span className="text-[15px] font-semibold text-white">{t('technology.tryAI')}</span>
+          </button>
+        </Link>
+      </div>
+
+      {/* Virtual Try-On Mirror */}
+      <div className="bg-white px-5 py-6">
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.virtualTryOn')}</h3>
+        <div className="relative mb-4">
+          <img
+            src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=200&fit=crop"
+            alt="AR Try-On"
+            className="w-full h-[180px] object-cover rounded-xl"
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-12 h-12 bg-[#C9A870] rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(201,168,112,0.4)]">
+              <IoPlayCircleOutline className="w-8 h-8 text-white" />
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-2 overflow-x-auto mb-4" style={{ scrollbarWidth: 'none' }}>
+          {[t('technology.realTime'), t('technology.multipleProducts'), t('technology.hdQuality')].map((f, i) => (
+            <div key={i} className="bg-white border border-[#E8E3D9] text-[#8B7355] text-[12px] px-4 py-2 rounded-full flex-shrink-0">{f}</div>
+          ))}
+        </div>
+        <Link to="/virtual-tryon" onClick={() => window.scrollTo(0, 0)}>
+          <button className="w-full min-h-[52px] bg-white border-2 border-[#8B7355] rounded-xl">
+            <span className="text-[15px] font-semibold text-[#8B7355]">{t('technology.experienceAR')}</span>
+          </button>
+        </Link>
+      </div>
+
+      {/* Breakthrough Formulations */}
+      <div className="bg-gradient-to-b from-[#F5F1EA] to-[#E8E3D9] px-5 py-6">
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.breakthroughFormulations')}</h3>
+        <div className="space-y-3">
+          {[
+            { title: t('technology.innovations.bioActive'),       desc: t('technology.innovations.bioActiveDesc'),       gradient: 'from-[#E8E3F7] to-[#D5CAE8]' },
+            { title: t('technology.innovations.timeRelease'),     desc: t('technology.innovations.timeReleaseDesc'),     gradient: 'from-[#E3F2FD] to-[#CCEAF9]' },
+            { title: t('technology.innovations.clinicalTesting'), desc: t('technology.innovations.clinicalTestingDesc'), gradient: 'from-[#E8F5E9] to-[#D4EDD6]' },
+          ].map((item, idx) => (
+            <div key={idx} className="bg-white rounded-lg p-4 flex items-center gap-4">
+              <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${item.gradient} flex items-center justify-center flex-shrink-0`}>
+                <IoFlaskOutline className="w-6 h-6 text-[#8B7355]" />
+              </div>
+              <div>
+                <h4 className="text-[14px] font-medium text-[#1A1A1A] mb-1">{item.title}</h4>
+                <p className="text-[12px] font-normal text-[#666666]">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Your Custom Journey */}
+      <div className="bg-white px-5 py-6">
+        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">{t('technology.customJourney')}</h3>
+        <div className="relative">
+          {getJourneySteps(t).map((step, idx) => (
+            <div key={idx} className="flex gap-4 mb-5 last:mb-0">
+              <div className="flex flex-col items-center">
+                <div className="w-10 h-10 bg-[#C9A870] rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-[15px] font-semibold text-white">{idx + 1}</span>
+                </div>
+                {idx < getJourneySteps(t).length - 1 && <div className="w-0.5 h-10 bg-[#C9A870] opacity-30" />}
+              </div>
+              <div className="flex-1 pb-2">
+                <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{step.title}</h4>
+                <p className="text-[13px] font-normal text-[#666666]">{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <Link to="/beauty-journey" onClick={() => window.scrollTo(0, 0)}>
+          <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mt-4 shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
+            <span className="text-[15px] font-semibold text-white">{t('technology.startJourney')}</span>
+          </button>
+        </Link>
+      </div>
+
       {/* Stats Bar */}
       <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] mx-5 rounded-[16px] py-6 px-4 flex flex-row items-center justify-around mb-8">
         {stats.map((stat, idx) => (
