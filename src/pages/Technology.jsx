@@ -152,244 +152,109 @@ const getDesktopBenefits = (t) => [
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function TechnologyMobile() {
   const { t } = useTranslation()
-  const coreFeatures = getCoreFeatures(t)
-  const journeySteps = getJourneySteps(t)
-  const aiBenefits = getAIBenefits(t)
-  const scientificInnovations = getScientificInnovations(t)
-  const mobileBenefits = getMobileBenefits(t)
+  const innovationCards = getInnovationCards(t)
+  const stats = getStats(t)
+  const howItWorksSteps = getHowItWorksSteps(t)
+  const desktopBenefits = getDesktopBenefits(t)
+
   return (
-    <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex flex-col">
+    <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
 
-      {/* Gold Header */}
-      <div className="min-h-[64px] bg-gradient-to-r from-[#C9A870] to-[#B89660] px-5 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex-shrink-0">
-        <button className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center">
-          <IoChevronBack className="w-6 h-6 text-white" />
-        </button>
-        <h1 className="text-[18px] font-semibold text-white">{t('technology.title')}</h1>
-        <button className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center">
-          <IoInformationCircleOutline className="w-6 h-6 text-white" />
-        </button>
-      </div>
-
-      {/* Hero */}
-      <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-6 pt-8 pb-0 flex flex-col items-center">
-        <p className="text-[11px] font-light italic text-[#8B7355] tracking-[1.5px] mb-2">{t('technology.tagline')}</p>
-        <h2 className="text-[36px] font-bold text-[#1A1A1A] leading-tight mb-2 text-center">{t('technology.heroTitle')}</h2>
-        <p className="text-[15px] font-normal text-[#666666] mb-4 text-center">{t('technology.heroSubtitle')}</p>
-        <div className="w-16 h-[3px] bg-[#C9A870] mb-6" />
+      {/* Hero — same as desktop */}
+      <div className="min-h-[300px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 py-10">
+        <div className="w-full relative z-10">
+          <p className="text-[12px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('technology.advancedTech')}</p>
+          <h1 className="text-[40px] font-bold text-[#1A1A1A] leading-[1] mb-4">{t('technology.desktopHeroTitle')}</h1>
+          <p className="text-[15px] font-normal text-[#666666] mb-6">{t('technology.desktopHeroDesc')}</p>
+          <div className="w-[100px] h-[4px] bg-[#C9A870]" />
+        </div>
         <img
-          src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=440&h=180&fit=crop"
-          alt="Future technology"
-          className="w-full h-[160px] object-cover"
+          src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=400&fit=crop"
+          alt=""
+          className="absolute top-0 right-0 w-[160px] h-full object-cover opacity-20"
         />
       </div>
 
-      {/* Core Features Grid */}
-      <div className="bg-white px-5 pt-6 pb-4">
-        <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-5">{t('technology.smartSolutions')}</h3>
-        <div className="grid grid-cols-2 gap-4">
-          {coreFeatures.map((feature, idx) => (
-            <div key={idx} className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden">
-              <div className={`h-36 bg-gradient-to-b ${feature.gradient} flex items-center justify-center`}>
-                <feature.icon className="w-14 h-14 text-[#8B7355]" />
+      {/* Breadcrumb */}
+      <div className="min-h-[40px] bg-[#FDFBF7] px-6 flex items-center">
+        <span className="text-[13px] text-[#8B7355]">{t('technology.home')}</span>
+        <span className="text-[13px] text-[#666666] mx-2">/</span>
+        <span className="text-[13px] text-[#666666]">{t('technology.breadcrumbTech')}</span>
+      </div>
+
+      {/* 4 Innovation Cards */}
+      <div className="px-5 py-8">
+        <div className="grid grid-cols-1 gap-5">
+          {innovationCards.map((card, idx) => (
+            <div key={idx} className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden">
+              <div className="w-full h-[180px] overflow-hidden">
+                <img src={card.image} alt={card.title} className="w-full h-full object-cover" />
               </div>
-              <div className="p-4">
-                <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-2">{feature.title}</h4>
-                <p className="text-[12px] font-normal text-[#666666] mb-3 line-clamp-2">{feature.description}</p>
-                <button className="flex items-center gap-1 text-[13px] font-medium text-[#8B7355]">
-                  {t('technology.explore')} <IoArrowForward className="w-3.5 h-3.5" />
-                </button>
+              <div className="p-5">
+                <div className="px-[14px] py-[5px] bg-[#F5F1EA] text-[#8B7355] text-[10px] font-medium rounded-full inline-block mb-3">{card.tag}</div>
+                <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-2">{card.title}</h3>
+                <p className="text-[14px] text-[#666666] leading-[1.6] mb-4">{card.description}</p>
+                <Link to={card.path} onClick={() => window.scrollTo(0, 0)}>
+                  <button className="h-[44px] px-6 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">{card.buttonText}</button>
+                </Link>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* AI Analysis Detail */}
-      <div className="bg-[#FDFBF7] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.aiAnalysis')}</h3>
-        <img
-          src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=200&fit=crop"
-          alt="AI Analysis"
-          className="w-full h-[180px] object-cover rounded-xl mb-4"
-        />
-        <div className="space-y-3">
-          {aiBenefits.map((benefit, idx) => (
-            <div key={idx} className="bg-white rounded-lg p-4 flex items-start gap-3">
-              <benefit.icon className="w-6 h-6 text-[#8B7355] flex-shrink-0 mt-1" />
-              <div>
-                <h4 className="text-[14px] font-medium text-[#1A1A1A] mb-1">{benefit.title}</h4>
-                <p className="text-[12px] font-normal text-[#666666]">{benefit.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <Link to="/ai-consultation" onClick={() => window.scrollTo(0, 0)}>
-          <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mt-4 shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
-            <span className="text-[15px] font-semibold text-white">{t('technology.tryAI')}</span>
-          </button>
-        </Link>
-      </div>
-
-      {/* AR Try-On Showcase */}
-      <div className="bg-white px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.virtualTryOn')}</h3>
-        <div className="relative mb-4">
-          <img
-            src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=200&fit=crop"
-            alt="AR Try-On"
-            className="w-full h-[180px] object-cover rounded-xl"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 bg-[#C9A870] rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(201,168,112,0.4)]">
-              <IoPlayCircleOutline className="w-8 h-8 text-white" />
+      {/* Stats Bar */}
+      <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] mx-5 rounded-[16px] py-6 px-4 flex flex-col gap-5 mb-8">
+        {stats.map((stat, idx) => (
+          <div key={idx} className="flex items-center gap-4">
+            <stat.icon className="w-[40px] h-[40px] text-[#8B7355] flex-shrink-0" />
+            <div>
+              <p className="text-[20px] font-medium text-[#1A1A1A]">{stat.value}</p>
+              <p className="text-[13px] text-[#666666]">{stat.label}</p>
             </div>
           </div>
-        </div>
-        <div className="flex gap-2 overflow-x-auto mb-4" style={{ scrollbarWidth: 'none' }}>
-          {[t('technology.realTime'), t('technology.multipleProducts'), t('technology.hdQuality')].map((f, i) => (
-            <div key={i} className="bg-white border border-[#E8E3D9] text-[#8B7355] text-[12px] px-4 py-2 rounded-full flex-shrink-0">{f}</div>
-          ))}
-        </div>
-        <Link to="/virtual-tryon" onClick={() => window.scrollTo(0, 0)}>
-          <button className="w-full min-h-[52px] bg-white border-2 border-[#8B7355] rounded-xl">
-            <span className="text-[15px] font-semibold text-[#8B7355]">{t('technology.experienceAR')}</span>
-          </button>
-        </Link>
+        ))}
       </div>
 
-      {/* Breakthrough Formulations */}
-      <div className="bg-gradient-to-b from-[#F5F1EA] to-[#E8E3D9] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.breakthroughFormulations')}</h3>
-        <div className="space-y-3">
-          {scientificInnovations.map((item, idx) => (
-            <div key={idx} className="bg-white rounded-lg p-4 flex items-center gap-4">
-              <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${item.gradient} flex items-center justify-center flex-shrink-0`}>
-                <IoFlaskOutline className="w-6 h-6 text-[#8B7355]" />
+      {/* How It Works */}
+      <div className="px-5 pb-8">
+        <h2 className="text-[26px] font-medium text-[#1A1A1A] text-center mb-6">{t('technology.howItWorks')}</h2>
+        <div className="flex flex-col gap-4">
+          {howItWorksSteps.map((step, idx) => (
+            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5">
+              <div className="flex items-center gap-4 mb-3">
+                <img src={step.image} alt={step.title} className="w-[72px] h-[72px] object-cover rounded-[8px] flex-shrink-0" />
+                <div className="w-[40px] h-[40px] bg-[#8B7355] text-white text-[20px] font-semibold rounded-full flex items-center justify-center flex-shrink-0">{step.number}</div>
               </div>
-              <div>
-                <h4 className="text-[14px] font-medium text-[#1A1A1A] mb-1">{item.title}</h4>
-                <p className="text-[12px] font-normal text-[#666666]">{item.desc}</p>
-              </div>
+              <h4 className="text-[17px] font-medium text-[#1A1A1A] mb-2">{step.title}</h4>
+              <p className="text-[13px] text-[#666666] leading-[1.6]">{step.description}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Custom Journey */}
-      <div className="bg-white px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">{t('technology.customJourney')}</h3>
-        <div className="relative">
-          {journeySteps.map((step, idx) => (
-            <div key={idx} className="flex gap-4 mb-5 last:mb-0">
-              <div className="flex flex-col items-center">
-                <div className="w-10 h-10 bg-[#C9A870] rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-[15px] font-semibold text-white">{idx + 1}</span>
-                </div>
-                {idx < journeySteps.length - 1 && <div className="w-0.5 h-10 bg-[#C9A870] opacity-30" />}
-              </div>
-              <div className="flex-1 pb-2">
-                <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-1">{step.title}</h4>
-                <p className="text-[13px] font-normal text-[#666666]">{step.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <Link to="/beauty-journey" onClick={() => window.scrollTo(0, 0)}>
-          <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mt-4 shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
-            <span className="text-[15px] font-semibold text-white">{t('technology.startJourney')}</span>
-          </button>
-        </Link>
-      </div>
-
-      {/* Smart Recommendations */}
-      <div className="bg-[#FDFBF7] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.intelligentRecs')}</h3>
-        <div className="flex gap-3 overflow-x-auto mb-4" style={{ scrollbarWidth: 'none' }}>
-          {[
-            'https://images.unsplash.com/photo-1556228578-4d08bdfaf8ce?w=120&h=120&fit=crop',
-            'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=120&h=120&fit=crop',
-            'https://images.unsplash.com/photo-1620916297-7af36b7ad403?w=120&h=120&fit=crop',
-          ].map((img, i) => (
-            <div key={i} className="min-w-[130px] bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.06)] overflow-hidden flex-shrink-0">
-              <img src={img} alt="Product" className="w-full h-[100px] object-cover" />
-              <div className="p-3">
-                <p className="text-[13px] font-normal text-[#1A1A1A] mb-2">{t('technology.premiumSerum')}</p>
-                <div className="bg-[#C9A870] text-white text-[11px] font-medium px-2 py-1 rounded-full inline-block">Match: 94%</div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {[t('technology.aiBadge'), t('technology.learnsPrefs'), t('technology.realResultsBadge')].map((badge, i) => (
-            <div key={i} className="border border-[#E8E3D9] text-[#666666] text-[12px] px-3 py-2 rounded-full inline-flex items-center gap-1.5">
-              <IoSparklesOutline className="w-3.5 h-3.5 text-[#8B7355]" />
-              {badge}
+      {/* Why Smart Beauty — 6 items from desktop */}
+      <div className="px-5 pb-8">
+        <h2 className="text-[26px] font-medium text-[#1A1A1A] mb-6">{t('technology.whySmartBeauty')}</h2>
+        <div className="grid grid-cols-1 gap-4">
+          {desktopBenefits.map((benefit, idx) => (
+            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5">
+              <benefit.icon className="w-[28px] h-[28px] text-[#8B7355] mb-3" />
+              <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-2">{benefit.title}</h4>
+              <p className="text-[13px] text-[#666666] leading-[1.6]">{benefit.description}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Benefits Grid */}
-      <div className="bg-white px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">{t('technology.whySmartBeauty')}</h3>
-        <div className="grid grid-cols-2 gap-5">
-          {mobileBenefits.map((benefit, idx) => (
-            <div key={idx} className="flex flex-col items-center text-center">
-              <benefit.icon className="w-8 h-8 text-[#8B7355] mb-3" />
-              <h4 className="text-[14px] font-medium text-[#1A1A1A] mb-1">{benefit.title}</h4>
-              <p className="text-[12px] font-normal text-[#666666]">{benefit.desc}</p>
-            </div>
-          ))}
+      {/* CTA */}
+      <div className="bg-[#F5F1EA] mx-5 rounded-[16px] px-6 py-8 mb-8 flex flex-col items-center">
+        <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-2 text-center">{t('technology.experienceToday')}</h3>
+        <p className="text-[13px] text-[#666666] mb-5 text-center">{t('technology.joinThousandsAI')}</p>
+        <div className="flex flex-col gap-3 w-full">
+          <input type="email" placeholder={t('technology.emailPlaceholder')} className="w-full h-[52px] px-5 bg-white text-[14px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
+          <button className="w-full h-[52px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">{t('technology.getStarted')}</button>
         </div>
-      </div>
-
-      {/* Testimonials */}
-      <div className="bg-[#FAF8F5] px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-5">{t('technology.realResults')}</h3>
-        <div className="flex gap-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-          {testimonials.map((item, idx) => (
-            <div key={idx} className="min-w-[300px] bg-white rounded-2xl p-5 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex-shrink-0">
-              <img src={item.photo} alt={item.name} className="w-14 h-14 rounded-full object-cover mb-4" />
-              <p className="text-[14px] font-normal italic text-[#333333] mb-4">"{item.quote}"</p>
-              <p className="text-[13px] font-medium text-[#1A1A1A] mb-1">{item.name}</p>
-              <div className="flex items-center gap-0.5 mb-3">
-                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-3.5 h-3.5 text-[#C9A870]" />)}
-              </div>
-              <div className="bg-[#F5F1EA] text-[#8B7355] text-[11px] font-normal px-3 py-1 rounded-full inline-block">{item.tech}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Final CTA */}
-      <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-6 py-10 flex flex-col items-center">
-        <h2 className="text-[26px] font-bold text-[#1A1A1A] mb-2 text-center">{t('technology.experienceFuture')}</h2>
-        <p className="text-[14px] font-normal text-[#666666] mb-6 text-center">{t('technology.joinThousands')}</p>
-        <button className="w-full min-h-[52px] bg-gradient-to-r from-[#8B7355] to-[#A38968] rounded-xl mb-3 shadow-[0_4px_12px_rgba(139,115,85,0.25)]">
-          <span className="text-[16px] font-semibold text-white">{t('technology.getStarted')}</span>
-        </button>
-        <button className="text-[14px] font-medium text-[#8B7355] underline">{t('technology.learnMore')}</button>
-      </div>
-
-      {/* Bottom Nav */}
-      <div className="min-h-[64px] bg-white border-t border-[#E8E3D9] flex items-center justify-around flex-shrink-0">
-        <button className="flex flex-col items-center gap-1">
-          <IoHomeOutline className="w-6 h-6 text-[#BDBDBD]" />
-          <span className="text-[11px] text-[#BDBDBD]">{t('technology.nav.home')}</span>
-        </button>
-        <button className="flex flex-col items-center gap-1">
-          <IoDesktopOutline className="w-6 h-6 text-[#8B7355]" />
-          <span className="text-[11px] text-[#8B7355]">{t('technology.nav.tech')}</span>
-        </button>
-        <button className="flex flex-col items-center gap-1">
-          <IoHeartOutline className="w-6 h-6 text-[#BDBDBD]" />
-          <span className="text-[11px] text-[#BDBDBD]">{t('technology.nav.saved')}</span>
-        </button>
-        <button className="flex flex-col items-center gap-1">
-          <IoPersonOutline className="w-6 h-6 text-[#BDBDBD]" />
-          <span className="text-[11px] text-[#BDBDBD]">{t('technology.nav.profile')}</span>
-        </button>
       </div>
 
     </div>
