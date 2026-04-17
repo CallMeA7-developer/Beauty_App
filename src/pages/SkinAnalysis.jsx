@@ -45,6 +45,7 @@ export default function SkinAnalysis() {
   const [scheduledDate, setScheduledDate] = useState('')
   const [scheduleSuccess, setScheduleSuccess] = useState(false)
   const [showUploadMessage, setShowUploadMessage] = useState(false)
+  const [showInfoBanner, setShowInfoBanner] = useState(true)
 
   useEffect(() => {
     if (location.hash) {
@@ -452,6 +453,52 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
+
+      {/* ── AI Consultant Info Banner (Mobile Only) ── */}
+      {showInfoBanner && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-5 pt-2">
+          <div className="bg-white rounded-[16px] shadow-[0_-4px_32px_rgba(139,115,85,0.18)] border border-[#E8E3D9] overflow-hidden">
+            {/* Gold accent top bar */}
+            <div className="h-[3px] bg-gradient-to-r from-[#C9A870] to-[#8B7355]" />
+            <div className="p-5">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-[40px] h-[40px] rounded-full bg-[#F5F1EA] flex items-center justify-center flex-shrink-0">
+                    <IoSparklesOutline className="w-[20px] h-[20px] text-[#8B7355]" />
+                  </div>
+                  <div>
+                    <h4 className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">New to Skin Analysis?</h4>
+                    <p className="text-[12px] font-light text-[#8B7355] italic">Discover how it works</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowInfoBanner(false)}
+                  className="w-7 h-7 flex items-center justify-center flex-shrink-0 ml-2"
+                >
+                  <IoCloseOutline className="w-5 h-5 text-[#999999]" />
+                </button>
+              </div>
+              <p className="text-[13px] font-normal text-[#666666] leading-relaxed mb-4">
+                Our AI-powered skin analysis uses medical-grade technology to deliver personalized results in seconds. Learn how our consultation process works before you begin.
+              </p>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => navigate('/ai-consultation')}
+                  className="flex-1 h-[44px] bg-[#8B7355] text-white text-[13px] font-medium rounded-[10px] hover:bg-[#7a6448] transition-colors"
+                >
+                  Learn How It Works
+                </button>
+                <button
+                  onClick={() => setShowInfoBanner(false)}
+                  className="flex-1 h-[44px] bg-[#F5F1EA] text-[#8B7355] text-[13px] font-medium rounded-[10px] hover:bg-[#ede8df] transition-colors"
+                >
+                  I Understand
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
