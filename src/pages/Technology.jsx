@@ -204,14 +204,12 @@ function TechnologyMobile() {
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] mx-5 rounded-[16px] py-6 px-4 flex flex-col gap-5 mb-8">
+      <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] mx-5 rounded-[16px] py-6 px-4 flex flex-row items-center justify-around mb-8">
         {stats.map((stat, idx) => (
-          <div key={idx} className="flex items-center gap-4">
-            <stat.icon className="w-[40px] h-[40px] text-[#8B7355] flex-shrink-0" />
-            <div>
-              <p className="text-[20px] font-medium text-[#1A1A1A]">{stat.value}</p>
-              <p className="text-[13px] text-[#666666]">{stat.label}</p>
-            </div>
+          <div key={idx} className="flex flex-col items-center text-center">
+            <stat.icon className="w-[36px] h-[36px] text-[#8B7355] mb-2" />
+            <p className="text-[16px] font-medium text-[#1A1A1A]">{stat.value}</p>
+            <p className="text-[11px] text-[#666666] leading-tight max-w-[80px]">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -221,11 +219,9 @@ function TechnologyMobile() {
         <h2 className="text-[26px] font-medium text-[#1A1A1A] text-center mb-6">{t('technology.howItWorks')}</h2>
         <div className="flex flex-col gap-4">
           {howItWorksSteps.map((step, idx) => (
-            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5">
-              <div className="flex items-center gap-4 mb-3">
-                <img src={step.image} alt={step.title} className="w-[72px] h-[72px] object-cover rounded-[8px] flex-shrink-0" />
-                <div className="w-[40px] h-[40px] bg-[#8B7355] text-white text-[20px] font-semibold rounded-full flex items-center justify-center flex-shrink-0">{step.number}</div>
-              </div>
+            <div key={idx} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 flex flex-col items-center text-center">
+              <img src={step.image} alt={step.title} className="w-[90px] h-[90px] object-cover rounded-[8px] mb-3" />
+              <div className="w-[44px] h-[44px] bg-[#8B7355] text-white text-[20px] font-semibold rounded-full flex items-center justify-center mb-3">{step.number}</div>
               <h4 className="text-[17px] font-medium text-[#1A1A1A] mb-2">{step.title}</h4>
               <p className="text-[13px] text-[#666666] leading-[1.6]">{step.description}</p>
             </div>
