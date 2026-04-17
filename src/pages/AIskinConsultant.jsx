@@ -136,39 +136,47 @@ function AISkinConsultantMobile() {
         </div>
       </div>
 
-      {/* ── Quick Start Card ── */}
+      {/* ── Begin Your Journey CTA ── */}
       <div className="px-5 -mt-8 mb-10">
-        <div className="bg-white rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-6">
-          <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-1">Begin Your Analysis</h3>
-          <p className="text-[13px] font-normal text-[#666666] mb-4">Three simple ways to start</p>
-          <div className="space-y-4">
-            {quickStartCards.map((card, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl p-4 cursor-pointer"
-                style={{ backgroundColor: card.bgColor, border: card.borderColor ? `1px solid ${card.borderColor}` : 'none' }}
-                onClick={() => {
-                  if (idx === 2) setShowBookingPopup(true)
-                  else navigate('/skin-analysis')
-                }}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <card.icon className="w-7 h-7 flex-shrink-0" style={{ color: card.iconColor }} />
-                  <div>
-                    <h4 className="text-[15px] font-medium text-[#1A1A1A]">{card.title}</h4>
-                    <p className="text-[12px] font-normal text-[#666666]">{card.description}</p>
-                  </div>
+        <div className="bg-white rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden">
+          {/* Gold accent */}
+          <div className="h-[3px] bg-gradient-to-r from-[#C9A870] to-[#8B7355]" />
+          <div className="p-6">
+            {/* Stats row */}
+            <div className="flex items-center justify-around mb-6 pb-5 border-b border-[#F5F1EA]">
+              {[
+                { value: '98%',   label: 'Accuracy' },
+                { value: '60s',   label: 'Results'  },
+                { value: 'Free',  label: 'To Start'  },
+              ].map((stat, idx) => (
+                <div key={idx} className="flex flex-col items-center">
+                  <span className="text-[22px] font-bold text-[#8B7355]">{stat.value}</span>
+                  <span className="text-[11px] font-normal text-[#999999]">{stat.label}</span>
                 </div>
-                {idx === 0 && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); navigate('/skin-analysis') }}
-                    className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-medium rounded-lg"
-                  >
-                    Upload Photo
-                  </button>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
+            {/* Text */}
+            <h3 className="text-[22px] font-semibold text-[#1A1A1A] mb-2">Begin Your Skin Journey</h3>
+            <p className="text-[13px] font-normal text-[#666666] leading-relaxed mb-6">
+              Your personalized skin journey starts here. Choose a free AI-powered analysis or connect with one of our certified skin experts for real-time guidance.
+            </p>
+            {/* CTAs */}
+            <div className="space-y-3">
+              <button
+                onClick={() => navigate('/skin-analysis')}
+                className="w-full h-[52px] bg-[#8B7355] text-white text-[15px] font-semibold rounded-[10px] hover:bg-[#7a6448] transition-colors flex items-center justify-center gap-2"
+              >
+                <IoSparklesOutline className="w-5 h-5" />
+                Start Free Analysis
+              </button>
+              <button
+                onClick={() => setShowBookingPopup(true)}
+                className="w-full h-[52px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[10px] hover:bg-[#FDFBF7] transition-colors flex items-center justify-center gap-2"
+              >
+                <IoVideocamOutline className="w-5 h-5" />
+                Book Live Expert Session
+              </button>
+            </div>
           </div>
         </div>
       </div>
