@@ -169,13 +169,7 @@ function AISkinConsultantMobile() {
                 <IoSparklesOutline className="w-5 h-5" />
                 Start Free Analysis
               </button>
-              <button
-                onClick={() => setShowBookingPopup(true)}
-                className="w-full h-[52px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[10px] hover:bg-[#FDFBF7] transition-colors flex items-center justify-center gap-2"
-              >
-                <IoVideocamOutline className="w-5 h-5" />
-                Book Live Expert Session
-              </button>
+              {/* Book Live Expert Session — temporarily hidden */}
             </div>
           </div>
         </div>
