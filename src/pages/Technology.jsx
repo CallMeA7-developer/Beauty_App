@@ -233,32 +233,7 @@ function TechnologyMobile() {
         </Link>
       </div>
 
-      {/* Virtual Try-On Mirror */}
-      <div className="bg-white px-5 py-6">
-        <h3 className="text-[20px] font-medium text-[#1A1A1A] mb-4">{t('technology.virtualTryOn')}</h3>
-        <div className="relative mb-4">
-          <img
-            src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=200&fit=crop"
-            alt="AR Try-On"
-            className="w-full h-[180px] object-cover rounded-xl"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 bg-[#C9A870] rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(201,168,112,0.4)]">
-              <IoPlayCircleOutline className="w-8 h-8 text-white" />
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-2 overflow-x-auto mb-4" style={{ scrollbarWidth: 'none' }}>
-          {[t('technology.realTime'), t('technology.multipleProducts'), t('technology.hdQuality')].map((f, i) => (
-            <div key={i} className="bg-white border border-[#E8E3D9] text-[#8B7355] text-[12px] px-4 py-2 rounded-full flex-shrink-0">{f}</div>
-          ))}
-        </div>
-        <Link to="/virtual-tryon" onClick={() => window.scrollTo(0, 0)}>
-          <button className="w-full min-h-[52px] bg-white border-2 border-[#8B7355] rounded-xl">
-            <span className="text-[15px] font-semibold text-[#8B7355]">{t('technology.experienceAR')}</span>
-          </button>
-        </Link>
-      </div>
+
 
       {/* Breakthrough Formulations */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-[#E8E3D9] px-5 py-6">
