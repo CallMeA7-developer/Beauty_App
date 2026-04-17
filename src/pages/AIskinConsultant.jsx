@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   IoCameraOutline,
   IoCheckmarkCircle,
@@ -96,6 +97,7 @@ const faqs = [
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function AISkinConsultantMobile() {
+  const navigate = useNavigate()
   const [expandedFaq, setExpandedFaq] = useState(new Set([0, 1]))
   const [showUploadPopup, setShowUploadPopup] = useState(false)
   const [showBookingPopup, setShowBookingPopup] = useState(false)
@@ -145,7 +147,10 @@ function AISkinConsultantMobile() {
                 key={idx}
                 className="rounded-xl p-4 cursor-pointer"
                 style={{ backgroundColor: card.bgColor, border: card.borderColor ? `1px solid ${card.borderColor}` : 'none' }}
-                onClick={() => { if (idx === 2) setShowBookingPopup(true) }}
+                onClick={() => {
+                  if (idx === 2) setShowBookingPopup(true)
+                  else navigate('/skin-analysis')
+                }}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <card.icon className="w-7 h-7 flex-shrink-0" style={{ color: card.iconColor }} />
@@ -156,7 +161,7 @@ function AISkinConsultantMobile() {
                 </div>
                 {idx === 0 && (
                   <button
-                    onClick={(e) => { e.stopPropagation(); setShowUploadPopup(true) }}
+                    onClick={(e) => { e.stopPropagation(); navigate('/skin-analysis') }}
                     className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-medium rounded-lg"
                   >
                     Upload Photo
@@ -198,25 +203,7 @@ function AISkinConsultantMobile() {
         </div>
       </div>
 
-      {/* ── Process Steps ── */}
-      <div className="bg-white px-5 py-10">
-        <h3 className="text-[26px] font-medium text-[#1A1A1A] text-center mb-7">Your Journey</h3>
-        <div className="space-y-6 relative pl-8">
-          <div className="absolute left-5 top-6 bottom-6 w-0.5 bg-[#E8E3D9]" />
-          {processSteps.map((step, idx) => (
-            <div key={idx} className="flex gap-4 relative">
-              <div className="absolute -left-8 w-10 h-10 bg-[#8B7355] text-white text-[18px] font-semibold rounded-full flex items-center justify-center flex-shrink-0">
-                {step.number}
-              </div>
-              <img src={step.image} alt={step.title} className="w-16 h-16 object-cover rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.08)] flex-shrink-0" />
-              <div className="flex-1 pt-1">
-                <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-1">{step.title}</h4>
-                <p className="text-[13px] font-normal text-[#666666]">{step.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
 
       {/* ── Sample Results ── */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-5 py-10">
@@ -245,8 +232,10 @@ function AISkinConsultantMobile() {
               </div>
             ))}
           </div>
-          <button className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-medium rounded-lg">
-            View Sample Report
+          <button
+            onClick={() => navigate('/skin-analysis')}
+            className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-medium rounded-lg">
+            Analyze My Skin
           </button>
         </div>
       </div>
@@ -283,31 +272,7 @@ function AISkinConsultantMobile() {
         </div>
       </div>
 
-      {/* ── Testimonials ── */}
-      <div className="bg-[#FDFBF7] px-5 py-10">
-        <h3 className="text-[26px] font-medium text-[#1A1A1A] text-center mb-7">Real Results</h3>
-        <div className="flex overflow-x-auto gap-4 pb-4" style={{ scrollbarWidth: 'none' }}>
-          {testimonials.map((t, idx) => (
-            <div key={idx} className="min-w-[320px] bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden flex-shrink-0">
-              <div className="flex">
-                <img src={t.beforeImage} alt="Before" className="w-1/2 h-[160px] object-cover" />
-                <img src={t.afterImage}  alt="After"  className="w-1/2 h-[160px] object-cover" />
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h5 className="text-[14px] font-medium text-[#1A1A1A]">{t.name}, {t.age}</h5>
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-3 h-3 text-[#C9A870]" />)}
-                  </div>
-                </div>
-                <div className="inline-block px-3 py-1 bg-[#F5F1EA] text-[#8B7355] text-[11px] font-medium rounded-full mb-2">{t.type}</div>
-                <p className="text-[12px] font-light italic text-[#666666] mb-1">"{t.quote}"</p>
-                <p className="text-[12px] font-medium text-[#8B7355]">{t.timeline}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
 
       {/* ── FAQ ── */}
       <div className="bg-white px-5 py-10">
