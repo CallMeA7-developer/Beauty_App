@@ -1859,6 +1859,568 @@ function FinancialTab() {
   )
 }
 
+// ─── Shared Mockup Helpers ─────────────────────────────────────────────────────
+function ComingSoonBanner({ text }) {
+  return (
+    <div className="rounded-[12px] p-4 mb-6 flex items-center gap-3" style={{ background: '#C9A870' }}>
+      <span className="text-white text-lg">◈</span>
+      <p className="text-white text-sm font-medium">{text}</p>
+    </div>
+  )
+}
+
+function MockToggle({ on }) {
+  return (
+    <div className="w-10 h-6 rounded-full flex-shrink-0 relative cursor-not-allowed" style={{ background: on ? '#C9A870' : '#D1D5DB' }}>
+      <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${on ? 'left-5' : 'left-1'}`} />
+    </div>
+  )
+}
+
+// ─── Notifications Tab (Mockup) ────────────────────────────────────────────────
+function NotificationsTab() {
+  const campaigns = [
+    { name: 'Welcome New Customers', status: 'Sent', recipients: 342, date: 'Apr 15, 2026', openRate: '72%' },
+    { name: 'Spring Collection Launch', status: 'Sent', recipients: 891, date: 'Apr 10, 2026', openRate: '65%' },
+    { name: 'Skin Analysis Reminder', status: 'Scheduled', recipients: 156, date: 'Apr 25, 2026', openRate: '—' },
+    { name: 'Exclusive Members Offer', status: 'Draft', recipients: null, date: '—', openRate: '—' },
+  ]
+
+  const reminders = [
+    { email: 'aradiyas18@gmail.com', scheduled: 'Scheduled for Apr 25, 2026' },
+    { email: 'melika123@gmail.com', scheduled: 'Scheduled for May 1, 2026' },
+    { email: 'address123@gmail.com', scheduled: 'Scheduled for May 10, 2026' },
+  ]
+
+  const notifSettings = [
+    { label: 'New Order Received', desc: 'Get notified when a new order is placed' },
+    { label: 'Low Stock Alert', desc: 'Alert when product stock falls below 10 units' },
+    { label: 'New Customer Signup', desc: 'Notify when a new customer registers' },
+    { label: 'New Review Submitted', desc: 'Alert when a customer submits a product review' },
+  ]
+
+  const statusBadge = (s) => {
+    if (s === 'Sent') return <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">Sent</span>
+    if (s === 'Scheduled') return <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">Scheduled</span>
+    return <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">Draft</span>
+  }
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Email & Notifications</h2>
+      <ComingSoonBanner text="This feature is currently under development and will be available soon." />
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Emails Sent This Month', value: '1,248', icon: '◎' },
+          { label: 'Open Rate', value: '68%', icon: '◈' },
+          { label: 'Scheduled Reminders', value: '23', icon: '◉' },
+          { label: 'Failed Deliveries', value: '3', icon: '◆' },
+        ].map((c) => (
+          <div key={c.label} className="bg-white rounded-[12px] shadow-sm p-5">
+            <div className="text-xl mb-2" style={{ color: PRIMARY }}>{c.icon}</div>
+            <div className="text-2xl font-semibold text-gray-800 mb-1">{c.value}</div>
+            <div className="text-xs text-gray-500">{c.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="font-medium text-gray-700">Email Campaigns</h3>
+          <button disabled title="Coming Soon"
+            className="text-white text-sm px-4 py-2 rounded-lg font-medium opacity-60 cursor-not-allowed"
+            style={{ background: PRIMARY }}>
+            + Create Campaign
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: BG }}>
+                {['Campaign', 'Status', 'Recipients', 'Date', 'Open Rate'].map((h) => (
+                  <th key={h} className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {campaigns.map((c, i) => (
+                <tr key={i} className="border-t border-gray-50 hover:bg-gray-50">
+                  <td className="px-5 py-3 font-medium text-gray-800">{c.name}</td>
+                  <td className="px-5 py-3">{statusBadge(c.status)}</td>
+                  <td className="px-5 py-3 text-gray-600">{c.recipients ?? '—'}</td>
+                  <td className="px-5 py-3 text-gray-500 text-xs">{c.date}</td>
+                  <td className="px-5 py-3 text-gray-700">{c.openRate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h3 className="font-medium text-gray-700">Skin Analysis Reminders</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: BG }}>
+                {['Email', 'Scheduled', 'Status'].map((h) => (
+                  <th key={h} className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {reminders.map((r, i) => (
+                <tr key={i} className="border-t border-gray-50 hover:bg-gray-50">
+                  <td className="px-5 py-3 text-gray-700">{r.email}</td>
+                  <td className="px-5 py-3 text-gray-600 text-xs">{r.scheduled}</td>
+                  <td className="px-5 py-3">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">Pending</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm p-5">
+        <h3 className="font-medium text-gray-700 mb-4">Notification Preferences</h3>
+        <div className="space-y-4">
+          {notifSettings.map((n) => (
+            <div key={n.label} className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-800">{n.label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{n.desc}</p>
+              </div>
+              <MockToggle on={true} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Staff Tab (Mockup) ────────────────────────────────────────────────────────
+function StaffTab() {
+  const staff = [
+    { initial: 'A', email: 'aradiyas18@gmail.com', role: 'Super Admin', status: 'Active', lastLogin: 'Today' },
+    { initial: 'M', email: 'manager@shanloray.com', role: 'Manager', status: 'Invited', lastLogin: 'Never' },
+    { initial: 'S', email: 'staff@shanloray.com', role: 'Staff', status: 'Invited', lastLogin: 'Never' },
+  ]
+
+  const permissions = [
+    { label: 'View Dashboard', staff: true, manager: true, admin: true },
+    { label: 'Manage Products', staff: false, manager: true, admin: true },
+    { label: 'Manage Orders', staff: true, manager: true, admin: true },
+    { label: 'View Customers', staff: false, manager: true, admin: true },
+    { label: 'Manage Discounts', staff: false, manager: true, admin: true },
+    { label: 'Financial Reports', staff: false, manager: false, admin: true },
+    { label: 'Staff Management', staff: false, manager: false, admin: true },
+    { label: 'Content Management', staff: false, manager: true, admin: true },
+  ]
+
+  const activity = [
+    { time: 'Today 09:15', user: 'aradiyas18@gmail.com', action: 'Logged into admin panel', color: '#22C55E' },
+    { time: 'Today 09:20', user: 'aradiyas18@gmail.com', action: 'Updated order #A1B2C3D4 status to Shipped', color: '#3B82F6' },
+    { time: 'Today 09:35', user: 'aradiyas18@gmail.com', action: 'Added new product "Rose Elixir Serum"', color: '#C9A870' },
+    { time: 'Yesterday 14:22', user: 'aradiyas18@gmail.com', action: 'Deleted review #FF10BF64', color: '#EF4444' },
+    { time: 'Yesterday 11:05', user: 'aradiyas18@gmail.com', action: 'Updated product price for "Velvet Kiss Lipstick"', color: '#3B82F6' },
+  ]
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Staff Management</h2>
+      <ComingSoonBanner text="Staff management with role-based permissions is currently under development." />
+
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: 'Total Staff Members', value: '3', icon: '◈' },
+          { label: 'Active Sessions', value: '1', icon: '◉' },
+          { label: 'Pending Invitations', value: '2', icon: '◎' },
+        ].map((c) => (
+          <div key={c.label} className="bg-white rounded-[12px] shadow-sm p-5">
+            <div className="text-xl mb-2" style={{ color: PRIMARY }}>{c.icon}</div>
+            <div className="text-2xl font-semibold text-gray-800 mb-1">{c.value}</div>
+            <div className="text-xs text-gray-500">{c.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="font-medium text-gray-700">Team Members</h3>
+          <button disabled
+            className="text-white text-sm px-4 py-2 rounded-lg font-medium opacity-60 cursor-not-allowed"
+            style={{ background: PRIMARY }}>
+            + Invite Staff
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: BG }}>
+                {['', 'Email', 'Role', 'Status', 'Last Login', 'Actions'].map((h) => (
+                  <th key={h} className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {staff.map((s, i) => (
+                <tr key={i} className="border-t border-gray-50 hover:bg-gray-50">
+                  <td className="px-5 py-3">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-semibold"
+                      style={{ background: PRIMARY }}>
+                      {s.initial}
+                    </div>
+                  </td>
+                  <td className="px-5 py-3 text-gray-700">{s.email}</td>
+                  <td className="px-5 py-3">
+                    <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: '#F0EBE3', color: PRIMARY }}>
+                      {s.role}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3">
+                    {s.status === 'Active'
+                      ? <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">Active</span>
+                      : <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">Invited</span>
+                    }
+                  </td>
+                  <td className="px-5 py-3 text-gray-500 text-xs">{s.lastLogin}</td>
+                  <td className="px-5 py-3">
+                    <button disabled className="text-xs px-3 py-1 rounded-md border border-gray-200 text-gray-400 cursor-not-allowed opacity-60">
+                      {s.status === 'Active' ? 'Edit' : 'Resend Invite'}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h3 className="font-medium text-gray-700">Role Permissions</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: BG }}>
+                <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">Permission</th>
+                {['Staff', 'Manager', 'Super Admin'].map((r) => (
+                  <th key={r} className="text-center px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{r}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {permissions.map((p, i) => (
+                <tr key={i} className="border-t border-gray-50 hover:bg-gray-50">
+                  <td className="px-5 py-3 text-gray-700">{p.label}</td>
+                  <td className="px-5 py-3 text-center">
+                    <span style={{ color: p.staff ? '#C9A870' : '#D1D5DB' }} className="font-bold">{p.staff ? '✓' : '✗'}</span>
+                  </td>
+                  <td className="px-5 py-3 text-center">
+                    <span style={{ color: p.manager ? '#C9A870' : '#D1D5DB' }} className="font-bold">{p.manager ? '✓' : '✗'}</span>
+                  </td>
+                  <td className="px-5 py-3 text-center">
+                    <span style={{ color: p.admin ? '#C9A870' : '#D1D5DB' }} className="font-bold">{p.admin ? '✓' : '✗'}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm p-5">
+        <h3 className="font-medium text-gray-700 mb-4">Recent Activity Log</h3>
+        <div className="space-y-3">
+          {activity.map((a, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <div className="w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: a.color }} />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-gray-800">{a.action}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{a.time} · {a.user}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Content Tab (Mockup) ──────────────────────────────────────────────────────
+function ContentTab() {
+  const banners = [
+    { title: 'Spring Collection 2026', status: 'Active', position: 'Hero Banner' },
+    { title: 'AI Skin Analysis Launch', status: 'Active', position: 'Featured Section' },
+    { title: 'Ramadan Special Offer', status: 'Inactive', position: 'Promotional Bar' },
+  ]
+
+  const featured = [
+    { name: 'Luminous Youth Elixir', category: 'Skincare' },
+    { name: 'Velvet Kiss Lipstick', category: 'Makeup' },
+    { name: 'Rose Oud Parfum', category: 'Fragrance' },
+    { name: 'Supreme Radiance Cream', category: 'Skincare' },
+  ]
+
+  const posts = [
+    { title: 'The Science Behind Retinol', status: 'Published', date: 'Apr 10, 2026', views: '1,240' },
+    { title: 'Your Complete Spring Skincare Guide', status: 'Published', date: 'Apr 5, 2026', views: '892' },
+    { title: 'Understanding Your Skin Type', status: 'Draft', date: '—', views: '—' },
+  ]
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Content Management</h2>
+      <ComingSoonBanner text="Content management tools are currently under development and will be available soon." />
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="font-medium text-gray-700">Homepage Banners</h3>
+          <button disabled
+            className="text-white text-sm px-4 py-2 rounded-lg font-medium opacity-60 cursor-not-allowed"
+            style={{ background: PRIMARY }}>
+            + Add Banner
+          </button>
+        </div>
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {banners.map((b, i) => (
+            <div key={i} className="border border-gray-100 rounded-[10px] overflow-hidden">
+              <div className="h-[200px] bg-gray-100 flex items-center justify-center" style={{ background: '#F3F0EC' }}>
+                <span className="text-gray-300 text-4xl">◈</span>
+              </div>
+              <div className="p-4">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <p className="text-sm font-medium text-gray-800">{b.title}</p>
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${b.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                    {b.status}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-400 mb-3">{b.position}</p>
+                <button disabled
+                  className="text-xs px-3 py-1 rounded-md border border-gray-200 text-gray-400 cursor-not-allowed opacity-60">
+                  Edit Banner
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h3 className="font-medium text-gray-700">Featured Products on Homepage</h3>
+        </div>
+        <div className="divide-y divide-gray-50">
+          {featured.map((p, i) => (
+            <div key={i} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors">
+              <span className="text-gray-300 text-lg cursor-not-allowed select-none">≡</span>
+              <div className="flex-1">
+                <span className="text-sm font-medium text-gray-800">{p.name}</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded-full flex-shrink-0" style={{ background: '#F0EBE3', color: PRIMARY }}>
+                {p.category}
+              </span>
+              <button disabled
+                className="text-xs px-3 py-1 rounded-md border border-gray-200 text-gray-400 cursor-not-allowed opacity-60">
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="px-5 py-3 border-t border-gray-100">
+          <p className="text-xs text-gray-400 italic">Drag to reorder featured products — Coming Soon</p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="font-medium text-gray-700">Journal Posts</h3>
+          <button disabled
+            className="text-white text-sm px-4 py-2 rounded-lg font-medium opacity-60 cursor-not-allowed"
+            style={{ background: PRIMARY }}>
+            + New Post
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: BG }}>
+                {['Title', 'Status', 'Date', 'Views', ''].map((h) => (
+                  <th key={h} className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map((p, i) => (
+                <tr key={i} className="border-t border-gray-50 hover:bg-gray-50">
+                  <td className="px-5 py-3 font-medium text-gray-800">{p.title}</td>
+                  <td className="px-5 py-3">
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.status === 'Published' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                      {p.status}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3 text-gray-500 text-xs">{p.date}</td>
+                  <td className="px-5 py-3 text-gray-600">{p.views}</td>
+                  <td className="px-5 py-3">
+                    <button disabled className="text-xs px-3 py-1 rounded-md border border-gray-200 text-gray-400 cursor-not-allowed opacity-60">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm p-5">
+        <h3 className="font-medium text-gray-700 mb-4">Announcement Bar</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Announcement Text</label>
+            <input
+              disabled
+              defaultValue="Free shipping on orders over $150 | New Spring Collection Now Available"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 bg-gray-50 cursor-not-allowed"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <MockToggle on={true} />
+              <span className="text-sm text-gray-600">Show announcement bar</span>
+            </div>
+          </div>
+          <button disabled
+            className="text-white text-sm px-5 py-2 rounded-lg font-medium opacity-60 cursor-not-allowed"
+            style={{ background: PRIMARY }}>
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Security Tab (Mockup) ─────────────────────────────────────────────────────
+function SecurityTab() {
+  const loginHistory = [
+    { ok: true, email: 'aradiyas18@gmail.com', time: 'Today 09:15 AM', browser: 'Chrome, Windows', location: 'Dubai, UAE' },
+    { ok: true, email: 'aradiyas18@gmail.com', time: 'Apr 19, 2026 08:44 AM', browser: 'Chrome, Windows', location: 'Dubai, UAE' },
+    { ok: true, email: 'aradiyas18@gmail.com', time: 'Apr 18, 2026 11:20 AM', browser: 'Safari, iPhone', location: 'Dubai, UAE' },
+    { ok: false, email: 'unknown@gmail.com', time: 'Apr 17, 2026 03:12 AM', browser: 'Unknown Browser', location: 'Unknown Location' },
+    { ok: true, email: 'aradiyas18@gmail.com', time: 'Apr 16, 2026 09:05 AM', browser: 'Chrome, Windows', location: 'Dubai, UAE' },
+  ]
+
+  const securitySettings = [
+    { label: 'Two-Factor Authentication', desc: 'Add an extra layer of security', on: false },
+    { label: 'Login Notifications', desc: 'Get notified on every new login', on: true },
+    { label: 'Suspicious Activity Alerts', desc: 'Alert on unusual login attempts', on: true },
+    { label: 'Auto Logout After Inactivity', desc: 'Logout after 30 minutes of inactivity', on: false },
+  ]
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Access & Security</h2>
+      <ComingSoonBanner text="Advanced security features are currently under development." />
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Admin Accounts', value: '1 Active', icon: '◈' },
+          { label: 'Last Login', value: 'Today, 09:15 AM', icon: '◉' },
+          { label: 'Failed Login Attempts', value: '0', icon: '◎' },
+          { label: 'Two-Factor Auth', value: 'Not Enabled', icon: '◆' },
+        ].map((c) => (
+          <div key={c.label} className="bg-white rounded-[12px] shadow-sm p-5">
+            <div className="text-xl mb-2" style={{ color: PRIMARY }}>{c.icon}</div>
+            <div className="text-lg font-semibold text-gray-800 mb-1">{c.value}</div>
+            <div className="text-xs text-gray-500">{c.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm p-5">
+        <h3 className="font-medium text-gray-700 mb-4">Authorized Admin Emails</h3>
+        <div className="flex gap-3 mb-4">
+          <input disabled placeholder="Enter email address…"
+            className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 cursor-not-allowed" />
+          <button disabled
+            className="text-white text-sm px-4 py-2 rounded-lg font-medium opacity-60 cursor-not-allowed"
+            style={{ background: PRIMARY }}>
+            Add Admin
+          </button>
+        </div>
+        <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: BG }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0"
+            style={{ background: PRIMARY }}>
+            A
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-800">aradiyas18@gmail.com</p>
+            <p className="text-xs text-gray-400">Super Admin · Added: Apr 14, 2026</p>
+          </div>
+          <button disabled
+            className="text-xs px-3 py-1 rounded-md border border-gray-200 text-gray-300 cursor-not-allowed opacity-50">
+            Remove
+          </button>
+        </div>
+        <p className="text-xs text-gray-400 italic mt-3">Only Super Admins can add or remove admin accounts</p>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h3 className="font-medium text-gray-700">Recent Login History</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ background: BG }}>
+                {['', 'Email', 'Time', 'Browser', 'Location'].map((h) => (
+                  <th key={h} className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {loginHistory.map((l, i) => (
+                <tr key={i} className={`border-t border-gray-50 transition-colors ${!l.ok ? 'bg-red-50' : 'hover:bg-gray-50'}`}>
+                  <td className="px-5 py-3">
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: l.ok ? '#22C55E' : '#EF4444' }} />
+                  </td>
+                  <td className="px-5 py-3 text-gray-700">{l.email}</td>
+                  <td className="px-5 py-3 text-gray-500 text-xs whitespace-nowrap">{l.time}</td>
+                  <td className="px-5 py-3 text-gray-600 text-xs">{l.browser}</td>
+                  <td className="px-5 py-3 text-gray-600 text-xs">{l.location}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[12px] shadow-sm p-5">
+        <h3 className="font-medium text-gray-700 mb-4">Security Settings</h3>
+        <div className="space-y-4">
+          {securitySettings.map((s) => (
+            <div key={s.label} className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-800">{s.label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{s.desc}</p>
+              </div>
+              <MockToggle on={s.on} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Main Admin Panel ──────────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { key: 'dashboard', label: 'Dashboard', icon: '▦' },
@@ -1871,6 +2433,10 @@ const NAV_ITEMS = [
   { key: 'inventory', label: 'Inventory', icon: '◫' },
   { key: 'skininsights', label: 'Skin Insights', icon: '◉' },
   { key: 'financial', label: 'Financial', icon: '◆' },
+  { key: 'notifications', label: 'Notifications', icon: '◎' },
+  { key: 'staff', label: 'Staff', icon: '◈' },
+  { key: 'content', label: 'Content', icon: '▣' },
+  { key: 'security', label: 'Security', icon: '⊙' },
 ]
 
 export default function AdminPanel() {
@@ -2052,6 +2618,10 @@ export default function AdminPanel() {
           {tab === 'inventory' && <InventoryTab />}
           {tab === 'skininsights' && <SkinInsightsTab />}
           {tab === 'financial' && <FinancialTab />}
+          {tab === 'notifications' && <NotificationsTab />}
+          {tab === 'staff' && <StaffTab />}
+          {tab === 'content' && <ContentTab />}
+          {tab === 'security' && <SecurityTab />}
         </main>
       </div>
     </div>
