@@ -943,6 +943,11 @@ function CollectionMobile() {
           <div className="flex items-center justify-center py-10">
             <div className="w-8 h-8 rounded-full border-2 border-[#8B7355] border-t-transparent animate-spin" />
           </div>
+        ) : shopAllProducts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <p className="text-[16px] font-medium text-[#999999]">No products found in this collection</p>
+            <p className="text-[13px] text-[#BBBBBB] mt-2">Try selecting a different collection or category</p>
+          </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {shopAllProducts.map((product) => (
