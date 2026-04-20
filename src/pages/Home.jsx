@@ -83,20 +83,20 @@ function HomeMobile() {
     <div className="w-full bg-white font-['Cormorant_Garamond']">
 
       {/* Hero */}
-      <section className="w-full relative h-screen min-h-[100svh]">
+      <section className="w-full relative" style={{ height: '100dvh', minHeight: '100svh' }}>
         <img
           src={`${SUPABASE_STORAGE}/4.jpeg`}
           alt="Luxury skincare golden hour"
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
-        <div className="absolute bottom-5 left-5 right-5">
-          <div className="bg-white/90 backdrop-blur-sm rounded-[12px] p-6">
-            <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-3">{t('home.heroCollection')}</p>
-            <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.1] mb-4">{t('home.heroTitle')}</h1>
-            <p className="text-[15px] font-normal text-[#666666] leading-[1.6] mb-5">{t('home.heroSubtitle')}</p>
+        <div className="absolute bottom-4 left-4 right-4">
+          <div className="bg-white/90 backdrop-blur-sm rounded-[12px] p-4">
+            <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-2">{t('home.heroCollection')}</p>
+            <h1 className="text-[28px] font-bold text-[#1A1A1A] leading-[1.1] mb-2">{t('home.heroTitle')}</h1>
+            <p className="text-[13px] font-normal text-[#666666] leading-[1.5] mb-4">{t('home.heroSubtitle')}</p>
             <Link to="/explore">
-              <button className="w-[120px] h-[48px] border-[2px] border-[#1A1A1A] text-[14px] font-semibold text-[#1A1A1A]">
+              <button className="w-[110px] h-[42px] border-[2px] border-[#1A1A1A] text-[13px] font-semibold text-[#1A1A1A]">
                 {t('home.explore')}
               </button>
             </Link>
