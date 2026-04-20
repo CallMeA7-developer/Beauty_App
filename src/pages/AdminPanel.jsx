@@ -9,10 +9,8 @@ const BG = '#FDFBF7'
 function Spinner() {
   return (
     <div className="flex items-center justify-center py-16">
-      <div
-        className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-        style={{ borderColor: `${PRIMARY} transparent ${PRIMARY} ${PRIMARY}` }}
-      />
+      <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+        style={{ borderColor: `${PRIMARY} transparent ${PRIMARY} ${PRIMARY}` }} />
     </div>
   )
 }
@@ -45,9 +43,7 @@ function StatusBadge({ status }) {
 function Modal({ title, onClose, children, wide }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.45)' }}>
-      <div
-        className={`bg-white rounded-[12px] shadow-xl flex flex-col max-h-[90vh] ${wide ? 'w-full max-w-2xl' : 'w-full max-w-lg'}`}
-      >
+      <div className={`bg-white rounded-[12px] shadow-xl flex flex-col max-h-[90vh] ${wide ? 'w-full max-w-2xl' : 'w-full max-w-lg'}`}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-800" style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 20 }}>
             {title}
@@ -77,7 +73,6 @@ function DashboardTab() {
           supabase.from('orders').select('total'),
           supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(5),
         ])
-
       const revenue = (orderData || []).reduce((s, o) => s + parseFloat(o.total || 0), 0)
       setStats({ products: products || 0, orders: orders || 0, customers: customers || 0, revenue })
       setRecentOrders(recent || [])
@@ -98,9 +93,7 @@ function DashboardTab() {
 
   return (
     <div>
-      <h2 className="text-2xl font-light mb-6" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>
-        Dashboard
-      </h2>
+      <h2 className="text-2xl font-light mb-6" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Dashboard</h2>
       {loading ? <Spinner /> : (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -112,7 +105,6 @@ function DashboardTab() {
               </div>
             ))}
           </div>
-
           <div className="bg-white rounded-[12px] shadow-sm">
             <div className="px-5 py-4 border-b border-gray-100">
               <h3 className="font-medium text-gray-700">Recent Orders</h3>
@@ -149,8 +141,6 @@ function DashboardTab() {
 }
 
 // ─── Products Tab ──────────────────────────────────────────────────────────────
-const PRODUCT_FIELDS = ['name', 'brand', 'price', 'category', 'subcategory', 'image_url', 'description']
-
 function ProductModal({ product, onClose, onSaved }) {
   const isEdit = !!product?.id
   const [form, setForm] = useState({
@@ -187,13 +177,11 @@ function ProductModal({ product, onClose, onSaved }) {
     <Modal title={isEdit ? 'Edit Product' : 'Add Product'} onClose={onClose}>
       <form onSubmit={submit} className="space-y-4">
         {error && <p className="text-red-500 text-sm">{error}</p>}
-
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Product Name *</label>
             <input required value={form.name} onChange={(e) => set('name', e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1"
-              style={{ focusRingColor: PRIMARY }} />
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Brand *</label>
@@ -201,7 +189,6 @@ function ProductModal({ product, onClose, onSaved }) {
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1" />
           </div>
         </div>
-
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Price (USD) *</label>
@@ -216,13 +203,11 @@ function ProductModal({ product, onClose, onSaved }) {
             </select>
           </div>
         </div>
-
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">Subcategory</label>
           <input value={form.subcategory} onChange={(e) => set('subcategory', e.target.value)}
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1" />
         </div>
-
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">Image URL</label>
           <input value={form.image_url} onChange={(e) => set('image_url', e.target.value)}
@@ -231,13 +216,11 @@ function ProductModal({ product, onClose, onSaved }) {
             <img src={form.image_url} alt="preview" className="mt-2 w-16 h-16 rounded-lg object-cover border border-gray-100" />
           )}
         </div>
-
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
           <textarea rows={3} value={form.description} onChange={(e) => set('description', e.target.value)}
             className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 resize-none" />
         </div>
-
         <div className="flex gap-3 pt-2">
           <button type="button" onClick={onClose}
             className="flex-1 border border-gray-200 text-gray-600 rounded-lg py-2 text-sm hover:bg-gray-50 transition-colors">
@@ -288,10 +271,7 @@ function ProductsTab() {
     load()
   }
 
-  function showToast(msg) {
-    setToast(msg)
-    setTimeout(() => setToast(''), 3000)
-  }
+  function showToast(msg) { setToast(msg); setTimeout(() => setToast(''), 3000) }
 
   const fmt = (n) => `$${parseFloat(n).toFixed(2)}`
   const totalPages = Math.ceil(total / PAGE_SIZE)
@@ -299,23 +279,18 @@ function ProductsTab() {
   return (
     <div>
       {toast && (
-        <div className="fixed top-4 right-4 z-50 text-white text-sm px-4 py-2 rounded-lg shadow-lg"
-          style={{ background: PRIMARY }}>
+        <div className="fixed top-4 right-4 z-50 text-white text-sm px-4 py-2 rounded-lg shadow-lg" style={{ background: PRIMARY }}>
           {toast}
         </div>
       )}
-
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-        <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>
-          Products
-        </h2>
+        <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Products</h2>
         <button onClick={() => setModal({ mode: 'add' })}
           className="text-white text-sm px-4 py-2 rounded-lg font-medium transition-opacity hover:opacity-90"
           style={{ background: PRIMARY }}>
           + Add Product
         </button>
       </div>
-
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <input placeholder="Search by name or brand…" value={search} onChange={(e) => setSearch(e.target.value)}
           className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none" />
@@ -324,7 +299,6 @@ function ProductsTab() {
           {['All', 'Skincare', 'Makeup', 'Fragrance'].map((c) => <option key={c}>{c}</option>)}
         </select>
       </div>
-
       <div className="bg-white rounded-[12px] shadow-sm">
         {loading ? <Spinner /> : products.length === 0 ? <EmptyState message="No products found" /> : (
           <div className="overflow-x-auto">
@@ -348,9 +322,7 @@ function ProductsTab() {
                     <td className="px-5 py-3 text-gray-800 font-medium max-w-[180px] truncate">{p.name}</td>
                     <td className="px-5 py-3 text-gray-600">{p.brand}</td>
                     <td className="px-5 py-3">
-                      <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: '#F0EBE3', color: PRIMARY }}>
-                        {p.category}
-                      </span>
+                      <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: '#F0EBE3', color: PRIMARY }}>{p.category}</span>
                     </td>
                     <td className="px-5 py-3 text-gray-800">{fmt(p.price)}</td>
                     <td className="px-5 py-3">
@@ -372,12 +344,9 @@ function ProductsTab() {
             </table>
           </div>
         )}
-
         {totalPages > 1 && (
           <div className="flex items-center justify-between px-5 py-3 border-t border-gray-100">
-            <span className="text-xs text-gray-500">
-              Page {page + 1} of {totalPages} — {total} products
-            </span>
+            <span className="text-xs text-gray-500">Page {page + 1} of {totalPages} — {total} products</span>
             <div className="flex gap-2">
               <button disabled={page === 0} onClick={() => setPage((p) => p - 1)}
                 className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50 transition-colors">
@@ -391,7 +360,6 @@ function ProductsTab() {
           </div>
         )}
       </div>
-
       {modal && (
         <ProductModal
           product={modal.mode === 'edit' ? modal.product : null}
@@ -399,7 +367,6 @@ function ProductsTab() {
           onSaved={() => { setModal(null); showToast(modal.mode === 'edit' ? 'Product updated' : 'Product added'); load() }}
         />
       )}
-
       {deleteTarget && (
         <Modal title="Confirm Delete" onClose={() => setDeleteTarget(null)}>
           <p className="text-sm text-gray-600 mb-6">
@@ -460,7 +427,6 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
             <p className="text-sm text-gray-700">{fmtDate(order.created_at)}</p>
           </div>
         </div>
-
         <div>
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Items ({order.items?.length || 0})</p>
           <div className="space-y-2">
@@ -479,22 +445,14 @@ function OrderDetailModal({ order, onClose, onStatusChange }) {
             ))}
           </div>
         </div>
-
         <div className="border-t border-gray-100 pt-4 space-y-1">
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>Subtotal</span><span>{fmt(order.subtotal)}</span>
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>Shipping</span><span>{fmt(order.shipping)}</span>
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>Tax</span><span>{fmt(order.tax)}</span>
-          </div>
+          <div className="flex justify-between text-sm text-gray-600"><span>Subtotal</span><span>{fmt(order.subtotal)}</span></div>
+          <div className="flex justify-between text-sm text-gray-600"><span>Shipping</span><span>{fmt(order.shipping)}</span></div>
+          <div className="flex justify-between text-sm text-gray-600"><span>Tax</span><span>{fmt(order.tax)}</span></div>
           <div className="flex justify-between text-sm font-semibold text-gray-800 border-t border-gray-100 pt-2 mt-2">
             <span>Total</span><span>{fmt(order.total)}</span>
           </div>
         </div>
-
         <div className="flex items-center gap-3 pt-2">
           <div>
             <p className="text-xs text-gray-500 mb-1">Payment Status</p>
@@ -532,8 +490,7 @@ function OrdersTab() {
 
   const load = useCallback(async () => {
     setLoading(true)
-    let q = supabase.from('orders').select('*').order('created_at', { ascending: false })
-    const { data } = await q
+    const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false })
     setOrders(data || [])
     setLoading(false)
   }, [])
@@ -566,21 +523,16 @@ function OrdersTab() {
   return (
     <div>
       {toast && (
-        <div className="fixed top-4 right-4 z-50 text-white text-sm px-4 py-2 rounded-lg shadow-lg"
-          style={{ background: PRIMARY }}>
+        <div className="fixed top-4 right-4 z-50 text-white text-sm px-4 py-2 rounded-lg shadow-lg" style={{ background: PRIMARY }}>
           {toast}
         </div>
       )}
-
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-        <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>
-          Orders
-        </h2>
+        <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Orders</h2>
         <button onClick={load} className="text-sm border border-gray-200 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
           ↺ Refresh
         </button>
       </div>
-
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <input placeholder="Search by customer name…" value={search} onChange={(e) => setSearch(e.target.value)}
           className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none" />
@@ -591,7 +543,6 @@ function OrdersTab() {
           ))}
         </select>
       </div>
-
       <div className="bg-white rounded-[12px] shadow-sm">
         {loading ? <Spinner /> : filtered.length === 0 ? <EmptyState message="No orders found" /> : (
           <div className="overflow-x-auto">
@@ -634,7 +585,6 @@ function OrdersTab() {
           </div>
         )}
       </div>
-
       {viewOrder && (
         <OrderDetailModal
           order={viewOrder}
@@ -659,7 +609,7 @@ function CustomersTab() {
     setLoading(true)
     const { data: profiles } = await supabase
       .from('profiles')
-      .select('*, user:user_id(email)')
+      .select('*')
       .order('created_at', { ascending: false })
 
     const { data: orders } = await supabase.from('orders').select('user_id, total')
@@ -673,7 +623,6 @@ function CustomersTab() {
 
     const merged = (profiles || []).map((p) => ({
       ...p,
-      email: p.user?.email || '',
       orders: ordersByUser[p.user_id]?.count || 0,
       spent: ordersByUser[p.user_id]?.spent || 0,
     }))
@@ -695,19 +644,15 @@ function CustomersTab() {
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-        <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>
-          Customers
-        </h2>
+        <h2 className="text-2xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>Customers</h2>
         <button onClick={load} className="text-sm border border-gray-200 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
           ↺ Refresh
         </button>
       </div>
-
       <div className="mb-4">
         <input placeholder="Search by name or email…" value={search} onChange={(e) => setSearch(e.target.value)}
           className="w-full sm:max-w-xs border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none" />
       </div>
-
       <div className="bg-white rounded-[12px] shadow-sm">
         {loading ? <Spinner /> : filtered.length === 0 ? <EmptyState message="No customers found" /> : (
           <div className="overflow-x-auto">
@@ -754,68 +699,124 @@ const NAV_ITEMS = [
 
 export default function AdminPanel() {
   const navigate = useNavigate()
-  const [authState, setAuthState] = useState('loading')
+  const [authState, setAuthState] = useState('login')
   const [tab, setTab] = useState('dashboard')
   const [mobileNav, setMobileNav] = useState(false)
+  const [emailInput, setEmailInput] = useState('')
+  const [emailError, setEmailError] = useState(false)
+  const [checking, setChecking] = useState(false)
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        navigate('/')
-        return
-      }
-      if (session.user.email === ADMIN_EMAIL) {
-        setAuthState('admin')
-      } else {
-        setAuthState('denied')
-      }
-    })
-  }, [navigate])
-
-  async function logout() {
-    await supabase.auth.signOut()
-    navigate('/')
+  const handleAdminLogin = async () => {
+    if (!emailInput.trim()) return
+    setChecking(true)
+    setEmailError(false)
+    if (emailInput.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+      setAuthState('admin')
+    } else {
+      setEmailError(true)
+    }
+    setChecking(false)
   }
 
-  if (authState === 'loading') {
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleAdminLogin()
+  }
+
+  function logout() {
+    setAuthState('login')
+    setEmailInput('')
+    setEmailError(false)
+  }
+
+  // ── Login Page ──
+  if (authState === 'login') {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: BG }}>
-        <Spinner />
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: BG, fontFamily: 'Inter, sans-serif' }}>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet" />
+        <div className="bg-white rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.10)] w-full max-w-[420px] overflow-hidden">
+          {/* Gold accent top bar */}
+          <div className="h-[4px]" style={{ background: `linear-gradient(to right, ${PRIMARY}, #C9A870)` }} />
+          <div className="px-8 py-10">
+            {/* Logo */}
+            <div className="text-center mb-8">
+              <h1 className="text-[28px] font-semibold tracking-[3px] mb-1"
+                style={{ fontFamily: 'Cormorant Garamond, serif', color: PRIMARY }}>
+                SHAN LORAY
+              </h1>
+              <p className="text-[13px] font-light italic text-gray-400">Admin Portal</p>
+              <div className="w-12 h-[2px] mx-auto mt-3" style={{ background: '#C9A870' }} />
+            </div>
+
+            {/* Error Message */}
+            {emailError && (
+              <div className="mb-5 bg-red-50 border border-red-100 rounded-[10px] p-4 text-center">
+                <p className="text-[14px] font-semibold text-red-600 mb-1">⚠ Incorrect Email Address</p>
+                <p className="text-[12px] text-red-400 leading-relaxed mb-4">
+                  The email you entered does not have admin access. Please provide the correct admin email to continue.
+                </p>
+                <button
+                  onClick={() => navigate('/')}
+                  className="text-[13px] font-medium px-5 py-2 rounded-lg text-white transition-opacity hover:opacity-90"
+                  style={{ background: PRIMARY }}>
+                  Visit Our Website
+                </button>
+              </div>
+            )}
+
+            {/* Email Input */}
+            {!emailError && (
+              <p className="text-[13px] text-gray-500 text-center mb-5 leading-relaxed">
+                Enter your admin email address to access the Shan Loray management portal.
+              </p>
+            )}
+
+            <div className="mb-4">
+              <label className="block text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-widest">
+                Admin Email Address
+              </label>
+              <input
+                type="email"
+                value={emailInput}
+                onChange={(e) => { setEmailInput(e.target.value); setEmailError(false) }}
+                onKeyDown={handleKeyDown}
+                placeholder="Enter your admin email"
+                className="w-full h-[48px] px-4 border rounded-[10px] text-[14px] text-gray-800 outline-none transition-colors"
+                style={{ borderColor: emailError ? '#FCA5A5' : '#E5E7EB' }}
+                autoFocus
+              />
+            </div>
+
+            <button
+              onClick={handleAdminLogin}
+              disabled={checking || !emailInput.trim()}
+              className="w-full h-[48px] text-white text-[14px] font-medium rounded-[10px] transition-opacity disabled:opacity-50 hover:opacity-90 mb-4"
+              style={{ background: PRIMARY }}>
+              {checking ? 'Verifying…' : 'Access Admin Panel →'}
+            </button>
+
+            <div className="text-center">
+              <button
+                onClick={() => navigate('/')}
+                className="text-[12px] text-gray-400 hover:text-gray-600 transition-colors">
+                ← Back to Shan Loray Website
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 
-  if (authState === 'denied') {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center" style={{ background: BG }}>
-        <div className="text-5xl mb-4" style={{ color: PRIMARY }}>✦</div>
-        <h1 className="text-2xl font-light mb-2" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#2D2D2D' }}>
-          Access Denied
-        </h1>
-        <p className="text-gray-500 text-sm mb-6">You do not have permission to view this page.</p>
-        <button onClick={() => navigate('/')}
-          className="text-white px-6 py-2 rounded-lg text-sm font-medium"
-          style={{ background: PRIMARY }}>
-          Back to Home
-        </button>
-      </div>
-    )
-  }
-
+  // ── Admin Panel ──
   return (
     <div className="min-h-screen flex flex-col" style={{ background: BG, fontFamily: 'Inter, sans-serif' }}>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap"
-        rel="stylesheet"
-      />
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
       {/* Top Header */}
       <header className="bg-white border-b border-gray-100 shadow-sm z-20 sticky top-0">
         <div className="flex items-center justify-between px-4 sm:px-6 h-14">
           <div className="flex items-center gap-3">
-            <button className="sm:hidden text-gray-500 hover:text-gray-700" onClick={() => setMobileNav(!mobileNav)}>
-              ☰
-            </button>
+            <button className="sm:hidden text-gray-500 hover:text-gray-700" onClick={() => setMobileNav(!mobileNav)}>☰</button>
             <span className="font-semibold tracking-wide" style={{ fontFamily: 'Cormorant Garamond, serif', color: PRIMARY, fontSize: 20 }}>
               Shan Loray <span className="text-gray-400 font-light text-base">Admin</span>
             </span>
