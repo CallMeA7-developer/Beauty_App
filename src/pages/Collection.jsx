@@ -4,36 +4,39 @@
   ALTER TABLE products ADD COLUMN IF NOT EXISTS collection_category text DEFAULT '';
 
   Then tag products in Supabase:
+  -- Clear existing collection tags first
+  UPDATE products SET collection = '', collection_category = '';
+
   -- Signature Collection: top 12 skincare products by rating
   UPDATE products SET collection = 'signature', collection_category = 'skincare_sets'
-  WHERE category = 'Skincare' AND id IN (
-    SELECT id FROM products WHERE category = 'Skincare' ORDER BY rating DESC LIMIT 12
+  WHERE id IN (
+    SELECT id FROM products WHERE category = 'Skincare' ORDER BY rating DESC, reviews_count DESC LIMIT 12
   );
 
-  -- Limited Editions: top 8 products by price
+  -- Limited Editions: top 8 by price (avoid overlap)
   UPDATE products SET collection = 'limited_edition', collection_category = 'skincare_sets'
-  WHERE id IN (
-    SELECT id FROM products WHERE category = 'Skincare' ORDER BY price DESC LIMIT 8
+  WHERE collection = '' AND id IN (
+    SELECT id FROM products WHERE collection = '' ORDER BY price DESC LIMIT 8
   );
 
-  -- Holiday Sets: 2 from each category
+  -- Holiday Sets: 2 from each category (avoid overlap)
   UPDATE products SET collection = 'holiday_set', collection_category = 'gift_sets'
-  WHERE id IN (
-    SELECT id FROM products WHERE category = 'Skincare' ORDER BY rating DESC LIMIT 2
+  WHERE collection = '' AND id IN (
+    SELECT id FROM products WHERE collection = '' AND category = 'Skincare' ORDER BY rating DESC LIMIT 2
   );
   UPDATE products SET collection = 'holiday_set', collection_category = 'gift_sets'
-  WHERE id IN (
-    SELECT id FROM products WHERE category = 'Makeup' ORDER BY rating DESC LIMIT 2
+  WHERE collection = '' AND id IN (
+    SELECT id FROM products WHERE collection = '' AND category = 'Makeup' ORDER BY rating DESC LIMIT 2
   );
   UPDATE products SET collection = 'holiday_set', collection_category = 'gift_sets'
-  WHERE id IN (
-    SELECT id FROM products WHERE category = 'Fragrance' ORDER BY rating DESC LIMIT 2
+  WHERE collection = '' AND id IN (
+    SELECT id FROM products WHERE collection = '' AND category = 'Fragrance' ORDER BY rating DESC LIMIT 2
   );
 
-  -- Gift Sets: 15 mixed products
+  -- Gift Sets: top 15 by review count (avoid overlap)
   UPDATE products SET collection = 'gift_set', collection_category = 'value_sets'
-  WHERE id IN (
-    SELECT id FROM products ORDER BY reviews_count DESC LIMIT 15
+  WHERE collection = '' AND id IN (
+    SELECT id FROM products WHERE collection = '' ORDER BY reviews_count DESC LIMIT 15
   );
 */
 
@@ -157,70 +160,72 @@ const eyeCareTypes = [
 
 // Mask sub-types (from shop-mask-dropdown)
 const maskTypes = [
-  { name: 'Sheet Mask',   image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=64&h=64&fit=crop', description: 'Deep hydration'     },
-  { name: 'Clay Mask',    image: 'https://images.unsplash.com/photo-1556228852-80a3c565a5b1?w=64&h=64&fit=crop', description: 'Purifying treatment'  },
-  { name: 'Sleep Mask',   image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Overnight renewal'   },
-  { name: 'Peel-Off Mask',image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Gentle exfoliation'  },
-  { name: 'Hydrogel Mask',image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Cooling refresh'     },
-  { name: 'Bubble Mask',  image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=64&h=64&fit=crop', description: 'Oxygenating care'    },
+  { name: 'Sheet Mask',    image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=64&h=64&fit=crop', description: 'Deep hydration'     },
+  { name: 'Clay Mask',     image: 'https://images.unsplash.com/photo-1556228852-80a3c565a5b1?w=64&h=64&fit=crop', description: 'Purifying treatment'  },
+  { name: 'Sleep Mask',    image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Overnight renewal'   },
+  { name: 'Peel-Off Mask', image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Gentle exfoliation'  },
+  { name: 'Hydrogel Mask', image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Cooling refresh'     },
+  { name: 'Bubble Mask',   image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=64&h=64&fit=crop', description: 'Oxygenating care'    },
 ]
 
 // Sunscreen sub-types (from shop-sunscreen-dropdown)
 const sunscreenTypes = [
-  { name: 'Mineral SPF 50+',  image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop', description: 'Broad spectrum protection' },
-  { name: 'Tinted SPF 45',    image: 'https://images.unsplash.com/photo-1556228852-80a3c565a5b1?w=64&h=64&fit=crop', description: 'Natural coverage shield'    },
-  { name: 'Hydrating SPF 30', image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Moisture + protection'      },
-  { name: 'Sport SPF 60',     image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Active defense formula'     },
-  { name: 'Anti-Aging SPF 40',image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Youth preserving shield'    },
-  { name: 'Powder SPF 35',    image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=64&h=64&fit=crop', description: 'Touch-up protection'        },
+  { name: 'Mineral SPF 50+',   image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=64&h=64&fit=crop', description: 'Broad spectrum protection' },
+  { name: 'Tinted SPF 45',     image: 'https://images.unsplash.com/photo-1556228852-80a3c565a5b1?w=64&h=64&fit=crop', description: 'Natural coverage shield'    },
+  { name: 'Hydrating SPF 30',  image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=64&h=64&fit=crop', description: 'Moisture + protection'      },
+  { name: 'Sport SPF 60',      image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Active defense formula'     },
+  { name: 'Anti-Aging SPF 40', image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=64&h=64&fit=crop', description: 'Youth preserving shield'    },
+  { name: 'Powder SPF 35',     image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=64&h=64&fit=crop', description: 'Touch-up protection'        },
 ]
 
 // Fragrance types (from shop-fragrance-dropdown)
 const fragranceTypes = [
-  { name: 'Eau de Parfum',  image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=64&h=64&fit=crop', description: 'Intense & long-lasting' },
+  { name: 'Eau de Parfum',   image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=64&h=64&fit=crop', description: 'Intense & long-lasting' },
   { name: 'Eau de Toilette', image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=64&h=64&fit=crop', description: 'Light & refreshing'     },
-  { name: 'Body Mist',      image: 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=64&h=64&fit=crop', description: 'Subtle fragrance veil'  },
-  { name: 'Discovery Sets', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=64&h=64&fit=crop', description: 'Sample our collection'  },
+  { name: 'Body Mist',       image: 'https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=64&h=64&fit=crop', description: 'Subtle fragrance veil'  },
+  { name: 'Discovery Sets',  image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=64&h=64&fit=crop', description: 'Sample our collection'  },
 ]
+
 // Body Care types (from shop-bodycare-dropdown)
 const bodyCareTypes = [
-  { name: 'Body Lotion', image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=64&h=64&fit=crop', description: 'Rich hydration'   },
-  { name: 'Body Wash',   image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=64&h=64&fit=crop', description: 'Gentle cleansing' },
-  { name: 'Scrubs',      image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Smooth & refine'  },
-  { name: 'Hand Care',   image: 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=64&h=64&fit=crop', description: 'Nourish & protect'},
+  { name: 'Body Lotion', image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=64&h=64&fit=crop', description: 'Rich hydration'    },
+  { name: 'Body Wash',   image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=64&h=64&fit=crop', description: 'Gentle cleansing'  },
+  { name: 'Scrubs',      image: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=64&h=64&fit=crop', description: 'Smooth & refine'   },
+  { name: 'Hand Care',   image: 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=64&h=64&fit=crop', description: 'Nourish & protect' },
 ]
 
 // ─── Shared Data ──────────────────────────────────────────────────────────────
+// NOTE: 'price' field removed — now fetched dynamically from Supabase
 const desktopCollections = [
-  { name: 'Signature Collection', subtitle: 'THE ICONS',         description: 'Our most beloved formulas in one essential edit',              products: '12 Products', price: 'From $485', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=580&h=720&fit=crop', badge: false },
-  { name: 'Limited Editions',     subtitle: 'RARE BOTANICALS',   description: 'Exclusive seasonal formulations with precious ingredients',      products: '8 Products',  price: 'From $195', image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=580&h=720&fit=crop', badge: true  },
-  { name: 'Holiday 2024',         subtitle: 'GIFT OF RADIANCE',  description: 'Festive beauty sets wrapped in elegance',                       products: '6 Sets',      price: 'From $165', image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=580&h=420&fit=crop', badge: false },
-  { name: 'Gift Sets',            subtitle: 'WRAPPED IN LUXURY', description: 'Thoughtfully curated gift collections',                         products: '15+ Options', price: 'From $145', image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=580&h=420&fit=crop', badge: false },
+  { name: 'Signature Collection', subtitle: 'THE ICONS',         description: 'Our most beloved formulas in one essential edit',         products: '12 Products', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=580&h=720&fit=crop', badge: false },
+  { name: 'Limited Editions',     subtitle: 'RARE BOTANICALS',   description: 'Exclusive seasonal formulations with precious ingredients', products: '8 Products',  image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=580&h=720&fit=crop', badge: true  },
+  { name: 'Holiday 2024',         subtitle: 'GIFT OF RADIANCE',  description: 'Festive beauty sets wrapped in elegance',                  products: '6 Sets',      image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=580&h=420&fit=crop', badge: false },
+  { name: 'Gift Sets',            subtitle: 'WRAPPED IN LUXURY', description: 'Thoughtfully curated gift collections',                    products: '15+ Options', image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=580&h=420&fit=crop', badge: false },
 ]
 
 const desktopCategories = ['All Collections', 'Skincare Sets', 'Makeup Collections', 'Fragrance Duos', 'Travel Sizes', 'Discovery Kits', 'Value Sets']
 
 const featuredProducts = [
-  { name: 'Ultimate Renewal Collection',  description: 'Complete anti-aging ritual with our most potent actives',              price: '$485', rating: 5, reviews: 324, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=460&h=560&fit=crop' },
-  { name: 'Hydration Essentials Trio',    description: 'Three-step moisture boost for plump, dewy skin',                       price: '$285', rating: 5, reviews: 412, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=460&h=280&fit=crop' },
-  { name: 'Brightening Ritual Set',       description: 'Vitamin C powered routine for luminous glow',                         price: '$345', rating: 5, reviews: 287, image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=460&h=280&fit=crop' },
+  { name: 'Ultimate Renewal Collection',  description: 'Complete anti-aging ritual with our most potent actives',    price: '$485', rating: 5, reviews: 324, image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=460&h=560&fit=crop' },
+  { name: 'Hydration Essentials Trio',    description: 'Three-step moisture boost for plump, dewy skin',             price: '$285', rating: 5, reviews: 412, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=460&h=280&fit=crop' },
+  { name: 'Brightening Ritual Set',       description: 'Vitamin C powered routine for luminous glow',                price: '$345', rating: 5, reviews: 287, image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=460&h=280&fit=crop' },
 ]
 
 const squareProducts = [
-  { name: 'Daily Essentials Kit',   description: 'Perfect starter collection', price: '$165', reviews: 589, image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=300&h=300&fit=crop' },
-  { name: 'Travel Beauty Set',      description: 'Luxury on the go',           price: '$128', reviews: 445, image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300&h=300&fit=crop' },
-  { name: 'Evening Ritual Duo',     description: 'Night repair essentials',    price: '$245', reviews: 356, image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=300&h=300&fit=crop' },
+  { name: 'Daily Essentials Kit',  description: 'Perfect starter collection', price: '$165', reviews: 589, image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=300&h=300&fit=crop' },
+  { name: 'Travel Beauty Set',     description: 'Luxury on the go',           price: '$128', reviews: 445, image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300&h=300&fit=crop' },
+  { name: 'Evening Ritual Duo',    description: 'Night repair essentials',    price: '$245', reviews: 356, image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=300&h=300&fit=crop' },
 ]
 
 const rectangularProducts = [
-  { name: 'Complete Skincare Journey',    description: 'Six essential steps to transformative skin', price: '$595', reviews: 203, image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=470&h=400&fit=crop' },
-  { name: 'Deluxe Discovery Collection', description: 'Experience our bestsellers in generous sizes', price: '$385', reviews: 167, image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=470&h=400&fit=crop' },
+  { name: 'Complete Skincare Journey',    description: 'Six essential steps to transformative skin',   price: '$595', reviews: 203, image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=470&h=400&fit=crop' },
+  { name: 'Deluxe Discovery Collection', description: 'Experience our bestsellers in generous sizes',  price: '$385', reviews: 167, image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=470&h=400&fit=crop' },
 ]
 
 const benefits = [
   { title: 'Curated Expertise', description: 'Professionally selected combinations for optimal results', icon: IoSparklesOutline },
-  { title: 'Exclusive Value',   description: 'Special pricing available only in collection format',    icon: IoCheckmarkCircle  },
-  { title: 'Gift Ready',        description: 'Beautiful packaging perfect for gifting',                icon: IoGiftOutline      },
+  { title: 'Exclusive Value',   description: 'Special pricing available only in collection format',      icon: IoCheckmarkCircle  },
+  { title: 'Gift Ready',        description: 'Beautiful packaging perfect for gifting',                  icon: IoGiftOutline      },
 ]
 
 const mobileCategories = [
@@ -305,7 +310,7 @@ function CollectionMobile() {
   const [makeupCount, setMakeupCount] = useState(0)
   const [fragranceCount, setFragranceCount] = useState(0)
   const [bodyCareCount, setBodyCareCount] = useState(0)
-  const [featuredProducts, setFeaturedProducts] = useState([])
+  const [featuredProductsMobile, setFeaturedProductsMobile] = useState([])
   const [shopAllCategory, setShopAllCategory] = useState('All Products')
   const [shopAllProducts, setShopAllProducts] = useState([])
   const [loadingShopAll, setLoadingShopAll] = useState(false)
@@ -336,7 +341,7 @@ function CollectionMobile() {
         .limit(50)
       if (data && data.length > 0) {
         const shuffled = [...data].sort(() => Math.random() - 0.5)
-        setFeaturedProducts(shuffled.slice(0, 3))
+        setFeaturedProductsMobile(shuffled.slice(0, 3))
       }
     }
     fetchFeaturedProducts()
@@ -423,12 +428,11 @@ function CollectionMobile() {
               </div>
             </button>
 
-            {/* Expanded — Skincare list (matching Figma) */}
+            {/* Expanded — Skincare list */}
             {category.id === 'skincare' && expandedCategory === category.id && (
               <div className="bg-white">
                 {category.subcategories.map((sub) => (
                   <div key={sub.name}>
-                    {/* Cleanser row — tappable, expands grid below */}
                     {sub.name === 'Cleansers' && (
                       <div>
                         <button
@@ -441,8 +445,6 @@ function CollectionMobile() {
                           </div>
                           <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedCleanser ? 'rotate-180' : ''}`} />
                         </button>
-
-                        {/* Cleanser type grid */}
                         {expandedCleanser && (
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
@@ -460,7 +462,6 @@ function CollectionMobile() {
                       </div>
                     )}
 
-                    {/* Serums row — tappable, expands grid below */}
                     {sub.name === 'Serums' && (
                       <div>
                         <button
@@ -473,8 +474,6 @@ function CollectionMobile() {
                           </div>
                           <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedSerum ? 'rotate-180' : ''}`} />
                         </button>
-
-                        {/* Serum type grid */}
                         {expandedSerum && (
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
@@ -492,7 +491,6 @@ function CollectionMobile() {
                       </div>
                     )}
 
-                    {/* Moisturizers row — tappable, expands grid below */}
                     {sub.name === 'Moisturizers' && (
                       <div>
                         <button
@@ -505,8 +503,6 @@ function CollectionMobile() {
                           </div>
                           <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedMoisturizer ? 'rotate-180' : ''}`} />
                         </button>
-
-                        {/* Moisturizer type grid */}
                         {expandedMoisturizer && (
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
@@ -524,7 +520,6 @@ function CollectionMobile() {
                       </div>
                     )}
 
-                    {/* Eye Care row — tappable, expands grid below */}
                     {sub.name === 'Eye Care' && (
                       <div>
                         <button
@@ -537,8 +532,6 @@ function CollectionMobile() {
                           </div>
                           <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedEyeCare ? 'rotate-180' : ''}`} />
                         </button>
-
-                        {/* Eye Care type grid */}
                         {expandedEyeCare && (
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
@@ -556,7 +549,6 @@ function CollectionMobile() {
                       </div>
                     )}
 
-                    {/* Masks row — tappable, expands grid below */}
                     {sub.name === 'Masks' && (
                       <div>
                         <button
@@ -569,8 +561,6 @@ function CollectionMobile() {
                           </div>
                           <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedMask ? 'rotate-180' : ''}`} />
                         </button>
-
-                        {/* Mask type grid */}
                         {expandedMask && (
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
@@ -588,7 +578,6 @@ function CollectionMobile() {
                       </div>
                     )}
 
-                    {/* Sunscreen row — tappable, expands grid below */}
                     {sub.name === 'Sunscreen' && (
                       <div>
                         <button
@@ -601,8 +590,6 @@ function CollectionMobile() {
                           </div>
                           <IoChevronDown className={`w-[18px] h-[18px] text-[#8B7355] transition-transform duration-200 ${expandedSunscreen ? 'rotate-180' : ''}`} />
                         </button>
-
-                        {/* Sunscreen type grid */}
                         {expandedSunscreen && (
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
@@ -629,7 +616,6 @@ function CollectionMobile() {
               <div className="bg-[#FDFBF7]">
                 {category.subcategories.map((sub) => (
                   <div key={sub.name}>
-                    {/* Face row */}
                     {sub.name === 'Face' && (
                       <button
                         onClick={() => setExpandedFace(!expandedFace)}
@@ -646,7 +632,6 @@ function CollectionMobile() {
                       </button>
                     )}
 
-                    {/* Eyes row */}
                     {sub.name === 'Eyes' && (
                       <button
                         onClick={() => setExpandedEyes(!expandedEyes)}
@@ -669,7 +654,6 @@ function CollectionMobile() {
                       </button>
                     )}
 
-                    {/* Lips row */}
                     {sub.name === 'Lips' && (
                       <button
                         onClick={() => setExpandedLips(!expandedLips)}
@@ -686,7 +670,6 @@ function CollectionMobile() {
                       </button>
                     )}
 
-                    {/* Sets & Palettes row */}
                     {sub.name === 'Sets & Palettes' && (
                       <Link to={sub.path || '/makeup'}>
                         <div className="min-h-[52px] bg-white hover:bg-[#FAF8F5] px-5 flex items-center justify-between border-b border-[#E8E3D9] last:border-b-0 transition-colors">
@@ -704,7 +687,6 @@ function CollectionMobile() {
                       </Link>
                     )}
 
-                    {/* Face drill-down items (from shop-face-dropdown) */}
                     {sub.name === 'Face' && expandedFace && (
                       <div className="bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] px-4 py-2">
                         {faceItems.map((item, idx) => (
@@ -747,7 +729,6 @@ function CollectionMobile() {
                       </div>
                     )}
 
-                    {/* Eyes drill-down items (from shop-eyes-dropdown) */}
                     {sub.name === 'Eyes' && expandedEyes && (
                       <div className="bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] px-4 py-2">
                         {eyesItems.map((item, idx) => (
@@ -787,7 +768,6 @@ function CollectionMobile() {
                       </div>
                     )}
 
-                    {/* Lips drill-down items (from shop-lips-dropdown) */}
                     {sub.name === 'Lips' && expandedLips && (
                       <div className="bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] px-4 py-2">
                         {lipsItems.map((item, idx) => (
@@ -873,7 +853,7 @@ function CollectionMobile() {
           <span className="text-[14px] font-medium text-[#8B7355]">View All</span>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-          {featuredProducts.map((product, idx) => (
+          {featuredProductsMobile.map((product, idx) => (
             <div key={product.id || idx} onClick={() => navigate(`/product/${product.id}`)} className="min-w-[240px] bg-white rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] overflow-hidden flex-shrink-0 cursor-pointer">
               <div className="relative h-[240px]">
                 <img src={product.image_url || product.image} alt={product.name} className="w-full h-full object-cover" />
@@ -974,7 +954,34 @@ function CollectionDesktop() {
   const [selectedCategory, setSelectedCategory] = useState('All Collections')
   const [collectionProducts, setCollectionProducts] = useState([])
   const [loadingProducts, setLoadingProducts] = useState(false)
+  // ── NEW: dynamic min prices fetched from Supabase ──
+  const [collectionPrices, setCollectionPrices] = useState({})
   const productsRef = useRef(null)
+
+  // Fetch min price for each collection on mount
+  useEffect(() => {
+    const fetchMinPrices = async () => {
+      const keys = ['signature', 'limited_edition', 'holiday_set', 'gift_set']
+      const prices = {}
+      await Promise.all(
+        keys.map(async (key) => {
+          const { data } = await supabase
+            .from('products')
+            .select('price')
+            .eq('collection', key)
+            .order('price', { ascending: true })
+            .limit(1)
+          if (data && data.length > 0) {
+            prices[key] = `From $${parseFloat(data[0].price).toFixed(0)}`
+          } else {
+            prices[key] = ''
+          }
+        })
+      )
+      setCollectionPrices(prices)
+    }
+    fetchMinPrices()
+  }, [])
 
   useEffect(() => {
     if (location.hash) {
@@ -1087,7 +1094,10 @@ function CollectionDesktop() {
                     <p className="text-[14px] md:text-[15px] lg:text-[18px] font-normal mb-3 lg:mb-4">{collection.description}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-[13px] lg:text-[16px] font-normal">{collection.products}</span>
-                      <span className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold">{collection.price}</span>
+                      {/* ── Dynamic price from Supabase ── */}
+                      <span className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold">
+                        {collectionPrices[key] || ''}
+                      </span>
                     </div>
                   </div>
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
