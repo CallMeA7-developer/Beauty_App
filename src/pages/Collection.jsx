@@ -954,8 +954,9 @@ function CollectionDesktop() {
   const [selectedCategory, setSelectedCategory] = useState('All Collections')
   const [collectionProducts, setCollectionProducts] = useState([])
   const [loadingProducts, setLoadingProducts] = useState(false)
-  // ── NEW: dynamic min prices fetched from Supabase ──
   const [collectionPrices, setCollectionPrices] = useState({})
+  // ── All Collections: 8 real products (3 Skincare, 3 Makeup, 2 Fragrance) by highest price ──
+  const [allCollectionsProducts, setAllCollectionsProducts] = useState([])
   const productsRef = useRef(null)
 
   // Fetch min price for each collection on mount
@@ -981,6 +982,23 @@ function CollectionDesktop() {
       setCollectionPrices(prices)
     }
     fetchMinPrices()
+  }, [])
+
+  // Fetch 8 real products for "All Collections" default view (3 Skincare, 3 Makeup, 2 Fragrance) by highest price
+  useEffect(() => {
+    const fetchAllCollectionsProducts = async () => {
+      const [{ data: skincare }, { data: makeup }, { data: fragrance }] = await Promise.all([
+        supabase.from('products').select('*').ilike('category', 'Skincare').order('price', { ascending: false }).limit(3),
+        supabase.from('products').select('*').ilike('category', 'Makeup').order('price', { ascending: false }).limit(3),
+        supabase.from('products').select('*').ilike('category', 'Fragrance').order('price', { ascending: false }).limit(2),
+      ])
+      setAllCollectionsProducts([
+        ...(skincare || []),
+        ...(makeup || []),
+        ...(fragrance || []),
+      ])
+    }
+    fetchAllCollectionsProducts()
   }, [])
 
   useEffect(() => {
@@ -1014,7 +1032,12 @@ function CollectionDesktop() {
     setSelectedCategory(cat)
     if (selectedCollection) return
     if (cat === 'All Collections') {
-      setCollectionProducts([])
+      // Show the 8 curated real products, scroll to them
+      setCollectionProducts(allCollectionsProducts)
+      setLoadingProducts(false)
+      setTimeout(() => {
+        productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
       return
     }
     setLoadingProducts(true)
@@ -1034,7 +1057,7 @@ function CollectionDesktop() {
   }
 
   const getFilteredCollectionProducts = () => {
-    if (selectedCategory === 'All Collections') return collectionProducts
+    if (selectedCategory === 'All Collections') return allCollectionsProducts
     if (selectedCategory === 'Skincare Sets') return collectionProducts.filter(p => p.category === 'Skincare')
     if (selectedCategory === 'Makeup Collections') return collectionProducts.filter(p => p.category === 'Makeup')
     if (selectedCategory === 'Fragrance Duos') return collectionProducts.filter(p => p.category === 'Fragrance')
@@ -1164,88 +1187,22 @@ function CollectionDesktop() {
           </div>
         )}
 
-        {/* Featured Products */}
-        <div className="flex flex-col md:flex-row gap-5 mb-10 md:mb-12 lg:mb-[48px]">
-          <div className="w-full md:w-[340px] lg:w-[460px] md:h-[480px] lg:h-[560px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer">
-            <div className="relative w-full h-[260px] md:h-[300px] lg:h-[380px]">
-              <img src={featuredProducts[0].image} alt={featuredProducts[0].name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute bottom-0 left-0 right-0 h-[160px] bg-gradient-to-t from-black/50 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-5 lg:p-[24px] text-white">
-                <p className="text-[14px] lg:text-[17px] font-normal mb-1 lg:mb-2">{featuredProducts[0].description}</p>
-                <h3 className="text-[20px] lg:text-[28px] font-medium mb-2 lg:mb-3">{featuredProducts[0].name}</h3>
-                <p className="text-[20px] lg:text-[24px] font-semibold">{featuredProducts[0].price}</p>
+        {/* All Collections Default Products — shown when no collection/category is selected */}
+        {!selectedCollection && selectedCategory === 'All Collections' && allCollectionsProducts.length > 0 && (
+          <div className="mb-10 md:mb-12 lg:mb-[48px]">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-[22px] md:text-[26px] lg:text-[30px] font-medium text-[#1A1A1A]">Featured Products</h2>
+                <p className="text-[14px] text-[#999999] mt-1">Handpicked from our top categories</p>
               </div>
             </div>
-            <div className="p-5 lg:p-[24px]">
-              <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
-              <div className="flex items-center gap-[6px]">
-                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
-                <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({featuredProducts[0].reviews})</span>
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {allCollectionsProducts.map((product) => (
+                <CollectionProductCard key={product.id} product={product} />
+              ))}
             </div>
           </div>
-          <div className="flex-1 flex flex-col gap-4 lg:gap-[20px]">
-            {[featuredProducts[1], featuredProducts[2]].map((product, idx) => (
-              <div key={idx} className="w-full h-[180px] md:h-[220px] lg:h-[270px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer flex">
-                <div className="w-[160px] md:w-[220px] lg:w-[280px] h-full relative overflow-hidden flex-shrink-0">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <div className="flex-1 p-4 md:p-5 lg:p-[24px] flex flex-col justify-center">
-                  <p className="text-[11px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1 lg:mb-2">Shan Loray</p>
-                  <h4 className="text-[16px] md:text-[18px] lg:text-[22px] font-medium text-[#2B2B2B] leading-[1.2] mb-1 lg:mb-2">{product.name}</h4>
-                  <p className="text-[13px] lg:text-[15px] font-normal text-[#999999] leading-[1.5] mb-2 lg:mb-3 line-clamp-2">{product.description}</p>
-                  <p className="text-[18px] lg:text-[22px] font-semibold text-[#1A1A1A] mb-2 lg:mb-3">{product.price}</p>
-                  <div className="flex items-center gap-[6px]">
-                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[13px] h-[13px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
-                    <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Square Products */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10 md:mb-12 lg:mb-[48px]">
-          {squareProducts.map((product, idx) => (
-            <div key={idx} className="group cursor-pointer">
-              <div className="relative w-full aspect-square rounded-[12px] overflow-hidden mb-4 lg:mb-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
-              <h4 className="text-[17px] lg:text-[20px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
-              <p className="text-[13px] lg:text-[15px] font-normal text-[#999999] leading-[1.5] mb-2">{product.description}</p>
-              <p className="text-[17px] lg:text-[19px] font-semibold text-[#1A1A1A] mb-2">{product.price}</p>
-              <div className="flex items-center gap-[6px]">
-                {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
-                <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Rectangular Products */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16 md:mb-20 lg:mb-[96px]">
-          {rectangularProducts.map((product, idx) => (
-            <div key={idx} className="w-full bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
-              <div className="relative w-full h-[200px] md:h-[240px] lg:h-[280px] overflow-hidden">
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              <div className="p-5 lg:p-[24px]">
-                <p className="text-[12px] lg:text-[13px] font-light italic text-[#8B7355] tracking-[1.2px] mb-2">Shan Loray</p>
-                <h4 className="text-[18px] lg:text-[22px] font-medium text-[#2B2B2B] leading-[1.2] mb-2">{product.name}</h4>
-                <p className="text-[13px] lg:text-[15px] font-normal text-[#999999] leading-[1.5] mb-3">{product.description}</p>
-                <div className="flex items-center justify-between">
-                  <p className="text-[18px] lg:text-[22px] font-semibold text-[#1A1A1A]">{product.price}</p>
-                  <div className="flex items-center gap-[6px]">
-                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] lg:w-[15px] lg:h-[15px] text-[#C9A870]" />)}
-                    <span className="text-[12px] lg:text-[13px] font-normal text-[#999999] ml-1">({product.reviews})</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        )}
 
         {/* Benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 lg:gap-[64px] mb-16 md:mb-20 lg:mb-[96px]">
