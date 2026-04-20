@@ -27,24 +27,34 @@ const instagramImages = [
 // These query the featured_products table joined with products,
 // so the admin panel can change which products appear here at any time.
 
-async function fetchBestSellersFromDB() {
-  const { data, error } = await supabase
+async function fetchFeaturedSection(section) {
+  // Step 1: get product_ids for this section ordered by position
+  const { data: featured, error } = await supabase
     .from('featured_products')
-    .select('position, products(*)')
-    .eq('section', 'best_seller')
+    .select('product_id, position')
+    .eq('section', section)
     .order('position', { ascending: true })
-  if (error || !data) return []
-  return data.map(row => row.products).filter(Boolean)
+  if (error || !featured || featured.length === 0) return []
+
+  const ids = featured.map(row => row.product_id)
+
+  // Step 2: fetch the actual products
+  const { data: products } = await supabase
+    .from('products')
+    .select('id, name, brand, price, image_url')
+    .in('id', ids)
+  if (!products) return []
+
+  // Step 3: return in correct position order
+  return ids.map(id => products.find(p => p.id === id)).filter(Boolean)
+}
+
+async function fetchBestSellersFromDB() {
+  return fetchFeaturedSection('best_seller')
 }
 
 async function fetchNewArrivalsFromDB() {
-  const { data, error } = await supabase
-    .from('featured_products')
-    .select('position, products(*)')
-    .eq('section', 'new_arrival')
-    .order('position', { ascending: true })
-  if (error || !data) return []
-  return data.map(row => row.products).filter(Boolean)
+  return fetchFeaturedSection('new_arrival')
 }
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
