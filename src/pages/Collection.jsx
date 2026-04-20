@@ -1,5 +1,45 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+/*
+  Run this SQL in Supabase before using this page:
+  ALTER TABLE products ADD COLUMN IF NOT EXISTS collection text DEFAULT '';
+  ALTER TABLE products ADD COLUMN IF NOT EXISTS collection_category text DEFAULT '';
+
+  Then tag products in Supabase:
+  -- Signature Collection: top 12 skincare products by rating
+  UPDATE products SET collection = 'signature', collection_category = 'skincare_sets'
+  WHERE category = 'Skincare' AND id IN (
+    SELECT id FROM products WHERE category = 'Skincare' ORDER BY rating DESC LIMIT 12
+  );
+
+  -- Limited Editions: top 8 products by price
+  UPDATE products SET collection = 'limited_edition', collection_category = 'skincare_sets'
+  WHERE id IN (
+    SELECT id FROM products WHERE category = 'Skincare' ORDER BY price DESC LIMIT 8
+  );
+
+  -- Holiday Sets: 2 from each category
+  UPDATE products SET collection = 'holiday_set', collection_category = 'gift_sets'
+  WHERE id IN (
+    SELECT id FROM products WHERE category = 'Skincare' ORDER BY rating DESC LIMIT 2
+  );
+  UPDATE products SET collection = 'holiday_set', collection_category = 'gift_sets'
+  WHERE id IN (
+    SELECT id FROM products WHERE category = 'Makeup' ORDER BY rating DESC LIMIT 2
+  );
+  UPDATE products SET collection = 'holiday_set', collection_category = 'gift_sets'
+  WHERE id IN (
+    SELECT id FROM products WHERE category = 'Fragrance' ORDER BY rating DESC LIMIT 2
+  );
+
+  -- Gift Sets: 15 mixed products
+  UPDATE products SET collection = 'gift_set', collection_category = 'value_sets'
+  WHERE id IN (
+    SELECT id FROM products ORDER BY reviews_count DESC LIMIT 15
+  );
+*/
+
+import { useState, useEffect, useRef } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import {
   IoStarSharp,
   IoChevronBack,
@@ -220,8 +260,35 @@ const quickShopProducts = [
 
 const mobileFilterTabs = ['All Products', 'Best Sellers', 'New Arrivals', 'Sale']
 
+// ─── Collection Product Card ───────────────────────────────────────────────────
+function CollectionProductCard({ product }) {
+  const navigate = useNavigate()
+  return (
+    <div
+      onClick={() => navigate(`/product/${product.id}`)}
+      className="bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300 group"
+    >
+      <div className="relative w-full aspect-square overflow-hidden">
+        <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        {product.badge && <span className="absolute top-3 left-3 px-3 py-1 bg-[#C9A870] text-white text-[11px] font-medium rounded-full">{product.badge}</span>}
+      </div>
+      <div className="p-4">
+        <p className="text-[11px] font-light italic text-[#8B7355] mb-1">{product.brand}</p>
+        <h4 className="text-[15px] font-medium text-[#1A1A1A] mb-1 leading-tight line-clamp-2">{product.name}</h4>
+        <p className="text-[12px] text-[#999999] mb-2 line-clamp-2">{product.description}</p>
+        <div className="flex items-center justify-between">
+          <span className="text-[16px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
+          <div className="flex gap-0.5">{[...Array(5)].map((_, i) => <span key={i} className="text-[#C9A870] text-[12px]">★</span>)}</div>
+        </div>
+        <p className="text-[11px] text-[#999999] mt-1">({product.reviews_count || 0} reviews)</p>
+      </div>
+    </div>
+  )
+}
+
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function CollectionMobile() {
+  const navigate = useNavigate()
   const [expandedCategory, setExpandedCategory] = useState('skincare')
   const [activeFilter, setActiveFilter]         = useState('All Products')
   const [expandedFace, setExpandedFace]         = useState(false)
@@ -234,8 +301,73 @@ function CollectionMobile() {
   const [expandedMask, setExpandedMask]               = useState(false)
   const [expandedSunscreen, setExpandedSunscreen]     = useState(false)
   const [expandedFragrance, setExpandedFragrance]     = useState(false)
+  const [skincareCount, setSkincareCount] = useState(0)
+  const [makeupCount, setMakeupCount] = useState(0)
+  const [fragranceCount, setFragranceCount] = useState(0)
+  const [bodyCareCount, setBodyCareCount] = useState(0)
+  const [featuredProducts, setFeaturedProducts] = useState([])
+  const [shopAllCategory, setShopAllCategory] = useState('All Products')
+  const [shopAllProducts, setShopAllProducts] = useState([])
+  const [loadingShopAll, setLoadingShopAll] = useState(false)
 
   const toggleCategory = (id) => setExpandedCategory(expandedCategory === id ? null : id)
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const [{ count: skincare }, { count: makeup }, { count: fragrance }] = await Promise.all([
+        supabase.from('products').select('*', { count: 'exact', head: true }).ilike('category', 'Skincare'),
+        supabase.from('products').select('*', { count: 'exact', head: true }).ilike('category', 'Makeup'),
+        supabase.from('products').select('*', { count: 'exact', head: true }).ilike('category', 'Fragrance'),
+      ])
+      setSkincareCount(skincare || 0)
+      setMakeupCount(makeup || 0)
+      setFragranceCount(fragrance || 0)
+      setBodyCareCount(0)
+    }
+    fetchCounts()
+  }, [])
+
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .order('rating', { ascending: false })
+        .limit(50)
+      if (data && data.length > 0) {
+        const shuffled = [...data].sort(() => Math.random() - 0.5)
+        setFeaturedProducts(shuffled.slice(0, 3))
+      }
+    }
+    fetchFeaturedProducts()
+  }, [])
+
+  const fetchShopAllProducts = async (category) => {
+    setShopAllCategory(category)
+    setLoadingShopAll(true)
+    let query = supabase.from('products').select('*').limit(12)
+    if (category === 'All Products') {
+      query = query.order('rating', { ascending: false })
+    } else if (category === 'Skincare Sets') {
+      query = query.ilike('category', 'Skincare').order('rating', { ascending: false })
+    } else if (category === 'Makeup Collections') {
+      query = query.ilike('category', 'Makeup').order('rating', { ascending: false })
+    } else if (category === 'Fragrance Duos') {
+      query = query.ilike('category', 'Fragrance').order('rating', { ascending: false })
+    } else {
+      query = query.eq('collection_category', category.toLowerCase().replace(' ', '_')).order('rating', { ascending: false })
+    }
+    const { data } = await query
+    setShopAllProducts(data || [])
+    setLoadingShopAll(false)
+  }
+
+  useEffect(() => {
+    fetchShopAllProducts('All Products')
+  }, [])
+
+  const mobileCategoryDynamicCount = { skincare: skincareCount, makeup: makeupCount, fragrance: fragranceCount, bodycare: bodyCareCount }
+  const shopAllTabs = ['All Products', 'Skincare Sets', 'Makeup Collections', 'Fragrance Duos', 'Travel Sizes', 'Discovery Kits', 'Value Sets']
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
@@ -286,7 +418,7 @@ function CollectionMobile() {
                 <span className="text-[17px] font-medium text-[#1A1A1A]">{category.name}</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-[12px] font-light text-[#999999]">{category.count} products</span>
+                <span className="text-[12px] font-light text-[#999999]">{mobileCategoryDynamicCount[category.id] ?? category.count} products</span>
                 <IoChevronDown className={`w-5 h-5 text-[#8B7355] transition-transform duration-200 ${expandedCategory === category.id ? 'rotate-180' : ''}`} />
               </div>
             </button>
@@ -315,7 +447,7 @@ function CollectionMobile() {
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
                               {cleanserTypes.map((type) => (
-                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                <div key={type.name} onClick={() => navigate('/skincare?subcategory=Cleansers')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                                   <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                                   <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                                   <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -347,7 +479,7 @@ function CollectionMobile() {
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
                               {serumTypes.map((type) => (
-                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                <div key={type.name} onClick={() => navigate('/skincare?subcategory=Serums')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                                   <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                                   <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                                   <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -379,7 +511,7 @@ function CollectionMobile() {
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
                               {moisturizerTypes.map((type) => (
-                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                <div key={type.name} onClick={() => navigate('/skincare?subcategory=Moisturizers')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                                   <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                                   <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                                   <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -411,7 +543,7 @@ function CollectionMobile() {
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
                               {eyeCareTypes.map((type) => (
-                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                <div key={type.name} onClick={() => navigate('/skincare?subcategory=Eye Care')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                                   <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                                   <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                                   <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -443,7 +575,7 @@ function CollectionMobile() {
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
                               {maskTypes.map((type) => (
-                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                <div key={type.name} onClick={() => navigate('/skincare?subcategory=Masks')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                                   <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                                   <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                                   <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -475,7 +607,7 @@ function CollectionMobile() {
                           <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                             <div className="grid grid-cols-2 gap-3">
                               {sunscreenTypes.map((type) => (
-                                <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                                <div key={type.name} onClick={() => navigate('/skincare?subcategory=Sunscreen')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                                   <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                                   <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                                   <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -578,6 +710,7 @@ function CollectionMobile() {
                         {faceItems.map((item, idx) => (
                           <div
                             key={item.name}
+                            onClick={() => navigate(`/makeup?subcategory=${item.name}`)}
                             className={`min-h-[72px] hover:bg-[#FAF8F5] flex items-center gap-3 px-2 py-2 cursor-pointer ${idx < faceItems.length - 1 ? 'border-b border-[#E8E3D9]' : ''}`}
                           >
                             <img src={item.image} alt={item.name} className="w-[64px] h-[64px] rounded-[8px] object-cover flex-shrink-0" />
@@ -620,6 +753,7 @@ function CollectionMobile() {
                         {eyesItems.map((item, idx) => (
                           <div
                             key={item.name}
+                            onClick={() => navigate(`/makeup?subcategory=${item.name}`)}
                             className={`min-h-[72px] hover:bg-[#FAF8F5] flex items-center gap-3 px-2 py-2 cursor-pointer ${idx < eyesItems.length - 1 ? 'border-b border-[#E8E3D9]' : ''}`}
                           >
                             <img src={item.image} alt={item.name} className="w-[64px] h-[64px] rounded-[8px] object-cover flex-shrink-0" />
@@ -659,6 +793,7 @@ function CollectionMobile() {
                         {lipsItems.map((item, idx) => (
                           <div
                             key={item.name}
+                            onClick={() => navigate(`/makeup?subcategory=${item.name}`)}
                             className={`min-h-[72px] hover:bg-[#FAF8F5] flex items-center gap-3 px-2 py-2 cursor-pointer ${idx < lipsItems.length - 1 ? 'border-b border-[#E8E3D9]' : ''}`}
                           >
                             <img src={item.image} alt={item.name} className="w-[64px] h-[64px] rounded-[8px] object-cover flex-shrink-0" />
@@ -701,7 +836,7 @@ function CollectionMobile() {
               <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                 <div className="grid grid-cols-2 gap-3">
                   {fragranceTypes.map((type) => (
-                    <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                    <div key={type.name} onClick={() => navigate(`/fragrance?subcategory=${type.name}`)} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                       <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                       <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                       <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -717,7 +852,7 @@ function CollectionMobile() {
               <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                 <div className="grid grid-cols-2 gap-3">
                   {bodyCareTypes.map((type) => (
-                    <div key={type.name} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                    <div key={type.name} onClick={() => navigate('/collections')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                       <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                       <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                       <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>
@@ -738,10 +873,10 @@ function CollectionMobile() {
           <span className="text-[14px] font-medium text-[#8B7355]">View All</span>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-          {mobileFeaturedProducts.map((product, idx) => (
-            <div key={idx} className="min-w-[240px] bg-white rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] overflow-hidden flex-shrink-0">
+          {featuredProducts.map((product, idx) => (
+            <div key={product.id || idx} onClick={() => navigate(`/product/${product.id}`)} className="min-w-[240px] bg-white rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] overflow-hidden flex-shrink-0 cursor-pointer">
               <div className="relative h-[240px]">
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                <img src={product.image_url || product.image} alt={product.name} className="w-full h-full object-cover" />
                 <div className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
                   <IoHeartOutline className="w-5 h-5 text-[#2B2B2B]" />
                 </div>
@@ -750,7 +885,7 @@ function CollectionMobile() {
                 <p className="text-[11px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1">{product.brand}</p>
                 <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-2 line-clamp-2">{product.name}</h3>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[19px] font-semibold text-[#1A1A1A]">{product.price}</span>
+                  <span className="text-[19px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-3 h-3 text-[#C9A870]" />)}
                   </div>
@@ -764,83 +899,82 @@ function CollectionMobile() {
         </div>
       </div>
 
-      {/* Quick Shop Grid */}
+      {/* Shop All Products */}
       <div className="bg-white px-5 py-6 border-t border-[#E8E3D9]">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-[20px] font-bold text-[#1A1A1A]">Shop All Products</h2>
-          <button className="flex items-center gap-1 text-[13px] font-medium text-[#8B7355]">
-            Sort <IoChevronDown className="w-4 h-4" />
-          </button>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          {quickShopProducts.map((product, idx) => (
-            <div key={idx} className="bg-white rounded-[8px] shadow-[0_2px_8px_rgba(0,0,0,0.06)] overflow-hidden">
-              <div className="relative h-[140px]">
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                <button className="absolute top-2 right-2 w-7 h-7 bg-white/90 rounded-full flex items-center justify-center">
-                  <IoHeartOutline className="w-4 h-4 text-[#2B2B2B]" />
-                </button>
-              </div>
-              <div className="p-3">
-                <h3 className="text-[13px] font-normal text-[#2B2B2B] mb-1 line-clamp-2 h-[36px]">{product.name}</h3>
-                <span className="text-[16px] font-medium text-[#1A1A1A]">{product.price}</span>
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto mb-4" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex items-center gap-2 w-max py-1">
+            {shopAllTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => fetchShopAllProducts(tab)}
+                className={`px-4 py-2 text-[13px] rounded-[24px] whitespace-nowrap transition-all border ${
+                  shopAllCategory === tab
+                    ? 'bg-[#8B7355] text-white border-[#8B7355] font-medium'
+                    : 'bg-transparent text-[#8B7355] border-[#C9A870] font-normal'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
+        {loadingShopAll ? (
+          <div className="flex items-center justify-center py-10">
+            <div className="w-8 h-8 rounded-full border-2 border-[#8B7355] border-t-transparent animate-spin" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {shopAllProducts.map((product) => (
+              <div key={product.id} onClick={() => navigate(`/product/${product.id}`)} className="bg-white rounded-[8px] shadow-[0_2px_8px_rgba(0,0,0,0.06)] overflow-hidden cursor-pointer">
+                <div className="relative h-[140px]">
+                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                  <button className="absolute top-2 right-2 w-7 h-7 bg-white/90 rounded-full flex items-center justify-center">
+                    <IoHeartOutline className="w-4 h-4 text-[#2B2B2B]" />
+                  </button>
+                </div>
+                <div className="p-3">
+                  <p className="text-[10px] font-light italic text-[#8B7355] mb-0.5">{product.brand}</p>
+                  <h3 className="text-[13px] font-normal text-[#2B2B2B] mb-1 line-clamp-2 h-[36px]">{product.name}</h3>
+                  <span className="text-[16px] font-medium text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <button className="w-full min-h-[48px] mt-5 border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-medium rounded-[8px]">
           Load More
         </button>
       </div>
 
-      {/* Newsletter Banner */}
-      <div className="bg-gradient-to-r from-[#F5F1EA] to-[#FDFBF7] px-5 py-8 flex flex-col items-center text-center">
-        <h3 className="text-[22px] font-medium text-[#1A1A1A] mb-2">Join Our Community</h3>
-        <p className="text-[13px] font-normal text-[#666666] mb-4">Get exclusive offers and beauty tips</p>
-        <div className="w-full flex gap-2">
-          <input type="email" placeholder="Enter your email" className="flex-1 h-[48px] px-4 bg-white text-[13px] font-normal text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
-          <button className="h-[48px] px-6 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px]">Subscribe</button>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="w-full bg-[#2B2B2B] px-5 py-10">
-        <div className="mb-8">
-          <h3 className="text-[18px] font-semibold text-white tracking-[2px] mb-2">SHAN LORAY</h3>
-          <p className="text-[12px] font-light italic text-[#C4B5A0] mb-5">Timeless Luxury Beauty</p>
-        </div>
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          {[
-            { title: 'Shop',  links: ['Skincare', 'Makeup', 'Fragrance']       },
-            { title: 'Help',  links: ['Contact', 'Shipping', 'Returns']         },
-            { title: 'About', links: ['Our Story', 'Ingredients', 'Sustainability'] },
-          ].map(({ title, links }) => (
-            <div key={title}>
-              <h4 className="text-[14px] font-medium text-white mb-3">{title}</h4>
-              <div className="space-y-2">
-                {links.map((link) => <p key={link} className="text-[13px] font-normal text-[#C4B5A0]">{link}</p>)}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-center gap-6 mb-6">
-          <IoLogoInstagram className="w-6 h-6 text-[#C4B5A0]" />
-          <IoLogoFacebook  className="w-6 h-6 text-[#C4B5A0]" />
-          <IoLogoPinterest className="w-6 h-6 text-[#C4B5A0]" />
-          <IoLogoYoutube   className="w-6 h-6 text-[#C4B5A0]" />
-        </div>
-        <div className="border-t border-[#3D3D3D] pt-5 text-center">
-          <p className="text-[11px] font-light text-[#808080]">© 2024 Shan Loray. All rights reserved.</p>
-        </div>
-      </footer>
-
     </div>
   )
+}
+
+const collectionTitles = {
+  signature: 'Signature Collection',
+  limited_edition: 'Limited Editions',
+  holiday_set: 'Holiday 2024',
+  gift_set: 'Gift Sets',
+}
+
+const collectionKeyMap = {
+  'Signature Collection': 'signature',
+  'Limited Editions': 'limited_edition',
+  'Holiday 2024': 'holiday_set',
+  'Gift Sets': 'gift_set',
 }
 
 // ─── Desktop (+ Tablet responsive) ───────────────────────────────────────────
 function CollectionDesktop() {
   const location = useLocation()
+  const [selectedCollection, setSelectedCollection] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState('All Collections')
+  const [collectionProducts, setCollectionProducts] = useState([])
+  const [loadingProducts, setLoadingProducts] = useState(false)
+  const productsRef = useRef(null)
 
   useEffect(() => {
     if (location.hash) {
@@ -848,6 +982,62 @@ function CollectionDesktop() {
       if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
     }
   }, [location])
+
+  const fetchCollectionProducts = async (collectionKey) => {
+    if (selectedCollection === collectionKey) {
+      setSelectedCollection(null)
+      setCollectionProducts([])
+      return
+    }
+    setSelectedCollection(collectionKey)
+    setLoadingProducts(true)
+    setSelectedCategory('All Collections')
+    const { data } = await supabase
+      .from('products')
+      .select('*')
+      .eq('collection', collectionKey)
+    setCollectionProducts(data || [])
+    setLoadingProducts(false)
+    setTimeout(() => {
+      productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }
+
+  const fetchCategoryProducts = async (cat) => {
+    setSelectedCategory(cat)
+    if (selectedCollection) return
+    if (cat === 'All Collections') {
+      setCollectionProducts([])
+      return
+    }
+    setLoadingProducts(true)
+    let query = supabase.from('products').select('*')
+    if (cat === 'Skincare Sets') query = query.ilike('category', 'Skincare')
+    else if (cat === 'Makeup Collections') query = query.ilike('category', 'Makeup')
+    else if (cat === 'Fragrance Duos') query = query.ilike('category', 'Fragrance')
+    else if (cat === 'Travel Sizes') query = query.eq('collection_category', 'travel_sizes')
+    else if (cat === 'Discovery Kits') query = query.eq('collection_category', 'discovery_kits')
+    else if (cat === 'Value Sets') query = query.eq('collection_category', 'value_sets')
+    const { data } = await query
+    setCollectionProducts(data || [])
+    setLoadingProducts(false)
+    setTimeout(() => {
+      productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }
+
+  const getFilteredCollectionProducts = () => {
+    if (selectedCategory === 'All Collections') return collectionProducts
+    if (selectedCategory === 'Skincare Sets') return collectionProducts.filter(p => p.category === 'Skincare')
+    if (selectedCategory === 'Makeup Collections') return collectionProducts.filter(p => p.category === 'Makeup')
+    if (selectedCategory === 'Fragrance Duos') return collectionProducts.filter(p => p.category === 'Fragrance')
+    if (selectedCategory === 'Travel Sizes') return collectionProducts.filter(p => p.collection_category === 'travel_sizes')
+    if (selectedCategory === 'Discovery Kits') return collectionProducts.filter(p => p.collection_category === 'discovery_kits')
+    if (selectedCategory === 'Value Sets') return collectionProducts.filter(p => p.collection_category === 'value_sets')
+    return collectionProducts
+  }
+
+  const filteredProducts = getFilteredCollectionProducts()
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -878,42 +1068,91 @@ function CollectionDesktop() {
 
         {/* Collections Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10 md:mb-12 lg:mb-[64px]">
-          {desktopCollections.map((collection, idx) => (
-            <div key={idx} className={`${idx < 2 ? 'h-[420px] md:h-[560px] lg:h-[720px]' : 'h-[300px] md:h-[360px] lg:h-[420px]'} bg-white rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.10)] group cursor-pointer relative`}>
-              <div className="relative w-full h-full">
-                <img src={collection.image} alt={collection.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                {collection.badge && <div className="absolute top-[16px] right-[16px] lg:top-[20px] lg:right-[20px] px-[14px] py-[7px] lg:px-[16px] lg:py-[8px] bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium rounded-full">LIMITED</div>}
-                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 lg:p-[32px] text-white">
-                  <p className="text-[12px] lg:text-[14px] font-light italic tracking-[2px] mb-2">{collection.subtitle}</p>
-                  <h3 className={`${idx < 2 ? 'text-[28px] md:text-[36px] lg:text-[48px]' : 'text-[22px] md:text-[28px] lg:text-[36px]'} font-bold mb-2 lg:mb-3`}>{collection.name}</h3>
-                  <p className="text-[14px] md:text-[15px] lg:text-[18px] font-normal mb-3 lg:mb-4">{collection.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[13px] lg:text-[16px] font-normal">{collection.products}</span>
-                    <span className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold">{collection.price}</span>
+          {desktopCollections.map((collection, idx) => {
+            const key = collectionKeyMap[collection.name]
+            const isSelected = selectedCollection === key
+            return (
+              <div
+                key={idx}
+                onClick={() => fetchCollectionProducts(key)}
+                className={`${idx < 2 ? 'h-[420px] md:h-[560px] lg:h-[720px]' : 'h-[300px] md:h-[360px] lg:h-[420px]'} bg-white rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.10)] group cursor-pointer relative transition-all duration-300 ${isSelected ? 'ring-4 ring-[#C9A870]' : ''}`}
+              >
+                <div className="relative w-full h-full">
+                  <img src={collection.image} alt={collection.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  {collection.badge && <div className="absolute top-[16px] right-[16px] lg:top-[20px] lg:right-[20px] px-[14px] py-[7px] lg:px-[16px] lg:py-[8px] bg-[#C9A870] text-white text-[11px] lg:text-[12px] font-medium rounded-full">LIMITED</div>}
+                  <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 lg:p-[32px] text-white">
+                    <p className="text-[12px] lg:text-[14px] font-light italic tracking-[2px] mb-2">{collection.subtitle}</p>
+                    <h3 className={`${idx < 2 ? 'text-[28px] md:text-[36px] lg:text-[48px]' : 'text-[22px] md:text-[28px] lg:text-[36px]'} font-bold mb-2 lg:mb-3`}>{collection.name}</h3>
+                    <p className="text-[14px] md:text-[15px] lg:text-[18px] font-normal mb-3 lg:mb-4">{collection.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[13px] lg:text-[16px] font-normal">{collection.products}</span>
+                      <span className="text-[16px] md:text-[18px] lg:text-[20px] font-semibold">{collection.price}</span>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
+                    <button className="opacity-0 group-hover:opacity-100 px-[24px] lg:px-[32px] py-[12px] lg:py-[14px] bg-white text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-opacity duration-300">
+                      View Products →
+                    </button>
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
-                  <button className="opacity-0 group-hover:opacity-100 px-[24px] lg:px-[32px] py-[12px] lg:py-[14px] bg-white text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)] transition-opacity duration-300">
-                    Explore Collection
-                  </button>
-                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Browse by Category */}
         <div id="browse-by-category" className="mb-10 md:mb-12 lg:mb-[48px]">
           <h2 className="text-[22px] md:text-[25px] lg:text-[28px] font-medium text-[#1A1A1A] text-center mb-6 lg:mb-[32px]">Browse by Category</h2>
           <div className="flex items-center justify-center gap-[10px] lg:gap-[12px] flex-wrap">
-            {desktopCategories.map((cat, idx) => (
-              <div key={cat} className={`px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] rounded-full cursor-pointer transition-all ${idx === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#8B7355] hover:text-white'}`}>
+            {desktopCategories.map((cat) => (
+              <div
+                key={cat}
+                onClick={() => fetchCategoryProducts(cat)}
+                className={`px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] rounded-full cursor-pointer transition-all ${selectedCategory === cat ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D] hover:bg-[#8B7355] hover:text-white'}`}
+              >
                 <span className="text-[13px] lg:text-[14px] font-medium">{cat}</span>
               </div>
             ))}
           </div>
         </div>
+
+        {/* Collection Products Section */}
+        {(selectedCollection || selectedCategory !== 'All Collections') && (
+          <div className="mb-10 md:mb-12 lg:mb-[64px]">
+            <div ref={productsRef} />
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-[22px] md:text-[26px] lg:text-[30px] font-medium text-[#1A1A1A]">
+                  {selectedCollection ? collectionTitles[selectedCollection] : selectedCategory}
+                </h2>
+                <p className="text-[14px] text-[#999999] mt-1">{filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}</p>
+              </div>
+              <button
+                onClick={() => { setSelectedCollection(null); setCollectionProducts([]); setSelectedCategory('All Collections') }}
+                className="px-4 py-2 text-[13px] font-medium text-[#8B7355] border border-[#8B7355] rounded-full hover:bg-[#8B7355] hover:text-white transition-colors"
+              >
+                Clear Selection ×
+              </button>
+            </div>
+            {loadingProducts ? (
+              <div className="flex items-center justify-center py-16">
+                <div className="w-10 h-10 rounded-full border-2 border-[#8B7355] border-t-transparent animate-spin" />
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <p className="text-[18px] font-medium text-[#999999]">No products found in this collection</p>
+                <p className="text-[14px] text-[#BBBBBB] mt-2">Try selecting a different collection or category</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                {filteredProducts.map((product) => (
+                  <CollectionProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Featured Products */}
         <div className="flex flex-col md:flex-row gap-5 mb-10 md:mb-12 lg:mb-[48px]">
