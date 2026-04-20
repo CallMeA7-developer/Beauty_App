@@ -40,6 +40,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsConditions from './pages/TermsConditions'
 import Journal from './pages/Journal'
 import JournalArticle from './pages/JournalArticle'
+import AdminPanel from './pages/AdminPanel'
 import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
@@ -56,6 +57,7 @@ export default function App() {
       <Routes>
         {/* ── Splash — no Navbar/Footer ── */}
         <Route path="/splash" element={<SplashScreen />} />
+        <Route path="/admin" element={<AdminPanel />} />
 
         {/* ── All other pages — with Navbar + Footer ── */}
         <Route path="/*" element={
