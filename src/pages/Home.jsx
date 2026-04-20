@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { IoCheckmarkCircle, IoChevronBack, IoChevronForward, IoStarSharp } from 'react-icons/io5'
@@ -83,7 +83,7 @@ function HomeMobile() {
     <div className="w-full bg-white font-['Cormorant_Garamond']">
 
       {/* Hero */}
-      <section className="w-full relative min-h-[600px]">
+      <section className="w-full relative h-screen min-h-[100svh]">
         <img
           src={`${SUPABASE_STORAGE}/4.jpeg`}
           alt="Luxury skincare golden hour"
@@ -320,6 +320,17 @@ function HomeMobile() {
           </a>
         </div>
       </section>
+
+      {/* Scroll to Top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 right-6 z-50 w-11 h-11 bg-[#8B7355] text-white rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)] flex items-center justify-center hover:bg-[#7a6448] transition-colors"
+        aria-label="Back to top"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 15l-6-6-6 6" />
+        </svg>
+      </button>
     </div>
   )
 }
@@ -612,6 +623,17 @@ function HomeDesktop() {
           </a>
         </div>
       </section>
+
+      {/* Scroll to Top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-[#8B7355] text-white rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)] flex items-center justify-center hover:bg-[#7a6448] transition-colors"
+        aria-label="Back to top"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 15l-6-6-6 6" />
+        </svg>
+      </button>
     </div>
   )
 }
