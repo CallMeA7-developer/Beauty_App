@@ -311,6 +311,8 @@ function CollectionMobile() {
   const [fragranceCount, setFragranceCount] = useState(0)
   const [bodyCareCount, setBodyCareCount] = useState(0)
   const [featuredProductsMobile, setFeaturedProductsMobile] = useState([])
+  const [allFeaturedProducts, setAllFeaturedProducts] = useState([])
+  const [showAllFeatured, setShowAllFeatured] = useState(false)
   const [shopAllCategory, setShopAllCategory] = useState('All Products')
   const [shopAllProducts, setShopAllProducts] = useState([])
   const [loadingShopAll, setLoadingShopAll] = useState(false)
@@ -332,17 +334,17 @@ function CollectionMobile() {
     fetchCounts()
   }, [])
 
+  // Fetch same 8 products as desktop All Collections (3 Skincare, 3 Makeup, 2 Fragrance by highest price)
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('*')
-        .order('rating', { ascending: false })
-        .limit(50)
-      if (data && data.length > 0) {
-        const shuffled = [...data].sort(() => Math.random() - 0.5)
-        setFeaturedProductsMobile(shuffled.slice(0, 3))
-      }
+      const [{ data: skincare }, { data: makeup }, { data: fragrance }] = await Promise.all([
+        supabase.from('products').select('*').ilike('category', 'Skincare').order('price', { ascending: false }).limit(3),
+        supabase.from('products').select('*').ilike('category', 'Makeup').order('price', { ascending: false }).limit(3),
+        supabase.from('products').select('*').ilike('category', 'Fragrance').order('price', { ascending: false }).limit(2),
+      ])
+      const all = [...(skincare || []), ...(makeup || []), ...(fragrance || [])]
+      setAllFeaturedProducts(all)
+      setFeaturedProductsMobile(all.slice(0, 3))
     }
     fetchFeaturedProducts()
   }, [])
@@ -359,6 +361,12 @@ function CollectionMobile() {
       query = query.ilike('category', 'Makeup').order('rating', { ascending: false })
     } else if (category === 'Fragrance Duos') {
       query = query.ilike('category', 'Fragrance').order('rating', { ascending: false })
+    } else if (category === 'Travel Sizes') {
+      query = query.eq('collection_category', 'travel_sizes').order('rating', { ascending: false })
+    } else if (category === 'Discovery Kits') {
+      query = query.eq('collection_category', 'discovery_kits').order('rating', { ascending: false })
+    } else if (category === 'Value Sets') {
+      query = query.eq('collection_category', 'value_sets').order('rating', { ascending: false })
     } else {
       query = query.eq('collection_category', category.toLowerCase().replace(' ', '_')).order('rating', { ascending: false })
     }
@@ -850,33 +858,63 @@ function CollectionMobile() {
       <div className="bg-white px-5 py-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-[20px] font-bold text-[#1A1A1A]">Featured Products</h2>
-          <span className="text-[14px] font-medium text-[#8B7355]">View All</span>
+          <button
+            onClick={() => setShowAllFeatured(!showAllFeatured)}
+            className="text-[14px] font-medium text-[#8B7355]"
+          >
+            {showAllFeatured ? 'Show Less' : 'View All'}
+          </button>
         </div>
-        <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-          {featuredProductsMobile.map((product, idx) => (
-            <div key={product.id || idx} onClick={() => navigate(`/product/${product.id}`)} className="min-w-[240px] bg-white rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] overflow-hidden flex-shrink-0 cursor-pointer">
-              <div className="relative h-[240px]">
-                <img src={product.image_url || product.image} alt={product.name} className="w-full h-full object-cover" />
-                <div className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
-                  <IoHeartOutline className="w-5 h-5 text-[#2B2B2B]" />
-                </div>
-              </div>
-              <div className="p-4">
-                <p className="text-[11px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1">{product.brand}</p>
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-2 line-clamp-2">{product.name}</h3>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[19px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-3 h-3 text-[#C9A870]" />)}
+
+        {/* Collapsed: horizontal scroll of 3 products */}
+        {!showAllFeatured && (
+          <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
+            {featuredProductsMobile.map((product, idx) => (
+              <div key={product.id || idx} onClick={() => navigate(`/product/${product.id}`)} className="min-w-[240px] bg-white rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] overflow-hidden flex-shrink-0 cursor-pointer">
+                <div className="relative h-[240px]">
+                  <img src={product.image_url || product.image} alt={product.name} className="w-full h-full object-cover" />
+                  <div className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
+                    <IoHeartOutline className="w-5 h-5 text-[#2B2B2B]" />
                   </div>
                 </div>
-                <button className="w-full h-[42px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px]">
-                  Quick Add
-                </button>
+                <div className="p-4">
+                  <p className="text-[11px] font-light italic text-[#8B7355] tracking-[1.2px] mb-1">{product.brand}</p>
+                  <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-2 line-clamp-2">{product.name}</h3>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[19px] font-semibold text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-3 h-3 text-[#C9A870]" />)}
+                    </div>
+                  </div>
+                  <button className="w-full h-[42px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px]">
+                    Quick Add
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
+        {/* Expanded: 2-column grid of all 8 products */}
+        {showAllFeatured && (
+          <div className="grid grid-cols-2 gap-3">
+            {allFeaturedProducts.map((product) => (
+              <div key={product.id} onClick={() => navigate(`/product/${product.id}`)} className="bg-white rounded-[8px] shadow-[0_2px_8px_rgba(0,0,0,0.06)] overflow-hidden cursor-pointer">
+                <div className="relative h-[140px]">
+                  <img src={product.image_url || product.image} alt={product.name} className="w-full h-full object-cover" />
+                  <div className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
+                    <IoHeartOutline className="w-4 h-4 text-[#2B2B2B]" />
+                  </div>
+                </div>
+                <div className="p-3">
+                  <p className="text-[10px] font-light italic text-[#8B7355] mb-0.5">{product.brand}</p>
+                  <h3 className="text-[13px] font-normal text-[#2B2B2B] mb-1 line-clamp-2 h-[36px]">{product.name}</h3>
+                  <span className="text-[16px] font-medium text-[#1A1A1A]">${parseFloat(product.price).toFixed(2)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Shop All Products */}
