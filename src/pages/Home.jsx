@@ -23,6 +23,30 @@ const instagramImages = [
   `${SUPABASE_STORAGE}/17.jpeg`,
 ]
 
+// ─── Shared fetch helpers ─────────────────────────────────────────────────────
+// These query the featured_products table joined with products,
+// so the admin panel can change which products appear here at any time.
+
+async function fetchBestSellersFromDB() {
+  const { data, error } = await supabase
+    .from('featured_products')
+    .select('position, products(*)')
+    .eq('section', 'best_seller')
+    .order('position', { ascending: true })
+  if (error || !data) return []
+  return data.map(row => row.products).filter(Boolean)
+}
+
+async function fetchNewArrivalsFromDB() {
+  const { data, error } = await supabase
+    .from('featured_products')
+    .select('position, products(*)')
+    .eq('section', 'new_arrival')
+    .order('position', { ascending: true })
+  if (error || !data) return []
+  return data.map(row => row.products).filter(Boolean)
+}
+
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function HomeMobile() {
   const { user } = useAuth()
@@ -33,36 +57,16 @@ function HomeMobile() {
   const [notifyMessage, setNotifyMessage] = useState(false)
 
   useEffect(() => {
-    const fetchBestSellers = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('id, name, brand, price, image_url')
-        .in('id', ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404'])
-      if (data && data.length > 0) {
-        const order = ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404']
-        const sorted = order.map(id => data.find(p => p.id === id)).filter(Boolean)
-        setBestSellers(sorted)
-      }
-    }
-    fetchBestSellers()
+    fetchBestSellersFromDB().then(data => setBestSellers(data))
   }, [])
 
   useEffect(() => {
-    const fetchNewArrivals = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('id, name, brand, price, image_url')
-        .in('id', ['sk-405', 'sk-406', 'mk-402', 'mk-403'])
-      if (data && data.length > 0) {
-        const main = data.find(p => p.id === 'sk-405')
-        const supporting = ['sk-406', 'mk-402', 'mk-403']
-          .map(id => data.find(p => p.id === id))
-          .filter(Boolean)
-        setNewArrivalMain(main)
-        setNewArrivalSupporting(supporting)
+    fetchNewArrivalsFromDB().then(data => {
+      if (data.length > 0) {
+        setNewArrivalMain(data[0])
+        setNewArrivalSupporting(data.slice(1))
       }
-    }
-    fetchNewArrivals()
+    })
   }, [])
 
   return (
@@ -203,11 +207,13 @@ function HomeMobile() {
                 ))}
               </div>
               <div className="space-y-3">
-                <button onClick={() => { if (user) { window.location.href = `/product/${newArrivalMain.id}` } else { window.location.href = '/account' } }}
+                <button
+                  onClick={() => { if (user) { window.location.href = `/product/${newArrivalMain.id}` } else { window.location.href = '/account' } }}
                   className="w-full h-12 bg-[#8B7355] text-white text-[14px] font-semibold rounded-[4px]">
                   {t('home.preOrder')}
                 </button>
-                <button onClick={() => { setNotifyMessage(true); setTimeout(() => setNotifyMessage(false), 4000) }}
+                <button
+                  onClick={() => { setNotifyMessage(true); setTimeout(() => setNotifyMessage(false), 4000) }}
                   className="w-full h-12 border-[2px] border-[#8B7355] text-[#8B7355] text-[14px] font-semibold rounded-[4px]">
                   {t('home.notifyMe')}
                 </button>
@@ -318,36 +324,16 @@ function HomeDesktop() {
   const [notifyMessage, setNotifyMessage] = useState(false)
 
   useEffect(() => {
-    const fetchBestSellers = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('id, name, brand, price, image_url')
-        .in('id', ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404'])
-      if (data && data.length > 0) {
-        const order = ['sk-401', 'mk-401', 'sk-402', 'sk-403', 'sk-404']
-        const sorted = order.map(id => data.find(p => p.id === id)).filter(Boolean)
-        setBestSellers(sorted)
-      }
-    }
-    fetchBestSellers()
+    fetchBestSellersFromDB().then(data => setBestSellers(data))
   }, [])
 
   useEffect(() => {
-    const fetchNewArrivals = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('id, name, brand, price, image_url')
-        .in('id', ['sk-405', 'sk-406', 'mk-402', 'mk-403'])
-      if (data && data.length > 0) {
-        const main = data.find(p => p.id === 'sk-405')
-        const supporting = ['sk-406', 'mk-402', 'mk-403']
-          .map(id => data.find(p => p.id === id))
-          .filter(Boolean)
-        setNewArrivalMain(main)
-        setNewArrivalSupporting(supporting)
+    fetchNewArrivalsFromDB().then(data => {
+      if (data.length > 0) {
+        setNewArrivalMain(data[0])
+        setNewArrivalSupporting(data.slice(1))
       }
-    }
-    fetchNewArrivals()
+    })
   }, [])
 
   return (
@@ -495,11 +481,13 @@ function HomeDesktop() {
                   ))}
                 </div>
                 <div className="space-y-4">
-                  <button onClick={() => { if (user) { window.location.href = `/product/${newArrivalMain.id}` } else { window.location.href = '/account' } }}
+                  <button
+                    onClick={() => { if (user) { window.location.href = `/product/${newArrivalMain.id}` } else { window.location.href = '/account' } }}
                     className="w-full h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#7a6448] transition-colors">
                     {t('home.preOrder')}
                   </button>
-                  <button onClick={() => { setNotifyMessage(true); setTimeout(() => setNotifyMessage(false), 4000) }}
+                  <button
+                    onClick={() => { setNotifyMessage(true); setTimeout(() => setNotifyMessage(false), 4000) }}
                     className="w-full h-[52px] lg:h-[56px] border-[2px] border-[#8B7355] bg-transparent text-[#8B7355] text-[14px] lg:text-[15px] font-semibold rounded-[4px] tracking-[1px] hover:bg-[#8B7355] hover:text-white transition-all">
                     {t('home.notifyMe')}
                   </button>
