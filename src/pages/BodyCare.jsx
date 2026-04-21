@@ -13,7 +13,6 @@ import {
   IoSearchOutline,
 } from 'react-icons/io5'
 
-import { filterBrandsAll } from '../data/products'
 import { formatProductsForUI } from '../lib/productsService'
 import { supabase } from '../lib/supabase'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -24,19 +23,20 @@ const bodyCareSubcategories = [
   'Body Oil', 'Body Butter', 'Bath Salts', 'Deodorant',
 ]
 
-const bodyCareSkinTypes = ['Dry', 'Normal', 'Sensitive', 'All Skin Types']
-const bodyCareConcerns  = ['Hydration', 'Firming', 'Brightening', 'Anti-Aging', 'Sensitive Skin', 'Detox']
-const bodyCareIngredients = ['Shea Butter', 'Coconut Oil', 'Hyaluronic Acid', 'Vitamin E', 'Aloe Vera', 'Ceramides']
+const bodyCareSkinTypes   = ['Dry', 'Normal', 'Sensitive', 'All Skin Types']
+const bodyCareConcerns    = ['Hydration', 'Firming', 'Brightening', 'Anti-Aging', 'Sensitive Skin', 'Detox', 'Stretch Marks', 'Cellulite']
+const bodyCareIngredients = ['Shea Butter', 'Coconut Oil', 'Hyaluronic Acid', 'Vitamin E', 'Aloe Vera', 'Ceramides', 'Retinol', 'Niacinamide']
+const bodyCareScents      = ['Unscented', 'Floral', 'Citrus', 'Vanilla', 'Fresh']
 
 const categoryImageMap = {
-  'Body Lotion':  'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=80&h=80&fit=crop',
-  'Body Wash':    'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=80&h=80&fit=crop',
-  'Scrubs':       'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=80&h=80&fit=crop',
-  'Hand Care':    'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=80&h=80&fit=crop',
-  'Body Oil':     'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop',
-  'Body Butter':  'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=80&h=80&fit=crop',
-  'Bath Salts':   'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=80&h=80&fit=crop',
-  'Deodorant':    'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop',
+  'Body Lotion': 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=80&h=80&fit=crop',
+  'Body Wash':   'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=80&h=80&fit=crop',
+  'Scrubs':      'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=80&h=80&fit=crop',
+  'Hand Care':   'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=80&h=80&fit=crop',
+  'Body Oil':    'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=80&h=80&fit=crop',
+  'Body Butter': 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=80&h=80&fit=crop',
+  'Bath Salts':  'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=80&h=80&fit=crop',
+  'Deodorant':   'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=80&h=80&fit=crop',
 }
 
 // ─── Translation helpers ──────────────────────────────────────────────────────
@@ -55,25 +55,31 @@ const filterTranslationsEN = {
   'Dry': 'Dry', 'Normal': 'Normal', 'Sensitive': 'Sensitive', 'All Skin Types': 'All Skin Types',
   'Hydration': 'Hydration', 'Firming': 'Firming', 'Brightening': 'Brightening',
   'Anti-Aging': 'Anti-Aging', 'Sensitive Skin': 'Sensitive Skin', 'Detox': 'Detox',
+  'Stretch Marks': 'Stretch Marks', 'Cellulite': 'Cellulite',
   'Shea Butter': 'Shea Butter', 'Coconut Oil': 'Coconut Oil', 'Hyaluronic Acid': 'Hyaluronic Acid',
   'Vitamin E': 'Vitamin E', 'Aloe Vera': 'Aloe Vera', 'Ceramides': 'Ceramides',
+  'Retinol': 'Retinol', 'Niacinamide': 'Niacinamide',
+  'Unscented': 'Unscented', 'Floral': 'Floral', 'Citrus': 'Citrus', 'Vanilla': 'Vanilla', 'Fresh': 'Fresh',
 }
+
 const filterTranslationsRU = {
   'Dry': 'Сухая', 'Normal': 'Нормальная', 'Sensitive': 'Чувствительная', 'All Skin Types': 'Все типы кожи',
   'Hydration': 'Увлажнение', 'Firming': 'Упругость', 'Brightening': 'Осветление',
   'Anti-Aging': 'Антивозрастной', 'Sensitive Skin': 'Чувствительная кожа', 'Detox': 'Детокс',
+  'Stretch Marks': 'Растяжки', 'Cellulite': 'Целлюлит',
   'Shea Butter': 'Масло ши', 'Coconut Oil': 'Кокосовое масло', 'Hyaluronic Acid': 'Гиалуроновая кислота',
   'Vitamin E': 'Витамин Е', 'Aloe Vera': 'Алоэ вера', 'Ceramides': 'Керамиды',
+  'Retinol': 'Ретинол', 'Niacinamide': 'Ниацинамид',
+  'Unscented': 'Без запаха', 'Floral': 'Цветочный', 'Citrus': 'Цитрусовый', 'Vanilla': 'Ваниль', 'Fresh': 'Свежий',
 }
+
 const useFilterTranslation = () => {
   const { i18n } = useTranslation()
   const tf = (value) => {
     const map = i18n.language === 'ru' ? filterTranslationsRU : filterTranslationsEN
     return map[value] || value
   }
-  const ts = (value) => {
-    return i18n.language === 'ru' ? (subcategoryTranslationsRU[value] || value) : value
-  }
+  const ts = (value) => i18n.language === 'ru' ? (subcategoryTranslationsRU[value] || value) : value
   return { tf, ts }
 }
 
@@ -83,7 +89,7 @@ async function getBodyCareProducts() {
     .from('products')
     .select('*')
     .ilike('category', 'Body Care')
-    .order('created_at', { ascending: false })
+    .limit(50)
   if (error) {
     console.error('Error fetching body care products:', error)
     return []
@@ -91,17 +97,55 @@ async function getBodyCareProducts() {
   return data || []
 }
 
+// ─── Shared filter + sort logic ───────────────────────────────────────────────
+function getFilteredAndSorted(allProducts, {
+  selectedSubcategories, selectedSkinTypes, selectedConcerns,
+  selectedIngredients, selectedScents, minPrice, maxPrice, activeSort, searchQuery
+}) {
+  let filtered = [...allProducts]
+
+  if (searchQuery?.trim()) {
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  }
+  if (minPrice || maxPrice) {
+    const min = minPrice ? parseFloat(minPrice) : 0
+    const max = maxPrice ? parseFloat(maxPrice) : Infinity
+    filtered = filtered.filter(p => p.priceValue >= min && p.priceValue <= max)
+  }
+  if (selectedSubcategories.length > 0) {
+    filtered = filtered.filter(p => selectedSubcategories.includes(p.subcategory))
+  }
+  if (selectedSkinTypes.length > 0) {
+    filtered = filtered.filter(p => p.skin_types && selectedSkinTypes.every(t => p.skin_types.includes(t)))
+  }
+  if (selectedConcerns.length > 0) {
+    filtered = filtered.filter(p => p.skin_concerns && selectedConcerns.every(c => p.skin_concerns.includes(c)))
+  }
+  if (selectedIngredients.length > 0) {
+    filtered = filtered.filter(p => p.ingredients && selectedIngredients.every(i => p.ingredients.includes(i)))
+  }
+  if (selectedScents.length > 0) {
+    filtered = filtered.filter(p => selectedScents.includes(p.scent))
+  }
+
+  if (activeSort === 'Price: Low to High')      filtered.sort((a, b) => a.priceValue - b.priceValue)
+  else if (activeSort === 'Price: High to Low') filtered.sort((a, b) => b.priceValue - a.priceValue)
+  else if (activeSort === 'Best Selling')        filtered.sort((a, b) => b.reviews - a.reviews)
+  else if (activeSort === 'Newest')              filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+  else if (activeSort === 'Top Rated')           filtered.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
+
+  return filtered
+}
+
 // ─── Live Search with Suggestions ────────────────────────────────────────────
 function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, placeholder, className }) {
-  const [suggestions, setSuggestions] = useState([])
+  const [suggestions, setSuggestions]         = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const wrapperRef = useRef(null)
 
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
-      const matches = allProducts
-        .filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-        .slice(0, 6)
+      const matches = allProducts.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 6)
       setSuggestions(matches)
       setShowSuggestions(true)
     } else {
@@ -112,18 +156,13 @@ function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, place
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setShowSuggestions(false)
-      }
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) setShowSuggestions(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleSelect = (name) => {
-    setSearchQuery(name)
-    setShowSuggestions(false)
-  }
+  const handleSelect = (name) => { setSearchQuery(name); setShowSuggestions(false) }
 
   const highlightMatch = (text, query) => {
     const parts = text.split(new RegExp(`(${query})`, 'gi'))
@@ -159,11 +198,8 @@ function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, place
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden">
           {suggestions.map((product, idx) => (
-            <button
-              key={product.id || idx}
-              onClick={() => handleSelect(product.name)}
-              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0"
-            >
+            <button key={product.id || idx} onClick={() => handleSelect(product.name)}
+              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0">
               <img src={product.image} alt={product.name} className="w-[40px] h-[40px] rounded-[6px] object-cover flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-[14px] text-[#1A1A1A] leading-tight">{highlightMatch(product.name, searchQuery)}</p>
@@ -185,26 +221,24 @@ function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, place
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function BodyCareMobile() {
-  const { t } = useTranslation()
   const { tf, ts } = useFilterTranslation()
-  const [allProducts, setAllProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [activeSort, setActiveSort]           = useState('Recommended')
+  const [allProducts, setAllProducts]         = useState([])
+  const [loading, setLoading]                 = useState(true)
+  const [activeSort, setActiveSort]           = useState('Best Selling')
   const [showSortSheet, setShowSortSheet]     = useState(false)
   const [showFilterSheet, setShowFilterSheet] = useState(false)
   const [selectedSubcategories, setSelectedSubcategories] = useState([])
-  const [selectedSkinTypes, setSelectedSkinTypes]   = useState([])
-  const [selectedConcerns, setSelectedConcerns]     = useState([])
-  const [selectedIngredients, setSelectedIngredients] = useState([])
-  const [selectedBrands, setSelectedBrands]         = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
-  const [displayCount, setDisplayCount] = useState(10)
-
+  const [selectedSkinTypes, setSelectedSkinTypes]         = useState([])
+  const [selectedConcerns, setSelectedConcerns]           = useState([])
+  const [selectedIngredients, setSelectedIngredients]     = useState([])
+  const [selectedScents, setSelectedScents]               = useState([])
+  const [searchQuery, setSearchQuery]         = useState('')
+  const [minPrice, setMinPrice]               = useState('')
+  const [maxPrice, setMaxPrice]               = useState('')
+  const [displayCount, setDisplayCount]       = useState(10)
   const [searchParams] = useSearchParams()
 
-  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (minPrice || maxPrice ? 1 : 0)
+  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedScents.length + (minPrice || maxPrice ? 1 : 0)
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
@@ -225,43 +259,7 @@ function BodyCareMobile() {
 
   useEffect(() => {
     setDisplayCount(10)
-  }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, minPrice, maxPrice, searchQuery])
-
-  const getFilteredAndSortedProducts = () => {
-    let filtered = [...allProducts]
-
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    }
-    if (minPrice || maxPrice) {
-      const min = minPrice ? parseFloat(minPrice) : 0
-      const max = maxPrice ? parseFloat(maxPrice) : Infinity
-      filtered = filtered.filter(p => p.priceValue >= min && p.priceValue <= max)
-    }
-    if (selectedSubcategories.length > 0) {
-      filtered = filtered.filter(p => selectedSubcategories.includes(p.subcategory))
-    }
-    if (selectedSkinTypes.length > 0) {
-      filtered = filtered.filter(p => p.skin_types && selectedSkinTypes.every(type => p.skin_types.includes(type)))
-    }
-    if (selectedConcerns.length > 0) {
-      filtered = filtered.filter(p => p.skin_concerns && selectedConcerns.every(c => p.skin_concerns.includes(c)))
-    }
-    if (selectedIngredients.length > 0) {
-      filtered = filtered.filter(p => p.ingredients && selectedIngredients.every(i => p.ingredients.includes(i)))
-    }
-    if (selectedBrands.length > 0) {
-      filtered = filtered.filter(p => selectedBrands.includes(p.brand))
-    }
-
-    if (activeSort === 'Price: Low to High') filtered.sort((a, b) => a.priceValue - b.priceValue)
-    else if (activeSort === 'Price: High to Low') filtered.sort((a, b) => b.priceValue - a.priceValue)
-    else if (activeSort === 'Best Selling') filtered.sort((a, b) => b.reviews - a.reviews)
-    else if (activeSort === 'Newest') filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    else if (activeSort === 'Top Rated') filtered.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
-
-    return filtered
-  }
+  }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedScents, minPrice, maxPrice, searchQuery])
 
   if (loading) return <LoadingSpinner />
 
@@ -276,20 +274,24 @@ function BodyCareMobile() {
     image: categoryImageMap[name],
   }))
 
-  const products = getFilteredAndSortedProducts()
+  const products = getFilteredAndSorted(allProducts, {
+    selectedSubcategories, selectedSkinTypes, selectedConcerns,
+    selectedIngredients, selectedScents, minPrice, maxPrice, activeSort, searchQuery
+  })
   const mobileProducts = products.slice(0, displayCount)
+
+  const clearAll = () => {
+    setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([])
+    setSelectedIngredients([]); setSelectedScents([]); setMinPrice(''); setMaxPrice('')
+  }
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond']">
 
-      {/* ── Hero Banner ── */}
+      {/* Hero */}
       <div className="relative min-h-[260px] bg-[#F5F0EB] overflow-hidden flex items-center">
         <div className="absolute right-0 top-0 bottom-0 w-[50%]">
-          <img
-            src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400&fit=crop"
-            alt="Body Care"
-            className="w-full h-full object-cover"
-          />
+          <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400&fit=crop" alt="Body Care" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#F5F0EB] via-[#F5F0EB]/20 to-transparent" />
         </div>
         <div className="relative z-10 px-5 py-10 w-[62%]">
@@ -300,17 +302,15 @@ function BodyCareMobile() {
         </div>
       </div>
 
-      {/* ── Subcategory Cards ── */}
+      {/* Subcategory Cards */}
       <div className="bg-white px-4 py-5 overflow-x-auto border-b border-[#E8E3D9]" style={{ scrollbarWidth: 'none' }}>
         <div className="flex gap-3 w-max">
           {subcategoryCards.map((cat) => {
             const isSelected = selectedSubcategories.includes(cat.name)
             return (
-              <div
-                key={cat.name}
+              <div key={cat.name}
                 onClick={() => setSelectedSubcategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
-                className={`w-[120px] bg-white border-2 rounded-[12px] p-4 flex flex-col items-center gap-2 cursor-pointer transition-colors ${isSelected ? 'border-[#8B7355] bg-[#F5F1EA]' : 'border-[#E8E3D9] hover:border-[#C9A870]'}`}
-              >
+                className={`w-[120px] bg-white border-2 rounded-[12px] p-4 flex flex-col items-center gap-2 cursor-pointer transition-colors ${isSelected ? 'border-[#8B7355] bg-[#F5F1EA]' : 'border-[#E8E3D9] hover:border-[#C9A870]'}`}>
                 <div className="w-[60px] h-[60px] rounded-full overflow-hidden bg-[#F9F6F2]">
                   <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
                 </div>
@@ -322,21 +322,12 @@ function BodyCareMobile() {
         </div>
       </div>
 
-      {/* ── Toolbar ── */}
+      {/* Toolbar */}
       <div className="bg-white px-5 pt-4 pb-3">
-        <SearchWithSuggestions
-          allProducts={allProducts}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search body care products..."
-          className="mb-3"
-        />
+        <SearchWithSuggestions allProducts={allProducts} searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder="Search body care products..." className="mb-3" />
         <div className="flex items-center justify-between mb-3">
           <span className="text-[13px] font-normal text-[#666666]">Showing {products.length} products</span>
-          <button
-            onClick={() => setShowFilterSheet(true)}
-            className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]"
-          >
+          <button onClick={() => setShowFilterSheet(true)} className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]">
             <IoFunnelOutline className="w-3.5 h-3.5 text-[#8B7355]" />
             Filters
             {activeFilters > 0 && (
@@ -346,23 +337,13 @@ function BodyCareMobile() {
             )}
           </button>
         </div>
-        <button
-          onClick={() => setShowSortSheet(true)}
-          className="w-full h-12 px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between mb-2"
-        >
-          <span className="text-[14px] font-normal text-[#2B2B2B]">Sort by: {
-            activeSort === 'Recommended' ? 'Recommended' :
-            activeSort === 'Best Selling' ? 'Best Selling' :
-            activeSort === 'Newest' ? 'Newest' :
-            activeSort === 'Price: Low to High' ? 'Price: Low to High' :
-            activeSort === 'Price: High to Low' ? 'Price: High to Low' :
-            activeSort === 'Top Rated' ? 'Top Rated' : activeSort
-          }</span>
+        <button onClick={() => setShowSortSheet(true)} className="w-full h-12 px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between mb-2">
+          <span className="text-[14px] font-normal text-[#2B2B2B]">Sort by: {activeSort}</span>
           <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
         </button>
       </div>
 
-      {/* ── Product Grid ── */}
+      {/* Product Grid */}
       <div className="px-4 pb-6">
         {products.length === 0 ? (
           <div className="flex items-center justify-center min-h-[300px]">
@@ -389,26 +370,20 @@ function BodyCareMobile() {
                     </div>
                   </div>
                   <p className="text-[11px] text-[#999999] mb-3">({product.reviews})</p>
-                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">
-                    Add to Bag
-                  </button>
+                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">Add to Bag</button>
                 </div>
               </Link>
             ))}
           </div>
         )}
-
         {products.length > displayCount && (
-          <button
-            onClick={() => setDisplayCount(prev => prev + 10)}
-            className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]"
-          >
+          <button onClick={() => setDisplayCount(prev => prev + 10)} className="w-full h-12 mt-5 border border-[#C9A870] text-[#8B7355] text-[14px] font-medium rounded-[8px]">
             Load More ({products.length - displayCount} remaining)
           </button>
         )}
       </div>
 
-      {/* ── Sort Sheet ── */}
+      {/* Sort Sheet */}
       {showSortSheet && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowSortSheet(false)} />
@@ -420,7 +395,6 @@ function BodyCareMobile() {
             </div>
             <div className="space-y-1">
               {[
-                { key: 'Recommended',       label: 'Recommended' },
                 { key: 'Best Selling',       label: 'Best Selling' },
                 { key: 'Newest',             label: 'Newest Arrivals' },
                 { key: 'Price: Low to High', label: 'Price: Low to High' },
@@ -442,7 +416,7 @@ function BodyCareMobile() {
         </div>
       )}
 
-      {/* ── Filter Sheet ── */}
+      {/* Filter Sheet */}
       {showFilterSheet && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowFilterSheet(false)} />
@@ -459,23 +433,21 @@ function BodyCareMobile() {
                   </div>
                 )}
               </div>
-              <button onClick={() => setShowFilterSheet(false)}>
-                <IoClose className="w-6 h-6 text-[#2B2B2B]" />
-              </button>
+              <button onClick={() => setShowFilterSheet(false)}><IoClose className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
+
             <div className="overflow-y-auto flex-1">
-              {/* Subcategory */}
+
+              {/* Product Category */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Product Category</h3>
                 <div className="grid grid-cols-3 gap-3">
                   {subcategoryCards.map((cat) => {
                     const isSelected = selectedSubcategories.includes(cat.name)
                     return (
-                      <button
-                        key={cat.name}
+                      <button key={cat.name}
                         onClick={() => setSelectedSubcategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name])}
-                        className={`rounded-[8px] p-3 flex flex-col items-center gap-2 border-2 transition-colors ${isSelected ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}
-                      >
+                        className={`rounded-[8px] p-3 flex flex-col items-center gap-2 border-2 transition-colors ${isSelected ? 'border-[#8B7355] bg-[#FDFBF7]' : 'border-[#E8E3D9] bg-white'}`}>
                         <img src={cat.image} alt={cat.name} className="w-[36px] h-[36px] rounded-full object-cover" />
                         <span className="text-[11px] font-medium text-[#2B2B2B] text-center leading-tight">{ts(cat.name)}</span>
                         <span className="text-[10px] text-[#999999]">{cat.count}</span>
@@ -484,18 +456,20 @@ function BodyCareMobile() {
                   })}
                 </div>
               </div>
+
               {/* Price Range */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[16px] font-medium text-[#2B2B2B]">Price Range</h3>
                   <span className="text-[14px] font-medium text-[#8B7355]">${minPrice || 0} – ${maxPrice || 200}</span>
                 </div>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2">
                   <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none" />
                   <span className="text-[14px] text-[#666666]">—</span>
                   <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="flex-1 h-[40px] px-3 border border-[#E8E3D9] rounded-[6px] text-[14px] outline-none" />
                 </div>
               </div>
+
               {/* Skin Type */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Type</h3>
@@ -513,9 +487,10 @@ function BodyCareMobile() {
                   })}
                 </div>
               </div>
-              {/* Body Concern */}
+
+              {/* Skin Concern */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Body Concern</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Concern</h3>
                 <div className="flex flex-wrap gap-2">
                   {bodyCareConcerns.map((concern) => {
                     const isSelected = selectedConcerns.includes(concern)
@@ -528,6 +503,7 @@ function BodyCareMobile() {
                   })}
                 </div>
               </div>
+
               {/* Key Ingredients */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Key Ingredients</h3>
@@ -543,34 +519,28 @@ function BodyCareMobile() {
                   })}
                 </div>
               </div>
-              {/* Brand */}
-              <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Brand</h3>
-                <div className="space-y-2">
-                  {filterBrandsAll.map((brand) => {
-                    const isChecked = selectedBrands.includes(brand)
+
+              {/* Scent */}
+              <div className="px-5 py-5">
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Scent</h3>
+                <div className="flex flex-wrap gap-2">
+                  {bodyCareScents.map((scent) => {
+                    const isSelected = selectedScents.includes(scent)
                     return (
-                      <button key={brand} onClick={() => setSelectedBrands(prev => isChecked ? prev.filter(b => b !== brand) : [...prev, brand])} className="flex items-center gap-3 h-[40px] w-full">
-                        <div className={`w-[20px] h-[20px] rounded-[4px] border-2 flex items-center justify-center flex-shrink-0 transition-colors ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'bg-white border-[#E8E3D9]'}`}>
-                          {isChecked && <IoCheckmark className="w-[13px] h-[13px] text-white" />}
-                        </div>
-                        <span className="text-[14px] text-[#2B2B2B]">{brand}</span>
+                      <button key={scent} onClick={() => setSelectedScents(prev => isSelected ? prev.filter(s => s !== scent) : [...prev, scent])}
+                        className={`px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>
+                        {tf(scent)}
                       </button>
                     )
                   })}
                 </div>
               </div>
+
             </div>
+
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
-              <button
-                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice('') }}
-                className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]"
-              >
-                Clear All
-              </button>
-              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">
-                Apply Filters ({products.length})
-              </button>
+              <button onClick={clearAll} className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]">Clear All</button>
+              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">Apply Filters ({products.length})</button>
             </div>
           </div>
         </div>
@@ -579,25 +549,24 @@ function BodyCareMobile() {
   )
 }
 
-// ─── Desktop + Tablet responsive ─────────────────────────────────────────────
+// ─── Desktop + Tablet ─────────────────────────────────────────────────────────
 function BodyCareDesktop() {
   const { tf, ts } = useFilterTranslation()
-  const [allProducts, setAllProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [activeSort, setActiveSort] = useState('Best Selling')
+  const [allProducts, setAllProducts]   = useState([])
+  const [loading, setLoading]           = useState(true)
+  const [activeSort, setActiveSort]     = useState('Best Selling')
   const [showSortDropdown, setShowSortDropdown] = useState(false)
   const [selectedSubcategories, setSelectedSubcategories] = useState([])
-  const [selectedSkinTypes, setSelectedSkinTypes] = useState([])
-  const [selectedConcerns, setSelectedConcerns] = useState([])
-  const [selectedIngredients, setSelectedIngredients] = useState([])
-  const [selectedBrands, setSelectedBrands] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
+  const [selectedSkinTypes, setSelectedSkinTypes]         = useState([])
+  const [selectedConcerns, setSelectedConcerns]           = useState([])
+  const [selectedIngredients, setSelectedIngredients]     = useState([])
+  const [selectedScents, setSelectedScents]               = useState([])
+  const [searchQuery, setSearchQuery]   = useState('')
+  const [minPrice, setMinPrice]         = useState('')
+  const [maxPrice, setMaxPrice]         = useState('')
   const [displayCount, setDisplayCount] = useState(10)
-  const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
-
   const [searchParams] = useSearchParams()
+  const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
 
   useEffect(() => {
     const sub = searchParams.get('subcategory')
@@ -618,43 +587,7 @@ function BodyCareDesktop() {
 
   useEffect(() => {
     setDisplayCount(10)
-  }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedBrands, minPrice, maxPrice, searchQuery])
-
-  const getFilteredAndSortedProducts = () => {
-    let filtered = [...allProducts]
-
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    }
-    if (minPrice || maxPrice) {
-      const min = minPrice ? parseFloat(minPrice) : 0
-      const max = maxPrice ? parseFloat(maxPrice) : Infinity
-      filtered = filtered.filter(p => p.priceValue >= min && p.priceValue <= max)
-    }
-    if (selectedSubcategories.length > 0) {
-      filtered = filtered.filter(p => selectedSubcategories.includes(p.subcategory))
-    }
-    if (selectedSkinTypes.length > 0) {
-      filtered = filtered.filter(p => p.skin_types && selectedSkinTypes.every(type => p.skin_types.includes(type)))
-    }
-    if (selectedConcerns.length > 0) {
-      filtered = filtered.filter(p => p.skin_concerns && selectedConcerns.every(c => p.skin_concerns.includes(c)))
-    }
-    if (selectedIngredients.length > 0) {
-      filtered = filtered.filter(p => p.ingredients && selectedIngredients.every(i => p.ingredients.includes(i)))
-    }
-    if (selectedBrands.length > 0) {
-      filtered = filtered.filter(p => selectedBrands.includes(p.brand))
-    }
-
-    if (activeSort === 'Price: Low to High') filtered.sort((a, b) => a.priceValue - b.priceValue)
-    else if (activeSort === 'Price: High to Low') filtered.sort((a, b) => b.priceValue - a.priceValue)
-    else if (activeSort === 'Best Selling') filtered.sort((a, b) => b.reviews - a.reviews)
-    else if (activeSort === 'Newest') filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    else if (activeSort === 'Top Rated') filtered.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
-
-    return filtered
-  }
+  }, [selectedSubcategories, selectedSkinTypes, selectedConcerns, selectedIngredients, selectedScents, minPrice, maxPrice, searchQuery])
 
   if (loading) return <LoadingSpinner />
 
@@ -669,15 +602,23 @@ function BodyCareDesktop() {
     image: categoryImageMap[name],
   }))
 
-  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedBrands.length + (minPrice || maxPrice ? 1 : 0)
+  const activeFilters = selectedSubcategories.length + selectedSkinTypes.length + selectedConcerns.length + selectedIngredients.length + selectedScents.length + (minPrice || maxPrice ? 1 : 0)
 
-  const products = getFilteredAndSortedProducts()
-  const displayedProducts = products.slice(0, displayCount)
+  const products = getFilteredAndSorted(allProducts, {
+    selectedSubcategories, selectedSkinTypes, selectedConcerns,
+    selectedIngredients, selectedScents, minPrice, maxPrice, activeSort, searchQuery
+  })
 
-  const largeProducts      = displayedProducts.slice(0, 1)
-  const mediumProducts     = displayedProducts.slice(1, 3)
-  const squareProducts     = displayedProducts.slice(3, 6)
+  const displayedProducts   = products.slice(0, displayCount)
+  const largeProducts       = displayedProducts.slice(0, 1)
+  const mediumProducts      = displayedProducts.slice(1, 3)
+  const squareProducts      = displayedProducts.slice(3, 6)
   const rectangularProducts = displayedProducts.slice(6, displayCount)
+
+  const clearAll = () => {
+    setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([])
+    setSelectedIngredients([]); setSelectedScents([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(10)
+  }
 
   return (
     <div className="bg-white font-['Cormorant_Garamond']">
@@ -712,32 +653,30 @@ function BodyCareDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">REFINE SELECTION</h3>
-              {activeFilters > 0 && (
-                <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>
-              )}
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">Refine Selection</h3>
+              {activeFilters > 0 && <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>}
             </div>
+
+            {/* Category Pills */}
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
-              <div
-                onClick={() => setSelectedSubcategories([])}
-                className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedSubcategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
-              >
+              <div onClick={() => setSelectedSubcategories([])}
+                className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedSubcategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>
                 All Body Care
               </div>
               {subcategoryCards.map((cat) => {
                 const isSelected = selectedSubcategories.includes(cat.name)
                 return (
-                  <div
-                    key={cat.name}
+                  <div key={cat.name}
                     onClick={() => { setSelectedSubcategories(prev => isSelected ? prev.filter(c => c !== cat.name) : [...prev, cat.name]); setDisplayCount(10) }}
-                    className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}
-                  >
+                    className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${isSelected ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>
                     {ts(cat.name)} ({cat.count})
                   </div>
                 )
               })}
             </div>
+
             <div className="border-t border-[#E8E3D9] pt-5 lg:pt-[24px] space-y-4 lg:space-y-[20px]">
+
               {/* Price Range */}
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Price Range</h4>
@@ -747,6 +686,7 @@ function BodyCareDesktop() {
                   <input type="number" placeholder="$200" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
                 </div>
               </div>
+
               {/* Skin Type */}
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Type</h4>
@@ -764,9 +704,10 @@ function BodyCareDesktop() {
                   })}
                 </div>
               </div>
-              {/* Body Concern */}
+
+              {/* Skin Concern */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Body Concern</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Concern</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {bodyCareConcerns.map((item) => {
                     const isChecked = selectedConcerns.includes(item)
@@ -781,6 +722,7 @@ function BodyCareDesktop() {
                   })}
                 </div>
               </div>
+
               {/* Key Ingredients */}
               <div>
                 <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Key Ingredients</h4>
@@ -798,27 +740,27 @@ function BodyCareDesktop() {
                   })}
                 </div>
               </div>
-              {/* Brand */}
+
+              {/* Scent */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Brand</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Scent</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
-                  {filterBrandsAll.map((item) => {
-                    const isChecked = selectedBrands.includes(item)
+                  {bodyCareScents.map((item) => {
+                    const isChecked = selectedScents.includes(item)
                     return (
-                      <label key={item} onClick={() => setSelectedBrands(prev => isChecked ? prev.filter(b => b !== item) : [...prev, item])} className="flex items-center gap-[10px] cursor-pointer">
+                      <label key={item} onClick={() => setSelectedScents(prev => isChecked ? prev.filter(s => s !== item) : [...prev, item])} className="flex items-center gap-[10px] cursor-pointer">
                         <div className={`w-[15px] h-[15px] lg:w-[16px] lg:h-[16px] border-[2px] rounded-[2px] flex items-center justify-center flex-shrink-0 ${isChecked ? 'bg-[#C9A870] border-[#C9A870]' : 'border-[#C9A870]'}`}>
                           {isChecked && <IoCheckmark className="w-[11px] h-[11px] text-white" />}
                         </div>
-                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{item}</span>
+                        <span className="text-[13px] lg:text-[14px] text-[#3D3D3D]">{tf(item)}</span>
                       </label>
                     )
                   })}
                 </div>
               </div>
-              <button
-                onClick={() => { setSelectedSubcategories([]); setSelectedSkinTypes([]); setSelectedConcerns([]); setSelectedIngredients([]); setSelectedBrands([]); setMinPrice(''); setMaxPrice(''); setDisplayCount(10) }}
-                className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors mb-3"
-              >
+
+              <button onClick={clearAll}
+                className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                 Clear All Filters
               </button>
             </div>
@@ -827,13 +769,7 @@ function BodyCareDesktop() {
 
         {/* Product Grid */}
         <div className="flex-1 min-w-0">
-          <SearchWithSuggestions
-            allProducts={allProducts}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="Search body care products..."
-            className="mb-6"
-          />
+          <SearchWithSuggestions allProducts={allProducts} searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder="Search body care products..." className="mb-6" />
 
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-[48px]">
@@ -841,35 +777,22 @@ function BodyCareDesktop() {
             <div className="flex items-center gap-3 lg:gap-[16px]">
               <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">Sort by</span>
               <div className="relative">
-                <button
-                  onClick={() => setShowSortDropdown(!showSortDropdown)}
-                  className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all"
-                >
-                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">
-                    {activeSort === 'Recommended' ? 'Recommended' :
-                     activeSort === 'Best Selling' ? 'Best Selling' :
-                     activeSort === 'Newest' ? 'Newest Arrivals' :
-                     activeSort === 'Price: Low to High' ? 'Price: Low to High' :
-                     activeSort === 'Price: High to Low' ? 'Price: High to Low' :
-                     activeSort === 'Top Rated' ? 'Top Rated' : activeSort}
-                  </span>
+                <button onClick={() => setShowSortDropdown(!showSortDropdown)}
+                  className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all">
+                  <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#2B2B2B]">{activeSort}</span>
                   <IoChevronDown className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px] text-[#8B7355]" />
                 </button>
                 {showSortDropdown && (
                   <div className="absolute top-full mt-2 right-0 w-[240px] bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-10">
                     {[
-                      { key: 'Recommended',       label: 'Recommended' },
                       { key: 'Best Selling',       label: 'Best Selling' },
                       { key: 'Newest',             label: 'Newest Arrivals' },
                       { key: 'Price: Low to High', label: 'Price: Low to High' },
                       { key: 'Price: High to Low', label: 'Price: High to Low' },
                       { key: 'Top Rated',          label: 'Top Rated' },
                     ].map(({ key, label }) => (
-                      <button
-                        key={key}
-                        onClick={() => { setActiveSort(key); setShowSortDropdown(false) }}
-                        className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === key ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}
-                      >
+                      <button key={key} onClick={() => { setActiveSort(key); setShowSortDropdown(false) }}
+                        className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === key ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}>
                         {label}
                       </button>
                     ))}
@@ -885,7 +808,7 @@ function BodyCareDesktop() {
             </div>
           ) : (
             <>
-              {/* Row 1 — large card + 2 medium cards */}
+              {/* Row 1 — large + 2 medium */}
               {largeProducts.length > 0 && (
                 <div className="flex flex-col md:flex-row gap-5 mb-10 md:mb-12 lg:mb-[64px]">
                   <Link to={`/product/${largeProducts[0].id}`} className="w-full md:w-[300px] lg:w-[460px] md:h-[480px] lg:h-[560px] bg-white rounded-[12px] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] group cursor-pointer hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
@@ -929,7 +852,7 @@ function BodyCareDesktop() {
                 </div>
               )}
 
-              {/* Row 2 — square products */}
+              {/* Row 2 — square */}
               {squareProducts.length > 0 && (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-[20px] mb-10 md:mb-12 lg:mb-[64px]">
                   {squareProducts.map((product, idx) => (
@@ -951,7 +874,7 @@ function BodyCareDesktop() {
                 </div>
               )}
 
-              {/* Row 3 — rectangular products */}
+              {/* Row 3 — rectangular */}
               {rectangularProducts.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-[20px] mb-10 md:mb-12 lg:mb-[64px]">
                   {rectangularProducts.map((product, idx) => (
@@ -979,10 +902,8 @@ function BodyCareDesktop() {
               {/* Load More */}
               {products.length > displayCount && (
                 <div className="flex items-center justify-center mb-16 lg:mb-[96px]">
-                  <button
-                    onClick={() => setDisplayCount(prev => prev + 10)}
-                    className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors"
-                  >
+                  <button onClick={() => setDisplayCount(prev => prev + 10)}
+                    className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors">
                     Load More ({products.length - displayCount} remaining)
                   </button>
                 </div>
@@ -995,7 +916,7 @@ function BodyCareDesktop() {
   )
 }
 
-// ─── Main Export (Switcher) ───────────────────────────────────────────────────
+// ─── Main Export ──────────────────────────────────────────────────────────────
 export default function BodyCare() {
   const { i18n } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
