@@ -24,7 +24,7 @@ const desktopCategories = [
   { name: 'Skincare',    icon: IoLeafOutline,         color: '#688B8D', path: '/skincare'    },
   { name: 'Makeup',      icon: IoColorPaletteOutline, color: '#D4AFA3', path: '/makeup'      },
   { name: 'Fragrance',   icon: IoFlaskOutline,        color: '#C9A870', path: '/fragrance'   },
-  { name: 'Body Care',   icon: IoWaterOutline,        color: '#B8A99A', path: '/collections' },
+  { name: 'Body Care',   icon: IoWaterOutline,        color: '#B8A99A', path: '/bodycare' },
   { name: 'Collections', icon: IoDiamondOutline,      color: '#8B7355', path: '/collections' },
 ]
 
@@ -32,7 +32,7 @@ const mobileCategories = [
   { name: 'Skincare',    gradient: 'from-[#E8F4F4] to-[#D4E8E8]', icon: '💧', path: '/skincare'    },
   { name: 'Makeup',      gradient: 'from-[#FFE8E8] to-[#FFD4D4]', icon: '💄', path: '/makeup'      },
   { name: 'Fragrance',   gradient: 'from-[#F5E8FF] to-[#E8D4FF]', icon: '🌸', path: '/fragrance'   },
-  { name: 'Body Care',   gradient: 'from-[#FFF4E8] to-[#FFE8D4]', icon: '🧴', path: '/collections' },
+  { name: 'Body Care',   gradient: 'from-[#FFF4E8] to-[#FFE8D4]', icon: '🧴', path: '/bodycare' },
   { name: 'Collections', gradient: 'from-[#E8F9E8] to-[#D4F0D4]', icon: '🎁', path: '/collections' },
 ]
 

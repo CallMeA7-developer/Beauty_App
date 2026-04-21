@@ -840,7 +840,7 @@ function CollectionMobile() {
               <div className="bg-[#F9F6F2] px-4 py-4 border-b border-[#E8E3D9]">
                 <div className="grid grid-cols-2 gap-3">
                   {bodyCareTypes.map((type) => (
-                    <div key={type.name} onClick={() => navigate('/collections')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
+                    <div key={type.name} onClick={() => navigate('/bodycare')} className="bg-white border border-[#E8E3D9] rounded-[10px] p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#FAF8F5]">
                       <img src={type.image} alt={type.name} className="w-[72px] h-[72px] rounded-[8px] object-cover" />
                       <span className="text-[13px] font-normal text-[#2B2B2B] text-center leading-tight">{type.name}</span>
                       <p className="text-[11px] font-light text-[#999999] text-center">{type.description}</p>

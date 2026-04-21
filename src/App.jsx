@@ -41,6 +41,7 @@ import TermsConditions from './pages/TermsConditions'
 import Journal from './pages/Journal'
 import JournalArticle from './pages/JournalArticle'
 import AdminPanel from './pages/AdminPanel'
+import BodyCare from './pages/BodyCare'
 import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
@@ -70,6 +71,7 @@ export default function App() {
               <Route path="/skincare"                element={<Skincare />} />
               <Route path="/makeup"                  element={<Makeup />} />
               <Route path="/fragrance"               element={<Fragrance />} />
+              <Route path="/bodycare"               element={<BodyCare />} />
               <Route path="/technology"              element={<Technology />} />
               <Route path="/explore"                 element={<Explore />} />
               <Route path="/search"                  element={<Search />} />
