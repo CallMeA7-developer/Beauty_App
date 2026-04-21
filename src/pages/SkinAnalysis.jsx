@@ -104,8 +104,8 @@ function CalendarModal({ user, scheduledDate, setScheduledDate, scheduleSuccess,
   return (
     <>
       <div className="fixed inset-0 bg-black/40 z-50" onClick={() => { setShowCalendar(false); setScheduleSuccess(false) }} />
-      <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
-        <div className="bg-white rounded-[20px] shadow-[0_16px_48px_rgba(139,115,85,0.2)] w-full max-w-[440px] font-['Cormorant_Garamond'] overflow-hidden">
+      <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center px-0 sm:px-4">
+        <div className="bg-white rounded-t-[24px] sm:rounded-[20px] shadow-[0_-8px_32px_rgba(139,115,85,0.15)] sm:shadow-[0_16px_48px_rgba(139,115,85,0.2)] w-full sm:max-w-[440px] font-['Cormorant_Garamond'] overflow-hidden max-h-[90dvh] overflow-y-auto">
 
           {/* Header */}
           <div className="h-[3px] bg-gradient-to-r from-[#C9A870] to-[#8B7355]" />
@@ -702,14 +702,32 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       )}
 
       {/* Hero */}
-      <div className="min-h-[340px] md:min-h-[420px] lg:min-h-[520px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px] py-10 md:py-0">
-        <div className="w-full md:w-[500px] lg:w-[650px] relative z-10">
-          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
-          <h1 className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1] mb-4 lg:mb-6">Discover Your Skin's True Potential</h1>
-          <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-[#666666] mb-6 lg:mb-8">Advanced AI technology analyzes your skin in seconds with medical-grade precision</p>
-          <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
+      <div className="relative overflow-hidden flex items-center" style={{ minHeight: 'clamp(340px, 50vw, 520px)' }}>
+        {/* Mobile: full background image */}
+        <img
+          src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop"
+          alt="Skin Analysis"
+          className="md:hidden absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Mobile overlay */}
+        <div className="md:hidden absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        {/* Desktop: gradient background */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA]" />
+
+        {/* Content */}
+        <div className="relative z-10 w-full px-6 md:px-[60px] lg:px-[120px] py-12 md:py-0" style={{ minHeight: 'clamp(340px, 50vw, 520px)' }}>
+          <div className="flex items-center h-full md:min-h-[420px] lg:min-h-[520px]">
+            <div className="w-full md:w-[500px] lg:w-[650px]">
+              <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-white md:text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
+              <h1 className="text-[36px] md:text-[56px] lg:text-[72px] font-bold text-white md:text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-6">Discover Your Skin's True Potential</h1>
+              <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-white/80 md:text-[#666666] mb-6 lg:mb-8">Advanced AI technology analyzes your skin in seconds with medical-grade precision</p>
+              <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
+            </div>
+          </div>
         </div>
-        <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
+
+        {/* Desktop image */}
+        <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2 z-10">
           <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=400&fit=crop" alt="Skin Analysis" className="w-[400px] h-[400px] object-cover rounded-[8px] shadow-[0_12px_48px_rgba(0,0,0,0.12)]" />
         </div>
       </div>
@@ -745,15 +763,15 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col sm:flex-row gap-3 w-full px-4 sm:px-0 sm:w-auto">
                   <button
                     onClick={() => setShowUploadMessage(true)}
-                    className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+                    className="w-full sm:w-[160px] lg:w-[180px] h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
                     Upload Photo
                   </button>
                   <button
                     onClick={() => setShowUploadMessage(true)}
-                    className="w-full sm:w-[160px] lg:w-[180px] h-[48px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+                    className="w-full sm:w-[160px] lg:w-[180px] h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                     Take Selfie
                   </button>
                 </div>
