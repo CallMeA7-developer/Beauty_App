@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   IoChevronDown,
@@ -22,6 +23,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 
 // ─── Custom Calendar Modal ────────────────────────────────────────────────────
 function CalendarModal({ user, scheduledDate, setScheduledDate, scheduleSuccess, setScheduleSuccess, setShowCalendar, supabase }) {
+  const { t } = useTranslation()
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const tomorrow = new Date(today)
@@ -111,7 +113,7 @@ function CalendarModal({ user, scheduledDate, setScheduledDate, scheduleSuccess,
           <div className="h-[3px] bg-gradient-to-r from-[#C9A870] to-[#8B7355]" />
           <div className="px-6 pt-6 pb-4">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="text-[22px] font-semibold text-[#1A1A1A]">Schedule Next Analysis</h3>
+              <h3 className="text-[22px] font-semibold text-[#1A1A1A]">{t('skinAnalysis.scheduleModalTitle')}</h3>
               <button onClick={() => { setShowCalendar(false); setScheduleSuccess(false) }}
                 className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F5F1EA] transition-colors">
                 <IoCloseOutline className="w-5 h-5 text-[#666666]" />
@@ -119,7 +121,7 @@ function CalendarModal({ user, scheduledDate, setScheduledDate, scheduleSuccess,
             </div>
             <div className="flex items-center gap-2">
               <IoMailOutline className="w-[14px] h-[14px] text-[#8B7355]" />
-              <span className="text-[12px] text-[#666666]">Reminder to: <span className="font-medium text-[#8B7355]">{user?.email}</span></span>
+              <span className="text-[12px] text-[#666666]">{t('skinAnalysis.reminderTo')} <span className="font-medium text-[#8B7355]">{user?.email}</span></span>
             </div>
           </div>
 
@@ -128,13 +130,13 @@ function CalendarModal({ user, scheduledDate, setScheduledDate, scheduleSuccess,
               <div className="w-[72px] h-[72px] bg-[#F5F1EA] rounded-full flex items-center justify-center mx-auto mb-4">
                 <IoCheckmark className="w-[36px] h-[36px] text-[#8B7355]" />
               </div>
-              <h4 className="text-[20px] font-semibold text-[#1A1A1A] mb-2">Reminder Scheduled!</h4>
-              <p className="text-[14px] text-[#666666] mb-1">Reminder set for</p>
+              <h4 className="text-[20px] font-semibold text-[#1A1A1A] mb-2">{t('skinAnalysis.reminderScheduled')}</h4>
+              <p className="text-[14px] text-[#666666] mb-1">{t('skinAnalysis.reminderSetFor')}</p>
               <p className="text-[15px] font-medium text-[#8B7355] mb-4">{formatSelected()}</p>
               <button
                 onClick={() => { setShowCalendar(false); setScheduleSuccess(false) }}
                 className="h-[44px] px-8 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                Done
+                {t('skinAnalysis.done')}
               </button>
             </div>
           ) : (
@@ -209,7 +211,7 @@ function CalendarModal({ user, scheduledDate, setScheduledDate, scheduleSuccess,
                 }}
                 disabled={!scheduledDate}
                 className="w-full h-[48px] bg-[#8B7355] text-white text-[14px] font-medium rounded-[10px] hover:bg-[#7a6448] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-                Confirm & Send Reminder
+                {t('skinAnalysis.confirmReminder')}
               </button>
             </div>
           )}
@@ -224,6 +226,7 @@ export default function SkinAnalysis() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { addToCart } = useCart()
+  const { t } = useTranslation()
 
   const [selectedConcern, setSelectedConcern] = useState(null)
   const [selectedSkinType, setSelectedSkinType] = useState(null)
@@ -345,7 +348,7 @@ export default function SkinAnalysis() {
 
   const analyzeSkinn = async () => {
     if (!selectedSkinType || !selectedConcern) {
-      setError('Please select your skin type and primary concern')
+      setError(t('skinAnalysis.errorSelect'))
       return
     }
 
@@ -374,12 +377,12 @@ export default function SkinAnalysis() {
               content: `Analyze this user's skin and return a fully personalized result. The scores must reflect their actual profile — do NOT use generic or repeated numbers.
 
 User Profile:
-- Skin Type: ${selectedSkinType}
+- {t('skinAnalysis.skinType')}: ${selectedSkinType}
 - Primary Concern: ${selectedConcern}
-- Age Range: ${selectedAge || 'Unknown'}
+- {t('skinAnalysis.ageRange')}: ${selectedAge || 'Unknown'}
 - Specific Issues: ${selectedSpecificConcerns.join(', ') || 'None'}
-- Current Routine: ${selectedRoutine}
-- Sun Exposure: ${sunExposure}
+- {t('skinAnalysis.currentRoutine')}: ${selectedRoutine}
+- {t('skinAnalysis.sunExposure')}: ${sunExposure}
 
 Scoring rules:
 - Oily skin → lower clarity (50–70), lower texture (55–72)
@@ -420,7 +423,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
     } catch (err) {
       console.error('Analysis error:', err)
-      setError('Failed to analyze skin. Please try again.')
+      setError(t('skinAnalysis.errorFailed'))
     } finally {
       setLoading(false)
     }
@@ -596,18 +599,18 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
   }
 
   const guidelines = [
-    { icon: IoSunnyOutline, title: 'Good Lighting', desc: 'Natural daylight preferred' },
-    { icon: IoPersonCircleOutline, title: 'Face Forward', desc: 'Look directly at camera' },
-    { icon: IoSparklesOutline, title: 'Remove Makeup', desc: 'Clean, bare skin' },
+    { icon: IoSunnyOutline, title: t('skinAnalysis.guideLight'), desc: t('skinAnalysis.guideLightDesc') },
+    { icon: IoPersonCircleOutline, title: t('skinAnalysis.guideFace'), desc: t('skinAnalysis.guideFaceDesc') },
+    { icon: IoSparklesOutline, title: t('skinAnalysis.guideMakeup'), desc: t('skinAnalysis.guideMakeupDesc') },
   ]
 
   const faqs = [
-    { q: 'How accurate is the AI skin analysis?', a: 'Our AI technology analyzes skin with 98% accuracy, validated by dermatologists and based on millions of skin scans.' },
-    { q: 'How often should I get analyzed?', a: 'We recommend monthly analysis to track improvements and adjust your skincare routine as needed.' },
-    { q: 'Is my data private and secure?', a: 'Absolutely. All images and data are encrypted and never shared with third parties. Your privacy is our priority.' },
-    { q: 'Does the analysis cost anything?', a: 'The basic analysis is complimentary. Premium features include expert consultations and advanced tracking.' },
-    { q: 'Can I use recommended products from other brands?', a: 'While we recommend our scientifically formulated products, the analysis results can guide any skincare choice.' },
-    { q: 'How long until I see results?', a: 'Most users notice improvements within 4-6 weeks of following their personalized routine consistently.' },
+    { q: t('skinAnalysis.faq1q'), a: t('skinAnalysis.faq1a') },
+    { q: t('skinAnalysis.faq2q'), a: t('skinAnalysis.faq2a') },
+    { q: t('skinAnalysis.faq3q'), a: t('skinAnalysis.faq3a') },
+    { q: t('skinAnalysis.faq4q'), a: t('skinAnalysis.faq4a') },
+    { q: t('skinAnalysis.faq5q'), a: t('skinAnalysis.faq5a') },
+    { q: t('skinAnalysis.faq6q'), a: t('skinAnalysis.faq6a') },
   ]
 
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[14px] h-[14px] text-[#C9A870]" />)
@@ -640,7 +643,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
           )}
           className="w-full h-[40px] lg:h-[44px] bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors"
         >
-          Add to Cart
+          {t('skinAnalysis.addToCart')}
         </button>
       </div>
     </div>
@@ -668,8 +671,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                     <IoSparklesOutline className="w-[20px] h-[20px] text-[#8B7355]" />
                   </div>
                   <div>
-                    <h4 className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">New to Skin Analysis?</h4>
-                    <p className="text-[12px] font-light text-[#8B7355] italic">Discover how it works</p>
+                    <h4 className="text-[15px] font-semibold text-[#1A1A1A] leading-tight">{t('skinAnalysis.bannerTitle')}</h4>
+                    <p className="text-[12px] font-light text-[#8B7355] italic">{t('skinAnalysis.bannerSubtitle')}</p>
                   </div>
                 </div>
                 <button
@@ -680,20 +683,20 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                 </button>
               </div>
               <p className="text-[13px] font-normal text-[#666666] leading-relaxed mb-4">
-                Our AI-powered skin analysis uses medical-grade technology to deliver personalized results in seconds. Learn how our consultation process works before you begin.
+                {t('skinAnalysis.bannerDesc')}
               </p>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => navigate('/ai-consultation')}
                   className="flex-1 h-[44px] bg-[#8B7355] text-white text-[13px] font-medium rounded-[10px] hover:bg-[#7a6448] transition-colors"
                 >
-                  Learn How It Works
+                  {t('skinAnalysis.bannerLearn')}
                 </button>
                 <button
                   onClick={() => setShowInfoBanner(false)}
                   className="flex-1 h-[44px] bg-[#F5F1EA] text-[#8B7355] text-[13px] font-medium rounded-[10px] hover:bg-[#ede8df] transition-colors"
                 >
-                  I Understand
+                  {t('skinAnalysis.bannerUnderstand')}
                 </button>
               </div>
             </div>
@@ -718,9 +721,9 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         <div className="relative z-10 w-full px-6 md:px-[60px] lg:px-[120px] py-12 md:py-0" style={{ minHeight: 'clamp(340px, 50vw, 520px)' }}>
           <div className="flex items-center h-full md:min-h-[420px] lg:min-h-[520px]">
             <div className="w-full md:w-[500px] lg:w-[650px]">
-              <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-white md:text-[#8B7355] tracking-[2px] mb-3">AI-POWERED SKIN ANALYSIS</p>
-              <h1 className="text-[36px] md:text-[56px] lg:text-[72px] font-bold text-white md:text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-6">Discover Your Skin's True Potential</h1>
-              <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-white/80 md:text-[#666666] mb-6 lg:mb-8">Advanced AI technology analyzes your skin in seconds with medical-grade precision</p>
+              <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-white md:text-[#8B7355] tracking-[2px] mb-3">{t('skinAnalysis.heroBadge')}</p>
+              <h1 className="text-[36px] md:text-[56px] lg:text-[72px] font-bold text-white md:text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-6">{t('skinAnalysis.heroTitle')}</h1>
+              <p className="text-[14px] md:text-[17px] lg:text-[20px] font-normal text-white/80 md:text-[#666666] mb-6 lg:mb-8">{t('skinAnalysis.heroSubtitle')}</p>
               <div className="w-[100px] md:w-[120px] lg:w-[140px] h-[4px] bg-[#C9A870]" />
             </div>
           </div>
@@ -744,22 +747,22 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       {/* Upload Section */}
       <div id="upload-section" className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
         <div className="max-w-[1200px] mx-auto">
-          <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Start Your Skin Analysis</h2>
-          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Upload a clear photo or use our questionnaire below</p>
+          <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.uploadTitle')}</h2>
+          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">{t('skinAnalysis.uploadSubtitle')}</p>
           <div className="w-full md:max-w-[600px] lg:max-w-[800px] mx-auto bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
             <div className="min-h-[280px] md:min-h-[340px] lg:min-h-[400px] bg-gradient-to-b from-[#F5F1EA] to-white border-2 border-dashed border-[#C9A870] rounded-t-[12px] flex flex-col items-center justify-center px-4 py-8 lg:py-0">
               <IoCameraOutline className="w-[56px] h-[56px] md:w-[68px] md:h-[68px] lg:w-[80px] lg:h-[80px] text-[#8B7355] mb-4" />
-              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">Upload Your Photo</h3>
-              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 text-center">Drag and drop your photo here or click to browse</p>
+              <h3 className="text-[18px] md:text-[20px] lg:text-[24px] font-medium text-[#1A1A1A] mb-4">{t('skinAnalysis.uploadPhotoTitle')}</h3>
+              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] mb-6 text-center">{t('skinAnalysis.uploadDrag')}</p>
               {showUploadMessage ? (
                 <div className="bg-[#F5F1EA] border border-[#C9A870] rounded-[8px] px-6 py-4 text-center max-w-[360px]">
                   <IoSparklesOutline className="w-[24px] h-[24px] text-[#8B7355] mx-auto mb-2" />
-                  <p className="text-[14px] font-medium text-[#8B7355] mb-1">We're working on this feature!</p>
-                  <p className="text-[13px] text-[#666666]">In the meantime, please use the questionnaire below to get your skin analysis.</p>
+                  <p className="text-[14px] font-medium text-[#8B7355] mb-1">{t('skinAnalysis.uploadWorkingTitle')}</p>
+                  <p className="text-[13px] text-[#666666]">{t('skinAnalysis.uploadWorkingDesc')}</p>
                   <button
                     onClick={() => document.getElementById('questionnaire-section')?.scrollIntoView({ behavior: 'smooth' })}
                     className="mt-3 h-[36px] px-5 bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                    Go to Questionnaire
+                    {t('skinAnalysis.goToQuestionnaire')}
                   </button>
                 </div>
               ) : (
@@ -767,12 +770,12 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                   <button
                     onClick={() => setShowUploadMessage(true)}
                     className="w-full sm:w-[160px] lg:w-[180px] h-[52px] lg:h-[56px] bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-                    Upload Photo
+                    {t('skinAnalysis.uploadPhotoBtn')}
                   </button>
                   <button
                     onClick={() => setShowUploadMessage(true)}
                     className="w-full sm:w-[160px] lg:w-[180px] h-[52px] lg:h-[56px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-                    Take Selfie
+                    {t('skinAnalysis.takeSelfieBtn')}
                   </button>
                 </div>
               )}
@@ -792,8 +795,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
       {/* Questionnaire */}
       <div id="questionnaire-section" className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[64px]">
-        <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Tell Us About Your Skin</h2>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Help us understand your unique skin concerns</p>
+        <h2 className="text-[28px] md:text-[38px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.questionnaireTitle')}</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">{t('skinAnalysis.questionnaireSubtitle')}</p>
 
         {error && (
           <div className="max-w-[1200px] mx-auto mb-6 p-4 bg-red-50 border border-red-200 rounded-[8px] text-red-600 text-[14px]">{error}</div>
@@ -802,7 +805,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         {loading && (
           <div className="max-w-[1200px] mx-auto mb-6 p-6 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex flex-col items-center">
             <LoadingSpinner />
-            <p className="text-[16px] text-[#8B7355] mt-4">Analyzing your skin... This may take a few seconds</p>
+            <p className="text-[16px] text-[#8B7355] mt-4">{t('skinAnalysis.analyzing')}</p>
           </div>
         )}
 
@@ -810,7 +813,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Primary Concern */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Primary Skin Concern</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.primaryConcern')}</h3>
             <div className="grid grid-cols-2 gap-3">
               {skinConcerns.map((concern) => (
                 <button key={concern} onClick={() => setSelectedConcern(concern)}
@@ -821,9 +824,9 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             </div>
           </div>
 
-          {/* Skin Type */}
+          {/* {t('skinAnalysis.skinType')} */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Skin Type</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.skinType')}</h3>
             <div className="grid grid-cols-3 gap-3">
               {skinTypes.map((type) => (
                 <button key={type} onClick={() => setSelectedSkinType(type)}
@@ -834,20 +837,20 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             </div>
           </div>
 
-          {/* Current Routine */}
+          {/* {t('skinAnalysis.currentRoutine')} */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Current Routine</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.currentRoutine')}</h3>
             <select value={selectedRoutine} onChange={(e) => setSelectedRoutine(e.target.value)}
               className="w-full h-[48px] lg:h-[56px] bg-white border border-[#E8E3D9] rounded-[8px] px-5 text-[13px] lg:text-[15px] font-normal text-[#2B2B2B] cursor-pointer outline-none">
-              <option>Minimal (1-3 products)</option>
-              <option>Moderate (4-6 products)</option>
-              <option>Extensive (7+ products)</option>
+              <option>{t('skinAnalysis.routineMinimal')}</option>
+              <option>{t('skinAnalysis.routineModerate')}</option>
+              <option>{t('skinAnalysis.routineExtensive')}</option>
             </select>
           </div>
 
-          {/* Sun Exposure */}
+          {/* {t('skinAnalysis.sunExposure')} */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Sun Exposure</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.sunExposure')}</h3>
             <div className="flex gap-3">
               {['Minimal', 'Moderate', 'High'].map((level) => (
                 <button key={level} onClick={() => setSunExposure(level)}
@@ -858,9 +861,9 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             </div>
           </div>
 
-          {/* Age Range */}
+          {/* {t('skinAnalysis.ageRange')} */}
           <div className="bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Age Range</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.ageRange')}</h3>
             <div className="grid grid-cols-3 gap-3">
               {ageRanges.map((range) => (
                 <button key={range} onClick={() => setSelectedAge(range)}
@@ -871,9 +874,9 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             </div>
           </div>
 
-          {/* Specific Concerns */}
+          {/* {t('skinAnalysis.specificConcerns')} */}
           <div className="md:col-span-2 bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[32px]">
-            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">Specific Concerns</h3>
+            <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-4 lg:mb-5">{t('skinAnalysis.specificConcerns')}</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {specificConcerns.map((concern) => (
                 <label key={concern} className="flex items-center gap-3 cursor-pointer" onClick={() => toggleSpecificConcern(concern)}>
@@ -890,13 +893,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
         <div className="flex justify-center">
           <button onClick={analyzeSkinn} disabled={loading}
             className="w-full sm:w-[200px] lg:w-[240px] h-[48px] lg:h-[56px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-            {loading ? 'Analyzing...' : 'Analyze My Skin'}
+            {loading ? t('skinAnalysis.analyzingBtn') : t('skinAnalysis.analyzeBtn')}
           </button>
         </div>
 
         {!user && analysisResult && (
           <div className="max-w-[1200px] mx-auto mt-6 p-4 bg-[#F5F1EA] rounded-[12px] text-center">
-            <p className="text-[14px] text-[#666666]"><span className="font-medium text-[#8B7355]">Save your results</span> — Sign in to save your analysis</p>
+            <p className="text-[14px] text-[#666666]"><span className="font-medium text-[#8B7355]">{t('skinAnalysis.saveResults')}</span> — {t('skinAnalysis.signInSave')}</p>
           </div>
         )}
       </div>
@@ -904,11 +907,11 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       {/* Analysis Results */}
       {analysisResult && (
         <div id="results-section" className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
-          <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">Your Skin Analysis Results</h2>
+          <h2 className="text-[28px] md:text-[40px] lg:text-[56px] font-bold text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.resultsTitle')}</h2>
           <div className="flex justify-center mb-8 lg:mb-12">
             <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#C9A870] text-white text-[13px] lg:text-[14px] font-medium rounded-full">
               <IoCheckmarkCircle className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
-              Analysis Complete
+              {t('skinAnalysis.analysisComplete')}
             </div>
           </div>
 
@@ -921,10 +924,10 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
               {[
-                { label: 'Hydration', value: analysisResult.hydration },
-                { label: 'Texture', value: analysisResult.texture },
-                { label: 'Clarity', value: analysisResult.clarity },
-                { label: 'Tone Evenness', value: analysisResult.toneEvenness },
+                { label: t('skinAnalysis.metricHydration'), value: analysisResult.hydration },
+                { label: t('skinAnalysis.metricTexture'), value: analysisResult.texture },
+                { label: t('skinAnalysis.metricClarity'), value: analysisResult.clarity },
+                { label: t('skinAnalysis.metricTone'), value: analysisResult.toneEvenness },
               ].map((stat) => (
                 <div key={stat.label} className="flex flex-col items-center">
                   <IoWaterOutline className="w-[24px] h-[24px] lg:w-[32px] lg:h-[32px] text-[#8B7355] mb-2" />
@@ -957,13 +960,13 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
       {/* Product Recommendations */}
       {analysisResult && (
         <div className="bg-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px]">
-          <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">Personalized Product Recommendations</h2>
-          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">Curated specifically for your skin analysis results</p>
+          <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-4">{t('skinAnalysis.recsTitle')}</h2>
+          <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] text-center mb-10 lg:mb-[56px]">{t('skinAnalysis.recsSubtitle')}</p>
 
           {/* Step 1: Morning */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
-            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 1: MORNING</span>
-            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Morning Protection Routine</h3>
+            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">{t('skinAnalysis.step1')}</span>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">{t('skinAnalysis.morningTitle')}</h3>
             {recommendedProducts.morning.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
                 {recommendedProducts.morning.map((product) => (
@@ -977,8 +980,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Step 2: Evening */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
-            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 2: EVENING</span>
-            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Evening Repair Routine</h3>
+            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">{t('skinAnalysis.step2')}</span>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">{t('skinAnalysis.eveningTitle')}</h3>
             {recommendedProducts.evening.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
                 {recommendedProducts.evening.map((product) => (
@@ -992,8 +995,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
           {/* Step 3: Targeted */}
           <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 md:p-6 lg:p-[40px] mb-6 lg:mb-8">
-            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">STEP 3: TARGETED CARE</span>
-            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">Specialized Treatments</h3>
+            <span className="inline-block px-4 py-2 bg-[#F5F1EA] text-[#8B7355] text-[11px] lg:text-[12px] font-medium rounded-full mb-4">{t('skinAnalysis.step3')}</span>
+            <h3 className="text-[20px] md:text-[24px] lg:text-[28px] font-medium text-[#1A1A1A] mb-6 lg:mb-8">{t('skinAnalysis.targetedTitle')}</h3>
             {recommendedProducts.targeted.length > 0 ? (
               <div className={`grid ${getGridCols(recommendedProducts.targeted.length)} gap-4 lg:gap-5`}>
                 {recommendedProducts.targeted.map((product) => (
@@ -1002,14 +1005,14 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
               </div>
             ) : (
               <p className="text-[14px] text-[#999999] text-center py-8">
-                {selectedSpecificConcerns.length === 0 ? 'Select specific concerns above to see targeted products.' : 'Loading products...'}
+                {selectedSpecificConcerns.length === 0 ? t('skinAnalysis.selectConcerns') : t('skinAnalysis.loadingProducts')}
               </p>
             )}
           </div>
 
           {savedSuccess && (
             <div className="max-w-[1200px] mx-auto mb-4 p-4 bg-[#F5F1EA] border border-[#C9A870] rounded-[8px] text-center">
-              <p className="text-[14px] lg:text-[15px] font-medium text-[#8B7355]">✓ Analysis saved to your profile successfully!</p>
+              <p className="text-[14px] lg:text-[15px] font-medium text-[#8B7355]">{t('skinAnalysis.savedSuccess')}</p>
             </div>
           )}
 
@@ -1018,7 +1021,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
             <button
               onClick={() => navigate('/beauty-journey')}
               className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
-              View Complete Routine
+              {t('skinAnalysis.viewRoutine')}
             </button>
             <button
               onClick={saveToProfile}
@@ -1028,16 +1031,16 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                   ? 'bg-[#F5F1EA] border-[#C9A870] text-[#C9A870] cursor-not-allowed'
                   : 'bg-white border-[#8B7355] text-[#8B7355] hover:bg-[#F5F1EA]'
               }`}>
-              {savedSuccess ? '✓ Saved to Profile' : isSaving ? 'Saving...' : 'Save to My Profile'}
+              {savedSuccess ? t('skinAnalysis.savedBtn') : isSaving ? t('skinAnalysis.savingBtn') : t('skinAnalysis.saveBtn')}
             </button>
           </div>
         </div>
       )}
 
-      {/* Track Your Skin Journey */}
+      {/* {t('skinAnalysis.journeyTitle')} */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-4 lg:mb-6">Track Your Skin Journey</h2>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">Monitor improvements with regular skin analysis</p>
+        <h2 className="text-[24px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] mb-4 lg:mb-6">{t('skinAnalysis.journeyTitle')}</h2>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-10 lg:mb-[56px]">{t('skinAnalysis.journeySubtitle')}</p>
 
         <div className="max-w-[1200px] mx-auto">
           {allAnalyses.length > 0 ? (
@@ -1062,10 +1065,10 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
                   </div>
                   <div className="grid grid-cols-2 gap-2 w-full">
                     {[
-                      { label: 'Hydration', value: analysis.metrics?.hydration },
-                      { label: 'Texture', value: analysis.metrics?.texture },
-                      { label: 'Clarity', value: analysis.metrics?.clarity },
-                      { label: 'Tone', value: analysis.metrics?.toneEvenness },
+                      { label: t('skinAnalysis.metricHydration'), value: analysis.metrics?.hydration },
+                      { label: t('skinAnalysis.metricTexture'), value: analysis.metrics?.texture },
+                      { label: t('skinAnalysis.metricClarity'), value: analysis.metrics?.clarity },
+                      { label: t('skinAnalysis.metricToneShort'), value: analysis.metrics?.toneEvenness },
                     ].map((m) => m.value != null && (
                       <div key={m.label} className="bg-white rounded-[8px] p-2 text-center border border-[#E8E3D9]">
                         <div className="text-[13px] lg:text-[14px] font-bold text-[#8B7355]">{m.value}%</div>
@@ -1081,8 +1084,8 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
               <div className="w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] rounded-full bg-[#F5F1EA] flex items-center justify-center mb-6">
                 <IoSparklesOutline className="w-[36px] h-[36px] lg:w-[44px] lg:h-[44px] text-[#C9A870]" />
               </div>
-              <h3 className="text-[18px] lg:text-[22px] font-medium text-[#1A1A1A] mb-3">No Analysis Yet</h3>
-              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] max-w-[380px]">Complete your first skin analysis above to start tracking your skin journey over time.</p>
+              <h3 className="text-[18px] lg:text-[22px] font-medium text-[#1A1A1A] mb-3">{t('skinAnalysis.noAnalysis')}</h3>
+              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] max-w-[380px]">{t('skinAnalysis.noAnalysisDesc')}</p>
             </div>
           )}
 
@@ -1091,7 +1094,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
               onClick={() => setShowCalendar(true)}
               className="h-[48px] lg:h-[52px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors flex items-center gap-2 mx-auto">
               <IoCalendarOutline className="w-[18px] h-[18px]" />
-              Schedule Next Analysis
+              {t('skinAnalysis.scheduleBtn')}
             </button>
           </div>
         </div>
@@ -1112,7 +1115,7 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
       {/* FAQ */}
       <div className="bg-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-[64px]">
-        <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">Frequently Asked Questions</h2>
+        <h2 className="text-[24px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('skinAnalysis.faqTitle')}</h2>
         <div className="max-w-[900px] mx-auto space-y-3">
           {faqs.map((faq, idx) => (
             <div key={idx} className="bg-white border border-[#E8E3D9] rounded-[12px] overflow-hidden">
@@ -1139,13 +1142,24 @@ Return ONLY this JSON structure with real calculated values (no placeholder zero
 
       {/* Newsletter */}
       <div className="bg-gradient-to-b from-[#F5F1EA] to-white px-4 md:px-[60px] lg:px-[120px] py-10 md:py-12 lg:py-0 lg:min-h-[180px] flex flex-col items-center justify-center">
-        <h3 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">Stay Updated on Skin Health</h3>
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-5 lg:mb-6 text-center">Get personalized skincare tips and exclusive offers</p>
+        <h3 className="text-[22px] md:text-[28px] lg:text-[36px] font-medium text-[#1A1A1A] mb-3 text-center">{t('skinAnalysis.newsletterTitle')}</h3>
+        <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] mb-5 lg:mb-6 text-center">{t('skinAnalysis.newsletterSubtitle')}</p>
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
           <input type="email" placeholder="Enter your email" className="w-full sm:w-[280px] lg:w-[360px] h-[48px] lg:h-[56px] px-5 bg-white text-[14px] lg:text-[15px] text-[#2B2B2B] rounded-[8px] border border-[#E8E3D9] outline-none" />
           <button className="w-full sm:w-auto h-[48px] lg:h-[56px] px-8 bg-[#8B7355] text-white text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">Subscribe</button>
         </div>
       </div>
+
+      {/* Scroll to Top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-[#8B7355] text-white rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)] flex items-center justify-center hover:bg-[#7a6448] transition-colors"
+        aria-label="Back to top"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 15l-6-6-6 6" />
+        </svg>
+      </button>
 
     </div>
   )
