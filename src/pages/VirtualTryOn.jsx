@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import {
   IoCameraOutline,
@@ -552,6 +553,7 @@ export default function VirtualTryOn() {
   const [unlocked, setUnlocked] = useState(false)
   const [error, setError] = useState(false)
 
+  const { t } = useTranslation()
   const CORRECT_PIN = '6969'
 
   useEffect(() => {
@@ -593,14 +595,14 @@ export default function VirtualTryOn() {
           </div>
 
           {/* Title */}
-          <h1 style={{ fontSize: '30px', fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: '8px' }}>Preview Access</h1>
+          <h1 style={{ fontSize: '30px', fontWeight: 'bold', color: '#FFFFFF', textAlign: 'center', marginBottom: '8px' }}>{t('virtualTryOn.pinTitle')}</h1>
           <p style={{ fontSize: '15px', color: 'rgba(201,168,112,0.7)', textAlign: 'center', marginBottom: '32px', lineHeight: '1.6' }}>
-            This environment is not public yet.<br />Enter the access code to continue.
+            {t('virtualTryOn.pinDesc')}
           </p>
 
           {/* PIN Input */}
           <div style={{ marginBottom: '8px' }}>
-            <label style={{ fontSize: '13px', fontWeight: '500', color: 'rgba(201,168,112,0.7)', display: 'block', marginBottom: '8px' }}>Access code</label>
+            <label style={{ fontSize: '13px', fontWeight: '500', color: 'rgba(201,168,112,0.7)', display: 'block', marginBottom: '8px' }}>{t('virtualTryOn.pinLabel')}</label>
             <input
               type="password"
               value={pin}
@@ -626,7 +628,7 @@ export default function VirtualTryOn() {
               onBlur={(e) => { if (!error) e.target.style.borderColor = 'rgba(201,168,112,0.25)' }}
             />
             {error && (
-              <p style={{ color: '#EF4444', fontSize: '13px', textAlign: 'center', marginTop: '8px' }}>Incorrect access code. Please try again.</p>
+              <p style={{ color: '#EF4444', fontSize: '13px', textAlign: 'center', marginTop: '8px' }}>{t('virtualTryOn.pinError')}</p>
             )}
           </div>
 
@@ -635,7 +637,7 @@ export default function VirtualTryOn() {
             onClick={handleUnlock}
             style={{ width: '100%', height: '52px', background: 'linear-gradient(to right, #C9A870, #8B7355)', color: 'white', fontSize: '16px', fontWeight: '600', borderRadius: '12px', border: 'none', cursor: 'pointer', marginTop: '16px', boxShadow: '0 4px 16px rgba(201,168,112,0.3)', letterSpacing: '0.5px' }}
           >
-            Continue
+            {t('virtualTryOn.pinContinue')}
           </button>
 
           {/* Continue Shopping */}
@@ -644,13 +646,13 @@ export default function VirtualTryOn() {
               onMouseEnter={(e) => { e.target.style.color = '#FFFFFF'; e.target.style.borderColor = 'rgba(201,168,112,0.4)' }}
               onMouseLeave={(e) => { e.target.style.color = '#8899AA'; e.target.style.borderColor = 'rgba(201,168,112,0.25)' }}
             >
-              Continue Shopping
+              {t('virtualTryOn.pinShop')}
             </button>
           </a>
 
           {/* Footer note */}
           <p style={{ fontSize: '12px', color: 'rgba(201,168,112,0.4)', textAlign: 'center', marginTop: '24px', lineHeight: '1.6' }}>
-            You will stay signed in to this preview until you log out of your account or close this browser tab.
+            {t('virtualTryOn.pinFooter')}
           </p>
         </div>
       </div>
