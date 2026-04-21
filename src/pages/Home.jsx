@@ -83,20 +83,20 @@ function HomeMobile() {
     <div className="w-full bg-white font-['Cormorant_Garamond']">
 
       {/* Hero */}
-      <section className="w-full relative" style={{ height: '100dvh', minHeight: '100svh' }}>
+      <section className="w-full relative" style={{ height: 'calc(100dvh - 64px)', maxHeight: '680px' }}>
         <img
           src={`${SUPABASE_STORAGE}/4.jpeg`}
           alt="Luxury skincare golden hour"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-white/90 backdrop-blur-sm rounded-[12px] p-4">
-            <p className="text-[10px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-2">{t('home.heroCollection')}</p>
-            <h1 className="text-[28px] font-bold text-[#1A1A1A] leading-[1.1] mb-2">{t('home.heroTitle')}</h1>
-            <p className="text-[13px] font-normal text-[#666666] leading-[1.5] mb-4">{t('home.heroSubtitle')}</p>
+          <div className="bg-white/92 backdrop-blur-sm rounded-[12px] px-5 py-4">
+            <p className="text-[9px] font-light italic text-[#C9A870] tracking-[2px] uppercase mb-1">{t('home.heroCollection')}</p>
+            <h1 className="text-[26px] font-bold text-[#1A1A1A] leading-[1.1] mb-1">{t('home.heroTitle')}</h1>
+            <p className="text-[12px] font-normal text-[#666666] leading-[1.4] mb-3">{t('home.heroSubtitle')}</p>
             <Link to="/explore">
-              <button className="w-[110px] h-[42px] border-[2px] border-[#1A1A1A] text-[13px] font-semibold text-[#1A1A1A]">
+              <button className="w-[100px] h-[38px] border-[2px] border-[#1A1A1A] text-[12px] font-semibold text-[#1A1A1A]">
                 {t('home.explore')}
               </button>
             </Link>
