@@ -2026,5 +2026,14 @@
 
   "newsletterTitle": "Stay Updated on Skin Health",
   "newsletterSubtitle": "Get personalized skincare tips and exclusive offers"
+},
+  "virtualTryOn": {
+  "pinTitle": "Preview Access",
+  "pinDesc": "This environment is not public yet. Enter the access code to continue.",
+  "pinLabel": "Access code",
+  "pinError": "Incorrect access code. Please try again.",
+  "pinContinue": "Continue",
+  "pinShop": "Continue Shopping",
+  "pinFooter": "You will stay signed in to this preview until you log out of your account or close this browser tab."
 }
 }
