@@ -2035,5 +2035,61 @@
   "pinContinue": "Continue",
   "pinShop": "Continue Shopping",
   "pinFooter": "You will stay signed in to this preview until you log out of your account or close this browser tab."
+},
+  {
+  "explore": {
+    "title": "Explore Shan Loray",
+    "subtitle": "Discover your perfect beauty ritual",
+    "searchPlaceholder": "Search products...",
+    "mobileSearchPlaceholder": "Search products, collections...",
+    "noResults": "No results for \"{{query}}\"",
+    "shopByCategory": "Shop by Category",
+    "featuredCollections": "Featured Collections",
+    "smartBeautyTools": "Smart Beauty Tools",
+    "popularRightNow": "Popular Right Now",
+    "featured": "Featured",
+    "trendingNow": "Trending Now",
+    "popularSearches": "Popular Searches",
+    "spring2024": "Spring 2024 Collection",
+    "spring2024Desc": "Discover botanical elegance",
+    "viewCollection": "View Collection →",
+    "memberOffer": "New Members Get 15% Off First Order",
+    "joinNow": "Join Now →",
+    "aiConsultantTitle": "AI Beauty Consultant",
+    "aiConsultantDesc": "Get personalized skincare recommendations based on your unique skin profile",
+    "aiConsultantCta": "Start Consultation →",
+    "virtualTryOnTitle": "Virtual Try-On",
+    "virtualTryOnDesc": "Experience products virtually with augmented reality technology",
+    "virtualTryOnCta": "Coming Soon →",
+    "categoryNames": {
+      "skincare": "Skincare",
+      "makeup": "Makeup",
+      "fragrance": "Fragrance",
+      "bodyCare": "Body Care",
+      "collections": "Collections"
+    },
+    "categories": {
+      "skincare": "Skincare",
+      "makeup": "Makeup",
+      "fragrance": "Fragrance",
+      "bodyCare": "Body Care"
+    },
+    "collectionNames": {
+      "signatureCollection": "Signature Collection",
+      "limitedEditions": "Limited Editions",
+      "holiday2024": "Holiday 2024",
+      "giftSets": "Gift Sets"
+    },
+    "popularSearchLabels": {
+      "masks": "Masks",
+      "serums": "Serums",
+      "foundation": "Foundation",
+      "lipstick": "Lipstick",
+      "eauDeParfum": "Eau de Parfum",
+      "bodyMist": "Body Mist",
+      "bodyButter": "Body Butter",
+      "bodyScrubs": "Body Scrubs"
+    }
+  }
 }
 }
