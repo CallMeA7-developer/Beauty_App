@@ -24,7 +24,7 @@ const desktopCategories = [
   { name: 'Skincare',    icon: IoLeafOutline,         color: '#688B8D', path: '/skincare'    },
   { name: 'Makeup',      icon: IoColorPaletteOutline, color: '#D4AFA3', path: '/makeup'      },
   { name: 'Fragrance',   icon: IoFlaskOutline,        color: '#C9A870', path: '/fragrance'   },
-  { name: 'Body Care',   icon: IoWaterOutline,        color: '#B8A99A', path: '/bodycare' },
+  { name: 'Body Care',   icon: IoWaterOutline,        color: '#B8A99A', path: '/collections' },
   { name: 'Collections', icon: IoDiamondOutline,      color: '#8B7355', path: '/collections' },
 ]
 
@@ -32,14 +32,15 @@ const mobileCategories = [
   { name: 'Skincare',    gradient: 'from-[#E8F4F4] to-[#D4E8E8]', icon: '💧', path: '/skincare'    },
   { name: 'Makeup',      gradient: 'from-[#FFE8E8] to-[#FFD4D4]', icon: '💄', path: '/makeup'      },
   { name: 'Fragrance',   gradient: 'from-[#F5E8FF] to-[#E8D4FF]', icon: '🌸', path: '/fragrance'   },
-  { name: 'Body Care',   gradient: 'from-[#FFF4E8] to-[#FFE8D4]', icon: '🧴', path: '/bodycare' },
+  { name: 'Body Care',   gradient: 'from-[#FFF4E8] to-[#FFE8D4]', icon: '🧴', path: '/collections' },
   { name: 'Collections', gradient: 'from-[#E8F9E8] to-[#D4F0D4]', icon: '🎁', path: '/collections' },
 ]
 
 const featuredCollections = [
-  { title: 'Spring Radiance',  image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=280&h=200&fit=crop'    },
-  { title: 'Bestsellers Edit', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=280&h=200&fit=crop' },
-  { title: 'New Arrivals',     image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=280&h=200&fit=crop' },
+  { title: 'Signature Collection', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=280&h=200&fit=crop' },
+  { title: 'Limited Editions',     image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=280&h=200&fit=crop' },
+  { title: 'Holiday 2024',         image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=280&h=200&fit=crop' },
+  { title: 'Gift Sets',            image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=280&h=200&fit=crop' },
 ]
 
 const quickLinks = [
@@ -336,9 +337,7 @@ function ExploreMobile() {
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex flex-col">
-      <div className="bg-white px-5 h-[72px] flex items-center justify-between flex-shrink-0">
-        <div className="w-11" />
-        <div className="font-bold text-[20px] text-[#1A1A1A] tracking-[2px]">SHAN LORAY</div>
+      <div className="bg-white px-5 h-[72px] flex items-center justify-end flex-shrink-0">
         <button onClick={() => navigate(-1)} className="w-11 h-11 flex items-center justify-center">
           <IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" />
         </button>
@@ -389,7 +388,7 @@ function ExploreMobile() {
 
       <div className="bg-[#F9F4EE] px-5 py-8 flex-shrink-0">
         <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-5">Smart Beauty Tools</h2>
-        <div className="space-y-3">
+        <div className="space-y-5">
           <Link to="/skin-analysis">
             <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
               <div className="w-12 h-12 rounded-full bg-[#688B8D] flex items-center justify-center mb-4">
@@ -433,18 +432,6 @@ function ExploreMobile() {
         )}
       </div>
 
-      <div className="bg-[#FDFBF7] px-5 py-8 flex-shrink-0">
-        <div className="grid grid-cols-2 gap-3">
-          {quickLinks.map((link, idx) => (
-            <Link key={idx} to={link.path}>
-              <div className="min-h-[56px] bg-white border-[1.5px] border-[#E8E3D9] rounded-xl flex flex-col items-center justify-center gap-2">
-                <link.icon className="w-5 h-5 text-[#8B7355]" />
-                <span className="text-[14px] font-medium text-[#2B2B2B]">{link.label}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
