@@ -11,6 +11,7 @@ import {
   IoCheckmark,
   IoFunnelOutline,
   IoSearchOutline,
+  IoArrowUp,
   IoLogoInstagram,
   IoLogoFacebook,
   IoLogoPinterest,
@@ -181,9 +182,17 @@ function getFilteredAndSorted(allProducts, {
 
   if (activeSort === 'Price: Low to High')  filtered.sort((a, b) => a.priceValue - b.priceValue)
   else if (activeSort === 'Price: High to Low') filtered.sort((a, b) => b.priceValue - a.priceValue)
-  else if (activeSort === 'Best Selling')    filtered.sort((a, b) => b.reviews - a.reviews)
-  else if (activeSort === 'Newest')          filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-  else if (activeSort === 'Top Rated')       filtered.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
+  else if (activeSort === 'Best Selling')    filtered.sort((a, b) => (b.reviews || 0) - (a.reviews || 0))
+  else if (activeSort === 'Newest')          filtered.sort((a, b) => {
+    if (a.created_at && b.created_at) return new Date(b.created_at) - new Date(a.created_at)
+    return String(b.id || '').localeCompare(String(a.id || ''))
+  })
+  else if (activeSort === 'Top Rated')       filtered.sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0))
+  else if (activeSort === 'Most Popular')    filtered.sort((a, b) => {
+    const scoreA = (parseFloat(a.rating || 0) * (a.reviews || 0))
+    const scoreB = (parseFloat(b.rating || 0) * (b.reviews || 0))
+    return scoreB - scoreA
+  })
 
   return filtered
 }
@@ -232,6 +241,13 @@ function MakeupMobile() {
   const [searchQuery, setSearchQuery] = useState('')
 
   const [searchParams] = useSearchParams()
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const activeFilters = selectedCategories.length + selectedFinish.length + selectedCoverage.length + selectedSkinTones.length + (minPrice || maxPrice ? 1 : 0)
 
@@ -425,6 +441,16 @@ function MakeupMobile() {
         )}
       </div>
 
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
+
       {/* Sort Sheet */}
       {showSortSheet && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
@@ -591,6 +617,13 @@ function MakeupDesktop() {
   const [displayCount, setDisplayCount] = useState(10)
 
   const [searchParams] = useSearchParams()
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const Stars = () => [...Array(5)].map((_, i) => <IoStarSharp key={i} className="w-[15px] h-[15px] text-[#C9A870]" />)
 
@@ -872,6 +905,15 @@ function MakeupDesktop() {
           )}
         </div>
       </div>
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
