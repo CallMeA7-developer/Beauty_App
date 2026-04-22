@@ -2089,5 +2089,39 @@
       "bodyButter": "Body Butter",
       "bodyScrubs": "Body Scrubs"
     }
-  }
+  },
+  "bodycare": {
+  "nourishRestore": "NOURISH & RESTORE",
+  "heroTitle": "Body Care",
+  "heroDesc": "Luxurious rituals for silky, radiant skin",
+  "heroDescDesktop": "Luxurious rituals for silky, radiant skin from head to toe",
+  "home": "Home",
+  "shop": "Shop",
+  "searchPlaceholder": "Search body care products...",
+  "showing": "Showing",
+  "products": "products",
+  "bodyCareProducts": "body care products",
+  "noProducts": "No products found",
+  "filters": "Filters",
+  "sortBy": "Sort by",
+  "sortBestSelling": "Best Selling",
+  "sortNewest": "Newest Arrivals",
+  "sortPriceLow": "Price: Low to High",
+  "sortPriceHigh": "Price: High to Low",
+  "sortTopRated": "Top Rated",
+  "addToBag": "Add to Bag",
+  "loadMore": "Load More",
+  "remaining": "remaining",
+  "clearAll": "Clear All",
+  "clearAllFilters": "Clear All Filters",
+  "applyFilters": "Apply Filters",
+  "refineSelection": "Refine Selection",
+  "allBodyCare": "All Body Care",
+  "productCategory": "Product Category",
+  "priceRange": "Price Range",
+  "skinType": "Skin Type",
+  "skinConcern": "Skin Concern",
+  "ingredients": "Key Ingredients",
+  "scent": "Scent"
+}
 }
