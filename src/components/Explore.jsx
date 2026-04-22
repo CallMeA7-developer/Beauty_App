@@ -37,10 +37,10 @@ const mobileCategories = [
 ]
 
 const featuredCollections = [
-  { title: 'Signature Collection', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=280&h=200&fit=crop' },
-  { title: 'Limited Editions',     image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=280&h=200&fit=crop' },
-  { title: 'Holiday 2024',         image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=280&h=200&fit=crop' },
-  { title: 'Gift Sets',            image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=280&h=200&fit=crop' },
+  { title: 'Signature Collection', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=280&h=200&fit=crop',   param: 'signature'       },
+  { title: 'Limited Editions',     image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=280&h=200&fit=crop', param: 'limited_edition' },
+  { title: 'Holiday 2024',         image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=280&h=200&fit=crop', param: 'holiday_set'     },
+  { title: 'Gift Sets',            image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=280&h=200&fit=crop', param: 'gift_set'        },
 ]
 
 const quickLinks = [
@@ -374,13 +374,15 @@ function ExploreMobile() {
         <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
           <div className="flex gap-3" style={{ width: 'max-content' }}>
             {featuredCollections.map((col, idx) => (
-              <div key={idx} className="w-[280px] h-[200px] rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] relative flex-shrink-0">
-                <img src={col.image} alt={col.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-5 left-5">
-                  <h3 className="text-[20px] font-semibold text-white">{col.title}</h3>
+              <Link key={idx} to={`/collections?collection=${col.param}`} className="flex-shrink-0">
+                <div className="w-[280px] h-[200px] rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] relative">
+                  <img src={col.image} alt={col.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-5 left-5">
+                    <h3 className="text-[20px] font-semibold text-white">{col.title}</h3>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -400,7 +402,7 @@ function ExploreMobile() {
             </div>
           </Link>
           <Link to="/virtual-tryon">
-          <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] cursor-pointer">
+            <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
             <div className="w-12 h-12 rounded-full bg-[#D4AFA3] flex items-center justify-center mb-4">
               <IoCameraOutline className="w-6 h-6 text-white" />
             </div>
