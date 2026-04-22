@@ -2036,7 +2036,6 @@
   "pinShop": "Continue Shopping",
   "pinFooter": "You will stay signed in to this preview until you log out of your account or close this browser tab."
 },
-  {
   "explore": {
     "title": "Explore Shan Loray",
     "subtitle": "Discover your perfect beauty ritual",
@@ -2091,5 +2090,4 @@
       "bodyScrubs": "Body Scrubs"
     }
   }
-}
 }
