@@ -25,6 +25,7 @@ import {
   IoCopyOutline,
   IoClose,
   IoStarOutline,
+  IoArrowUp,
 } from 'react-icons/io5'
 import { useTranslation } from 'react-i18next'
 import { productDetailSizes as sizeOptions } from '../data/products'
@@ -40,13 +41,18 @@ const concernBenefitMap = {
   'Anti-Aging':      'Visibly reduces fine lines and signs of aging',
   'Hydration':       'Delivers deep, long-lasting hydration to the skin',
   'Brightness':      'Enhances natural radiance for a luminous glow',
+  'Brightening':     'Enhances natural radiance for a luminous, even glow',
   'Redness Relief':  'Calms and soothes irritated, sensitive skin',
   'Dark Spots':      'Targets hyperpigmentation and uneven skin tone',
   'Acne':            'Controls breakouts and minimizes pores',
-  'Firming':         'Improves skin elasticity and firmness',
+  'Firming':         'Improves skin elasticity and firmness over time',
   'Pore Minimizing': 'Refines and minimizes the appearance of pores',
   'Sun Protection':  'Shields skin from harmful UV rays',
   'Exfoliation':     'Gently removes dead skin cells for smoother texture',
+  'Sensitive Skin':  'Specially formulated for sensitive, reactive skin',
+  'Detox':           'Draws out impurities and revitalizes tired skin',
+  'Stretch Marks':   'Visibly reduces the appearance of stretch marks',
+  'Cellulite':       'Helps smooth and firm skin for a more toned appearance',
 }
 
 const ingredientBenefitMap = {
@@ -68,6 +74,10 @@ const ingredientBenefitMap = {
   'Squalane':          'Lightweight hydration that mimics skin\'s natural oils',
   'Bakuchiol':         'Natural alternative to retinol for gentle anti-aging benefits',
   'Argan Oil':         'Provides intense nourishment and shine without greasiness',
+  'Shea Butter':       'Deeply nourishes and softens for silky smooth skin',
+  'Coconut Oil':       'Intensely moisturizes and leaves skin feeling supple and soft',
+  'Aloe Vera':         'Soothes, cools and hydrates even the most sensitive skin',
+  'Niacinamide':       'Minimizes pores and evens out skin tone and texture',
 }
 
 const howToUseMap = {
@@ -153,6 +163,62 @@ const howToUseMap = {
       { step: '2', text: 'Hold the bottle 15–20 cm away from the skin',                timing: null               },
       { step: '3', text: 'Do not rub — allow the fragrance to dry naturally',           timing: null               },
       { step: '4', text: 'Reapply as needed throughout the day',                        timing: null               },
+    ],
+  },
+  'Body Care': {
+    'Body Lotion': [
+      { step: '1', text: 'Apply to clean skin after showering while skin is still slightly damp', timing: 'Daily'            },
+      { step: '2', text: 'Take a generous amount and warm between your palms',                    timing: null               },
+      { step: '3', text: 'Massage into skin using long, upward strokes',                          timing: null               },
+      { step: '4', text: 'Allow to absorb fully before dressing',                                 timing: null               },
+    ],
+    'Body Wash': [
+      { step: '1', text: 'Wet skin thoroughly with warm water',                                   timing: 'Daily'            },
+      { step: '2', text: 'Apply a small amount to a loofah or directly onto skin',                timing: null               },
+      { step: '3', text: 'Lather and massage in circular motions across the body',                timing: null               },
+      { step: '4', text: 'Rinse thoroughly and pat dry',                                          timing: null               },
+    ],
+    'Scrubs': [
+      { step: '1', text: 'Apply to damp skin before or during shower',                            timing: '2–3 times a week' },
+      { step: '2', text: 'Scoop a generous amount and massage in circular motions',               timing: null               },
+      { step: '3', text: 'Focus on rough areas like elbows, knees and heels',                    timing: null               },
+      { step: '4', text: 'Rinse thoroughly and follow with body lotion',                          timing: null               },
+    ],
+    'Hand Care': [
+      { step: '1', text: 'Apply to clean, dry hands',                                             timing: 'Throughout the day' },
+      { step: '2', text: 'Take a small amount and rub between palms',                             timing: null               },
+      { step: '3', text: 'Massage into hands, fingers and cuticles',                              timing: null               },
+      { step: '4', text: 'For intensive care, apply generously at night and wear cotton gloves',  timing: 'Overnight'        },
+    ],
+    'Body Oil': [
+      { step: '1', text: 'Apply to damp skin after showering for best absorption',                timing: 'Daily'            },
+      { step: '2', text: 'Dispense a few drops into your palms and warm the oil',                timing: null               },
+      { step: '3', text: 'Massage into skin using long, sweeping strokes',                        timing: null               },
+      { step: '4', text: 'Allow to absorb for 2–3 minutes before dressing',                      timing: null               },
+    ],
+    'Body Butter': [
+      { step: '1', text: 'Apply to clean, dry skin — works best post-shower',                    timing: 'Daily'            },
+      { step: '2', text: 'Scoop a small amount and warm between fingers until melted',            timing: null               },
+      { step: '3', text: 'Massage into skin focusing on very dry areas',                          timing: null               },
+      { step: '4', text: 'For intense nourishment, apply generously before bed',                  timing: 'Overnight'        },
+    ],
+    'Bath Salts': [
+      { step: '1', text: 'Fill the bathtub with warm water',                                      timing: '2–3 times a week' },
+      { step: '2', text: 'Add 2–4 tablespoons of bath salts and stir to dissolve',               timing: null               },
+      { step: '3', text: 'Soak for 15–20 minutes to allow minerals to absorb',                   timing: '15–20 minutes'    },
+      { step: '4', text: 'Rinse and follow with body lotion while skin is still warm',            timing: null               },
+    ],
+    'Deodorant': [
+      { step: '1', text: 'Apply to clean, dry underarms',                                         timing: 'Daily'            },
+      { step: '2', text: 'Apply 2–3 strokes per underarm for full coverage',                     timing: null               },
+      { step: '3', text: 'Allow to dry completely before dressing',                               timing: null               },
+      { step: '4', text: 'Reapply as needed for all-day freshness',                               timing: null               },
+    ],
+    default: [
+      { step: '1', text: 'Apply to clean skin after bathing',                                     timing: 'Daily'            },
+      { step: '2', text: 'Take an appropriate amount and warm between hands',                     timing: null               },
+      { step: '3', text: 'Massage into skin using gentle circular motions',                       timing: null               },
+      { step: '4', text: 'Allow to fully absorb before dressing',                                 timing: null               },
     ],
   },
 }
@@ -318,6 +384,13 @@ function ProductDetailMobile({ product, onOpenAuthModal, reviews, relatedProduct
   const [toastMessage, setToastMessage]     = useState('')
   const [showShareModal, setShowShareModal] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const toggleSection = (id) => setOpenSection(openSection === id ? null : id)
 
@@ -662,34 +735,15 @@ function ProductDetailMobile({ product, onOpenAuthModal, reviews, relatedProduct
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="w-full bg-[#2B2B2B] px-5 py-10">
-        <div className="mb-8">
-          <h3 className="text-[16px] font-semibold text-white tracking-[2px] mb-2">SHAN LORAY</h3>
-          <p className="text-[11px] font-light italic text-[#C4B5A0]">{t('productDetail.timelessLuxury')}</p>
-        </div>
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          {[
-            { title: t('productDetail.shop'),  links: ['Skincare', 'Makeup', 'Fragrance'] },
-            { title: t('productDetail.help'),  links: [t('productDetail.contact'), t('productDetail.shipping'), t('productDetail.returns')] },
-            { title: t('productDetail.about'), links: [t('productDetail.ourStory'), t('productDetail.ingredients'), t('productDetail.sustainability')] },
-          ].map(({ title, links }) => (
-            <div key={title}>
-              <h4 className="text-[13px] font-medium text-white mb-3">{title}</h4>
-              <div className="space-y-2">{links.map((l) => <p key={l} className="text-[12px] font-normal text-[#C4B5A0]">{l}</p>)}</div>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-center gap-6 mb-5">
-          <IoLogoInstagram className="w-5 h-5 text-[#C4B5A0]" />
-          <IoLogoFacebook  className="w-5 h-5 text-[#C4B5A0]" />
-          <IoLogoPinterest className="w-5 h-5 text-[#C4B5A0]" />
-          <IoLogoYoutube   className="w-5 h-5 text-[#C4B5A0]" />
-        </div>
-        <div className="border-t border-[#3D3D3D] pt-4 text-center">
-          <p className="text-[11px] font-light text-[#808080]">{t('productDetail.copyright')}</p>
-        </div>
-      </footer>
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
@@ -707,6 +761,13 @@ function ProductDetailDesktop({ product, onOpenAuthModal, reviews, relatedProduc
   const [toastMessage, setToastMessage]     = useState('')
   const [showShareModal, setShowShareModal] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const getSizePrice = (size) => {
     const basePrice = product.priceValue
@@ -1045,6 +1106,16 @@ function ProductDetailDesktop({ product, onOpenAuthModal, reviews, relatedProduc
         </div>
       </div>
       <div className="h-[40px] md:h-[60px] lg:h-[80px]" />
+
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
