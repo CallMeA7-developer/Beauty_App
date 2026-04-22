@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   IoClose,
   IoCloseOutline,
@@ -21,92 +22,90 @@ import {
 import { supabase } from '../lib/supabase'
 
 const desktopCategories = [
-  { name: 'Skincare',    icon: IoLeafOutline,         color: '#688B8D', path: '/skincare'    },
-  { name: 'Makeup',      icon: IoColorPaletteOutline, color: '#D4AFA3', path: '/makeup'      },
-  { name: 'Fragrance',   icon: IoFlaskOutline,        color: '#C9A870', path: '/fragrance'   },
-  { name: 'Body Care',   icon: IoWaterOutline,        color: '#B8A99A', path: '/collections' },
-  { name: 'Collections', icon: IoDiamondOutline,      color: '#8B7355', path: '/collections' },
+  { key: 'skincare',    icon: IoLeafOutline,         color: '#688B8D', path: '/skincare'    },
+  { key: 'makeup',      icon: IoColorPaletteOutline, color: '#D4AFA3', path: '/makeup'      },
+  { key: 'fragrance',   icon: IoFlaskOutline,        color: '#C9A870', path: '/fragrance'   },
+  { key: 'bodyCare',    icon: IoWaterOutline,        color: '#B8A99A', path: '/bodycare'    },
+  { key: 'collections', icon: IoDiamondOutline,      color: '#8B7355', path: '/collections' },
 ]
 
 const mobileCategories = [
-  { name: 'Skincare',    gradient: 'from-[#E8F4F4] to-[#D4E8E8]', icon: '💧', path: '/skincare'    },
-  { name: 'Makeup',      gradient: 'from-[#FFE8E8] to-[#FFD4D4]', icon: '💄', path: '/makeup'      },
-  { name: 'Fragrance',   gradient: 'from-[#F5E8FF] to-[#E8D4FF]', icon: '🌸', path: '/fragrance'   },
-  { name: 'Body Care',   gradient: 'from-[#FFF4E8] to-[#FFE8D4]', icon: '🧴', path: '/collections' },
-  { name: 'Collections', gradient: 'from-[#E8F9E8] to-[#D4F0D4]', icon: '🎁', path: '/collections' },
+  { key: 'skincare',    gradient: 'from-[#E8F4F4] to-[#D4E8E8]', icon: '💧', path: '/skincare'    },
+  { key: 'makeup',      gradient: 'from-[#FFE8E8] to-[#FFD4D4]', icon: '💄', path: '/makeup'      },
+  { key: 'fragrance',   gradient: 'from-[#F5E8FF] to-[#E8D4FF]', icon: '🌸', path: '/fragrance'   },
+  { key: 'bodyCare',    gradient: 'from-[#FFF4E8] to-[#FFE8D4]', icon: '🧴', path: '/bodycare'    },
+  { key: 'collections', gradient: 'from-[#E8F9E8] to-[#D4F0D4]', icon: '🎁', path: '/collections' },
 ]
 
 const featuredCollections = [
-  { title: 'Signature Collection', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=280&h=200&fit=crop',   param: 'signature'       },
-  { title: 'Limited Editions',     image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=280&h=200&fit=crop', param: 'limited_edition' },
-  { title: 'Holiday 2024',         image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=280&h=200&fit=crop', param: 'holiday_set'     },
-  { title: 'Gift Sets',            image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=280&h=200&fit=crop', param: 'gift_set'        },
-]
-
-const quickLinks = [
-  { label: 'Gift Guide',     icon: IoGiftOutline,              path: '/collections'           },
-  { label: 'About Us',       icon: IoInformationCircleOutline, path: '/advanced-formulations' },
-  { label: 'Sustainability', icon: IoLeafOutline,              path: '/advanced-formulations' },
-  { label: 'Contact',        icon: IoChatbubbleOutline,        path: '/search'                },
+  { key: 'signatureCollection', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=280&h=200&fit=crop',   param: 'signature'       },
+  { key: 'limitedEditions',     image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=280&h=200&fit=crop', param: 'limited_edition' },
+  { key: 'holiday2024',         image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=280&h=200&fit=crop', param: 'holiday_set'     },
+  { key: 'giftSets',            image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=280&h=200&fit=crop', param: 'gift_set'        },
 ]
 
 const popularSearches = [
-  { label: 'Masks',         path: '/skincare?subcategory=Masks'               },
-  { label: 'Serums',        path: '/skincare?subcategory=Serums'              },
-  { label: 'Foundation',    path: '/makeup?subcategory=Foundation'            },
-  { label: 'Lipstick',      path: '/makeup?subcategory=Lipstick'              },
-  { label: 'Eau de Parfum', path: '/fragrance?subcategory=Eau%20de%20Parfum' },
-  { label: 'Body Mist',     path: '/fragrance?subcategory=Body%20Mist'       },
-  { label: 'Body Butter',   path: '/bodycare?subcategory=Body%20Butter'      },
-  { label: 'Body Scrubs',   path: '/bodycare?subcategory=Scrubs'             },
+  { key: 'masks',       path: '/skincare?subcategory=Masks'               },
+  { key: 'serums',      path: '/skincare?subcategory=Serums'              },
+  { key: 'foundation',  path: '/makeup?subcategory=Foundation'            },
+  { key: 'lipstick',    path: '/makeup?subcategory=Lipstick'              },
+  { key: 'eauDeParfum', path: '/fragrance?subcategory=Eau%20de%20Parfum' },
+  { key: 'bodyMist',    path: '/fragrance?subcategory=Body%20Mist'       },
+  { key: 'bodyButter',  path: '/bodycare?subcategory=Body%20Butter'      },
+  { key: 'bodyScrubs',  path: '/bodycare?subcategory=Scrubs'             },
 ]
 
-// All searchable subcategories with their page and category label
+// All searchable subcategories — labels stay in EN for search matching
 const allSubcategories = [
   // Skincare
-  { label: 'Cleansers',      category: 'Skincare',   path: '/skincare?subcategory=Cleansers'      },
-  { label: 'Exfoliators',    category: 'Skincare',   path: '/skincare?subcategory=Exfoliators'    },
-  { label: 'Eye Care',       category: 'Skincare',   path: '/skincare?subcategory=Eye%20Care'     },
-  { label: 'Masks',          category: 'Skincare',   path: '/skincare?subcategory=Masks'          },
-  { label: 'Moisturizers',   category: 'Skincare',   path: '/skincare?subcategory=Moisturizers'   },
-  { label: 'Serums',         category: 'Skincare',   path: '/skincare?subcategory=Serums'         },
-  { label: 'Sunscreen',      category: 'Skincare',   path: '/skincare?subcategory=Sunscreen'      },
-  { label: 'Toners',         category: 'Skincare',   path: '/skincare?subcategory=Toners'         },
+  { label: 'Cleansers',       category: 'Skincare',   path: '/skincare?subcategory=Cleansers'      },
+  { label: 'Exfoliators',     category: 'Skincare',   path: '/skincare?subcategory=Exfoliators'    },
+  { label: 'Eye Care',        category: 'Skincare',   path: '/skincare?subcategory=Eye%20Care'     },
+  { label: 'Masks',           category: 'Skincare',   path: '/skincare?subcategory=Masks'          },
+  { label: 'Moisturizers',    category: 'Skincare',   path: '/skincare?subcategory=Moisturizers'   },
+  { label: 'Serums',          category: 'Skincare',   path: '/skincare?subcategory=Serums'         },
+  { label: 'Sunscreen',       category: 'Skincare',   path: '/skincare?subcategory=Sunscreen'      },
+  { label: 'Toners',          category: 'Skincare',   path: '/skincare?subcategory=Toners'         },
   // Makeup
-  { label: 'Foundation',     category: 'Makeup',     path: '/makeup?subcategory=Foundation'       },
-  { label: 'Concealer',      category: 'Makeup',     path: '/makeup?subcategory=Concealer'        },
-  { label: 'Powder',         category: 'Makeup',     path: '/makeup?subcategory=Powder'           },
-  { label: 'Blush',          category: 'Makeup',     path: '/makeup?subcategory=Blush'            },
-  { label: 'Highlighter',    category: 'Makeup',     path: '/makeup?subcategory=Highlighter'      },
-  { label: 'Eyeshadow',      category: 'Makeup',     path: '/makeup?subcategory=Eyeshadow'        },
-  { label: 'Eyeliner',       category: 'Makeup',     path: '/makeup?subcategory=Eyeliner'         },
-  { label: 'Mascara',        category: 'Makeup',     path: '/makeup?subcategory=Mascara'          },
-  { label: 'Eyebrow',        category: 'Makeup',     path: '/makeup?subcategory=Eyebrow'          },
-  { label: 'Lipstick',       category: 'Makeup',     path: '/makeup?subcategory=Lipstick'         },
-  { label: 'Lip Gloss',      category: 'Makeup',     path: '/makeup?subcategory=Lip%20Gloss'      },
-  { label: 'Lip Liner',      category: 'Makeup',     path: '/makeup?subcategory=Lip%20Liner'      },
-  { label: 'Lip Care',       category: 'Makeup',     path: '/makeup?subcategory=Lip%20Care'       },
+  { label: 'Foundation',      category: 'Makeup',     path: '/makeup?subcategory=Foundation'       },
+  { label: 'Concealer',       category: 'Makeup',     path: '/makeup?subcategory=Concealer'        },
+  { label: 'Powder',          category: 'Makeup',     path: '/makeup?subcategory=Powder'           },
+  { label: 'Blush',           category: 'Makeup',     path: '/makeup?subcategory=Blush'            },
+  { label: 'Highlighter',     category: 'Makeup',     path: '/makeup?subcategory=Highlighter'      },
+  { label: 'Eyeshadow',       category: 'Makeup',     path: '/makeup?subcategory=Eyeshadow'        },
+  { label: 'Eyeliner',        category: 'Makeup',     path: '/makeup?subcategory=Eyeliner'         },
+  { label: 'Mascara',         category: 'Makeup',     path: '/makeup?subcategory=Mascara'          },
+  { label: 'Eyebrow',         category: 'Makeup',     path: '/makeup?subcategory=Eyebrow'          },
+  { label: 'Lipstick',        category: 'Makeup',     path: '/makeup?subcategory=Lipstick'         },
+  { label: 'Lip Gloss',       category: 'Makeup',     path: '/makeup?subcategory=Lip%20Gloss'      },
+  { label: 'Lip Liner',       category: 'Makeup',     path: '/makeup?subcategory=Lip%20Liner'      },
+  { label: 'Lip Care',        category: 'Makeup',     path: '/makeup?subcategory=Lip%20Care'       },
   // Fragrance
-  { label: 'Eau de Parfum',  category: 'Fragrance',  path: '/fragrance?subcategory=Eau%20de%20Parfum'  },
-  { label: 'Eau de Toilette', category: 'Fragrance', path: '/fragrance?subcategory=Eau%20de%20Toilette' },
-  { label: 'Body Mist',      category: 'Fragrance',  path: '/fragrance?subcategory=Body%20Mist'   },
-  { label: 'Discovery Sets', category: 'Fragrance',  path: '/fragrance?subcategory=Discovery%20Sets' },
+  { label: 'Eau de Parfum',   category: 'Fragrance',  path: '/fragrance?subcategory=Eau%20de%20Parfum'   },
+  { label: 'Eau de Toilette', category: 'Fragrance',  path: '/fragrance?subcategory=Eau%20de%20Toilette' },
+  { label: 'Body Mist',       category: 'Fragrance',  path: '/fragrance?subcategory=Body%20Mist'         },
+  { label: 'Discovery Sets',  category: 'Fragrance',  path: '/fragrance?subcategory=Discovery%20Sets'    },
   // Body Care
-  { label: 'Body Lotion',    category: 'Body Care',  path: '/bodycare?subcategory=Body%20Lotion'  },
-  { label: 'Body Wash',      category: 'Body Care',  path: '/bodycare?subcategory=Body%20Wash'    },
-  { label: 'Scrubs',         category: 'Body Care',  path: '/bodycare?subcategory=Scrubs'         },
-  { label: 'Hand Care',      category: 'Body Care',  path: '/bodycare?subcategory=Hand%20Care'    },
-  { label: 'Body Oil',       category: 'Body Care',  path: '/bodycare?subcategory=Body%20Oil'     },
-  { label: 'Body Butter',    category: 'Body Care',  path: '/bodycare?subcategory=Body%20Butter'  },
-  { label: 'Bath Salts',     category: 'Body Care',  path: '/bodycare?subcategory=Bath%20Salts'   },
-  { label: 'Deodorant',      category: 'Body Care',  path: '/bodycare?subcategory=Deodorant'      },
+  { label: 'Body Lotion',     category: 'Body Care',  path: '/bodycare?subcategory=Body%20Lotion'  },
+  { label: 'Body Wash',       category: 'Body Care',  path: '/bodycare?subcategory=Body%20Wash'    },
+  { label: 'Scrubs',          category: 'Body Care',  path: '/bodycare?subcategory=Scrubs'         },
+  { label: 'Hand Care',       category: 'Body Care',  path: '/bodycare?subcategory=Hand%20Care'    },
+  { label: 'Body Oil',        category: 'Body Care',  path: '/bodycare?subcategory=Body%20Oil'     },
+  { label: 'Body Butter',     category: 'Body Care',  path: '/bodycare?subcategory=Body%20Butter'  },
+  { label: 'Bath Salts',      category: 'Body Care',  path: '/bodycare?subcategory=Bath%20Salts'   },
+  { label: 'Deodorant',       category: 'Body Care',  path: '/bodycare?subcategory=Deodorant'      },
 ]
 
-const categoryColors = {
+const categoryColorMap = {
   Skincare:    'text-[#688B8D]',
   Makeup:      'text-[#D4AFA3]',
   Fragrance:   'text-[#C9A870]',
   'Body Care': 'text-[#B8A99A]',
+}
+
+const getCategoryKey = (category) => {
+  if (category === 'Body Care') return 'bodyCare'
+  return category.toLowerCase()
 }
 
 // Filter suggestions based on query
@@ -151,14 +150,14 @@ const TrendingSkeleton = ({ mobile = false }) => (
   </div>
 )
 
-// ─── Search with suggestions ──────────────────────────────────────────────────
+// ─── Search with suggestions (Desktop) ───────────────────────────────────────
 function SearchWithSuggestions({ navigate, placeholder, inputClass = '', containerClass = '' }) {
+  const { t } = useTranslation()
   const [searchValue, setSearchValue] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const wrapperRef = useRef(null)
 
-  // Update suggestions as user types
   useEffect(() => {
     if (searchValue.trim().length > 0) {
       setSuggestions(getSuggestions(searchValue))
@@ -169,7 +168,6 @@ function SearchWithSuggestions({ navigate, placeholder, inputClass = '', contain
     }
   }, [searchValue])
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -187,11 +185,8 @@ function SearchWithSuggestions({ navigate, placeholder, inputClass = '', contain
   }
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && suggestions.length > 0) {
-      handleSelect(suggestions[0])
-    } else if (e.key === 'Escape') {
-      setShowSuggestions(false)
-    }
+    if (e.key === 'Enter' && suggestions.length > 0) handleSelect(suggestions[0])
+    else if (e.key === 'Escape') setShowSuggestions(false)
   }
 
   return (
@@ -204,7 +199,7 @@ function SearchWithSuggestions({ navigate, placeholder, inputClass = '', contain
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
-          placeholder={placeholder || 'Search products...'}
+          placeholder={placeholder || t('explore.searchPlaceholder')}
           className={`flex-1 text-[14px] md:text-[15px] font-normal text-[#2B2B2B] bg-transparent outline-none placeholder:text-[#999999] ${inputClass}`}
         />
         {searchValue && (
@@ -214,19 +209,14 @@ function SearchWithSuggestions({ navigate, placeholder, inputClass = '', contain
         )}
       </div>
 
-      {/* Suggestions Dropdown */}
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden max-h-[240px] overflow-y-auto">
           {suggestions.map((suggestion, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleSelect(suggestion)}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0"
-            >
+            <button key={idx} onClick={() => handleSelect(suggestion)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0">
               <div className="flex items-center gap-3">
                 <IoSearchOutline className="w-[14px] h-[14px] text-[#999999] flex-shrink-0" />
                 <span className="text-[14px] font-normal text-[#1A1A1A]">
-                  {/* Highlight matching letters */}
                   {suggestion.label.split(new RegExp(`(${searchValue})`, 'gi')).map((part, i) =>
                     part.toLowerCase() === searchValue.toLowerCase()
                       ? <span key={i} className="font-semibold text-[#8B7355]">{part}</span>
@@ -234,18 +224,17 @@ function SearchWithSuggestions({ navigate, placeholder, inputClass = '', contain
                   )}
                 </span>
               </div>
-              <span className={`text-[11px] font-medium ${categoryColors[suggestion.category] || 'text-[#999999]'}`}>
-                {suggestion.category}
+              <span className={`text-[11px] font-medium ${categoryColorMap[suggestion.category] || 'text-[#999999]'}`}>
+                {t(`explore.categories.${getCategoryKey(suggestion.category)}`)}
               </span>
             </button>
           ))}
         </div>
       )}
 
-      {/* No results */}
       {showSuggestions && searchValue.trim().length > 0 && suggestions.length === 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E8E3D9] rounded-[8px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 px-4 py-3">
-          <p className="text-[13px] text-[#999999]">No results for "{searchValue}"</p>
+          <p className="text-[13px] text-[#999999]">{t('explore.noResults', { query: searchValue })}</p>
         </div>
       )}
     </div>
@@ -254,6 +243,7 @@ function SearchWithSuggestions({ navigate, placeholder, inputClass = '', contain
 
 // ─── Mobile search with suggestions ──────────────────────────────────────────
 function MobileSearchWithSuggestions({ navigate }) {
+  const { t } = useTranslation()
   const [searchValue, setSearchValue] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -271,9 +261,7 @@ function MobileSearchWithSuggestions({ navigate }) {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setShowSuggestions(false)
-      }
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) setShowSuggestions(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -295,7 +283,7 @@ function MobileSearchWithSuggestions({ navigate }) {
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && suggestions.length > 0) handleSelect(suggestions[0]) }}
           onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
-          placeholder="Search products, collections..."
+          placeholder={t('explore.mobileSearchPlaceholder')}
           className="flex-1 text-[14px] font-normal text-[#999999] bg-transparent outline-none"
         />
         {searchValue && (
@@ -308,11 +296,8 @@ function MobileSearchWithSuggestions({ navigate }) {
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 overflow-hidden max-h-[200px] overflow-y-auto">
           {suggestions.map((suggestion, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleSelect(suggestion)}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0"
-            >
+            <button key={idx} onClick={() => handleSelect(suggestion)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#FDFBF7] transition-colors text-left border-b border-[#F5F1EA] last:border-b-0">
               <div className="flex items-center gap-3">
                 <IoSearchOutline className="w-[14px] h-[14px] text-[#999999] flex-shrink-0" />
                 <span className="text-[14px] font-normal text-[#1A1A1A]">
@@ -323,8 +308,8 @@ function MobileSearchWithSuggestions({ navigate }) {
                   )}
                 </span>
               </div>
-              <span className={`text-[11px] font-medium ${categoryColors[suggestion.category] || 'text-[#999999]'}`}>
-                {suggestion.category}
+              <span className={`text-[11px] font-medium ${categoryColorMap[suggestion.category] || 'text-[#999999]'}`}>
+                {t(`explore.categories.${getCategoryKey(suggestion.category)}`)}
               </span>
             </button>
           ))}
@@ -333,7 +318,7 @@ function MobileSearchWithSuggestions({ navigate }) {
 
       {showSuggestions && searchValue.trim().length > 0 && suggestions.length === 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E8E3D9] rounded-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] z-50 px-4 py-3">
-          <p className="text-[13px] text-[#999999]">No results for "{searchValue}"</p>
+          <p className="text-[13px] text-[#999999]">{t('explore.noResults', { query: searchValue })}</p>
         </div>
       )}
     </div>
@@ -342,6 +327,7 @@ function MobileSearchWithSuggestions({ navigate }) {
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function ExploreMobile() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [trendingProducts, setTrendingProducts] = useState([])
 
@@ -349,21 +335,25 @@ function ExploreMobile() {
 
   return (
     <div className="w-full min-h-screen bg-white font-['Cormorant_Garamond'] flex flex-col">
+
+      {/* Header */}
       <div className="bg-white px-5 h-[72px] flex items-center justify-end flex-shrink-0">
         <button onClick={() => navigate(-1)} className="w-11 h-11 flex items-center justify-center">
           <IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" />
         </button>
       </div>
 
+      {/* Hero Search */}
       <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] px-5 py-8 flex flex-col justify-center flex-shrink-0">
-        <h1 className="text-[32px] font-semibold text-[#1A1A1A] text-center mb-2">Explore Shan Loray</h1>
-        <p className="text-[15px] font-normal text-[#666666] text-center mb-6">Discover your perfect beauty ritual</p>
+        <h1 className="text-[32px] font-semibold text-[#1A1A1A] text-center mb-2">{t('explore.title')}</h1>
+        <p className="text-[15px] font-normal text-[#666666] text-center mb-6">{t('explore.subtitle')}</p>
         <MobileSearchWithSuggestions navigate={navigate} />
       </div>
 
+      {/* Shop by Category */}
       <div className="bg-white px-5 py-8 flex-shrink-0">
         <div className="flex flex-col items-center mb-6">
-          <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-3">Shop by Category</h2>
+          <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-3">{t('explore.shopByCategory')}</h2>
           <div className="w-12 h-[2px] bg-[#C9A870]" />
         </div>
         <div className="space-y-3">
@@ -372,7 +362,7 @@ function ExploreMobile() {
               <div className={`h-[52px] bg-gradient-to-r ${cat.gradient} rounded-xl px-4 flex items-center justify-between`}>
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{cat.icon}</span>
-                  <span className="text-[16px] font-medium text-[#2B2B2B]">{cat.name}</span>
+                  <span className="text-[16px] font-medium text-[#2B2B2B]">{t(`explore.categoryNames.${cat.key}`)}</span>
                 </div>
                 <IoChevronForward className="w-5 h-5 text-[#999999]" />
               </div>
@@ -381,17 +371,18 @@ function ExploreMobile() {
         </div>
       </div>
 
+      {/* Featured Collections */}
       <div className="bg-white border-t border-[#F5F1EA] px-5 py-8 flex-shrink-0">
-        <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-6">Featured Collections</h2>
+        <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-6">{t('explore.featuredCollections')}</h2>
         <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
           <div className="flex gap-3" style={{ width: 'max-content' }}>
             {featuredCollections.map((col, idx) => (
               <Link key={idx} to={`/collections?collection=${col.param}`} className="flex-shrink-0">
                 <div className="w-[280px] h-[200px] rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)] relative">
-                  <img src={col.image} alt={col.title} className="w-full h-full object-cover" />
+                  <img src={col.image} alt={t(`explore.collectionNames.${col.key}`)} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-5 left-5">
-                    <h3 className="text-[20px] font-semibold text-white">{col.title}</h3>
+                    <h3 className="text-[20px] font-semibold text-white">{t(`explore.collectionNames.${col.key}`)}</h3>
                   </div>
                 </div>
               </Link>
@@ -400,34 +391,36 @@ function ExploreMobile() {
         </div>
       </div>
 
+      {/* Smart Beauty Tools */}
       <div className="bg-[#F9F4EE] px-5 py-8 flex-shrink-0">
-        <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-5">Smart Beauty Tools</h2>
+        <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-5">{t('explore.smartBeautyTools')}</h2>
         <div className="space-y-5">
           <Link to="/skin-analysis">
             <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
               <div className="w-12 h-12 rounded-full bg-[#688B8D] flex items-center justify-center mb-4">
                 <IoSparkles className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">AI Beauty Consultant</h3>
-              <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">Get personalized skincare recommendations based on your unique skin profile</p>
-              <span className="text-[13px] font-medium text-[#8B7355]">Start Consultation →</span>
+              <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">{t('explore.aiConsultantTitle')}</h3>
+              <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">{t('explore.aiConsultantDesc')}</p>
+              <span className="text-[13px] font-medium text-[#8B7355]">{t('explore.aiConsultantCta')}</span>
             </div>
           </Link>
           <Link to="/virtual-tryon">
             <div className="bg-white rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
-            <div className="w-12 h-12 rounded-full bg-[#D4AFA3] flex items-center justify-center mb-4">
-              <IoCameraOutline className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-full bg-[#D4AFA3] flex items-center justify-center mb-4">
+                <IoCameraOutline className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">{t('explore.virtualTryOnTitle')}</h3>
+              <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">{t('explore.virtualTryOnDesc')}</p>
+              <span className="text-[13px] font-medium text-[#8B7355]">{t('explore.virtualTryOnCta')}</span>
             </div>
-            <h3 className="text-[17px] font-semibold text-[#1A1A1A] mb-2">Virtual Try-On</h3>
-            <p className="text-[13px] font-normal text-[#666666] mb-3 leading-[1.5]">Experience products virtually with augmented reality technology</p>
-            <span className="text-[13px] font-medium text-[#8B7355]">Coming Soon →</span>
-          </div>
           </Link>
         </div>
       </div>
 
+      {/* Popular Right Now */}
       <div className="bg-white px-5 py-8 flex-shrink-0">
-        <h2 className="text-[16px] font-semibold text-[#1A1A1A] mb-5">Popular Right Now</h2>
+        <h2 className="text-[16px] font-semibold text-[#1A1A1A] mb-5">{t('explore.popularRightNow')}</h2>
         {trendingProducts.length > 0 ? (
           <div className="overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
             <div className="flex gap-3" style={{ width: 'max-content' }}>
@@ -452,6 +445,7 @@ function ExploreMobile() {
 
 // ─── Desktop ──────────────────────────────────────────────────────────────────
 function ExploreDesktop() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [trendingProducts, setTrendingProducts] = useState([])
 
@@ -466,7 +460,7 @@ function ExploreDesktop() {
         </button>
 
         <div className="pt-8 md:pt-[40px] pb-6 md:pb-[32px] flex flex-col items-center border-b border-[#E8E3D9]">
-          <h1 className="text-[28px] md:text-[36px] lg:text-[42px] font-semibold text-[#1A1A1A] mb-4 md:mb-[20px]">Explore Shan Loray</h1>
+          <h1 className="text-[28px] md:text-[36px] lg:text-[42px] font-semibold text-[#1A1A1A] mb-4 md:mb-[20px]">{t('explore.title')}</h1>
           <div className="w-[80px] md:w-[120px] h-[2px] bg-[#C9A870]" />
         </div>
 
@@ -475,7 +469,7 @@ function ExploreDesktop() {
 
             {/* Col 1 — Categories */}
             <div>
-              <h3 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#666666] mb-3 md:mb-[16px]">Shop by Category</h3>
+              <h3 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#666666] mb-3 md:mb-[16px]">{t('explore.shopByCategory')}</h3>
               <div className="flex flex-col gap-[6px] md:gap-[8px]">
                 {desktopCategories.map((cat, idx) => (
                   <Link key={idx} to={cat.path}>
@@ -483,7 +477,7 @@ function ExploreDesktop() {
                       <div className="w-[40px] h-[40px] md:w-[48px] md:h-[48px] rounded-full bg-[#FDFBF7] group-hover:bg-white flex items-center justify-center flex-shrink-0 transition-colors">
                         <cat.icon className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] transition-transform group-hover:scale-110" style={{ color: cat.color }} />
                       </div>
-                      <span className="text-[15px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">{cat.name}</span>
+                      <span className="text-[15px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">{t(`explore.categoryNames.${cat.key}`)}</span>
                     </div>
                   </Link>
                 ))}
@@ -492,19 +486,19 @@ function ExploreDesktop() {
 
             {/* Col 2 — Featured + Trending Now */}
             <div>
-              <h3 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#666666] mb-3 md:mb-[16px]">Featured</h3>
+              <h3 className="text-[16px] md:text-[18px] lg:text-[20px] font-medium text-[#666666] mb-3 md:mb-[16px]">{t('explore.featured')}</h3>
               <div className="mb-[16px]">
                 <div className="w-full h-[160px] md:h-[180px] lg:h-[200px] rounded-[12px] overflow-hidden mb-[12px] md:mb-[14px] group cursor-pointer">
-                  <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=360&h=240&fit=crop" alt="Spring 2024 Collection" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=360&h=240&fit=crop" alt={t('explore.spring2024')} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
-                <h4 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[6px]">Spring 2024 Collection</h4>
-                <p className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#666666] mb-[12px]">Discover botanical elegance</p>
+                <h4 className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold text-[#1A1A1A] mb-[6px]">{t('explore.spring2024')}</h4>
+                <p className="text-[13px] md:text-[14px] lg:text-[15px] font-normal text-[#666666] mb-[12px]">{t('explore.spring2024Desc')}</p>
                 <Link to="/collections">
-                  <span className="text-[13px] md:text-[14px] font-medium text-[#8B7355] cursor-pointer hover:underline">View Collection →</span>
+                  <span className="text-[13px] md:text-[14px] font-medium text-[#8B7355] cursor-pointer hover:underline">{t('explore.viewCollection')}</span>
                 </Link>
               </div>
               <div className="mt-4 md:mt-[20px]">
-                <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">Trending Now</h4>
+                <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">{t('explore.trendingNow')}</h4>
                 {trendingProducts.length > 0 ? (
                   <div className="flex gap-3 md:gap-[12px]">
                     {trendingProducts.map((product) => (
@@ -522,17 +516,17 @@ function ExploreDesktop() {
               </div>
             </div>
 
-            {/* Col 3 — Search with live suggestions + Popular Searches + Tools */}
+            {/* Col 3 — Search + Popular Searches + Tools */}
             <div>
-              <SearchWithSuggestions navigate={navigate} placeholder="Search products..." containerClass="mb-5 md:mb-[24px]" />
+              <SearchWithSuggestions navigate={navigate} placeholder={t('explore.searchPlaceholder')} containerClass="mb-5 md:mb-[24px]" />
 
               <div className="mb-5 md:mb-[24px]">
-                <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">Popular Searches</h4>
+                <h4 className="text-[14px] md:text-[15px] lg:text-[16px] font-medium text-[#666666] mb-3 md:mb-[12px]">{t('explore.popularSearches')}</h4>
                 <div className="flex flex-wrap gap-[6px] md:gap-[8px]">
                   {popularSearches.map((search, idx) => (
                     <Link key={idx} to={search.path}>
                       <div className="h-[32px] md:h-[36px] px-3 md:px-[16px] bg-[#FDFBF7] border border-[#E8E3D9] rounded-[18px] flex items-center cursor-pointer hover:bg-[#8B7355] hover:border-[#8B7355] transition-all group">
-                        <span className="text-[12px] md:text-[13px] lg:text-[14px] font-normal text-[#3D3D3D] group-hover:text-white transition-colors">{search.label}</span>
+                        <span className="text-[12px] md:text-[13px] lg:text-[14px] font-normal text-[#3D3D3D] group-hover:text-white transition-colors">{t(`explore.popularSearchLabels.${search.key}`)}</span>
                       </div>
                     </Link>
                   ))}
@@ -543,13 +537,13 @@ function ExploreDesktop() {
                 <Link to="/skin-analysis">
                   <div className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
                     <IoSparklesOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#688B8D] flex-shrink-0" />
-                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">AI Beauty Consultant</span>
+                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">{t('explore.aiConsultantTitle')}</span>
                   </div>
                 </Link>
                 <Link to="/virtual-tryon">
                   <div className="h-[48px] md:h-[52px] bg-[#FDFBF7] rounded-[8px] px-[14px] md:px-[16px] flex items-center gap-3 md:gap-[14px] cursor-pointer hover:bg-[#F0EBE3] transition-colors group">
                     <IoScanOutline className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] text-[#D4AFA3] flex-shrink-0" />
-                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">Virtual Try-On</span>
+                    <span className="text-[13px] md:text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors">{t('explore.virtualTryOnTitle')}</span>
                   </div>
                 </Link>
               </div>
@@ -559,9 +553,9 @@ function ExploreDesktop() {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 h-[72px] md:h-[80px] bg-gradient-to-r from-[#FDFBF7] to-[#F9F4EE] rounded-b-[16px] flex items-center justify-center border-t border-[#E8E3D9] px-4">
-          <span className="text-[14px] md:text-[16px] lg:text-[17px] font-medium text-[#8B7355] mr-[10px] md:mr-[12px] text-center">New Members Get 15% Off First Order</span>
+          <span className="text-[14px] md:text-[16px] lg:text-[17px] font-medium text-[#8B7355] mr-[10px] md:mr-[12px] text-center">{t('explore.memberOffer')}</span>
           <Link to="/account">
-            <span className="text-[13px] md:text-[14px] lg:text-[15px] font-semibold text-[#8B7355] underline cursor-pointer hover:text-[#7a6448] transition-colors whitespace-nowrap">Join Now →</span>
+            <span className="text-[13px] md:text-[14px] lg:text-[15px] font-semibold text-[#8B7355] underline cursor-pointer hover:text-[#7a6448] transition-colors whitespace-nowrap">{t('explore.joinNow')}</span>
           </Link>
         </div>
 
@@ -571,6 +565,7 @@ function ExploreDesktop() {
 }
 
 export default function Explore() {
+  const { i18n } = useTranslation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640)
 
   useEffect(() => {
@@ -579,5 +574,5 @@ export default function Explore() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  return isMobile ? <ExploreMobile /> : <ExploreDesktop />
+  return isMobile ? <ExploreMobile key={i18n.language} /> : <ExploreDesktop key={i18n.language} />
 }
