@@ -222,6 +222,7 @@ function SearchWithSuggestions({ allProducts, searchQuery, setSearchQuery, place
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 function BodyCareMobile() {
+  const { t } = useTranslation()
   const { tf, ts } = useFilterTranslation()
   const [allProducts, setAllProducts]         = useState([])
   const [loading, setLoading]                 = useState(true)
@@ -304,9 +305,9 @@ function BodyCareMobile() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#F5F0EB] via-[#F5F0EB]/20 to-transparent" />
         </div>
         <div className="relative z-10 px-5 py-10 w-[62%]">
-          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">NOURISH & RESTORE</p>
-          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">Body Care</h1>
-          <p className="text-[13px] font-normal text-[#666666] mb-4">Luxurious rituals for silky, radiant skin</p>
+          <p className="text-[10px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('bodycare.nourishRestore')}</p>
+          <h1 className="text-[36px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">{t('bodycare.heroTitle')}</h1>
+          <p className="text-[13px] font-normal text-[#666666] mb-4">{t('bodycare.heroDesc')}</p>
           <div className="w-[48px] h-[2px] bg-[#C9A870]" />
         </div>
       </div>
@@ -333,12 +334,12 @@ function BodyCareMobile() {
 
       {/* Toolbar */}
       <div className="bg-white px-5 pt-4 pb-3">
-        <SearchWithSuggestions allProducts={allProducts} searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder="Search body care products..." className="mb-3" />
+        <SearchWithSuggestions allProducts={allProducts} searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder={t('bodycare.searchPlaceholder')} className="mb-3" />
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[13px] font-normal text-[#666666]">Showing {products.length} products</span>
+          <span className="text-[13px] font-normal text-[#666666]">{t('bodycare.showing')} {products.length} {t('bodycare.products')}</span>
           <button onClick={() => setShowFilterSheet(true)} className="relative flex items-center gap-2 h-9 px-4 border border-[#E8E3D9] rounded-full text-[13px] font-medium text-[#2B2B2B]">
             <IoFunnelOutline className="w-3.5 h-3.5 text-[#8B7355]" />
-            Filters
+            {t('bodycare.filters')}
             {activeFilters > 0 && (
               <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#8B7355] rounded-full flex items-center justify-center">
                 <span className="text-[10px] font-medium text-white">{activeFilters}</span>
@@ -347,7 +348,7 @@ function BodyCareMobile() {
           </button>
         </div>
         <button onClick={() => setShowSortSheet(true)} className="w-full h-12 px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between mb-2">
-          <span className="text-[14px] font-normal text-[#2B2B2B]">Sort by: {activeSort}</span>
+          <span className="text-[14px] font-normal text-[#2B2B2B]">{t('bodycare.sortBy')}: {activeSort === 'Best Selling' ? t('bodycare.sortBestSelling') : activeSort === 'Newest' ? t('bodycare.sortNewest') : activeSort === 'Price: Low to High' ? t('bodycare.sortPriceLow') : activeSort === 'Price: High to Low' ? t('bodycare.sortPriceHigh') : t('bodycare.sortTopRated')}</span>
           <IoChevronDown className="w-4 h-4 text-[#8B7355]" />
         </button>
       </div>
@@ -356,7 +357,7 @@ function BodyCareMobile() {
       <div className="px-4 pb-6">
         {products.length === 0 ? (
           <div className="flex items-center justify-center min-h-[300px]">
-            <p className="text-[16px] text-[#666666]">No products found</p>
+            <p className="text-[16px] text-[#666666]">{t('bodycare.noProducts')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4">
@@ -379,7 +380,7 @@ function BodyCareMobile() {
                     </div>
                   </div>
                   <p className="text-[11px] text-[#999999] mb-3">({product.reviews})</p>
-                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">Add to Bag</button>
+                  <button className="w-full h-9 bg-[#8B7355] text-white text-[12px] font-medium rounded-[6px]">{t('bodycare.addToBag')}</button>
                 </div>
               </Link>
             ))}
@@ -409,16 +410,16 @@ function BodyCareMobile() {
           <div className="relative bg-white rounded-t-[20px] px-5 pt-5 pb-8">
             <div className="w-10 h-1 bg-[#E8E3D9] rounded-full mx-auto mb-5" />
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[18px] font-semibold text-[#1A1A1A]">Sort By</h3>
+<h3 className="text-[18px] font-semibold text-[#1A1A1A]">{t('bodycare.sortBy')}</h3>
               <button onClick={() => setShowSortSheet(false)}><IoCloseOutline className="w-6 h-6 text-[#2B2B2B]" /></button>
             </div>
             <div className="space-y-1">
               {[
-                { key: 'Best Selling',       label: 'Best Selling' },
-                { key: 'Newest',             label: 'Newest Arrivals' },
-                { key: 'Price: Low to High', label: 'Price: Low to High' },
-                { key: 'Price: High to Low', label: 'Price: High to Low' },
-                { key: 'Top Rated',          label: 'Top Rated' },
+                { key: 'Best Selling',       label: t('bodycare.sortBestSelling') },
+                { key: 'Newest',             label: t('bodycare.sortNewest') },
+                { key: 'Price: Low to High', label: t('bodycare.sortPriceLow') },
+                { key: 'Price: High to Low', label: t('bodycare.sortPriceHigh') },
+                { key: 'Top Rated',          label: t('bodycare.sortTopRated') },
               ].map(({ key, label }) => (
                 <button key={key} onClick={() => { setActiveSort(key); setShowSortSheet(false) }}
                   className="w-full h-12 flex items-center justify-between px-4 rounded-[8px] hover:bg-[#FAF8F5]">
@@ -445,7 +446,7 @@ function BodyCareMobile() {
             </div>
             <div className="min-h-[60px] px-5 flex items-center justify-between border-b border-[#E8E3D9] flex-shrink-0">
               <div className="flex items-center gap-2">
-                <h2 className="text-[22px] font-semibold text-[#1A1A1A]">Filters</h2>
+                <h2 className="text-[22px] font-semibold text-[#1A1A1A]">{t('bodycare.filters')}</h2>
                 {activeFilters > 0 && (
                   <div className="w-[22px] h-[22px] bg-[#C9A870] rounded-full flex items-center justify-center">
                     <span className="text-[11px] font-semibold text-white">{activeFilters}</span>
@@ -459,7 +460,7 @@ function BodyCareMobile() {
 
               {/* Product Category */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Product Category</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('bodycare.productCategory')}</h3>
                 <div className="grid grid-cols-3 gap-3">
                   {subcategoryCards.map((cat) => {
                     const isSelected = selectedSubcategories.includes(cat.name)
@@ -479,7 +480,7 @@ function BodyCareMobile() {
               {/* Price Range */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[16px] font-medium text-[#2B2B2B]">Price Range</h3>
+                  <h3 className="text-[16px] font-medium text-[#2B2B2B]">{t('bodycare.priceRange')}</h3>
                   <span className="text-[14px] font-medium text-[#8B7355]">${minPrice || 0} – ${maxPrice || 200}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -491,7 +492,7 @@ function BodyCareMobile() {
 
               {/* Skin Type */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Type</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('bodycare.skinType')}</h3>
                 <div className="space-y-3">
                   {bodyCareSkinTypes.map((type) => {
                     const isChecked = selectedSkinTypes.includes(type)
@@ -509,7 +510,7 @@ function BodyCareMobile() {
 
               {/* Skin Concern */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Skin Concern</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('bodycare.skinConcern')}</h3>
                 <div className="flex flex-wrap gap-2">
                   {bodyCareConcerns.map((concern) => {
                     const isSelected = selectedConcerns.includes(concern)
@@ -525,7 +526,7 @@ function BodyCareMobile() {
 
               {/* Key Ingredients */}
               <div className="px-5 py-5 border-b border-[#E8E3D9]">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Key Ingredients</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('bodycare.ingredients')}</h3>
                 <div className="flex flex-wrap gap-2">
                   {bodyCareIngredients.map((ing) => {
                     const isSelected = selectedIngredients.includes(ing)
@@ -541,7 +542,7 @@ function BodyCareMobile() {
 
               {/* Scent */}
               <div className="px-5 py-5">
-                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">Scent</h3>
+                <h3 className="text-[16px] font-medium text-[#2B2B2B] mb-4">{t('bodycare.scent')}</h3>
                 <div className="flex flex-wrap gap-2">
                   {bodyCareScents.map((scent) => {
                     const isSelected = selectedScents.includes(scent)
@@ -558,8 +559,8 @@ function BodyCareMobile() {
             </div>
 
             <div className="px-5 py-4 border-t border-[#E8E3D9] flex gap-3 flex-shrink-0">
-              <button onClick={clearAll} className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]">Clear All</button>
-              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">Apply Filters ({products.length})</button>
+              <button onClick={clearAll} className="flex-1 h-12 bg-white border-2 border-[#8B7355] text-[#8B7355] text-[15px] font-semibold rounded-[8px]">{t('bodycare.clearAll')}</button>
+              <button onClick={() => setShowFilterSheet(false)} className="flex-1 h-12 bg-[#8B7355] text-white text-[15px] font-semibold rounded-[8px]">{t('bodycare.applyFilters')} ({products.length})</button>
             </div>
           </div>
         </div>
@@ -570,6 +571,7 @@ function BodyCareMobile() {
 
 // ─── Desktop + Tablet ─────────────────────────────────────────────────────────
 function BodyCareDesktop() {
+  const { t } = useTranslation()
   const { tf, ts } = useFilterTranslation()
   const [allProducts, setAllProducts]   = useState([])
   const [loading, setLoading]           = useState(true)
@@ -654,9 +656,9 @@ function BodyCareDesktop() {
       <div className="min-h-[300px] md:min-h-[340px] lg:min-h-[380px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-6 md:px-[60px] lg:px-[120px]">
         <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&h=800&fit=crop" alt="" className="absolute top-0 right-0 w-[200px] md:w-[360px] lg:w-[500px] h-full object-cover opacity-20" />
         <div className="w-full max-w-[650px] relative z-10">
-          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">NOURISH & RESTORE</p>
-          <h1 className="text-[40px] md:text-[52px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">Body Care</h1>
-          <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">Luxurious rituals for silky, radiant skin from head to toe</p>
+          <p className="text-[12px] md:text-[13px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('bodycare.nourishRestore')}</p>
+          <h1 className="text-[40px] md:text-[52px] lg:text-[64px] font-bold text-[#1A1A1A] leading-[1] mb-4 md:mb-5 lg:mb-6">{t('bodycare.heroTitle')}</h1>
+          <p className="text-[15px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mb-6 md:mb-7 lg:mb-8">{t('bodycare.heroDescDesktop')}</p>
           <div className="w-[80px] md:w-[90px] lg:w-[100px] h-[4px] bg-[#C9A870]" />
         </div>
         <div className="hidden lg:block absolute right-[180px] top-1/2 -translate-y-1/2">
@@ -666,11 +668,11 @@ function BodyCareDesktop() {
 
       {/* Breadcrumb */}
       <div className="min-h-[48px] bg-[#FDFBF7] px-6 md:px-[60px] lg:px-[120px] flex items-center">
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Home</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('bodycare.home')}</span>
         <span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">Shop</span>
+        <span className="text-[13px] lg:text-[15px] text-[#8B7355] cursor-pointer">{t('bodycare.shop')}</span>
         <span className="text-[13px] lg:text-[15px] text-[#666666] mx-2">/</span>
-        <span className="text-[13px] lg:text-[15px] text-[#666666]">Body Care</span>
+        <span className="text-[13px] lg:text-[15px] text-[#666666]">{t('bodycare.heroTitle')}</span>
       </div>
 
       {/* Main Content */}
@@ -680,7 +682,7 @@ function BodyCareDesktop() {
         <div className="hidden md:block w-full md:w-[220px] lg:w-[280px] flex-shrink-0">
           <div className="bg-white border border-[#E8E3D9] rounded-[16px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[28px]">
             <div className="flex items-center justify-between mb-5 lg:mb-[24px]">
-              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">Refine Selection</h3>
+              <h3 className="text-[16px] lg:text-[18px] font-medium text-[#1A1A1A]">{t('bodycare.refineSelection')}</h3>
               {activeFilters > 0 && <span className="px-3 py-1 bg-[#8B7355] text-white text-[11px] font-semibold rounded-full">{activeFilters}</span>}
             </div>
 
@@ -688,7 +690,7 @@ function BodyCareDesktop() {
             <div className="space-y-[10px] lg:space-y-[12px] mb-6 lg:mb-[32px]">
               <div onClick={() => setSelectedSubcategories([])}
                 className={`inline-flex items-center px-[16px] lg:px-[20px] py-[8px] lg:py-[10px] text-[13px] lg:text-[14px] font-medium rounded-full cursor-pointer ${selectedSubcategories.length === 0 ? 'bg-[#8B7355] text-white' : 'bg-[#F5F1EA] text-[#3D3D3D]'}`}>
-                All Body Care
+                {t('bodycare.allBodyCare')}
               </div>
               {subcategoryCards.map((cat) => {
                 const isSelected = selectedSubcategories.includes(cat.name)
@@ -706,7 +708,7 @@ function BodyCareDesktop() {
 
               {/* Price Range */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Price Range</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('bodycare.priceRange')}</h4>
                 <div className="flex items-center gap-[6px] lg:gap-[8px]">
                   <input type="number" placeholder="$0" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="w-[80px] lg:w-[100px] h-[34px] lg:h-[36px] px-3 border border-[#E8E3D9] rounded-[6px] text-[13px] lg:text-[14px] outline-none" />
                   <span className="text-[13px] lg:text-[14px] text-[#666666]">—</span>
@@ -716,7 +718,7 @@ function BodyCareDesktop() {
 
               {/* Skin Type */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Type</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('bodycare.skinType')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {bodyCareSkinTypes.map((item) => {
                     const isChecked = selectedSkinTypes.includes(item)
@@ -734,7 +736,7 @@ function BodyCareDesktop() {
 
               {/* Skin Concern */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Skin Concern</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('bodycare.skinConcern')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {bodyCareConcerns.map((item) => {
                     const isChecked = selectedConcerns.includes(item)
@@ -752,7 +754,7 @@ function BodyCareDesktop() {
 
               {/* Key Ingredients */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Key Ingredients</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('bodycare.ingredients')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {bodyCareIngredients.map((item) => {
                     const isChecked = selectedIngredients.includes(item)
@@ -770,7 +772,7 @@ function BodyCareDesktop() {
 
               {/* Scent */}
               <div>
-                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">Scent</h4>
+                <h4 className="text-[14px] lg:text-[15px] font-medium text-[#1A1A1A] mb-3 lg:mb-[12px]">{t('bodycare.scent')}</h4>
                 <div className="space-y-[6px] lg:space-y-[8px]">
                   {bodyCareScents.map((item) => {
                     const isChecked = selectedScents.includes(item)
@@ -788,7 +790,7 @@ function BodyCareDesktop() {
 
               <button onClick={clearAll}
                 className="w-full h-[44px] lg:h-[48px] bg-white border-2 border-[#8B7355] text-[#8B7355] text-[14px] lg:text-[15px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
-                Clear All Filters
+                {t('bodycare.clearAllFilters')}
               </button>
             </div>
           </div>
@@ -796,13 +798,13 @@ function BodyCareDesktop() {
 
         {/* Product Grid */}
         <div className="flex-1 min-w-0">
-          <SearchWithSuggestions allProducts={allProducts} searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder="Search body care products..." className="mb-6" />
+          <SearchWithSuggestions allProducts={allProducts} searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder={t('bodycare.searchPlaceholder')} className="mb-6" />
 
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-[48px]">
-            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">Showing {products.length} body care products</span>
+            <span className="text-[13px] md:text-[14px] lg:text-[15px] text-[#666666]">{t('bodycare.showing')} {products.length} {t('bodycare.bodyCareProducts')}</span>
             <div className="flex items-center gap-3 lg:gap-[16px]">
-              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">Sort by</span>
+              <span className="hidden md:inline text-[14px] lg:text-[15px] text-[#666666]">{t('bodycare.sortBy')}</span>
               <div className="relative">
                 <button onClick={() => setShowSortDropdown(!showSortDropdown)}
                   className="w-[180px] md:w-[200px] lg:w-[240px] min-h-[44px] lg:min-h-[48px] px-4 bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-between cursor-pointer hover:border-[#C9A870] transition-all">
@@ -812,11 +814,11 @@ function BodyCareDesktop() {
                 {showSortDropdown && (
                   <div className="absolute top-full mt-2 right-0 w-[240px] bg-white border border-[#E8E3D9] rounded-[8px] shadow-lg z-10">
                     {[
-                      { key: 'Best Selling',       label: 'Best Selling' },
-                      { key: 'Newest',             label: 'Newest Arrivals' },
-                      { key: 'Price: Low to High', label: 'Price: Low to High' },
-                      { key: 'Price: High to Low', label: 'Price: High to Low' },
-                      { key: 'Top Rated',          label: 'Top Rated' },
+                      { key: 'Best Selling',       label: t('bodycare.sortBestSelling') },
+                      { key: 'Newest',             label: t('bodycare.sortNewest') },
+                      { key: 'Price: Low to High', label: t('bodycare.sortPriceLow') },
+                      { key: 'Price: High to Low', label: t('bodycare.sortPriceHigh') },
+                      { key: 'Top Rated',          label: t('bodycare.sortTopRated') },
                     ].map(({ key, label }) => (
                       <button key={key} onClick={() => { setActiveSort(key); setShowSortDropdown(false) }}
                         className={`w-full px-4 py-3 text-left text-[14px] hover:bg-[#F5F1EA] transition-colors ${activeSort === key ? 'text-[#8B7355] font-medium' : 'text-[#2B2B2B]'}`}>
@@ -831,7 +833,7 @@ function BodyCareDesktop() {
 
           {products.length === 0 ? (
             <div className="flex items-center justify-center min-h-[400px]">
-              <p className="text-[16px] text-[#666666]">No products found</p>
+<p className="text-[16px] text-[#666666]">{t('bodycare.noProducts')}</p>
             </div>
           ) : (
             <>
@@ -848,7 +850,7 @@ function BodyCareDesktop() {
                         <p className="text-[20px] lg:text-[24px] font-semibold">{largeProducts[0].price}</p>
                       </div>
                       <div className="absolute top-[16px] lg:top-[20px] right-[16px] lg:right-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button className="px-[18px] lg:px-[24px] py-[10px] lg:py-[12px] bg-white text-[#8B7355] text-[13px] lg:text-[14px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)]">Add to Bag</button>
+<button className="px-[18px] lg:px-[24px] py-[10px] lg:py-[12px] bg-white text-[#8B7355] text-[13px] lg:text-[14px] font-medium rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.2)]">{t('bodycare.addToBag')}</button>
                       </div>
                     </div>
                     <div className="p-5 lg:p-[24px]">
@@ -931,7 +933,7 @@ function BodyCareDesktop() {
                 <div className="flex items-center justify-center mb-16 lg:mb-[96px]">
                   <button onClick={() => setDisplayCount(prev => prev + 10)}
                     className="h-[52px] px-[48px] bg-[#8B7355] text-white text-[15px] lg:text-[16px] font-medium rounded-[8px] hover:bg-[#6F5A42] transition-colors">
-                    Load More ({products.length - displayCount} remaining)
+                    {t('bodycare.loadMore')} ({products.length - displayCount} {t('bodycare.remaining')})
                   </button>
                 </div>
               )}
