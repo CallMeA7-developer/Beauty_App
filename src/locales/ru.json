@@ -2100,5 +2100,39 @@
       "bodyButter": "Масло-крем для тела",
       "bodyScrubs": "Скрабы для тела"
     }
-  }
+  },
+  "bodycare": {
+  "nourishRestore": "ПИТАНИЕ И ВОССТАНОВЛЕНИЕ",
+  "heroTitle": "Уход за телом",
+  "heroDesc": "Роскошные ритуалы для гладкой, сияющей кожи",
+  "heroDescDesktop": "Роскошные ритуалы для гладкой, сияющей кожи с головы до пят",
+  "home": "Главная",
+  "shop": "Магазин",
+  "searchPlaceholder": "Поиск средств по уходу за телом...",
+  "showing": "Показано",
+  "products": "товаров",
+  "bodyCareProducts": "товаров по уходу за телом",
+  "noProducts": "Товары не найдены",
+  "filters": "Фильтры",
+  "sortBy": "Сортировка",
+  "sortBestSelling": "Хиты продаж",
+  "sortNewest": "Новинки",
+  "sortPriceLow": "Цена: по возрастанию",
+  "sortPriceHigh": "Цена: по убыванию",
+  "sortTopRated": "Лучший рейтинг",
+  "addToBag": "В корзину",
+  "loadMore": "Загрузить ещё",
+  "remaining": "осталось",
+  "clearAll": "Сбросить",
+  "clearAllFilters": "Сбросить фильтры",
+  "applyFilters": "Применить",
+  "refineSelection": "Уточнить выбор",
+  "allBodyCare": "Весь уход за телом",
+  "productCategory": "Категория",
+  "priceRange": "Ценовой диапазон",
+  "skinType": "Тип кожи",
+  "skinConcern": "Проблемы кожи",
+  "ingredients": "Ключевые ингредиенты",
+  "scent": "Аромат"
+}
 }
