@@ -57,6 +57,8 @@ const popularSearches = [
   { label: 'Lipstick',      path: '/makeup?subcategory=Lipstick'              },
   { label: 'Eau de Parfum', path: '/fragrance?subcategory=Eau%20de%20Parfum' },
   { label: 'Body Mist',     path: '/fragrance?subcategory=Body%20Mist'       },
+  { label: 'Body Butter',   path: '/bodycare?subcategory=Body%20Butter'      },
+  { label: 'Body Scrubs',   path: '/bodycare?subcategory=Scrubs'             },
 ]
 
 // All searchable subcategories with their page and category label
@@ -89,12 +91,22 @@ const allSubcategories = [
   { label: 'Eau de Toilette', category: 'Fragrance', path: '/fragrance?subcategory=Eau%20de%20Toilette' },
   { label: 'Body Mist',      category: 'Fragrance',  path: '/fragrance?subcategory=Body%20Mist'   },
   { label: 'Discovery Sets', category: 'Fragrance',  path: '/fragrance?subcategory=Discovery%20Sets' },
+  // Body Care
+  { label: 'Body Lotion',    category: 'Body Care',  path: '/bodycare?subcategory=Body%20Lotion'  },
+  { label: 'Body Wash',      category: 'Body Care',  path: '/bodycare?subcategory=Body%20Wash'    },
+  { label: 'Scrubs',         category: 'Body Care',  path: '/bodycare?subcategory=Scrubs'         },
+  { label: 'Hand Care',      category: 'Body Care',  path: '/bodycare?subcategory=Hand%20Care'    },
+  { label: 'Body Oil',       category: 'Body Care',  path: '/bodycare?subcategory=Body%20Oil'     },
+  { label: 'Body Butter',    category: 'Body Care',  path: '/bodycare?subcategory=Body%20Butter'  },
+  { label: 'Bath Salts',     category: 'Body Care',  path: '/bodycare?subcategory=Bath%20Salts'   },
+  { label: 'Deodorant',      category: 'Body Care',  path: '/bodycare?subcategory=Deodorant'      },
 ]
 
 const categoryColors = {
-  Skincare:  'text-[#688B8D]',
-  Makeup:    'text-[#D4AFA3]',
-  Fragrance: 'text-[#C9A870]',
+  Skincare:    'text-[#688B8D]',
+  Makeup:      'text-[#D4AFA3]',
+  Fragrance:   'text-[#C9A870]',
+  'Body Care': 'text-[#B8A99A]',
 }
 
 // Filter suggestions based on query
