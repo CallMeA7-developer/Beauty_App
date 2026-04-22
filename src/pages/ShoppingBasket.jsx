@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   IoTrashOutline,
@@ -10,6 +10,7 @@ import {
   IoRemoveOutline,
   IoInformationCircleOutline,
   IoHeartOutline,
+  IoArrowUp,
 } from 'react-icons/io5'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
@@ -21,6 +22,13 @@ export default function ShoppingBasket() {
   const { user, loading: authLoading } = useAuth()
   const { cartItems, loading, updateQuantity, removeFromCart } = useCart()
   const navigate = useNavigate()
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -110,10 +118,7 @@ export default function ShoppingBasket() {
                               <IoAddOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px] text-[#666666]" />
                             </button>
                           </div>
-                          <button className="flex items-center gap-[6px] text-[12px] lg:text-[13px] font-normal text-[#8B7355] cursor-pointer hover:underline">
-                            <IoHeartOutline className="w-[14px] h-[14px] lg:w-[16px] lg:h-[16px]" />
-                            {t('shoppingBasket.saveForLater')}
-                          </button>
+
                         </div>
                       </div>
                       {/* Line Total + Remove */}
@@ -240,6 +245,16 @@ export default function ShoppingBasket() {
       </div>
 
       <div className="h-[40px] md:h-[60px] lg:h-[80px]" />
+
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
