@@ -2192,7 +2192,7 @@
   "ingredients": "Ключевые ингредиенты",
   "scent": "Аромат"
 },
-  "notificationsPage": {
+"notificationsPage": {
   "title": "Настройки уведомлений",
   "subtitle": "Управляйте тем, как и когда вы получаете обновления",
   "breadcrumb": {
@@ -2201,38 +2201,45 @@
     "notificationPreferences": "Настройки уведомлений"
   },
   "guest": "Гость",
-  "membership": {
-    "member": "Участник",
-    "elite": "Элитный участник",
-    "gold": "Золотой участник"
-  },
+  "membership": { "member": "Участник", "elite": "Элитный участник", "gold": "Золотой участник" },
   "points": "Баллы лояльности",
   "pointsShort": "баллов",
-  "stats": {
-    "totalOrders": "Всего заказов",
-    "wishlistItems": "В избранном",
-    "reviewsWritten": "Отзывов написано"
-  },
   "userAvatar": "Аватар пользователя",
+  "stats": { "totalOrders": "Всего заказов", "wishlistItems": "В избранном", "reviewsWritten": "Отзывов написано" },
   "infoBanner": "Будьте в курсе заказов, советов по красоте и эксклюзивных предложений",
-  "sections": {
-    "email": "Email-уведомления",
-    "push": "Push-уведомления",
-    "sms": "SMS-уведомления",
-    "newsletter": "Рассылка"
-  },
+  "sections": { "email": "Email-уведомления", "sms": "SMS-уведомления", "push": "Push-уведомления", "newsletter": "Рассылка" },
   "pushDescription": "Включите уведомления браузера для обновлений в реальном времени",
-  "emailFrequencyPreference": "Частота email-рассылки",
-  "frequencyOptions": {
-    "daily": "Ежедневно",
-    "multiplePerWeek": "Несколько раз в неделю",
-    "weekly": "Еженедельно",
-    "biWeekly": "Раз в две недели",
-    "monthly": "Ежемесячно"
-  },
   "smsNotice": "Могут применяться стандартные тарифы на сообщения",
-  "privacyNotice": "Мы уважаем вашу конфиденциальность. Вы можете изменить настройки в любое время.",
+  "emailFrequencyPreference": "Частота email-рассылки",
+  "frequencyOptions": { "daily": "Ежедневно", "multiplePerWeek": "Несколько раз в неделю", "weekly": "Еженедельно", "biWeekly": "Раз в две недели", "monthly": "Ежемесячно" },
+  "resetToDefault": "Сбросить к стандартным",
   "savePreferences": "Сохранить настройки",
-  "resetToDefault": "Сбросить к стандартным"
+  "privacyNotice": "Мы уважаем вашу конфиденциальность. Вы можете изменить настройки в любое время.",
+  "nav": {
+    "accountDashboard": "Личный кабинет", "orderHistory": "История заказов", "myWishlist": "Мой список желаний",
+    "shippingAddresses": "Адреса доставки", "paymentMethods": "Способы оплаты", "beautyProfile": "Профиль красоты",
+    "loyaltyProgram": "Программа лояльности", "myRoutines": "Мои процедуры", "reviewsRatings": "Отзывы и оценки",
+    "accountSettings": "Настройки аккаунта", "notifications": "Уведомления"
+  },
+  "emailItems": {
+    "order-updates": { "title": "Обновления заказов", "description": "Подтверждения отправки, уведомления о доставке и статус заказа" },
+    "promotions": { "title": "Акции и предложения", "description": "Эксклюзивные скидки, сезонные распродажи и предложения для участников" },
+    "new-arrivals": { "title": "Новинки", "description": "Первыми узнавайте о новых продуктах и коллекциях" },
+    "beauty-tips": { "title": "Советы по красоте", "description": "Экспертные советы, обучающие материалы и персональные рекомендации" }
+  },
+  "smsItems": {
+    "order-alerts": { "title": "Уведомления о статусе заказа", "description": "Обновления доставки и уведомления об отправке в реальном времени" },
+    "flash-sales": { "title": "Эксклюзивные флеш-распродажи", "description": "Ограниченные предложения прямо на ваш телефон" }
+  },
+  "pushItems": {
+    "stock-alerts": { "title": "Уведомления о наличии", "description": "Получайте уведомления, когда товары из избранного появятся в наличии" },
+    "price-drop": { "title": "Снижение цены", "description": "Узнавайте, когда любимые товары поступают в продажу" },
+    "events": { "title": "Бьюти-события", "description": "Виртуальные консультации, мастер-классы и эксклюзивные мероприятия" }
+  },
+  "newsletterOptions": {
+    "weekly": { "label": "Еженедельный дайджест", "description": "Актуальные тренды красоты и советы каждый понедельник" },
+    "monthly": { "label": "Ежемесячный журнал", "description": "Подробные материалы и сезонные коллекции" },
+    "unsubscribe": { "label": "Отписаться", "description": "Отказаться от всех рассылок" }
+  }
 }
 }
