@@ -17,6 +17,9 @@ import {
   IoLocationOutline,
   IoNotificationsOutline,
   IoChevronDown,
+  IoArrowUp,
+  IoMenuOutline,
+  IoClose,
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
 import { useWishlist } from '../contexts/WishlistContext'
@@ -29,6 +32,14 @@ export default function PaymentMethods() {
   const [paymentMethods, setPaymentMethods] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [showDrawer, setShowDrawer] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   const [stats, setStats] = useState({
     totalOrders: 0,
     reviewsWritten: 0,
@@ -135,7 +146,7 @@ export default function PaymentMethods() {
       .single()
 
     if (!error && data) {
-      setPaymentMethods([data, ...paymentMethods])
+      setPaymentMethods(prev => [data, ...prev])
       resetForm()
       alert('Payment method added successfully')
     } else {
@@ -151,7 +162,7 @@ export default function PaymentMethods() {
         .eq('id', id)
 
       if (!error) {
-        setPaymentMethods(paymentMethods.filter(method => method.id !== id))
+        setPaymentMethods(prev => prev.filter(method => method.id !== id))
       }
     }
   }
@@ -243,16 +254,103 @@ export default function PaymentMethods() {
       </div>
 
       <div className="min-h-[100px] md:min-h-[120px] lg:min-h-[140px] bg-gradient-to-b from-[#FDFBF7] to-white flex flex-col items-center justify-center px-4 md:px-[60px] lg:px-[120px] py-6 md:py-0">
-        <div className="max-w-[1200px] w-full">
+        <div className="max-w-[1200px] w-full relative">
           <h1 className="text-[28px] md:text-[38px] lg:text-[48px] font-semibold text-[#1A1A1A]">Payment Methods</h1>
           <p className="text-[14px] md:text-[16px] lg:text-[18px] font-normal text-[#666666] mt-[8px]">Manage your secure payment options</p>
+          {/* Mobile drawer trigger */}
+          <button
+            onClick={() => setShowDrawer(true)}
+            className="lg:hidden absolute top-0 right-0 flex items-center gap-2 bg-white border border-[#E8E3D9] rounded-full px-3 py-2 shadow-sm"
+          >
+            {user?.user_metadata?.avatar_url ? (
+              <img src={user.user_metadata.avatar_url} alt="avatar" className="w-7 h-7 rounded-full object-cover" />
+            ) : (
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] flex items-center justify-center">
+                <span className="text-[11px] font-bold text-white">{userInitials}</span>
+              </div>
+            )}
+            <IoMenuOutline className="w-4 h-4 text-[#8B7355]" />
+          </button>
         </div>
       </div>
+
+      {/* ── Mobile Drawer ── */}
+      {showDrawer && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowDrawer(false)} />
+          <div className="absolute left-0 top-0 bottom-0 w-[300px] bg-white shadow-[4px_0_24px_rgba(0,0,0,0.15)] flex flex-col overflow-y-auto">
+
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E8E3D9] flex-shrink-0">
+              <span className="text-[16px] font-semibold text-[#1A1A1A]">My Account</span>
+              <button onClick={() => setShowDrawer(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F5F1EA] transition-colors">
+                <IoClose className="w-5 h-5 text-[#666666]" />
+              </button>
+            </div>
+
+            {/* Profile Section */}
+            <div className="p-5 border-b border-[#E8E3D9]">
+              <div className="flex flex-col items-center">
+                {user?.user_metadata?.avatar_url ? (
+                  <img src={user.user_metadata.avatar_url} alt="avatar" className="w-[80px] h-[80px] rounded-full object-cover border-[3px] border-[#C9A870] mb-3" />
+                ) : (
+                  <div className="w-[80px] h-[80px] rounded-full bg-[#C9A870] flex items-center justify-center text-white text-[28px] font-semibold border-[3px] border-[#C9A870] mb-3">
+                    {userInitials}
+                  </div>
+                )}
+                <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-1">{userName}</h2>
+                <div className="bg-[#C9A870] text-white text-[11px] font-medium px-[14px] py-[5px] rounded-full mb-3">
+                  {stats.tier} Member
+                </div>
+                <div className="flex items-center gap-2">
+                  <IoSparkles className="w-[16px] h-[16px] text-[#C9A870]" />
+                  <span className="text-[15px] font-medium text-[#8B7355]">{stats.loyaltyPoints.toLocaleString()} Points</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Nav Menu */}
+            <div className="p-2 border-b border-[#E8E3D9]">
+              {navigationItems.map((item) => (
+                <Link key={item.label} to={item.path} onClick={() => setShowDrawer(false)}>
+                  <div className={`flex items-center justify-between h-[46px] px-3 rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
+                    <div className="flex items-center gap-3">
+                      <item.icon className={`w-[18px] h-[18px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
+                      <span className={`text-[13px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
+                    </div>
+                    {item.badge ? (
+                      <div className="bg-[#C9A870] text-white text-[10px] font-medium px-[7px] py-[2px] rounded-full">{item.badge}</div>
+                    ) : null}
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Stats */}
+            <div className="p-5">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="text-center">
+                  <div className="text-[20px] font-semibold text-[#8B7355] mb-1">{stats.totalOrders}</div>
+                  <div className="text-[10px] font-light text-[#666666] leading-tight">Total Orders</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] font-semibold text-[#8B7355] mb-1">{wishlistCount}</div>
+                  <div className="text-[10px] font-light text-[#666666] leading-tight">Wishlist Items</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] font-semibold text-[#8B7355] mb-1">{stats.reviewsWritten}</div>
+                  <div className="text-[10px] font-light text-[#666666] leading-tight">Reviews Written</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="px-4 md:px-[60px] lg:px-[120px] py-6 md:py-10 lg:py-[48px]">
         <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-[40px]">
 
-          <div className="w-full lg:w-[320px] lg:flex-shrink-0">
+          <div className="hidden lg:block w-full lg:w-[320px] lg:flex-shrink-0">
 
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 lg:p-[28px] mb-5 lg:mb-[24px]">
               <div className="flex flex-col items-center">
@@ -485,15 +583,13 @@ export default function PaymentMethods() {
                               Set as Default
                             </button>
                           )}
-                          {!method.is_default && (
-                            <button
-                              onClick={() => handleDelete(method.id)}
-                              className="flex items-center gap-[6px] lg:gap-[8px] text-[#999999] text-[12px] lg:text-[14px] font-normal px-4 lg:px-[20px] py-[8px] lg:py-[10px] rounded-[8px] cursor-pointer hover:text-red-500 hover:bg-red-50 transition-all"
-                            >
-                              <IoTrashOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
-                              Delete
-                            </button>
-                          )}
+                          <button
+                            onClick={() => handleDelete(method.id)}
+                            className="flex items-center gap-[6px] lg:gap-[8px] text-[#999999] text-[12px] lg:text-[14px] font-normal px-4 lg:px-[20px] py-[8px] lg:py-[10px] rounded-[8px] cursor-pointer hover:text-red-500 hover:bg-red-50 transition-all"
+                          >
+                            <IoTrashOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
+                            Delete
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -528,6 +624,16 @@ export default function PaymentMethods() {
       </div>
 
       <div className="h-[40px] md:h-[60px] lg:h-[80px]" />
+
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
