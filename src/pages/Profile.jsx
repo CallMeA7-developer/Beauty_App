@@ -258,21 +258,6 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="p-4 border-b border-[#E8E3D9]">
-              <p className="text-[11px] font-medium text-[#8B7355] tracking-[1px] uppercase mb-3">{t('profile.quickAccess.title')}</p>
-              <div className="grid grid-cols-4 gap-2">
-                {quickActions.map((action) => (
-                  <Link key={action.label} to={action.path} onClick={() => setShowDrawer(false)}>
-                    <div className="flex flex-col items-center justify-center h-[64px] bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
-                      <action.icon className="w-[20px] h-[20px] text-[#8B7355] group-hover:text-white mb-1 transition-colors" />
-                      <span className="text-[10px] font-normal text-[#8B7355] group-hover:text-white transition-colors text-center leading-tight px-1">{action.label}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
             {/* Menu Sections */}
             <div className="flex-1">
               {menuSections.map((section) => (
@@ -322,6 +307,21 @@ export default function Profile() {
         <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">{t('profile.breadcrumb.home')}</span>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666] mx-2">/</span>
         <span className="text-[13px] lg:text-[15px] font-normal text-[#666666]">{t('profile.breadcrumb.myProfile')}</span>
+      </div>
+
+      {/* ── Quick Actions — Mobile only ── */}
+      <div className="lg:hidden px-4 py-5 bg-white border-b border-[#E8E3D9]">
+        <h3 className="text-[14px] font-medium text-[#1A1A1A] mb-4">{t('profile.quickAccess.title')}</h3>
+        <div className="grid grid-cols-4 gap-[10px]">
+          {quickActions.map((action) => (
+            <Link key={action.label} to={action.path}>
+              <div className="flex flex-col items-center justify-center h-[70px] bg-[#F5F1EA] rounded-[8px] cursor-pointer hover:bg-[#8B7355] group transition-all duration-300">
+                <action.icon className="w-[22px] h-[22px] text-[#8B7355] group-hover:text-white mb-1 transition-colors" />
+                <span className="text-[11px] font-normal text-[#8B7355] group-hover:text-white transition-colors text-center leading-tight px-1">{action.label}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* ── Main Content ── */}
