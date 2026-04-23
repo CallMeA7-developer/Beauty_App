@@ -2249,5 +2249,48 @@
     "label": "Unsubscribe",
     "description": "Opt out of all newsletter communications"
   }
+},
+  "notificationsPage": {
+  "title": "Notification Preferences",
+  "subtitle": "Manage how and when you receive updates from Shan Loray",
+  "breadcrumb": {
+    "home": "Home",
+    "accountDashboard": "Account Dashboard",
+    "notificationPreferences": "Notification Preferences"
+  },
+  "guest": "Guest",
+  "membership": {
+    "member": "Member",
+    "elite": "Elite Member",
+    "gold": "Gold Member"
+  },
+  "points": "Loyalty Points",
+  "pointsShort": "pts",
+  "stats": {
+    "totalOrders": "Total Orders",
+    "wishlistItems": "Wishlist Items",
+    "reviewsWritten": "Reviews Written"
+  },
+  "userAvatar": "User Avatar",
+  "infoBanner": "Stay informed about your orders, beauty tips, and exclusive offers",
+  "sections": {
+    "email": "Email Notifications",
+    "push": "Push Notifications",
+    "sms": "SMS Notifications",
+    "newsletter": "Newsletter"
+  },
+  "pushDescription": "Enable browser notifications to receive real-time updates",
+  "emailFrequencyPreference": "Email Frequency Preference",
+  "frequencyOptions": {
+    "daily": "Daily",
+    "multiplePerWeek": "Multiple per week",
+    "weekly": "Weekly",
+    "biWeekly": "Bi-weekly",
+    "monthly": "Monthly"
+  },
+  "smsNotice": "Standard message rates may apply",
+  "privacyNotice": "We respect your privacy. You can update these preferences at any time.",
+  "savePreferences": "Save Preferences",
+  "resetToDefault": "Reset to Default"
 }
 }
