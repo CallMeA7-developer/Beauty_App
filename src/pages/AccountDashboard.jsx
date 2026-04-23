@@ -706,11 +706,7 @@ export default function AccountDashboard() {
                     </div>
                   )}
                 </div>
-                <Link to="/skin-analysis">
-                  <button className="bg-[#8B7355] text-white text-[12px] lg:text-[14px] font-medium px-4 lg:px-[24px] py-[8px] lg:py-[10px] rounded-[8px] cursor-pointer hover:bg-[#7a6448] transition-colors whitespace-nowrap">
-                    {skinAnalysis ? t('dashboard.newAnalysis') : t('dashboard.startAnalysis')}
-                  </button>
-                </Link>
+
               </div>
               {skinAnalysis ? (
                 <>
