@@ -80,21 +80,18 @@ export default function Notifications() {
   const membershipTier = getMembershipTier(loyaltyPoints)
 
   const navigationItems = [
-    { label: 'Account Dashboard', icon: IoPersonOutline, path: '/dashboard', active: false },
-    { label: 'Order History', icon: IoBagCheckOutline, path: '/order-tracking', active: false },
-    { label: 'My Wishlist', icon: IoHeartOutline, path: '/wishlist', active: false, badge: wishlistItems.length > 0 ? wishlistItems.length : null },
-    { label: 'Shipping Addresses', icon: IoLocationOutline, path: '/shipping-address', active: false },
-    { label: 'Payment Methods', icon: IoCardOutline, path: '/payment-methods', active: false },
-    { label: 'Beauty Profile', icon: IoBodyOutline, path: '/skin-analysis', active: false },
-    { label: 'Loyalty Program', icon: IoSparkles, path: '/account', active: false, badge: loyaltyPoints > 0 ? `${loyaltyPoints.toLocaleString()} ${t('notificationsPage.pointsShort')}` : null },
-    { label: 'My Routines', icon: IoBookOutline, path: '/beauty-journey', active: false },
-    { label: 'Reviews & Ratings', icon: IoStarSharp, path: '/dashboard', active: false },
-    { label: 'Account Settings', icon: IoSettingsOutline, path: '/privacy-settings', active: false },
-    { label: 'Notifications', icon: IoNotificationsOutline, path: '/notifications', active: true },
-  ].map((item) => ({
-    ...item,
-    label: t(`notificationsPage.navItems.${item.label}`, { defaultValue: item.label }),
-  }))
+    { label: t('navItems.Account Dashboard'), icon: IoPersonOutline, path: '/dashboard', active: false },
+    { label: t('navItems.Order History'), icon: IoBagCheckOutline, path: '/order-tracking', active: false },
+    { label: t('navItems.My Wishlist'), icon: IoHeartOutline, path: '/wishlist', active: false, badge: wishlistItems.length > 0 ? wishlistItems.length : null },
+    { label: t('navItems.Shipping Addresses'), icon: IoLocationOutline, path: '/shipping-address', active: false },
+    { label: t('navItems.Payment Methods'), icon: IoCardOutline, path: '/payment-methods', active: false },
+    { label: t('navItems.Beauty Profile'), icon: IoBodyOutline, path: '/skin-analysis', active: false },
+    { label: t('navItems.Loyalty Program'), icon: IoSparkles, path: '/account', active: false, badge: loyaltyPoints > 0 ? `${loyaltyPoints.toLocaleString()} ${t('notificationsPage.pointsShort')}` : null },
+    { label: t('navItems.My Routines'), icon: IoBookOutline, path: '/beauty-journey', active: false },
+    { label: t('navItems.Reviews & Ratings'), icon: IoStarSharp, path: '/dashboard', active: false },
+    { label: t('navItems.Account Settings'), icon: IoSettingsOutline, path: '/privacy-settings', active: false },
+    { label: t('navItems.Notifications'), icon: IoNotificationsOutline, path: '/notifications', active: true },
+  ]
 
   const [email, setEmail] = useState([
     {
@@ -164,8 +161,8 @@ export default function Notifications() {
 
   const translatedNewsletterOptions = newsletterOptions.map((option) => ({
     ...option,
-    label: t(`notificationsPage.newsletterOptions.${option.value}.label`, { defaultValue: option.label }),
-    description: t(`notificationsPage.newsletterOptions.${option.value}.description`, { defaultValue: option.description }),
+    label: t(`newsletterOptions.${option.value}.label`, { defaultValue: option.label }),
+    description: t(`newsletterOptions.${option.value}.description`, { defaultValue: option.description }),
   }))
 
   const frequencyOptions = [
@@ -219,20 +216,20 @@ export default function Notifications() {
 
   const translatedEmail = email.map((item) => ({
     ...item,
-    title: t(`notificationsPage.emailItems.${item.id}.title`, { defaultValue: item.title }),
-    description: t(`notificationsPage.emailItems.${item.id}.description`, { defaultValue: item.description }),
+    title: t(`emailItems.${item.id}.title`, { defaultValue: item.title }),
+    description: t(`emailItems.${item.id}.description`, { defaultValue: item.description }),
   }))
 
   const translatedSms = sms.map((item) => ({
     ...item,
-    title: t(`notificationsPage.smsItems.${item.id}.title`, { defaultValue: item.title }),
-    description: t(`notificationsPage.smsItems.${item.id}.description`, { defaultValue: item.description }),
+    title: t(`smsItems.${item.id}.title`, { defaultValue: item.title }),
+    description: t(`smsItems.${item.id}.description`, { defaultValue: item.description }),
   }))
 
   const translatedPush = push.map((item) => ({
     ...item,
-    title: t(`notificationsPage.pushItems.${item.id}.title`, { defaultValue: item.title }),
-    description: t(`notificationsPage.pushItems.${item.id}.description`, { defaultValue: item.description }),
+    title: t(`pushItems.${item.id}.title`, { defaultValue: item.title }),
+    description: t(`pushItems.${item.id}.description`, { defaultValue: item.description }),
   }))
 
   return (
