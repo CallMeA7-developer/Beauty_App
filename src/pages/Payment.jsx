@@ -9,6 +9,7 @@ import {
   IoAddOutline,
   IoCardOutline,
   IoChevronDown,
+  IoArrowUp,
 } from 'react-icons/io5'
 import {
   securityFeatures   as securityFeaturesData,
@@ -51,6 +52,13 @@ export default function Payment() {
   const [savedCards, setSavedCards] = useState([])
   const [selectedCard, setSelectedCard] = useState(null)
   const [showAddCardForm, setShowAddCardForm] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   const [sameAddress, setSameAddress] = useState(true)
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -635,6 +643,16 @@ export default function Payment() {
       </div>
 
       <div className="h-[40px] md:h-[60px] lg:h-[80px]" />
+
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
