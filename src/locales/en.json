@@ -2250,7 +2250,7 @@
     "description": "Opt out of all newsletter communications"
   }
 },
-  "notificationsPage": {
+"notificationsPage": {
   "title": "Notification Preferences",
   "subtitle": "Manage how and when you receive updates from Shan Loray",
   "breadcrumb": {
