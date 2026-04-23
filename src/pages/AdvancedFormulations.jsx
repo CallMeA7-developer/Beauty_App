@@ -130,14 +130,28 @@ export default function AdvancedFormulations() {
     <div key={i18n.language} className="bg-white font-['Cormorant_Garamond']">
 
       {/* ── Hero ── */}
-      <div className="min-h-[340px] md:min-h-[440px] lg:min-h-[560px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden flex items-center px-4 md:px-[60px] lg:px-[120px] py-10 md:py-0">
-        <div className="w-full md:w-[520px] lg:w-[680px] relative z-10">
-          <p className="text-[11px] md:text-[12px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('formulations.tagline')}</p>
-          <h1 className="text-[36px] md:text-[52px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-5">{t('formulations.title')}</h1>
-          <p className="text-[13px] md:text-[16px] lg:text-[20px] font-normal text-[#666666] leading-[1.6] mb-6 lg:mb-8">{t('formulations.heroDesc')}</p>
-          <div className="w-[100px] md:w-[130px] lg:w-[160px] h-[4px] bg-[#C9A870]" />
+      {/* Mobile Hero */}
+      <div className="md:hidden bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA]">
+        <div className="relative w-full h-[240px] overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&h=500&fit=crop" alt="Laboratory Science" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FDFBF7] via-transparent to-transparent" />
         </div>
-        <div className="hidden lg:block absolute right-[140px] top-1/2 -translate-y-1/2">
+        <div className="px-4 pt-4 pb-8">
+          <p className="text-[11px] font-light italic text-[#8B7355] tracking-[2px] mb-2">{t('formulations.tagline')}</p>
+          <h1 className="text-[32px] font-bold text-[#1A1A1A] leading-[1.05] mb-3">{t('formulations.title')}</h1>
+          <p className="text-[13px] font-normal text-[#666666] leading-[1.6] mb-4">{t('formulations.heroDesc')}</p>
+          <div className="w-[80px] h-[4px] bg-[#C9A870]" />
+        </div>
+      </div>
+      {/* Tablet + Desktop Hero */}
+      <div className="hidden md:flex min-h-[440px] lg:min-h-[560px] bg-gradient-to-b from-[#FDFBF7] to-[#F5F1EA] relative overflow-hidden items-center px-[60px] lg:px-[120px]">
+        <div className="w-[520px] lg:w-[680px] relative z-10">
+          <p className="text-[12px] lg:text-[14px] font-light italic text-[#8B7355] tracking-[2px] mb-3">{t('formulations.tagline')}</p>
+          <h1 className="text-[52px] lg:text-[72px] font-bold text-[#1A1A1A] leading-[1.05] mb-4 lg:mb-5">{t('formulations.title')}</h1>
+          <p className="text-[16px] lg:text-[20px] font-normal text-[#666666] leading-[1.6] mb-6 lg:mb-8">{t('formulations.heroDesc')}</p>
+          <div className="w-[130px] lg:w-[160px] h-[4px] bg-[#C9A870]" />
+        </div>
+        <div className="absolute right-[140px] top-1/2 -translate-y-1/2">
           <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=440&h=440&fit=crop" alt="Laboratory Science" className="w-[440px] h-[440px] object-cover rounded-[12px] shadow-[0_16px_64px_rgba(0,0,0,0.15)]" />
         </div>
       </div>
@@ -200,26 +214,46 @@ export default function AdvancedFormulations() {
 
       {/* ── Delivery System ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <div className="flex flex-col md:flex-row gap-8 lg:gap-[64px] items-center">
-          <div className="w-full md:flex-1 lg:w-[580px] lg:flex-none">
-            <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=580&h=420&fit=crop" alt="Formulation Technology" className="w-full h-[260px] md:h-[340px] lg:h-[420px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.1)]" />
+        {/* Mobile: title → image → subtitle → layers */}
+        <div className="md:hidden">
+          <h2 className="text-[26px] font-medium text-[#1A1A1A] mb-4">{t('formulations.deliverySystem')}</h2>
+          <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=580&h=420&fit=crop" alt="Formulation Technology" className="w-full h-[220px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.1)] mb-4" />
+          <p className="text-[13px] font-normal text-[#666666] leading-[1.7] mb-5">{t('formulations.deliveryDesc')}</p>
+          <div className="space-y-3">
+            {[
+              { layer: t('formulations.surfaceLayer'), desc: t('formulations.surfaceLayerDesc') },
+              { layer: t('formulations.midLayer'), desc: t('formulations.midLayerDesc') },
+              { layer: t('formulations.deepLayer'), desc: t('formulations.deepLayerDesc') },
+            ].map((layer) => (
+              <div key={layer.layer} className="flex items-start gap-3 bg-[#F5F1EA] rounded-[8px] p-3">
+                <IoBeakerOutline className="w-[18px] h-[18px] text-[#8B7355] flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="text-[14px] font-medium text-[#1A1A1A] mb-1">{layer.layer}</h4>
+                  <p className="text-[12px] font-normal text-[#666666]">{layer.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Tablet + Desktop: image left, text right */}
+        <div className="hidden md:flex gap-8 lg:gap-[64px] items-center">
+          <div className="flex-1 lg:w-[580px] lg:flex-none">
+            <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=580&h=420&fit=crop" alt="Formulation Technology" className="w-full h-[340px] lg:h-[420px] object-cover rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.1)]" />
           </div>
           <div className="flex-1">
-            <h2 className="text-[22px] md:text-[30px] lg:text-[40px] font-medium text-[#1A1A1A] mb-4">{t('formulations.deliverySystem')}</h2>
-            <p className="text-[13px] md:text-[15px] lg:text-[16px] font-normal text-[#666666] leading-[1.7] mb-6">
-              {t('formulations.deliveryDesc')}
-            </p>
-            <div className="space-y-3 lg:space-y-4 mb-6">
+            <h2 className="text-[30px] lg:text-[40px] font-medium text-[#1A1A1A] mb-4">{t('formulations.deliverySystem')}</h2>
+            <p className="text-[15px] lg:text-[16px] font-normal text-[#666666] leading-[1.7] mb-6">{t('formulations.deliveryDesc')}</p>
+            <div className="space-y-4 mb-6">
               {[
                 { layer: t('formulations.surfaceLayer'), desc: t('formulations.surfaceLayerDesc') },
                 { layer: t('formulations.midLayer'), desc: t('formulations.midLayerDesc') },
                 { layer: t('formulations.deepLayer'), desc: t('formulations.deepLayerDesc') },
               ].map((layer) => (
-                <div key={layer.layer} className="flex items-start gap-3 bg-[#F5F1EA] rounded-[8px] p-3 lg:p-[16px]">
-                  <IoBeakerOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#8B7355] flex-shrink-0 mt-1" />
+                <div key={layer.layer} className="flex items-start gap-3 bg-[#F5F1EA] rounded-[8px] p-[16px]">
+                  <IoBeakerOutline className="w-[20px] h-[20px] text-[#8B7355] flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="text-[14px] lg:text-[16px] font-medium text-[#1A1A1A] mb-1">{layer.layer}</h4>
-                    <p className="text-[12px] lg:text-[14px] font-normal text-[#666666]">{layer.desc}</p>
+                    <h4 className="text-[16px] font-medium text-[#1A1A1A] mb-1">{layer.layer}</h4>
+                    <p className="text-[14px] font-normal text-[#666666]">{layer.desc}</p>
                   </div>
                 </div>
               ))}
@@ -333,15 +367,32 @@ export default function AdvancedFormulations() {
       </div>
 
       {/* ── Expert Team ── */}
-      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#F5F1EA]">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.expertTeam')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-[32px]">
+      <div className="py-10 md:py-14 lg:py-[80px] bg-[#F5F1EA]">
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-8 lg:mb-[56px] px-4 md:px-[60px] lg:px-[120px]">{t('formulations.expertTeam')}</h2>
+        {/* Mobile: horizontal scroll */}
+        <div className="md:hidden flex gap-4 overflow-x-auto px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
+          {experts.map((expert) => (
+            <div key={expert.name} className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 flex-shrink-0 w-[280px]">
+              <div className="flex justify-center mb-4">
+                <img src={expert.image} alt={expert.name} className="w-[100px] h-[100px] object-cover rounded-full border-4 border-[#C9A870]" />
+              </div>
+              <h3 className="text-[16px] font-semibold text-[#1A1A1A] text-center mb-1">{expert.name}</h3>
+              <p className="text-[12px] font-normal text-[#8B7355] text-center mb-4">{expert.title}</p>
+              <div className="flex gap-2">
+                <IoNewspaperOutline className="w-[16px] h-[16px] text-[#C9A870] flex-shrink-0 mt-1" />
+                <p className="text-[12px] font-normal italic text-[#666666] leading-[1.6]">"{expert.quote}"</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Tablet + Desktop: grid */}
+        <div className="hidden md:grid grid-cols-3 gap-5 lg:gap-[32px] px-[60px] lg:px-[120px]">
           {experts.map((expert) => (
             <div key={expert.name} className="bg-white rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5 lg:p-[32px]">
               <div className="flex justify-center mb-4 lg:mb-5">
-                <img src={expert.image} alt={expert.name} className="w-[120px] h-[120px] md:w-[140px] md:h-[140px] lg:w-[160px] lg:h-[160px] object-cover rounded-full border-4 border-[#C9A870]" />
+                <img src={expert.image} alt={expert.name} className="w-[140px] h-[140px] lg:w-[160px] lg:h-[160px] object-cover rounded-full border-4 border-[#C9A870]" />
               </div>
-              <h3 className="text-[17px] md:text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] text-center mb-1">{expert.name}</h3>
+              <h3 className="text-[18px] lg:text-[20px] font-semibold text-[#1A1A1A] text-center mb-1">{expert.name}</h3>
               <p className="text-[13px] lg:text-[14px] font-normal text-[#8B7355] text-center mb-4 lg:mb-5">{expert.title}</p>
               <div className="flex gap-2">
                 <IoNewspaperOutline className="w-[18px] h-[18px] lg:w-[20px] lg:h-[20px] text-[#C9A870] flex-shrink-0 mt-1" />
@@ -353,14 +404,39 @@ export default function AdvancedFormulations() {
       </div>
 
       {/* ── Hero Products ── */}
-      <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-white">
-        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.heroProducts')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-[32px]">
+      <div className="py-10 md:py-14 lg:py-[80px] bg-white">
+        <h2 className="text-[26px] md:text-[36px] lg:text-[48px] font-medium text-[#1A1A1A] text-center mb-8 lg:mb-[56px] px-4 md:px-[60px] lg:px-[120px]">{t('formulations.heroProducts')}</h2>
+        {/* Mobile: horizontal scroll */}
+        <div className="md:hidden flex gap-4 overflow-x-auto px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
+          {heroProducts.map((product) => (
+            <div key={product.name} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden flex-shrink-0 w-[260px]">
+              <img src={product.image} alt={product.name} className="w-full h-[200px] object-cover" />
+              <div className="p-4">
+                <h3 className="text-[15px] font-semibold text-[#1A1A1A] mb-3">{product.name}</h3>
+                <div className="mb-3">
+                  <p className="text-[11px] font-medium text-[#666666] mb-1">{t('formulations.keyActives')}</p>
+                  <p className="text-[12px] font-normal text-[#8B7355]">{product.keyActives}</p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-[11px] font-medium text-[#666666] mb-1">{t('formulations.technologyLabel')}</p>
+                  <p className="text-[12px] font-normal text-[#8B7355]">{product.technology}</p>
+                </div>
+                <button
+                  onClick={() => navigate(product.path)}
+                  className="w-full h-[40px] bg-[#8B7355] text-white text-[13px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:bg-[#7a6448] transition-colors">
+                  {t('formulations.learnMore')} <IoChevronForward className="w-[14px] h-[14px]" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Tablet + Desktop: grid */}
+        <div className="hidden md:grid grid-cols-3 gap-5 lg:gap-[32px] px-[60px] lg:px-[120px]">
           {heroProducts.map((product) => (
             <div key={product.name} className="bg-white rounded-[12px] border border-[#E8E3D9] shadow-[0_8px_32px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] transition-all duration-300">
-              <img src={product.image} alt={product.name} className="w-full h-[240px] md:h-[280px] lg:h-[360px] object-cover" />
-              <div className="p-4 md:p-5 lg:p-[28px]">
-                <h3 className="text-[16px] md:text-[17px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.name}</h3>
+              <img src={product.image} alt={product.name} className="w-full h-[280px] lg:h-[360px] object-cover" />
+              <div className="p-5 lg:p-[28px]">
+                <h3 className="text-[17px] lg:text-[20px] font-semibold text-[#1A1A1A] mb-3">{product.name}</h3>
                 <div className="mb-3 lg:mb-4">
                   <p className="text-[11px] lg:text-[13px] font-medium text-[#666666] mb-1">{t('formulations.keyActives')}</p>
                   <p className="text-[13px] lg:text-[15px] font-normal text-[#8B7355]">{product.keyActives}</p>
