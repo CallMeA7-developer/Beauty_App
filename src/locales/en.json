@@ -2180,5 +2180,74 @@
   "skinConcern": "Skin Concern",
   "ingredients": "Key Ingredients",
   "scent": "Scent"
+},
+  "navItems": {
+  "Account Dashboard": "Account Dashboard",
+  "Order History": "Order History",
+  "My Wishlist": "My Wishlist",
+  "Shipping Addresses": "Shipping Addresses",
+  "Payment Methods": "Payment Methods",
+  "Beauty Profile": "Beauty Profile",
+  "Loyalty Program": "Loyalty Program",
+  "My Routines": "My Routines",
+  "Reviews & Ratings": "Reviews & Ratings",
+  "Account Settings": "Account Settings",
+  "Notifications": "Notifications"
+},
+"emailItems": {
+  "order-updates": {
+    "title": "Order Updates",
+    "description": "Shipping confirmations, delivery notifications, and order status"
+  },
+  "promotions": {
+    "title": "Promotions & Offers",
+    "description": "Exclusive discounts, seasonal sales, and member-only deals"
+  },
+  "new-arrivals": {
+    "title": "New Arrivals",
+    "description": "Be first to know about new product launches and collections"
+  },
+  "beauty-tips": {
+    "title": "Beauty Tips",
+    "description": "Expert advice, tutorials, and personalized skincare recommendations"
+  }
+},
+"smsItems": {
+  "order-alerts": {
+    "title": "Order Status Alerts",
+    "description": "Real-time delivery updates and shipping notifications"
+  },
+  "flash-sales": {
+    "title": "Exclusive Flash Sales",
+    "description": "Limited-time offers sent directly to your phone"
+  }
+},
+"pushItems": {
+  "stock-alerts": {
+    "title": "In Stock Alerts",
+    "description": "Get notified when wishlist items become available"
+  },
+  "price-drop": {
+    "title": "Price Drop Notifications",
+    "description": "Know when products you love go on sale"
+  },
+  "events": {
+    "title": "Beauty Events",
+    "description": "Virtual consultations, masterclasses, and exclusive events"
+  }
+},
+"newsletterOptions": {
+  "weekly": {
+    "label": "Weekly Digest",
+    "description": "Curated beauty trends and tips every Monday"
+  },
+  "monthly": {
+    "label": "Monthly Magazine",
+    "description": "In-depth features and seasonal collections"
+  },
+  "unsubscribe": {
+    "label": "Unsubscribe",
+    "description": "Opt out of all newsletter communications"
+  }
 }
 }
