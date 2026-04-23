@@ -2180,18 +2180,5 @@
   "skinConcern": "Skin Concern",
   "ingredients": "Key Ingredients",
   "scent": "Scent"
-},
-  "navItems": {
-  "Account Dashboard": "Account Dashboard",
-  "Order History": "Order History",
-  "My Wishlist": "My Wishlist",
-  "Shipping Addresses": "Shipping Addresses",
-  "Payment Methods": "Payment Methods",
-  "Beauty Profile": "Beauty Profile",
-  "Loyalty Program": "Loyalty Program",
-  "My Routines": "My Routines",
-  "Reviews & Ratings": "Reviews & Ratings",
-  "Account Settings": "Account Settings",
-  "Notifications": "Notifications"
 }
 }
