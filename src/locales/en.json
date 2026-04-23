@@ -1309,75 +1309,118 @@
       }
     }
   },
-"navItems": {
-  "Account Dashboard": "Account Dashboard",
-  "Order History": "Order History",
-  "My Wishlist": "My Wishlist",
-  "Shipping Addresses": "Shipping Addresses",
-  "Payment Methods": "Payment Methods",
-  "Beauty Profile": "Beauty Profile",
-  "Loyalty Program": "Loyalty Program",
-  "My Routines": "My Routines",
-  "Reviews & Ratings": "Reviews & Ratings",
-  "Account Settings": "Account Settings",
-  "Notifications": "Notifications"
-},
-"emailItems": {
-  "order-updates": {
-    "title": "Order Updates",
-    "description": "Shipping confirmations, delivery notifications, and order status"
+  "notificationsPage": {
+    "title": "Notification Preferences",
+    "subtitle": "Manage how and when you receive updates from Shan Loray",
+    "breadcrumb": {
+      "home": "Home",
+      "accountDashboard": "Account Dashboard",
+      "notificationPreferences": "Notification Preferences"
+    },
+    "guest": "Guest",
+    "membership": {
+      "member": "Member",
+      "elite": "Elite Member",
+      "gold": "Gold Member"
+    },
+    "points": "Loyalty Points",
+    "pointsShort": "pts",
+    "userAvatar": "User Avatar",
+    "stats": {
+      "totalOrders": "Total Orders",
+      "wishlistItems": "Wishlist Items",
+      "reviewsWritten": "Reviews Written"
+    },
+    "infoBanner": "Stay informed about your orders, beauty tips, and exclusive offers",
+    "sections": {
+      "email": "Email Notifications",
+      "sms": "SMS Notifications",
+      "push": "Push Notifications",
+      "newsletter": "Newsletter"
+    },
+    "pushDescription": "Enable browser notifications to receive real-time updates",
+    "smsNotice": "Standard message rates may apply",
+    "emailFrequencyPreference": "Email Frequency Preference",
+    "frequencyOptions": {
+      "daily": "Daily",
+      "multiplePerWeek": "Multiple per week",
+      "weekly": "Weekly",
+      "biWeekly": "Bi-weekly",
+      "monthly": "Monthly"
+    },
+    "resetToDefault": "Reset to Default",
+    "savePreferences": "Save Preferences",
+    "privacyNotice": "We respect your privacy. You can update these preferences at any time.",
+    "nav": {
+      "accountDashboard": "Account Dashboard",
+      "orderHistory": "Order History",
+      "myWishlist": "My Wishlist",
+      "shippingAddresses": "Shipping Addresses",
+      "paymentMethods": "Payment Methods",
+      "beautyProfile": "Beauty Profile",
+      "loyaltyProgram": "Loyalty Program",
+      "myRoutines": "My Routines",
+      "reviewsRatings": "Reviews & Ratings",
+      "accountSettings": "Account Settings",
+      "notifications": "Notifications"
+    },
+    "emailItems": {
+      "order-updates": {
+        "title": "Order Updates",
+        "description": "Shipping confirmations, delivery notifications, and order status"
+      },
+      "promotions": {
+        "title": "Promotions & Offers",
+        "description": "Exclusive discounts, seasonal sales, and member-only deals"
+      },
+      "new-arrivals": {
+        "title": "New Arrivals",
+        "description": "Be first to know about new product launches and collections"
+      },
+      "beauty-tips": {
+        "title": "Beauty Tips",
+        "description": "Expert advice, tutorials, and personalized skincare recommendations"
+      }
+    },
+    "smsItems": {
+      "order-alerts": {
+        "title": "Order Status Alerts",
+        "description": "Real-time delivery updates and shipping notifications"
+      },
+      "flash-sales": {
+        "title": "Exclusive Flash Sales",
+        "description": "Limited-time offers sent directly to your phone"
+      }
+    },
+    "pushItems": {
+      "stock-alerts": {
+        "title": "In Stock Alerts",
+        "description": "Get notified when wishlist items become available"
+      },
+      "price-drop": {
+        "title": "Price Drop Notifications",
+        "description": "Know when products you love go on sale"
+      },
+      "events": {
+        "title": "Beauty Events",
+        "description": "Virtual consultations, masterclasses, and exclusive events"
+      }
+    },
+    "newsletterOptions": {
+      "weekly": {
+        "label": "Weekly Digest",
+        "description": "Curated beauty trends and tips every Monday"
+      },
+      "monthly": {
+        "label": "Monthly Magazine",
+        "description": "In-depth features and seasonal collections"
+      },
+      "unsubscribe": {
+        "label": "Unsubscribe",
+        "description": "Opt out of all newsletter communications"
+      }
+    }
   },
-  "promotions": {
-    "title": "Promotions & Offers",
-    "description": "Exclusive discounts, seasonal sales, and member-only deals"
-  },
-  "new-arrivals": {
-    "title": "New Arrivals",
-    "description": "Be first to know about new product launches and collections"
-  },
-  "beauty-tips": {
-    "title": "Beauty Tips",
-    "description": "Expert advice, tutorials, and personalized skincare recommendations"
-  }
-},
-"smsItems": {
-  "order-alerts": {
-    "title": "Order Status Alerts",
-    "description": "Real-time delivery updates and shipping notifications"
-  },
-  "flash-sales": {
-    "title": "Exclusive Flash Sales",
-    "description": "Limited-time offers sent directly to your phone"
-  }
-},
-"pushItems": {
-  "stock-alerts": {
-    "title": "In Stock Alerts",
-    "description": "Get notified when wishlist items become available"
-  },
-  "price-drop": {
-    "title": "Price Drop Notifications",
-    "description": "Know when products you love go on sale"
-  },
-  "events": {
-    "title": "Beauty Events",
-    "description": "Virtual consultations, masterclasses, and exclusive events"
-  }
-},
-"newsletterOptions": {
-  "weekly": {
-    "label": "Weekly Digest",
-    "description": "Curated beauty trends and tips every Monday"
-  },
-  "monthly": {
-    "label": "Monthly Magazine",
-    "description": "In-depth features and seasonal collections"
-  },
-  "unsubscribe": {
-    "label": "Unsubscribe",
-    "description": "Opt out of all newsletter communications"
-  }
-},
   "orderConfirmation": {
     "orderConfirmed": "Order Confirmed!",
     "thankYou": "Thank you for your purchase",
@@ -1523,46 +1566,46 @@
     "errorPlaceOrder": "Failed to place order. Please try again.",
     "errorFailedAdd": "Failed to add payment method"
   },
-"privacyPage": {
-  "title": "Privacy Settings",
-  "subtitle": "Control how your data is used",
-  "guest": "Guest",
-  "dataControls": "Data Controls",
-  "download": "Download My Data",
-  "delete": "Delete My Account",
-  "save": "Save Settings",
-  "controls": {
-    "personal-data": {
-      "title": "Personal Data Collection",
-      "desc": "Allow us to collect and process your personal information to improve your experience"
+  "privacyPage": {
+    "title": "Privacy Settings",
+    "subtitle": "Control how your data is used",
+    "guest": "Guest",
+    "dataControls": "Data Controls",
+    "download": "Download My Data",
+    "delete": "Delete My Account",
+    "save": "Save Settings",
+    "controls": {
+      "personal-data": {
+        "title": "Personal Data Collection",
+        "desc": "Allow us to collect and process your personal information to improve your experience"
+      },
+      "marketing": {
+        "title": "Marketing Communications",
+        "desc": "Receive personalized offers, promotions and beauty tips via email and SMS"
+      },
+      "cookies": {
+        "title": "Cookie Preferences",
+        "desc": "Allow cookies to enhance site functionality and remember your preferences"
+      },
+      "third-party": {
+        "title": "Third-Party Sharing",
+        "desc": "Share anonymized data with trusted partners to improve our services"
+      }
     },
-    "marketing": {
-      "title": "Marketing Communications",
-      "desc": "Receive personalized offers, promotions and beauty tips via email and SMS"
-    },
-    "cookies": {
-      "title": "Cookie Preferences",
-      "desc": "Allow cookies to enhance site functionality and remember your preferences"
-    },
-    "third-party": {
-      "title": "Third-Party Sharing",
-      "desc": "Share anonymized data with trusted partners to improve our services"
+    "navItems": {
+      "Account Dashboard": "Account Dashboard",
+      "Order History": "Order History",
+      "My Wishlist": "My Wishlist",
+      "Shipping Addresses": "Shipping Addresses",
+      "Payment Methods": "Payment Methods",
+      "Beauty Profile": "Beauty Profile",
+      "Loyalty Program": "Loyalty Program",
+      "My Routines": "My Routines",
+      "Reviews & Ratings": "Reviews & Ratings",
+      "Account Settings": "Account Settings",
+      "Notifications": "Notifications"
     }
   },
-  "navItems": {
-    "Account Dashboard": "Account Dashboard",
-    "Order History": "Order History",
-    "My Wishlist": "My Wishlist",
-    "Shipping Addresses": "Shipping Addresses",
-    "Payment Methods": "Payment Methods",
-    "Beauty Profile": "Beauty Profile",
-    "Loyalty Program": "Loyalty Program",
-    "My Routines": "My Routines",
-    "Reviews & Ratings": "Reviews & Ratings",
-    "Account Settings": "Account Settings",
-    "Notifications": "Notifications"
-  }
-},
   "formulations": {
     "home": "Home",
     "breadcrumb": "Advanced Formulations",
@@ -1678,421 +1721,309 @@
     "close": "Close"
   },
   "shoppingBasket": {
-  "home": "Home",
-  "title": "Shopping Basket",
-  "itemsInBasket": "items in your basket",
-  "emptyBasket": "Your basket is empty",
-  "startShopping": "Start Shopping",
-  "saveForLater": "Save for later",
-  "continueShopping": "Continue Shopping",
-  "freeShipping": "Free Standard Shipping",
-  "freeShippingDesc": "On orders over $75",
-  "easyReturns": "Easy Returns",
-  "easyReturnsDesc": "30-day return policy",
-  "orderSummary": "Order Summary",
-  "qty": "Qty",
-  "subtotal": "Subtotal",
-  "shipping": "Shipping",
-  "free": "Free",
-  "standardDelivery": "Standard Delivery (3–5 days)",
-  "estimatedTax": "Estimated Tax",
-  "orderTotal": "Order Total",
-  "promoPlaceholder": "Enter promo code",
-  "apply": "Apply",
-  "proceedToCheckout": "Proceed to Checkout",
-  "secureCheckout": "Secure Checkout"
-},
+    "home": "Home",
+    "title": "Shopping Basket",
+    "itemsInBasket": "items in your basket",
+    "emptyBasket": "Your basket is empty",
+    "startShopping": "Start Shopping",
+    "saveForLater": "Save for later",
+    "continueShopping": "Continue Shopping",
+    "freeShipping": "Free Standard Shipping",
+    "freeShippingDesc": "On orders over $75",
+    "easyReturns": "Easy Returns",
+    "easyReturnsDesc": "30-day return policy",
+    "orderSummary": "Order Summary",
+    "qty": "Qty",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "standardDelivery": "Standard Delivery (3–5 days)",
+    "estimatedTax": "Estimated Tax",
+    "orderTotal": "Order Total",
+    "promoPlaceholder": "Enter promo code",
+    "apply": "Apply",
+    "proceedToCheckout": "Proceed to Checkout",
+    "secureCheckout": "Secure Checkout"
+  },
   "wishlist": {
-  "title": "My Wishlist",
-  "home": "Home",
-  "user": "User",
-  "member": "Member",
-  "eliteMember": "Elite Member",
-  "goldMember": "Gold Member",
-  "points": "Points",
-  "savedTreasure": "saved treasure",
-  "savedTreasures": "saved treasures",
-  "savedItem": "saved item",
-  "savedItems": "saved items",
-  "awaitingAttention": "awaiting your attention",
-  "loginRequired": "Please log in to view your wishlist",
-  "goHome": "Go Home",
-  "emptyTitle": "Your wishlist is empty",
-  "emptyDesc": "Start adding products you love",
-  "exploreProducts": "Explore Products",
-  "inStock": "In Stock",
-  "addToBag": "Add to Bag",
-  "addToCart": "Add to Cart",
-  "remove": "Remove",
-  "moveAllToBag": "Move All to Bag",
-  "clearWishlist": "Clear Wishlist",
-  "clearAllItems": "Clear All Items",
-  "continueShopping": "Continue Shopping",
-  "shareWishlist": "Share Wishlist",
-  "shareYourWishlist": "Share Your Wishlist",
-  "shareDesc": "Share your curated collection",
-  "shareViaSocial": "Share via Social Media",
-  "otherOptions": "Other Options",
-  "sendViaEmail": "Send via Email",
-  "shareEmailDesc": "Share through email app",
-  "copyLink": "Copy Link",
-  "copyLinkDesc": "Copy wishlist URL",
-  "generateQR": "Generate QR Code",
-  "generateQRDesc": "Create scannable code",
-  "itemsToShare": "12 items to share",
-  "copy": "Copy",
-  "sortBy": "Sort By",
-  "filter": "Filter",
-  "filterProducts": "Filter Products",
-  "productType": "Product Type",
-  "priceRange": "Price Range",
-  "skinType": "Skin Type",
-  "skinConcerns": "Skin Concerns",
-  "brand": "Brand",
-  "searchBrands": "Search brands...",
-  "productBenefits": "Product Benefits",
-  "minimumRating": "Minimum Rating",
-  "andUp": "& Up",
-  "availability": "Availability",
-  "inStockLabel": "In Stock",
-  "includeOutOfStock": "Include Out of Stock",
-  "clearFilters": "Clear Filters",
-  "applyFilters": "Apply Filters",
-  "totalOrders": "Total Orders",
-  "wishlistItems": "Wishlist Items",
-  "reviewsWritten": "Reviews Written",
-  "sort": {
-    "label": "Sort",
-    "priceLow": "Price: Low to High",
-    "priceHigh": "Price: High to Low",
-    "newest": "Newest Arrivals",
-    "newestAdded": "Newest Added",
-    "bestSellers": "Best Sellers",
-    "mostPopular": "Most Popular",
-    "highestRated": "Highest Rated"
-  },
-  "nav": {
+    "title": "My Wishlist",
     "home": "Home",
-    "search": "Search",
-    "wishlist": "Wishlist",
-    "account": "Account",
-    "accountDashboard": "Account Dashboard",
-    "orderHistory": "Order History",
-    "beautyProfile": "Beauty Profile",
-    "loyaltyProgram": "Loyalty Program",
-    "myRoutines": "My Routines",
-    "reviewsRatings": "Reviews & Ratings",
-    "accountSettings": "Account Settings"
-  }
-},
-  "productDetail": {
-  "home": "Home",
-  "reviews": "reviews",
-  "stars": "stars",
-  "installments": "or 4 interest-free payments of ${{amount}}",
-  "size": "Size",
-  "quantity": "Quantity",
-  "addToCart": "Add to Cart",
-  "buyNow": "Buy Now",
-  "addToWishlist": "Add to Wishlist",
-  "share": "Share",
-  "addedToCart": "Added to cart!",
-  "whyYoullLoveIt": "Why You'll Love It",
-  "keyBenefits": "Key Benefits",
-  "fullDescription": "Full Description",
-  "howToUse": "How to Use",
-  "keyIngredients": "Key Ingredients",
-  "skinType": "Skin Type",
-  "bestFor": "Best For",
-  "noIngredients": "Ingredient information not available for this product.",
-  "customerReviews": "Customer Reviews",
-  "writeReview": "Write a Review",
-  "writeReviewDesc": "Share your thoughts about this product",
-  "rating": "Rating",
-  "reviewTitle": "Review Title",
-  "reviewTitlePlaceholder": "Summarize your experience",
-  "yourReview": "Your Review",
-  "reviewPlaceholder": "Tell us what you think about this product",
-  "submitReview": "Submit Review",
-  "submitting": "Submitting...",
-  "selectRating": "Please select a rating",
-  "fillAllFields": "Please fill in all fields",
-  "reviewError": "Failed to submit review. Please try again.",
-  "noReviews": "No reviews yet",
-  "beFirst": "Be the first to review",
-  "wasThisHelpful": "Was this helpful?",
-  "yes": "Yes",
-  "no": "No",
-  "anonymous": "Anonymous",
-  "notFound": "Product not found",
-  "completeRoutine": "Complete Your Routine",
-  "shareProduct": "Share Product",
-  "shareDesc": "Share this product with your friends",
-  "copyLink": "Copy Link",
-  "copied": "Copied!",
-  "freeShipping": "Free Shipping",
-  "freeShippingDesc": "On orders over $100",
-  "returns": "90-Day Returns",
-  "returnsDesc": "Hassle-free refunds",
-  "authentic": "Authentic Guarantee",
-  "authenticDesc": "100% genuine products",
-  "crueltyFree": "Cruelty-Free",
-  "crueltyFreeDesc": "Never Tested on Animals",
-  "cleanBeauty": "Clean Beauty",
-  "cleanBeautyDesc": "No Harmful Ingredients",
-  "sustainable": "Sustainable",
-  "sustainableDesc": "Eco-Conscious Packaging",
-  "joinCommunity": "Join Our Beauty Community",
-  "joinCommunityDesc": "Exclusive offers and skincare tips",
-  "emailPlaceholder": "Enter your email",
-  "subscribe": "Subscribe",
-  "timelessLuxury": "Timeless Luxury Beauty",
-  "shop": "Shop",
-  "help": "Help",
-  "about": "About",
-  "contact": "Contact",
-  "shipping": "Shipping",
-  "ourStory": "Our Story",
-  "ingredients": "Ingredients",
-  "sustainability": "Sustainability",
-  "copyright": "© 2024 Shan Loray. All rights reserved."
-},
-  "shippingAddress": {
-  "user": "User",
-  "loading": "Loading...",
-  "breadcrumb": {
-    "home": "Home",
-    "accountDashboard": "Account Dashboard",
-    "shippingAddresses": "Shipping Addresses"
-  },
-  "hero": {
-    "title": "Shipping Addresses",
-    "subtitle": "Manage your delivery locations"
-  },
-  "sidebar": {
-    "userAvatar": "User Avatar",
+    "user": "User",
     "member": "Member",
+    "eliteMember": "Elite Member",
+    "goldMember": "Gold Member",
     "points": "Points",
-    "tiers": {
-      "member": "Member",
-      "elite": "Elite",
-      "gold": "Gold"
-    }
-  },
-  "nav": {
-    "accountDashboard": "Account Dashboard",
-    "orderHistory": "Order History",
-    "myWishlist": "My Wishlist",
-    "shippingAddresses": "Shipping Addresses",
-    "paymentMethods": "Payment Methods",
-    "beautyProfile": "Beauty Profile",
-    "loyaltyProgram": "Loyalty Program",
-    "myRoutines": "My Routines",
-    "reviewsRatings": "Reviews & Ratings",
-    "accountSettings": "Account Settings",
-    "notifications": "Notifications",
-    "pointsBadge": "{{count}} pts"
-  },
-  "stats": {
+    "savedTreasure": "saved treasure",
+    "savedTreasures": "saved treasures",
+    "savedItem": "saved item",
+    "savedItems": "saved items",
+    "awaitingAttention": "awaiting your attention",
+    "loginRequired": "Please log in to view your wishlist",
+    "goHome": "Go Home",
+    "emptyTitle": "Your wishlist is empty",
+    "emptyDesc": "Start adding products you love",
+    "exploreProducts": "Explore Products",
+    "inStock": "In Stock",
+    "addToBag": "Add to Bag",
+    "addToCart": "Add to Cart",
+    "remove": "Remove",
+    "moveAllToBag": "Move All to Bag",
+    "clearWishlist": "Clear Wishlist",
+    "clearAllItems": "Clear All Items",
+    "continueShopping": "Continue Shopping",
+    "shareWishlist": "Share Wishlist",
+    "shareYourWishlist": "Share Your Wishlist",
+    "shareDesc": "Share your curated collection",
+    "shareViaSocial": "Share via Social Media",
+    "otherOptions": "Other Options",
+    "sendViaEmail": "Send via Email",
+    "shareEmailDesc": "Share through email app",
+    "copyLink": "Copy Link",
+    "copyLinkDesc": "Copy wishlist URL",
+    "generateQR": "Generate QR Code",
+    "generateQRDesc": "Create scannable code",
+    "itemsToShare": "12 items to share",
+    "copy": "Copy",
+    "sortBy": "Sort By",
+    "filter": "Filter",
+    "filterProducts": "Filter Products",
+    "productType": "Product Type",
+    "priceRange": "Price Range",
+    "skinType": "Skin Type",
+    "skinConcerns": "Skin Concerns",
+    "brand": "Brand",
+    "searchBrands": "Search brands...",
+    "productBenefits": "Product Benefits",
+    "minimumRating": "Minimum Rating",
+    "andUp": "& Up",
+    "availability": "Availability",
+    "inStockLabel": "In Stock",
+    "includeOutOfStock": "Include Out of Stock",
+    "clearFilters": "Clear Filters",
+    "applyFilters": "Apply Filters",
     "totalOrders": "Total Orders",
     "wishlistItems": "Wishlist Items",
-    "reviewsWritten": "Reviews Written"
-  },
-  "actions": {
-    "addNewAddress": "Add New Address",
-    "updateAddress": "Update Address",
-    "saveAddress": "Save Address",
-    "cancel": "Cancel",
-    "setDefault": "Set as Default",
-    "edit": "Edit",
-    "delete": "Delete",
-    "deleteConfirm": "Are you sure you want to delete this address?"
-  },
-  "form": {
-    "newTitle": "New Address",
-    "editTitle": "Edit Address",
-    "validation": "Please fill in all required fields",
-    "addressLabel": "Address Label",
-    "recipientName": "Recipient Name",
-    "streetAddress": "Street Address",
-    "city": "City",
-    "stateProvince": "State / Province",
-    "postalCode": "Postal Code",
-    "country": "Country",
-    "phoneNumber": "Phone Number",
-    "setDefault": "Set as default address",
-    "placeholders": {
-      "fullName": "Full name",
-      "streetAddress": "Street address",
-      "city": "City",
-      "state": "State",
-      "zip": "ZIP",
-      "phone": "+1 (555) 000-0000"
+    "reviewsWritten": "Reviews Written",
+    "sort": {
+      "label": "Sort",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low",
+      "newest": "Newest Arrivals",
+      "newestAdded": "Newest Added",
+      "bestSellers": "Best Sellers",
+      "mostPopular": "Most Popular",
+      "highestRated": "Highest Rated"
     },
-    "options": {
+    "nav": {
       "home": "Home",
-      "work": "Work",
-      "office": "Office",
-      "other": "Other"
-    },
-    "countries": {
-      "us": "United States",
-      "canada": "Canada",
-      "uk": "United Kingdom",
-      "australia": "Australia",
-      "uae": "United Arab Emirates"
+      "search": "Search",
+      "wishlist": "Wishlist",
+      "account": "Account",
+      "accountDashboard": "Account Dashboard",
+      "orderHistory": "Order History",
+      "beautyProfile": "Beauty Profile",
+      "loyaltyProgram": "Loyalty Program",
+      "myRoutines": "My Routines",
+      "reviewsRatings": "Reviews & Ratings",
+      "accountSettings": "Account Settings"
     }
   },
-  "empty": {
-    "title": "No addresses saved yet",
-    "description": "Add your first delivery address to get started",
-    "addAddress": "Add Address"
+  "productDetail": {
+    "home": "Home",
+    "reviews": "reviews",
+    "stars": "stars",
+    "installments": "or 4 interest-free payments of ${{amount}}",
+    "size": "Size",
+    "quantity": "Quantity",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "addToWishlist": "Add to Wishlist",
+    "share": "Share",
+    "addedToCart": "Added to cart!",
+    "whyYoullLoveIt": "Why You'll Love It",
+    "keyBenefits": "Key Benefits",
+    "fullDescription": "Full Description",
+    "howToUse": "How to Use",
+    "keyIngredients": "Key Ingredients",
+    "skinType": "Skin Type",
+    "bestFor": "Best For",
+    "noIngredients": "Ingredient information not available for this product.",
+    "customerReviews": "Customer Reviews",
+    "writeReview": "Write a Review",
+    "writeReviewDesc": "Share your thoughts about this product",
+    "rating": "Rating",
+    "reviewTitle": "Review Title",
+    "reviewTitlePlaceholder": "Summarize your experience",
+    "yourReview": "Your Review",
+    "reviewPlaceholder": "Tell us what you think about this product",
+    "submitReview": "Submit Review",
+    "submitting": "Submitting...",
+    "selectRating": "Please select a rating",
+    "fillAllFields": "Please fill in all fields",
+    "reviewError": "Failed to submit review. Please try again.",
+    "noReviews": "No reviews yet",
+    "beFirst": "Be the first to review",
+    "wasThisHelpful": "Was this helpful?",
+    "yes": "Yes",
+    "no": "No",
+    "anonymous": "Anonymous",
+    "notFound": "Product not found",
+    "completeRoutine": "Complete Your Routine",
+    "shareProduct": "Share Product",
+    "shareDesc": "Share this product with your friends",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "freeShipping": "Free Shipping",
+    "freeShippingDesc": "On orders over $100",
+    "returns": "90-Day Returns",
+    "returnsDesc": "Hassle-free refunds",
+    "authentic": "Authentic Guarantee",
+    "authenticDesc": "100% genuine products",
+    "crueltyFree": "Cruelty-Free",
+    "crueltyFreeDesc": "Never Tested on Animals",
+    "cleanBeauty": "Clean Beauty",
+    "cleanBeautyDesc": "No Harmful Ingredients",
+    "sustainable": "Sustainable",
+    "sustainableDesc": "Eco-Conscious Packaging",
+    "joinCommunity": "Join Our Beauty Community",
+    "joinCommunityDesc": "Exclusive offers and skincare tips",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "timelessLuxury": "Timeless Luxury Beauty",
+    "shop": "Shop",
+    "help": "Help",
+    "about": "About",
+    "contact": "Contact",
+    "shipping": "Shipping",
+    "ourStory": "Our Story",
+    "ingredients": "Ingredients",
+    "sustainability": "Sustainability",
+    "copyright": "© 2024 Shan Loray. All rights reserved."
   },
-  "addressCard": {
-    "default": "Default"
+  "shippingAddress": {
+    "user": "User",
+    "loading": "Loading...",
+    "breadcrumb": {
+      "home": "Home",
+      "accountDashboard": "Account Dashboard",
+      "shippingAddresses": "Shipping Addresses"
+    },
+    "hero": {
+      "title": "Shipping Addresses",
+      "subtitle": "Manage your delivery locations"
+    },
+    "sidebar": {
+      "userAvatar": "User Avatar",
+      "member": "Member",
+      "points": "Points",
+      "tiers": {
+        "member": "Member",
+        "elite": "Elite",
+        "gold": "Gold"
+      }
+    },
+    "nav": {
+      "accountDashboard": "Account Dashboard",
+      "orderHistory": "Order History",
+      "myWishlist": "My Wishlist",
+      "shippingAddresses": "Shipping Addresses",
+      "paymentMethods": "Payment Methods",
+      "beautyProfile": "Beauty Profile",
+      "loyaltyProgram": "Loyalty Program",
+      "myRoutines": "My Routines",
+      "reviewsRatings": "Reviews & Ratings",
+      "accountSettings": "Account Settings",
+      "notifications": "Notifications",
+      "pointsBadge": "{{count}} pts"
+    },
+    "stats": {
+      "totalOrders": "Total Orders",
+      "wishlistItems": "Wishlist Items",
+      "reviewsWritten": "Reviews Written"
+    },
+    "actions": {
+      "addNewAddress": "Add New Address",
+      "updateAddress": "Update Address",
+      "saveAddress": "Save Address",
+      "cancel": "Cancel",
+      "setDefault": "Set as Default",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Are you sure you want to delete this address?"
+    },
+    "form": {
+      "newTitle": "New Address",
+      "editTitle": "Edit Address",
+      "validation": "Please fill in all required fields",
+      "addressLabel": "Address Label",
+      "recipientName": "Recipient Name",
+      "streetAddress": "Street Address",
+      "city": "City",
+      "stateProvince": "State / Province",
+      "postalCode": "Postal Code",
+      "country": "Country",
+      "phoneNumber": "Phone Number",
+      "setDefault": "Set as default address",
+      "placeholders": {
+        "fullName": "Full name",
+        "streetAddress": "Street address",
+        "city": "City",
+        "state": "State",
+        "zip": "ZIP",
+        "phone": "+1 (555) 000-0000"
+      },
+      "options": {
+        "home": "Home",
+        "work": "Work",
+        "office": "Office",
+        "other": "Other"
+      },
+      "countries": {
+        "us": "United States",
+        "canada": "Canada",
+        "uk": "United Kingdom",
+        "australia": "Australia",
+        "uae": "United Arab Emirates"
+      }
+    },
+    "empty": {
+      "title": "No addresses saved yet",
+      "description": "Add your first delivery address to get started",
+      "addAddress": "Add Address"
+    },
+    "addressCard": {
+      "default": "Default"
+    },
+    "security": {
+      "title": "Secure & Private",
+      "description": "Your address information is encrypted and never shared with third parties."
+    }
   },
-  "security": {
-    "title": "Secure & Private",
-    "description": "Your address information is encrypted and never shared with third parties."
-  }
-},
   "footer": {
-  "tagline": "Timeless Luxury Beauty",
-  "description": "Crafting exceptional beauty experiences through the perfect union of science and nature.",
-  "shop": "Shop",
-  "support": "Support",
-  "stayConnected": "Stay Connected",
-  "skincare": "Skincare",
-  "makeup": "Makeup",
-  "fragrance": "Fragrance",
-  "tools": "Tools",
-  "giftSets": "Gift Sets",
-  "newArrivals": "New Arrivals",
-  "contactUs": "Contact Us",
-  "shipping": "Shipping",
-  "returns": "Returns",
-  "faqs": "FAQs",
-  "trackOrder": "Track Order",
-  "sizeGuide": "Size Guide",
-  "emailPlaceholder": "Enter your email",
-  "subscribe": "Subscribe",
-  "copyright": "© 2024 Shan Loray. All rights reserved.",
-  "privacyPolicy": "Privacy Policy",
-  "termsOfService": "Terms of Service",
-  "cookiePolicy": "Cookie Policy"
-},
-  "skinAnalysis": {
-  "heroBadge": "AI-Powered Skin Analysis",
-  "heroTitle": "Discover Your Skin's True Potential",
-  "heroSubtitle": "Advanced AI technology analyzes your skin in seconds with medical-grade precision",
-
-  "bannerTitle": "New to Skin Analysis?",
-  "bannerSubtitle": "Discover how it works",
-  "bannerDesc": "Our AI-powered skin analysis uses medical-grade technology to deliver personalized results in seconds. Learn how our consultation process works before you begin.",
-  "bannerLearn": "Learn How It Works",
-  "bannerUnderstand": "I Understand",
-
-  "uploadTitle": "Start Your Skin Analysis",
-  "uploadSubtitle": "Upload a clear photo or use our questionnaire below",
-  "uploadPhotoTitle": "Upload Your Photo",
-  "uploadDrag": "Drag and drop your photo here or click to browse",
-  "uploadWorkingTitle": "We're working on this feature!",
-  "uploadWorkingDesc": "In the meantime, please use the questionnaire below to get your skin analysis.",
-  "goToQuestionnaire": "Go to Questionnaire",
-  "uploadPhotoBtn": "Upload Photo",
-  "takeSelfieBtn": "Take Selfie",
-
-  "guideLight": "Good Lighting",
-  "guideLightDesc": "Natural daylight preferred",
-  "guideFace": "Face Forward",
-  "guideFaceDesc": "Look directly at camera",
-  "guideMakeup": "Remove Makeup",
-  "guideMakeupDesc": "Clean, bare skin",
-
-  "questionnaireTitle": "Tell Us About Your Skin",
-  "questionnaireSubtitle": "Help us understand your unique skin concerns",
-  "analyzing": "Analyzing your skin... This may take a few seconds",
-  "primaryConcern": "Primary Skin Concern",
-  "skinType": "Skin Type",
-  "currentRoutine": "Current Routine",
-  "routineMinimal": "Minimal (1-3 products)",
-  "routineModerate": "Moderate (4-6 products)",
-  "routineExtensive": "Extensive (7+ products)",
-  "sunExposure": "Sun Exposure",
-  "ageRange": "Age Range",
-  "specificConcerns": "Specific Concerns",
-  "errorSelect": "Please select your skin type and primary concern",
-  "errorFailed": "Failed to analyze skin. Please try again.",
-  "analyzeBtn": "Analyze My Skin",
-  "analyzingBtn": "Analyzing...",
-  "saveResults": "Save your results",
-  "signInSave": "Sign in to save your analysis",
-
-  "resultsTitle": "Your Skin Analysis Results",
-  "analysisComplete": "Analysis Complete",
-  "metricHydration": "Hydration",
-  "metricTexture": "Texture",
-  "metricClarity": "Clarity",
-  "metricTone": "Tone Evenness",
-  "metricToneShort": "Tone",
-
-  "recsTitle": "Personalized Product Recommendations",
-  "recsSubtitle": "Curated specifically for your skin analysis results",
-  "step1": "STEP 1: MORNING",
-  "morningTitle": "Morning Protection Routine",
-  "step2": "STEP 2: EVENING",
-  "eveningTitle": "Evening Repair Routine",
-  "step3": "STEP 3: TARGETED CARE",
-  "targetedTitle": "Specialized Treatments",
-  "loadingProducts": "Loading products...",
-  "selectConcerns": "Select specific concerns above to see targeted products.",
-  "savedSuccess": "✓ Analysis saved to your profile successfully!",
-  "viewRoutine": "View Complete Routine",
-  "saveBtn": "Save to My Profile",
-  "savingBtn": "Saving...",
-  "savedBtn": "✓ Saved to Profile",
-  "addToCart": "Add to Cart",
-
-  "journeyTitle": "Track Your Skin Journey",
-  "journeySubtitle": "Monitor improvements with regular skin analysis",
-  "noAnalysis": "No Analysis Yet",
-  "noAnalysisDesc": "Complete your first skin analysis above to start tracking your skin journey over time.",
-  "scheduleBtn": "Schedule Next Analysis",
-
-  "scheduleModalTitle": "Schedule Next Analysis",
-  "reminderTo": "Reminder to:",
-  "reminderScheduled": "Reminder Scheduled!",
-  "reminderSetFor": "Reminder set for",
-  "confirmReminder": "Confirm & Send Reminder",
-  "selectDate": "Select Date",
-  "done": "Done",
-
-  "faqTitle": "Frequently Asked Questions",
-  "faq1q": "How accurate is the AI skin analysis?",
-  "faq1a": "Our AI technology analyzes skin with 98% accuracy, validated by dermatologists and based on millions of skin scans.",
-  "faq2q": "How often should I get analyzed?",
-  "faq2a": "We recommend monthly analysis to track improvements and adjust your skincare routine as needed.",
-  "faq3q": "Is my data private and secure?",
-  "faq3a": "Absolutely. All images and data are encrypted and never shared with third parties. Your privacy is our priority.",
-  "faq4q": "Does the analysis cost anything?",
-  "faq4a": "The basic analysis is complimentary. Premium features include expert consultations and advanced tracking.",
-  "faq5q": "Can I use recommended products from other brands?",
-  "faq5a": "While we recommend our scientifically formulated products, the analysis results can guide any skincare choice.",
-  "faq6q": "How long until I see results?",
-  "faq6a": "Most users notice improvements within 4-6 weeks of following their personalized routine consistently.",
-
-  "newsletterTitle": "Stay Updated on Skin Health",
-  "newsletterSubtitle": "Get personalized skincare tips and exclusive offers"
-},
-  "virtualTryOn": {
-  "pinTitle": "Preview Access",
-  "pinDesc": "This environment is not public yet. Enter the access code to continue.",
-  "pinLabel": "Access code",
-  "pinError": "Incorrect access code. Please try again.",
-  "pinContinue": "Continue",
-  "pinShop": "Continue Shopping",
-  "pinFooter": "You will stay signed in to this preview until you log out of your account or close this browser tab."
-},
+    "tagline": "Timeless Luxury Beauty",
+    "description": "Crafting exceptional beauty experiences through the perfect union of science and nature.",
+    "shop": "Shop",
+    "support": "Support",
+    "stayConnected": "Stay Connected",
+    "skincare": "Skincare",
+    "makeup": "Makeup",
+    "fragrance": "Fragrance",
+    "tools": "Tools",
+    "giftSets": "Gift Sets",
+    "newArrivals": "New Arrivals",
+    "contactUs": "Contact Us",
+    "shipping": "Shipping",
+    "returns": "Returns",
+    "faqs": "FAQs",
+    "trackOrder": "Track Order",
+    "sizeGuide": "Size Guide",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "copyright": "© 2024 Shan Loray. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "cookiePolicy": "Cookie Policy"
+  },
   "explore": {
     "title": "Explore Shan Loray",
     "subtitle": "Discover your perfect beauty ritual",
@@ -2146,108 +2077,5 @@
       "bodyButter": "Body Butter",
       "bodyScrubs": "Body Scrubs"
     }
-  },
-  "bodycare": {
-  "nourishRestore": "NOURISH & RESTORE",
-  "heroTitle": "Body Care",
-  "heroDesc": "Luxurious rituals for silky, radiant skin",
-  "heroDescDesktop": "Luxurious rituals for silky, radiant skin from head to toe",
-  "home": "Home",
-  "shop": "Shop",
-  "searchPlaceholder": "Search body care products...",
-  "showing": "Showing",
-  "products": "products",
-  "bodyCareProducts": "body care products",
-  "noProducts": "No products found",
-  "filters": "Filters",
-  "sortBy": "Sort by",
-  "sortBestSelling": "Best Selling",
-  "sortNewest": "Newest Arrivals",
-  "sortPriceLow": "Price: Low to High",
-  "sortPriceHigh": "Price: High to Low",
-  "sortTopRated": "Top Rated",
-  "addToBag": "Add to Bag",
-  "loadMore": "Load More",
-  "remaining": "remaining",
-  "clearAll": "Clear All",
-  "clearAllFilters": "Clear All Filters",
-  "applyFilters": "Apply Filters",
-  "refineSelection": "Refine Selection",
-  "allBodyCare": "All Body Care",
-  "productCategory": "Product Category",
-  "priceRange": "Price Range",
-  "skinType": "Skin Type",
-  "skinConcern": "Skin Concern",
-  "ingredients": "Key Ingredients",
-  "scent": "Scent"
-},
-  "navItems": {
-  "Account Dashboard": "Account Dashboard",
-  "Order History": "Order History",
-  "My Wishlist": "My Wishlist",
-  "Shipping Addresses": "Shipping Addresses",
-  "Payment Methods": "Payment Methods",
-  "Beauty Profile": "Beauty Profile",
-  "Loyalty Program": "Loyalty Program",
-  "My Routines": "My Routines",
-  "Reviews & Ratings": "Reviews & Ratings",
-  "Account Settings": "Account Settings",
-  "Notifications": "Notifications"
-},
-"emailItems": {
-  "order-updates": {
-    "title": "Order Updates",
-    "description": "Shipping confirmations, delivery notifications, and order status"
-  },
-  "promotions": {
-    "title": "Promotions & Offers",
-    "description": "Exclusive discounts, seasonal sales, and member-only deals"
-  },
-  "new-arrivals": {
-    "title": "New Arrivals",
-    "description": "Be first to know about new product launches and collections"
-  },
-  "beauty-tips": {
-    "title": "Beauty Tips",
-    "description": "Expert advice, tutorials, and personalized skincare recommendations"
   }
-},
-"smsItems": {
-  "order-alerts": {
-    "title": "Order Status Alerts",
-    "description": "Real-time delivery updates and shipping notifications"
-  },
-  "flash-sales": {
-    "title": "Exclusive Flash Sales",
-    "description": "Limited-time offers sent directly to your phone"
-  }
-},
-"pushItems": {
-  "stock-alerts": {
-    "title": "In Stock Alerts",
-    "description": "Get notified when wishlist items become available"
-  },
-  "price-drop": {
-    "title": "Price Drop Notifications",
-    "description": "Know when products you love go on sale"
-  },
-  "events": {
-    "title": "Beauty Events",
-    "description": "Virtual consultations, masterclasses, and exclusive events"
-  }
-},
-"newsletterOptions": {
-  "weekly": {
-    "label": "Weekly Digest",
-    "description": "Curated beauty trends and tips every Monday"
-  },
-  "monthly": {
-    "label": "Monthly Magazine",
-    "description": "In-depth features and seasonal collections"
-  },
-  "unsubscribe": {
-    "label": "Unsubscribe",
-    "description": "Opt out of all newsletter communications"
-  }
-}
 }
