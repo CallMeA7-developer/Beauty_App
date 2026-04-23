@@ -268,12 +268,12 @@ export default function Privacy() {
             <div className="bg-white rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-5 md:p-6 lg:p-[32px]">
               <h2 className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold text-[#1A1A1A] mb-5 lg:mb-[24px]">Data Management</h2>
               <div className="flex flex-col sm:flex-row gap-3 lg:gap-[16px] mb-5 lg:mb-[24px]">
-                <button className="flex-1 h-[56px] md:h-[60px] lg:h-[64px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[15px] lg:text-[16px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:border-[#8B7355] hover:text-[#8B7355] transition-all">
-                  <IoDownloadOutline className="w-[20px] h-[20px]" />
+                <button className="flex-1 h-[48px] lg:h-[52px] bg-white border-[1.5px] border-[#E8E3D9] text-[#666666] text-[14px] lg:text-[15px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:border-[#8B7355] hover:text-[#8B7355] transition-all">
+                  <IoDownloadOutline className="w-[18px] h-[18px]" />
                   {t('privacyPage.download')}
                 </button>
-                <button className="flex-1 h-[56px] md:h-[60px] lg:h-[64px] bg-white border-[1.5px] border-[#E8E3D9] text-red-500 text-[15px] lg:text-[16px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:border-red-300 hover:bg-red-50 transition-all">
-                  <IoWarningOutline className="w-[20px] h-[20px]" />
+                <button className="flex-1 h-[48px] lg:h-[52px] bg-white border-[1.5px] border-[#E8E3D9] text-red-500 text-[14px] lg:text-[15px] font-medium rounded-[8px] flex items-center justify-center gap-2 hover:border-red-300 hover:bg-red-50 transition-all">
+                  <IoWarningOutline className="w-[18px] h-[18px]" />
                   {t('privacyPage.delete')}
                 </button>
               </div>
