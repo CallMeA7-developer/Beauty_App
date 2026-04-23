@@ -17,6 +17,9 @@ import {
   IoLocationOutline,
   IoCardOutline,
   IoStarSharp,
+  IoArrowUp,
+  IoMenuOutline,
+  IoClose,
 } from 'react-icons/io5'
 import { useAuth } from '../contexts/AuthContext'
 import { useWishlist } from '../contexts/WishlistContext'
@@ -35,6 +38,14 @@ export default function Profile() {
   const [skinAnalysis, setSkinAnalysis] = useState(null)
   const [skinAnalysisCompleted, setSkinAnalysisCompleted] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [showDrawer, setShowDrawer] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     if (user) {
@@ -159,6 +170,21 @@ export default function Profile() {
       <div className="min-h-[200px] md:min-h-[240px] lg:min-h-[280px] bg-gradient-to-b from-[#F5F1EA] to-[#FDFBF7] px-4 md:px-[60px] lg:px-[120px] flex items-center py-8 md:py-0">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8 lg:gap-[48px] w-full">
 
+          {/* Mobile Drawer Trigger */}
+          <button
+            onClick={() => setShowDrawer(true)}
+            className="lg:hidden absolute top-0 right-0 flex items-center gap-2 bg-white border border-[#E8E3D9] rounded-full px-3 py-2 shadow-sm"
+          >
+            {userAvatar ? (
+              <img src={userAvatar} alt="avatar" className="w-7 h-7 rounded-full object-cover" />
+            ) : (
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] flex items-center justify-center">
+                <span className="text-[11px] font-bold text-white">{userInitials}</span>
+              </div>
+            )}
+            <IoMenuOutline className="w-4 h-4 text-[#8B7355]" />
+          </button>
+
           {/* Avatar */}
           <div className="relative flex-shrink-0">
             {userAvatar ? (
@@ -197,6 +223,100 @@ export default function Profile() {
         </div>
       </div>
 
+      {/* ── Mobile Drawer ── */}
+      {showDrawer && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowDrawer(false)} />
+          {/* Drawer */}
+          <div className="absolute left-0 top-0 bottom-0 w-[300px] bg-white shadow-[4px_0_24px_rgba(0,0,0,0.15)] flex flex-col overflow-y-auto">
+
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E8E3D9] flex-shrink-0">
+              <span className="text-[16px] font-semibold text-[#1A1A1A]">{t('profile.menu.myAccount')}</span>
+              <button onClick={() => setShowDrawer(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F5F1EA] transition-colors">
+                <IoClose className="w-5 h-5 text-[#666666]" />
+              </button>
+            </div>
+
+            {/* Profile Info */}
+            <div className="p-5 border-b border-[#E8E3D9]">
+              <div className="flex flex-col items-center">
+                {userAvatar ? (
+                  <img src={userAvatar} alt={userName} className="w-[80px] h-[80px] rounded-full object-cover border-[3px] border-[#C9A870] mb-3" />
+                ) : (
+                  <div className="w-[80px] h-[80px] rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] border-[3px] border-[#C9A870] mb-3 flex items-center justify-center">
+                    <span className="text-[28px] font-bold text-white">{userInitials}</span>
+                  </div>
+                )}
+                <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-1">{userName}</h2>
+                <p className="text-[12px] text-[#666666] mb-3">{userEmail}</p>
+                <div className="flex items-center gap-2">
+                  <IoSparkles className="w-[16px] h-[16px] text-[#C9A870]" />
+                  <span className="text-[15px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} {t('profile.hero.loyaltyPoints')}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="p-4 border-b border-[#E8E3D9]">
+              <p className="text-[11px] font-medium text-[#8B7355] tracking-[1px] uppercase mb-3">{t('profile.quickAccess.title')}</p>
+              <div className="grid grid-cols-4 gap-2">
+                {quickActions.map((action) => (
+                  <Link key={action.label} to={action.path} onClick={() => setShowDrawer(false)}>
+                    <div className="flex flex-col items-center justify-center h-[64px] bg-[#F5F1EA] rounded-[8px] hover:bg-[#8B7355] group transition-all">
+                      <action.icon className="w-[20px] h-[20px] text-[#8B7355] group-hover:text-white mb-1 transition-colors" />
+                      <span className="text-[10px] font-normal text-[#8B7355] group-hover:text-white transition-colors text-center leading-tight px-1">{action.label}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Menu Sections */}
+            <div className="flex-1">
+              {menuSections.map((section) => (
+                <div key={section.title} className="border-b border-[#E8E3D9]">
+                  <div className="px-5 py-3 bg-[#FDFBF7]">
+                    <p className="text-[11px] font-medium text-[#8B7355] tracking-[1px] uppercase">{section.title}</p>
+                  </div>
+                  <div className="px-2 py-1">
+                    {section.items.map((item) => (
+                      <Link key={item.label} to={item.path} onClick={() => setShowDrawer(false)}>
+                        <div className="flex items-center justify-between h-[46px] px-3 rounded-[8px] hover:bg-[#FDFBF7] transition-colors">
+                          <div className="flex items-center gap-3">
+                            <item.icon className="w-[18px] h-[18px] text-[#8B7355]" />
+                            <span className="text-[13px] font-normal text-[#2B2B2B]">{item.label}</span>
+                          </div>
+                          {item.badge ? (
+                            <div className={`${item.badgeColor || 'bg-[#C9A870]'} text-white text-[10px] font-normal px-[8px] py-[3px] rounded-full`}>
+                              {item.badge}
+                            </div>
+                          ) : (
+                            <IoChevronForward className="w-[14px] h-[14px] text-[#999999]" />
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Sign Out */}
+            <div className="p-4 flex-shrink-0">
+              <button
+                onClick={() => { setShowDrawer(false); handleSignOut() }}
+                className="w-full h-[48px] bg-white border border-[#E8E3D9] rounded-[8px] flex items-center justify-center gap-[10px] hover:border-[#8B7355] group transition-colors"
+              >
+                <IoLogOutOutline className="w-[18px] h-[18px] text-[#666666] group-hover:text-[#8B7355] transition-colors" />
+                <span className="text-[14px] font-medium text-[#666666] group-hover:text-[#8B7355] transition-colors">{t('profile.signOut')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Breadcrumb ── */}
       <div className="min-h-[48px] bg-white px-4 md:px-[60px] lg:px-[120px] flex items-center border-b border-[#E8E3D9]">
         <span className="text-[13px] lg:text-[15px] font-normal text-[#8B7355] cursor-pointer">{t('profile.breadcrumb.home')}</span>
@@ -208,8 +328,8 @@ export default function Profile() {
       <div className="px-4 md:px-[60px] lg:px-[120px] py-6 md:py-10 lg:py-[64px]">
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-[40px]">
 
-          {/* ── Sidebar Menu ── */}
-          <div className="w-full lg:w-[360px] lg:flex-shrink-0 space-y-5 lg:space-y-6">
+          {/* ── Sidebar Menu — desktop/tablet only ── */}
+          <div className="hidden lg:block w-full lg:w-[360px] lg:flex-shrink-0 space-y-5 lg:space-y-6">
 
             {/* Quick Actions */}
             <div className="bg-white rounded-[16px] border border-[#E8E3D9] shadow-[0_4px_16px_rgba(0,0,0,0.06)] p-5 lg:p-[28px]">
@@ -456,6 +576,15 @@ export default function Profile() {
           </div>
         </div>
       </div>
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
