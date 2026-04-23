@@ -61,10 +61,7 @@ export function WishlistProvider({ children }) {
     try {
       const { data, error } = await supabase
         .from('wishlist')
-        .insert({
-          user_id: user.id,
-          product_id: productId
-        })
+        .insert({ user_id: user.id, product_id: productId })
         .select(`
           id,
           product_id,
@@ -84,8 +81,9 @@ export function WishlistProvider({ children }) {
 
       if (error) throw error
 
-      setWishlistItems([data, ...wishlistItems])
-      setWishlistCount(wishlistCount + 1)
+      // Use functional updates to avoid stale closure
+      setWishlistItems(prev => [data, ...prev])
+      setWishlistCount(prev => prev + 1)
       return { data, error: null }
     } catch (err) {
       console.error('Error adding to wishlist:', err)
@@ -105,8 +103,9 @@ export function WishlistProvider({ children }) {
 
       if (error) throw error
 
-      setWishlistItems(wishlistItems.filter(item => item.product_id !== productId))
-      setWishlistCount(wishlistCount - 1)
+      // Use functional updates to avoid stale closure
+      setWishlistItems(prev => prev.filter(item => item.product_id !== productId))
+      setWishlistCount(prev => Math.max(0, prev - 1))
       return { error: null }
     } catch (err) {
       console.error('Error removing from wishlist:', err)
