@@ -1497,14 +1497,32 @@
     "errorPlaceOrder": "Failed to place order. Please try again.",
     "errorFailedAdd": "Failed to add payment method"
   },
-  "privacyPage": {
-    "title": "Privacy Settings",
-    "subtitle": "Control how your data is used",
-    "guest": "Guest",
-    "dataControls": "Data Controls",
-    "download": "Download My Data",
-    "delete": "Delete My Account",
-    "save": "Save Settings"
+ "privacyPage": {
+  "title": "Privacy Settings",
+  "subtitle": "Control how your data is used",
+  "guest": "Guest",
+  "dataControls": "Data Controls",
+  "download": "Download My Data",
+  "delete": "Delete My Account",
+  "save": "Save Settings",
+  "controls": {
+    "personal-data": {
+      "title": "Personal Data Collection",
+      "desc": "Allow us to collect and process your personal information to improve your experience"
+    },
+    "marketing": {
+      "title": "Marketing Communications",
+      "desc": "Receive personalized offers, promotions and beauty tips via email and SMS"
+    },
+    "cookies": {
+      "title": "Cookie Preferences",
+      "desc": "Allow cookies to enhance site functionality and remember your preferences"
+    },
+    "third-party": {
+      "title": "Third-Party Sharing",
+      "desc": "Share anonymized data with trusted partners to improve our services"
+    }
+  }
   },
   "formulations": {
     "home": "Home",
