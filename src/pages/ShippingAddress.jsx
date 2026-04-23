@@ -652,15 +652,13 @@ export default function ShippingAddress() {
                           <IoCreateOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
                           {t('shippingAddress.actions.edit')}
                         </button>
-                        {!address.is_default && (
-                          <button
-                            onClick={() => handleDelete(address.id)}
-                            className="flex items-center gap-[6px] lg:gap-[8px] text-[#999999] text-[12px] lg:text-[14px] font-normal px-4 lg:px-[20px] py-[8px] lg:py-[10px] rounded-[8px] cursor-pointer hover:text-red-500 hover:bg-red-50 transition-all"
-                          >
-                            <IoTrashOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
-                            {t('shippingAddress.actions.delete')}
-                          </button>
-                        )}
+                        <button
+                          onClick={() => handleDelete(address.id)}
+                          className="flex items-center gap-[6px] lg:gap-[8px] text-[#999999] text-[12px] lg:text-[14px] font-normal px-4 lg:px-[20px] py-[8px] lg:py-[10px] rounded-[8px] cursor-pointer hover:text-red-500 hover:bg-red-50 transition-all"
+                        >
+                          <IoTrashOutline className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]" />
+                          {t('shippingAddress.actions.delete')}
+                        </button>
                       </div>
                     </div>
                   </div>
