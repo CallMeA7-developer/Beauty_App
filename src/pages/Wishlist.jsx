@@ -33,6 +33,9 @@ import {
   IoLinkOutline,
   IoQrCodeOutline,
   IoLogoTwitter,
+  IoArrowUp,
+  IoMenuOutline,
+  IoClose,
 } from 'react-icons/io5'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
@@ -320,6 +323,48 @@ function WishlistMobile() {
   const [sortOpen, setSortOpen]         = useState(false)
   const [shareOpen, setShareOpen]       = useState(false)
   const [selectedSort, setSelectedSort] = useState('newest')
+  const [showDrawer, setShowDrawer]     = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [totalOrders, setTotalOrders]   = useState(0)
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0)
+  const [reviewsCount, setReviewsCount] = useState(0)
+
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || t('wishlist.user')
+  const userEmail = user?.email || ''
+  const userAvatar = user?.user_metadata?.avatar_url
+  const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+
+  const navigationItems = [
+    { icon: IoPersonOutline,   label: t('wishlist.nav.accountDashboard'), path: '/dashboard',        active: false },
+    { icon: IoBagCheckOutline, label: t('wishlist.nav.orderHistory'),     path: '/order-tracking',   active: false },
+    { icon: IoHeartOutline,    label: t('wishlist.nav.wishlist'),         path: '/wishlist',         active: true  },
+    { icon: IoSparkles,        label: t('wishlist.nav.beautyProfile'),    path: '/skin-analysis',    active: false },
+    { icon: IoRibbonOutline,   label: t('wishlist.nav.loyaltyProgram'),   path: '/account',          active: false },
+    { icon: IoCalendarOutline, label: t('wishlist.nav.myRoutines'),       path: '/beauty-journey',   active: false },
+    { icon: IoStarSharp,       label: t('wishlist.nav.reviewsRatings'),   path: '/account',          active: false },
+    { icon: IoSettingsOutline, label: t('wishlist.nav.accountSettings'),  path: '/privacy-settings', active: false },
+  ]
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!user) return
+      try {
+        const { data: orders } = await supabase.from('orders').select('total').eq('user_id', user.id)
+        setTotalOrders(orders?.length || 0)
+        const points = orders?.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0) || 0
+        setLoyaltyPoints(Math.floor(points))
+        const { data: reviews } = await supabase.from('reviews').select('id').eq('user_id', user.id)
+        setReviewsCount(reviews?.length || 0)
+      } catch (err) { console.error('Error fetching stats:', err) }
+    }
+    fetchStats()
+  }, [user])
 
   const handleRemove = async (productId) => await removeFromWishlist(productId)
   const handleAddToBag = async (product) => {
@@ -344,10 +389,98 @@ function WishlistMobile() {
 
 
       {/* Title */}
-      <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] px-6 py-6 flex-shrink-0">
+      <div className="bg-gradient-to-b from-[#FDFBF7] to-[#F9F4EE] px-6 py-6 flex-shrink-0 relative">
         <h1 className="text-[32px] font-semibold text-[#1A1A1A] mb-1">{t('wishlist.title')}</h1>
         <p className="text-[16px] font-normal text-[#666666]">{wishlistCount} {wishlistCount === 1 ? t('wishlist.savedTreasure') : t('wishlist.savedTreasures')}</p>
+        {/* Mobile drawer trigger */}
+        <button
+          onClick={() => setShowDrawer(true)}
+          className="absolute top-6 right-6 flex items-center gap-2 bg-white border border-[#E8E3D9] rounded-full px-3 py-2 shadow-sm"
+        >
+          {userAvatar ? (
+            <img src={userAvatar} alt="avatar" className="w-7 h-7 rounded-full object-cover" />
+          ) : (
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] flex items-center justify-center">
+              <span className="text-[11px] font-bold text-white">{userInitials}</span>
+            </div>
+          )}
+          <IoMenuOutline className="w-4 h-4 text-[#8B7355]" />
+        </button>
       </div>
+
+      {/* Mobile Drawer */}
+      {showDrawer && (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowDrawer(false)} />
+          <div className="absolute left-0 top-0 bottom-0 w-[300px] bg-white shadow-[4px_0_24px_rgba(0,0,0,0.15)] flex flex-col overflow-y-auto">
+
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#E8E3D9] flex-shrink-0">
+              <span className="text-[16px] font-semibold text-[#1A1A1A]">{t('wishlist.nav.accountDashboard')}</span>
+              <button onClick={() => setShowDrawer(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F5F1EA] transition-colors">
+                <IoClose className="w-5 h-5 text-[#666666]" />
+              </button>
+            </div>
+
+            {/* Profile Section */}
+            <div className="p-5 border-b border-[#E8E3D9]">
+              <div className="flex flex-col items-center">
+                {userAvatar ? (
+                  <img src={userAvatar} alt="User Avatar" className="w-[80px] h-[80px] rounded-full object-cover border-[3px] border-[#C9A870] mb-3" />
+                ) : (
+                  <div className="w-[80px] h-[80px] rounded-full bg-gradient-to-br from-[#8B7355] to-[#C9A870] border-[3px] border-[#C9A870] mb-3 flex items-center justify-center">
+                    <span className="text-[28px] font-bold text-white">{userInitials}</span>
+                  </div>
+                )}
+                <h2 className="text-[18px] font-semibold text-[#1A1A1A] mb-1">{userName}</h2>
+                <p className="text-[12px] text-[#666666] mb-3">{userEmail}</p>
+                <div className="bg-[#C9A870] text-white text-[11px] font-medium px-[14px] py-[5px] rounded-full mb-3">
+                  {loyaltyPoints >= 3000 ? t('wishlist.goldMember') : loyaltyPoints >= 2000 ? t('wishlist.eliteMember') : t('wishlist.member')}
+                </div>
+                <div className="flex items-center gap-2">
+                  <IoSparkles className="w-[16px] h-[16px] text-[#C9A870]" />
+                  <span className="text-[15px] font-medium text-[#8B7355]">{loyaltyPoints.toLocaleString()} {t('wishlist.points')}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Nav Menu */}
+            <div className="p-2 border-b border-[#E8E3D9]">
+              {navigationItems.map((item) => (
+                <Link key={item.label} to={item.path} onClick={() => setShowDrawer(false)}>
+                  <div className={`flex items-center justify-between h-[46px] px-3 rounded-[8px] cursor-pointer transition-colors ${item.active ? 'bg-[#FDFBF7]' : 'hover:bg-[#FDFBF7]'}`}>
+                    <div className="flex items-center gap-3">
+                      <item.icon className={`w-[18px] h-[18px] ${item.active ? 'text-[#8B7355]' : 'text-[#666666]'}`} />
+                      <span className={`text-[13px] ${item.active ? 'text-[#8B7355] font-medium' : 'font-normal text-[#2B2B2B]'}`}>{item.label}</span>
+                    </div>
+                    {item.active && wishlistCount > 0 && (
+                      <div className="bg-[#C9A870] text-white text-[10px] font-medium px-[7px] py-[2px] rounded-full">{wishlistCount}</div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Stats */}
+            <div className="p-5">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="text-center">
+                  <div className="text-[20px] font-semibold text-[#8B7355] mb-1">{totalOrders}</div>
+                  <div className="text-[10px] font-light text-[#666666] leading-tight">{t('wishlist.totalOrders')}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] font-semibold text-[#8B7355] mb-1">{wishlistCount}</div>
+                  <div className="text-[10px] font-light text-[#666666] leading-tight">{t('wishlist.wishlistItems')}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[20px] font-semibold text-[#8B7355] mb-1">{reviewsCount}</div>
+                  <div className="text-[10px] font-light text-[#666666] leading-tight">{t('wishlist.reviewsWritten')}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Sort & Share Bar */}
       <div className="bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)] px-5 py-3 flex items-center justify-between gap-3 flex-shrink-0">
@@ -462,6 +595,16 @@ function WishlistMobile() {
 
 
 
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
+
       <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   )
@@ -478,7 +621,14 @@ function WishlistDesktop() {
   const [reviewsCount, setReviewsCount] = useState(0)
   const [selectedSort, setSelectedSort] = useState('newest')
   const [showSortDropdown, setShowSortDropdown] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
   const shareRef = useRef(null)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || t('wishlist.user')
   const userEmail = user?.email || ''
@@ -749,6 +899,16 @@ function WishlistDesktop() {
         </div>
       </div>
       <div className="h-[40px] md:h-[60px] lg:h-[80px]" />
+
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
