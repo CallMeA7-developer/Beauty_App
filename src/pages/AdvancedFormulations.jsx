@@ -17,6 +17,8 @@ import {
   IoBarChartOutline,
   IoNewspaperOutline,
   IoGridOutline,
+  IoArrowUp,
+  IoChevronDown,
 } from 'react-icons/io5'
 
 export default function AdvancedFormulations() {
@@ -25,6 +27,14 @@ export default function AdvancedFormulations() {
   const navigate  = useNavigate()
   const [showPdfPopup, setShowPdfPopup] = useState(false)
   const [pdfTitle, setPdfTitle]         = useState('')
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [openFaq, setOpenFaq] = useState(null)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   useEffect(() => {
     if (location.hash) {
       const el = document.getElementById(location.hash.replace('#', ''))
@@ -406,11 +416,24 @@ export default function AdvancedFormulations() {
       {/* ── FAQ ── */}
       <div className="px-4 md:px-[60px] lg:px-[120px] py-10 md:py-14 lg:py-[80px] bg-[#FDFBF7]">
         <h2 className="text-[26px] md:text-[32px] lg:text-[40px] font-medium text-[#1A1A1A] text-center mb-10 lg:mb-[56px]">{t('formulations.faq')}</h2>
-        <div className="max-w-[900px] mx-auto space-y-4">
-          {faqItems.map((item) => (
-            <div key={item.question} className="bg-white rounded-[12px] border border-[#E8E3D9] p-4 md:p-5 lg:p-[28px]">
-              <h3 className="text-[14px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] mb-3">{item.question}</h3>
-              <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.7]">{item.answer}</p>
+        <div className="max-w-[900px] mx-auto space-y-3 lg:space-y-4">
+          {faqItems.map((item, idx) => (
+            <div key={item.question} className="bg-white rounded-[12px] border border-[#E8E3D9] overflow-hidden">
+              <button
+                onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                className="w-full flex items-center justify-between p-4 md:p-5 lg:p-[28px] text-left"
+              >
+                <h3 className="text-[14px] md:text-[16px] lg:text-[18px] font-medium text-[#1A1A1A] pr-4">{item.question}</h3>
+                <IoChevronDown
+                  className={`w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] text-[#8B7355] flex-shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {openFaq === idx && (
+                <div className="px-4 md:px-5 lg:px-[28px] pb-4 md:pb-5 lg:pb-[28px]">
+                  <div className="h-[1px] bg-[#E8E3D9] mb-4" />
+                  <p className="text-[13px] lg:text-[15px] font-normal text-[#666666] leading-[1.7]">{item.answer}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -469,6 +492,15 @@ export default function AdvancedFormulations() {
         </div>
       </div>
 
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
