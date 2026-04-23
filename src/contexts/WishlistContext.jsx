@@ -114,6 +114,23 @@ export function WishlistProvider({ children }) {
     }
   }
 
+  const clearWishlist = async () => {
+    if (!user) return { error: 'User not authenticated' }
+    try {
+      const { error } = await supabase
+        .from('wishlist')
+        .delete()
+        .eq('user_id', user.id)
+      if (error) throw error
+      setWishlistItems([])
+      setWishlistCount(0)
+      return { error: null }
+    } catch (err) {
+      console.error('Error clearing wishlist:', err)
+      return { error: err.message }
+    }
+  }
+
   const isInWishlist = (productId) => {
     return wishlistItems.some(item => item.product_id === productId)
   }
@@ -124,6 +141,7 @@ export function WishlistProvider({ children }) {
     loading,
     addToWishlist,
     removeFromWishlist,
+    clearWishlist,
     isInWishlist,
     refreshWishlist: fetchWishlist
   }
