@@ -319,7 +319,7 @@ function WishlistMobile() {
   const { t, i18n } = useTranslation()
   const { user } = useAuth()
   const { addToCart } = useCart()
-  const { wishlistItems, wishlistCount, loading, removeFromWishlist } = useWishlist()
+  const { wishlistItems, wishlistCount, loading, removeFromWishlist, clearWishlist } = useWishlist()
   const [sortOpen, setSortOpen]         = useState(false)
   const [shareOpen, setShareOpen]       = useState(false)
   const [selectedSort, setSelectedSort] = useState('newest')
@@ -581,7 +581,7 @@ function WishlistMobile() {
       {/* Quick Actions */}
       {wishlistItems.length > 0 && (
         <div className="bg-[#F5F1EA] px-5 py-4 flex items-center justify-between gap-3 flex-shrink-0">
-          <button onClick={async () => { for (const item of wishlistItems) { await removeFromWishlist(item.product_id) } }}
+          <button onClick={clearWishlist}
             className="text-[14px] font-medium text-[#C84848] underline hover:text-[#a83030] transition-colors">
             {t('wishlist.clearAllItems')}
           </button>
@@ -615,7 +615,7 @@ function WishlistDesktop() {
   const { t, i18n } = useTranslation()
   const { user } = useAuth()
   const { addToCart } = useCart()
-  const { wishlistItems, wishlistCount, loading, removeFromWishlist } = useWishlist()
+  const { wishlistItems, wishlistCount, loading, removeFromWishlist, clearWishlist } = useWishlist()
   const [totalOrders, setTotalOrders] = useState(0)
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
   const [reviewsCount, setReviewsCount] = useState(0)
@@ -853,7 +853,7 @@ function WishlistDesktop() {
             {/* Bottom Actions */}
             {wishlistItems.length > 0 && (
               <div className="bg-[#F5F1EA] rounded-[12px] p-4 lg:p-[24px] flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 lg:mb-[32px]">
-                <button onClick={async () => { for (const item of wishlistItems) { await removeFromWishlist(item.product_id) } }}
+                <button onClick={clearWishlist}
                   className="text-[13px] lg:text-[14px] font-medium text-[#C84848] underline hover:text-[#a83030] transition-colors">
                   {t('wishlist.clearAllItems')}
                 </button>
