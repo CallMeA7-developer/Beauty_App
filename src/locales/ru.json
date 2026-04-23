@@ -1320,75 +1320,118 @@
       }
     }
   },
-"navItems": {
-  "Account Dashboard": "Личный кабинет",
-  "Order History": "История заказов",
-  "My Wishlist": "Мой список желаний",
-  "Shipping Addresses": "Адреса доставки",
-  "Payment Methods": "Способы оплаты",
-  "Beauty Profile": "Профиль красоты",
-  "Loyalty Program": "Программа лояльности",
-  "My Routines": "Мои процедуры",
-  "Reviews & Ratings": "Отзывы и оценки",
-  "Account Settings": "Настройки аккаунта",
-  "Notifications": "Уведомления"
-},
-"emailItems": {
-  "order-updates": {
-    "title": "Обновления заказов",
-    "description": "Подтверждения отправки, уведомления о доставке и статус заказа"
+  "notificationsPage": {
+    "title": "Настройки уведомлений",
+    "subtitle": "Управляйте тем, как и когда вы получаете обновления",
+    "breadcrumb": {
+      "home": "Главная",
+      "accountDashboard": "Личный кабинет",
+      "notificationPreferences": "Настройки уведомлений"
+    },
+    "guest": "Гость",
+    "membership": {
+      "member": "Участник",
+      "elite": "Элитный участник",
+      "gold": "Золотой участник"
+    },
+    "points": "Баллы лояльности",
+    "pointsShort": "баллов",
+    "userAvatar": "Аватар пользователя",
+    "stats": {
+      "totalOrders": "Всего заказов",
+      "wishlistItems": "В избранном",
+      "reviewsWritten": "Отзывов написано"
+    },
+    "infoBanner": "Будьте в курсе заказов, советов по красоте и эксклюзивных предложений",
+    "sections": {
+      "email": "Email-уведомления",
+      "sms": "SMS-уведомления",
+      "push": "Push-уведомления",
+      "newsletter": "Рассылка"
+    },
+    "pushDescription": "Включите уведомления браузера для обновлений в реальном времени",
+    "smsNotice": "Могут применяться стандартные тарифы на сообщения",
+    "emailFrequencyPreference": "Частота email-рассылки",
+    "frequencyOptions": {
+      "daily": "Ежедневно",
+      "multiplePerWeek": "Несколько раз в неделю",
+      "weekly": "Еженедельно",
+      "biWeekly": "Раз в две недели",
+      "monthly": "Ежемесячно"
+    },
+    "resetToDefault": "Сбросить к стандартным",
+    "savePreferences": "Сохранить настройки",
+    "privacyNotice": "Мы уважаем вашу конфиденциальность. Вы можете изменить настройки в любое время.",
+    "nav": {
+      "accountDashboard": "Личный кабинет",
+      "orderHistory": "История заказов",
+      "myWishlist": "Мой список желаний",
+      "shippingAddresses": "Адреса доставки",
+      "paymentMethods": "Способы оплаты",
+      "beautyProfile": "Профиль красоты",
+      "loyaltyProgram": "Программа лояльности",
+      "myRoutines": "Мои процедуры",
+      "reviewsRatings": "Отзывы и оценки",
+      "accountSettings": "Настройки аккаунта",
+      "notifications": "Уведомления"
+    },
+    "emailItems": {
+      "order-updates": {
+        "title": "Обновления заказов",
+        "description": "Подтверждения отправки, уведомления о доставке и статус заказа"
+      },
+      "promotions": {
+        "title": "Акции и предложения",
+        "description": "Эксклюзивные скидки, сезонные распродажи и предложения для участников"
+      },
+      "new-arrivals": {
+        "title": "Новинки",
+        "description": "Первыми узнавайте о новых продуктах и коллекциях"
+      },
+      "beauty-tips": {
+        "title": "Советы по красоте",
+        "description": "Экспертные советы, обучающие материалы и персональные рекомендации"
+      }
+    },
+    "smsItems": {
+      "order-alerts": {
+        "title": "Уведомления о статусе заказа",
+        "description": "Обновления доставки и уведомления об отправке в реальном времени"
+      },
+      "flash-sales": {
+        "title": "Эксклюзивные флеш-распродажи",
+        "description": "Ограниченные предложения прямо на ваш телефон"
+      }
+    },
+    "pushItems": {
+      "stock-alerts": {
+        "title": "Уведомления о наличии",
+        "description": "Получайте уведомления, когда товары из избранного появятся в наличии"
+      },
+      "price-drop": {
+        "title": "Снижение цены",
+        "description": "Узнавайте, когда любимые товары поступают в продажу"
+      },
+      "events": {
+        "title": "Бьюти-события",
+        "description": "Виртуальные консультации, мастер-классы и эксклюзивные мероприятия"
+      }
+    },
+    "newsletterOptions": {
+      "weekly": {
+        "label": "Еженедельный дайджест",
+        "description": "Актуальные тренды красоты и советы каждый понедельник"
+      },
+      "monthly": {
+        "label": "Ежемесячный журнал",
+        "description": "Подробные материалы и сезонные коллекции"
+      },
+      "unsubscribe": {
+        "label": "Отписаться",
+        "description": "Отказаться от всех рассылок"
+      }
+    }
   },
-  "promotions": {
-    "title": "Акции и предложения",
-    "description": "Эксклюзивные скидки, сезонные распродажи и предложения для участников"
-  },
-  "new-arrivals": {
-    "title": "Новинки",
-    "description": "Первыми узнавайте о новых продуктах и коллекциях"
-  },
-  "beauty-tips": {
-    "title": "Советы по красоте",
-    "description": "Экспертные советы, обучающие материалы и персональные рекомендации"
-  }
-},
-"smsItems": {
-  "order-alerts": {
-    "title": "Уведомления о статусе заказа",
-    "description": "Обновления доставки и уведомления об отправке в реальном времени"
-  },
-  "flash-sales": {
-    "title": "Эксклюзивные флеш-распродажи",
-    "description": "Ограниченные предложения прямо на ваш телефон"
-  }
-},
-"pushItems": {
-  "stock-alerts": {
-    "title": "Уведомления о наличии",
-    "description": "Получайте уведомления, когда товары из избранного появятся в наличии"
-  },
-  "price-drop": {
-    "title": "Снижение цены",
-    "description": "Узнавайте, когда любимые товары поступают в продажу"
-  },
-  "events": {
-    "title": "Бьюти-события",
-    "description": "Виртуальные консультации, мастер-классы и эксклюзивные мероприятия"
-  }
-},
-"newsletterOptions": {
-  "weekly": {
-    "label": "Еженедельный дайджест",
-    "description": "Актуальные тренды красоты и советы каждый понедельник"
-  },
-  "monthly": {
-    "label": "Ежемесячный журнал",
-    "description": "Подробные материалы и сезонные коллекции"
-  },
-  "unsubscribe": {
-    "label": "Отписаться",
-    "description": "Отказаться от всех рассылок"
-  }
-}
   "orderConfirmation": {
     "orderConfirmed": "Заказ подтверждён!",
     "thankYou": "Спасибо за покупку",
@@ -1534,46 +1577,46 @@
     "errorPlaceOrder": "Не удалось оформить заказ. Повторите попытку.",
     "errorFailedAdd": "Не удалось добавить способ оплаты"
   },
-"privacyPage": {
-  "title": "Настройки конфиденциальности",
-  "subtitle": "Управляйте использованием ваших данных",
-  "guest": "Гость",
-  "dataControls": "Управление данными",
-  "download": "Скачать мои данные",
-  "delete": "Удалить аккаунт",
-  "save": "Сохранить настройки",
-  "controls": {
-    "personal-data": {
-      "title": "Сбор персональных данных",
-      "desc": "Разрешить сбор и обработку ваших персональных данных для улучшения опыта"
+  "privacyPage": {
+    "title": "Настройки конфиденциальности",
+    "subtitle": "Управляйте использованием ваших данных",
+    "guest": "Гость",
+    "dataControls": "Управление данными",
+    "download": "Скачать мои данные",
+    "delete": "Удалить аккаунт",
+    "save": "Сохранить настройки",
+    "controls": {
+      "personal-data": {
+        "title": "Сбор персональных данных",
+        "desc": "Разрешить сбор и обработку ваших персональных данных для улучшения опыта"
+      },
+      "marketing": {
+        "title": "Маркетинговые коммуникации",
+        "desc": "Получайте персонализированные предложения и советы по красоте на email и SMS"
+      },
+      "cookies": {
+        "title": "Настройки файлов cookie",
+        "desc": "Разрешить файлы cookie для улучшения работы сайта и запоминания настроек"
+      },
+      "third-party": {
+        "title": "Передача данных третьим лицам",
+        "desc": "Передавать анонимные данные доверенным партнёрам для улучшения сервисов"
+      }
     },
-    "marketing": {
-      "title": "Маркетинговые коммуникации",
-      "desc": "Получайте персонализированные предложения и советы по красоте на email и SMS"
-    },
-    "cookies": {
-      "title": "Настройки файлов cookie",
-      "desc": "Разрешить файлы cookie для улучшения работы сайта и запоминания настроек"
-    },
-    "third-party": {
-      "title": "Передача данных третьим лицам",
-      "desc": "Передавать анонимные данные доверенным партнёрам для улучшения сервисов"
+    "navItems": {
+      "Account Dashboard": "Панель управления",
+      "Order History": "История заказов",
+      "My Wishlist": "Мой список желаний",
+      "Shipping Addresses": "Адреса доставки",
+      "Payment Methods": "Способы оплаты",
+      "Beauty Profile": "Профиль красоты",
+      "Loyalty Program": "Программа лояльности",
+      "My Routines": "Мои процедуры",
+      "Reviews & Ratings": "Отзывы и оценки",
+      "Account Settings": "Настройки аккаунта",
+      "Notifications": "Уведомления"
     }
   },
-  "navItems": {
-    "Account Dashboard": "Панель управления",
-    "Order History": "История заказов",
-    "My Wishlist": "Мой список желаний",
-    "Shipping Addresses": "Адреса доставки",
-    "Payment Methods": "Способы оплаты",
-    "Beauty Profile": "Профиль красоты",
-    "Loyalty Program": "Программа лояльности",
-    "My Routines": "Мои процедуры",
-    "Reviews & Ratings": "Отзывы и оценки",
-    "Account Settings": "Настройки аккаунта",
-    "Notifications": "Уведомления"
-  }
-},
   "formulations": {
     "home": "Главная",
     "breadcrumb": "Передовые формулы",
@@ -1689,421 +1732,309 @@
     "close": "Закрыть"
   },
   "shoppingBasket": {
-  "home": "Главная",
-  "title": "Корзина",
-  "itemsInBasket": "товаров в корзине",
-  "emptyBasket": "Ваша корзина пуста",
-  "startShopping": "Начать покупки",
-  "saveForLater": "Сохранить на потом",
-  "continueShopping": "Продолжить покупки",
-  "freeShipping": "Бесплатная стандартная доставка",
-  "freeShippingDesc": "При заказе от $75",
-  "easyReturns": "Простой возврат",
-  "easyReturnsDesc": "Политика возврата 30 дней",
-  "orderSummary": "Состав заказа",
-  "qty": "Кол-во",
-  "subtotal": "Подытог",
-  "shipping": "Доставка",
-  "free": "Бесплатно",
-  "standardDelivery": "Стандартная доставка (3–5 дней)",
-  "estimatedTax": "Ориентировочный налог",
-  "orderTotal": "Итого",
-  "promoPlaceholder": "Введите промокод",
-  "apply": "Применить",
-  "proceedToCheckout": "Перейти к оформлению",
-  "secureCheckout": "Безопасная оплата"
-},
+    "home": "Главная",
+    "title": "Корзина",
+    "itemsInBasket": "товаров в корзине",
+    "emptyBasket": "Ваша корзина пуста",
+    "startShopping": "Начать покупки",
+    "saveForLater": "Сохранить на потом",
+    "continueShopping": "Продолжить покупки",
+    "freeShipping": "Бесплатная стандартная доставка",
+    "freeShippingDesc": "При заказе от $75",
+    "easyReturns": "Простой возврат",
+    "easyReturnsDesc": "Политика возврата 30 дней",
+    "orderSummary": "Состав заказа",
+    "qty": "Кол-во",
+    "subtotal": "Подытог",
+    "shipping": "Доставка",
+    "free": "Бесплатно",
+    "standardDelivery": "Стандартная доставка (3–5 дней)",
+    "estimatedTax": "Ориентировочный налог",
+    "orderTotal": "Итого",
+    "promoPlaceholder": "Введите промокод",
+    "apply": "Применить",
+    "proceedToCheckout": "Перейти к оформлению",
+    "secureCheckout": "Безопасная оплата"
+  },
   "wishlist": {
-  "title": "Моё избранное",
-  "home": "Главная",
-  "user": "Пользователь",
-  "member": "Участник",
-  "eliteMember": "Элитный участник",
-  "goldMember": "Золотой участник",
-  "points": "Баллов",
-  "savedTreasure": "сохранённый товар",
-  "savedTreasures": "сохранённых товаров",
-  "savedItem": "сохранённый товар",
-  "savedItems": "сохранённых товаров",
-  "awaitingAttention": "ждут вашего внимания",
-  "loginRequired": "Войдите для просмотра избранного",
-  "goHome": "На главную",
-  "emptyTitle": "Список избранного пуст",
-  "emptyDesc": "Начните добавлять понравившиеся товары",
-  "exploreProducts": "Перейти к товарам",
-  "inStock": "В наличии",
-  "addToBag": "В корзину",
-  "addToCart": "В корзину",
-  "remove": "Удалить",
-  "moveAllToBag": "Всё в корзину",
-  "clearWishlist": "Очистить избранное",
-  "clearAllItems": "Удалить все",
-  "continueShopping": "Продолжить покупки",
-  "shareWishlist": "Поделиться избранным",
-  "shareYourWishlist": "Поделитесь избранным",
-  "shareDesc": "Поделитесь своей подборкой",
-  "shareViaSocial": "Поделиться в соцсетях",
-  "otherOptions": "Другие варианты",
-  "sendViaEmail": "Отправить по email",
-  "shareEmailDesc": "Поделиться через почту",
-  "copyLink": "Скопировать ссылку",
-  "copyLinkDesc": "Скопировать URL избранного",
-  "generateQR": "Создать QR-код",
-  "generateQRDesc": "Создать сканируемый код",
-  "itemsToShare": "12 товаров для отправки",
-  "copy": "Копировать",
-  "sortBy": "Сортировать",
-  "filter": "Фильтр",
-  "filterProducts": "Фильтр товаров",
-  "productType": "Тип товара",
-  "priceRange": "Диапазон цен",
-  "skinType": "Тип кожи",
-  "skinConcerns": "Проблемы кожи",
-  "brand": "Бренд",
-  "searchBrands": "Поиск брендов...",
-  "productBenefits": "Свойства товара",
-  "minimumRating": "Минимальный рейтинг",
-  "andUp": "и выше",
-  "availability": "Наличие",
-  "inStockLabel": "В наличии",
-  "includeOutOfStock": "Включая отсутствующие",
-  "clearFilters": "Очистить фильтры",
-  "applyFilters": "Применить фильтры",
-  "totalOrders": "Всего заказов",
-  "wishlistItems": "В избранном",
-  "reviewsWritten": "Отзывов написано",
-  "sort": {
-    "label": "Сортировка",
-    "priceLow": "Цена: по возрастанию",
-    "priceHigh": "Цена: по убыванию",
-    "newest": "Новинки",
-    "newestAdded": "Недавно добавленные",
-    "bestSellers": "Хиты продаж",
-    "mostPopular": "Самые популярные",
-    "highestRated": "Высший рейтинг"
-  },
-  "nav": {
+    "title": "Моё избранное",
     "home": "Главная",
-    "search": "Поиск",
-    "wishlist": "Избранное",
-    "account": "Аккаунт",
-    "accountDashboard": "Личный кабинет",
-    "orderHistory": "История заказов",
-    "beautyProfile": "Профиль красоты",
-    "loyaltyProgram": "Программа лояльности",
-    "myRoutines": "Мои ритуалы",
-    "reviewsRatings": "Отзывы и оценки",
-    "accountSettings": "Настройки аккаунта"
-  }
-},
-  "productDetail": {
-  "home": "Главная",
-  "reviews": "отзывов",
-  "stars": "звёзд",
-  "installments": "или 4 платежа без процентов по ${{amount}}",
-  "size": "Размер",
-  "quantity": "Количество",
-  "addToCart": "В корзину",
-  "buyNow": "Купить сейчас",
-  "addToWishlist": "В избранное",
-  "share": "Поделиться",
-  "addedToCart": "Добавлено в корзину!",
-  "whyYoullLoveIt": "Почему вам понравится",
-  "keyBenefits": "Ключевые преимущества",
-  "fullDescription": "Полное описание",
-  "howToUse": "Как использовать",
-  "keyIngredients": "Ключевые ингредиенты",
-  "skinType": "Тип кожи",
-  "bestFor": "Подходит для",
-  "noIngredients": "Информация об ингредиентах недоступна.",
-  "customerReviews": "Отзывы покупателей",
-  "writeReview": "Написать отзыв",
-  "writeReviewDesc": "Поделитесь своим мнением о продукте",
-  "rating": "Оценка",
-  "reviewTitle": "Заголовок отзыва",
-  "reviewTitlePlaceholder": "Опишите ваш опыт кратко",
-  "yourReview": "Ваш отзыв",
-  "reviewPlaceholder": "Расскажите, что думаете об этом продукте",
-  "submitReview": "Отправить отзыв",
-  "submitting": "Отправка...",
-  "selectRating": "Пожалуйста, выберите оценку",
-  "fillAllFields": "Пожалуйста, заполните все поля",
-  "reviewError": "Не удалось отправить отзыв. Попробуйте снова.",
-  "noReviews": "Отзывов пока нет",
-  "beFirst": "Будьте первым, кто оставит отзыв",
-  "wasThisHelpful": "Был ли этот отзыв полезен?",
-  "yes": "Да",
-  "no": "Нет",
-  "anonymous": "Аноним",
-  "notFound": "Товар не найден",
-  "completeRoutine": "Дополните свой уход",
-  "shareProduct": "Поделиться товаром",
-  "shareDesc": "Поделитесь этим товаром с друзьями",
-  "copyLink": "Копировать ссылку",
-  "copied": "Скопировано!",
-  "freeShipping": "Бесплатная доставка",
-  "freeShippingDesc": "При заказе от $100",
-  "returns": "Возврат за 90 дней",
-  "returnsDesc": "Возврат без лишних вопросов",
-  "authentic": "Гарантия подлинности",
-  "authenticDesc": "100% оригинальные товары",
-  "crueltyFree": "Без тестов на животных",
-  "crueltyFreeDesc": "Никогда не тестируется на животных",
-  "cleanBeauty": "Чистая косметика",
-  "cleanBeautyDesc": "Без вредных ингредиентов",
-  "sustainable": "Экологично",
-  "sustainableDesc": "Экологичная упаковка",
-  "joinCommunity": "Присоединяйтесь к нашему сообществу",
-  "joinCommunityDesc": "Эксклюзивные предложения и советы по уходу",
-  "emailPlaceholder": "Введите email",
-  "subscribe": "Подписаться",
-  "timelessLuxury": "Вневременная роскошь",
-  "shop": "Магазин",
-  "help": "Помощь",
-  "about": "О нас",
-  "contact": "Контакты",
-  "shipping": "Доставка",
-  "ourStory": "Наша история",
-  "ingredients": "Ингредиенты",
-  "sustainability": "Устойчивость",
-  "copyright": "© 2024 Shan Loray. Все права защищены."
-},
-  "shippingAddress": {
-  "user": "Пользователь",
-  "loading": "Загрузка...",
-  "breadcrumb": {
-    "home": "Главная",
-    "accountDashboard": "Панель аккаунта",
-    "shippingAddresses": "Адреса доставки"
-  },
-  "hero": {
-    "title": "Адреса доставки",
-    "subtitle": "Управляйте своими адресами доставки"
-  },
-  "sidebar": {
-    "userAvatar": "Аватар пользователя",
-    "member": "участник",
-    "points": "баллов",
-    "tiers": {
-      "member": "Обычный",
-      "elite": "Элитный",
-      "gold": "Золотой"
-    }
-  },
-  "nav": {
-    "accountDashboard": "Панель аккаунта",
-    "orderHistory": "История заказов",
-    "myWishlist": "Моё избранное",
-    "shippingAddresses": "Адреса доставки",
-    "paymentMethods": "Способы оплаты",
-    "beautyProfile": "Бьюти-профиль",
-    "loyaltyProgram": "Программа лояльности",
-    "myRoutines": "Мои рутины",
-    "reviewsRatings": "Отзывы и рейтинги",
-    "accountSettings": "Настройки аккаунта",
-    "notifications": "Уведомления",
-    "pointsBadge": "{{count}} баллов"
-  },
-  "stats": {
+    "user": "Пользователь",
+    "member": "Участник",
+    "eliteMember": "Элитный участник",
+    "goldMember": "Золотой участник",
+    "points": "Баллов",
+    "savedTreasure": "сохранённый товар",
+    "savedTreasures": "сохранённых товаров",
+    "savedItem": "сохранённый товар",
+    "savedItems": "сохранённых товаров",
+    "awaitingAttention": "ждут вашего внимания",
+    "loginRequired": "Войдите для просмотра избранного",
+    "goHome": "На главную",
+    "emptyTitle": "Список избранного пуст",
+    "emptyDesc": "Начните добавлять понравившиеся товары",
+    "exploreProducts": "Перейти к товарам",
+    "inStock": "В наличии",
+    "addToBag": "В корзину",
+    "addToCart": "В корзину",
+    "remove": "Удалить",
+    "moveAllToBag": "Всё в корзину",
+    "clearWishlist": "Очистить избранное",
+    "clearAllItems": "Удалить все",
+    "continueShopping": "Продолжить покупки",
+    "shareWishlist": "Поделиться избранным",
+    "shareYourWishlist": "Поделитесь избранным",
+    "shareDesc": "Поделитесь своей подборкой",
+    "shareViaSocial": "Поделиться в соцсетях",
+    "otherOptions": "Другие варианты",
+    "sendViaEmail": "Отправить по email",
+    "shareEmailDesc": "Поделиться через почту",
+    "copyLink": "Скопировать ссылку",
+    "copyLinkDesc": "Скопировать URL избранного",
+    "generateQR": "Создать QR-код",
+    "generateQRDesc": "Создать сканируемый код",
+    "itemsToShare": "12 товаров для отправки",
+    "copy": "Копировать",
+    "sortBy": "Сортировать",
+    "filter": "Фильтр",
+    "filterProducts": "Фильтр товаров",
+    "productType": "Тип товара",
+    "priceRange": "Диапазон цен",
+    "skinType": "Тип кожи",
+    "skinConcerns": "Проблемы кожи",
+    "brand": "Бренд",
+    "searchBrands": "Поиск брендов...",
+    "productBenefits": "Свойства товара",
+    "minimumRating": "Минимальный рейтинг",
+    "andUp": "и выше",
+    "availability": "Наличие",
+    "inStockLabel": "В наличии",
+    "includeOutOfStock": "Включая отсутствующие",
+    "clearFilters": "Очистить фильтры",
+    "applyFilters": "Применить фильтры",
     "totalOrders": "Всего заказов",
     "wishlistItems": "В избранном",
-    "reviewsWritten": "Написано отзывов"
-  },
-  "actions": {
-    "addNewAddress": "Добавить новый адрес",
-    "updateAddress": "Обновить адрес",
-    "saveAddress": "Сохранить адрес",
-    "cancel": "Отмена",
-    "setDefault": "Сделать основным",
-    "edit": "Редактировать",
-    "delete": "Удалить",
-    "deleteConfirm": "Вы уверены, что хотите удалить этот адрес?"
-  },
-  "form": {
-    "newTitle": "Новый адрес",
-    "editTitle": "Редактировать адрес",
-    "validation": "Пожалуйста, заполните все обязательные поля",
-    "addressLabel": "Метка адреса",
-    "recipientName": "Имя получателя",
-    "streetAddress": "Улица и номер дома",
-    "city": "Город",
-    "stateProvince": "Штат / Провинция",
-    "postalCode": "Почтовый индекс",
-    "country": "Страна",
-    "phoneNumber": "Номер телефона",
-    "setDefault": "Сделать адресом по умолчанию",
-    "placeholders": {
-      "fullName": "Полное имя",
-      "streetAddress": "Адрес",
-      "city": "Город",
-      "state": "Штат",
-      "zip": "Индекс",
-      "phone": "+1 (555) 000-0000"
+    "reviewsWritten": "Отзывов написано",
+    "sort": {
+      "label": "Сортировка",
+      "priceLow": "Цена: по возрастанию",
+      "priceHigh": "Цена: по убыванию",
+      "newest": "Новинки",
+      "newestAdded": "Недавно добавленные",
+      "bestSellers": "Хиты продаж",
+      "mostPopular": "Самые популярные",
+      "highestRated": "Высший рейтинг"
     },
-    "options": {
-      "home": "Дом",
-      "work": "Работа",
-      "office": "Офис",
-      "other": "Другое"
-    },
-    "countries": {
-      "us": "Соединённые Штаты",
-      "canada": "Канада",
-      "uk": "Великобритания",
-      "australia": "Австралия",
-      "uae": "Объединённые Арабские Эмираты"
+    "nav": {
+      "home": "Главная",
+      "search": "Поиск",
+      "wishlist": "Избранное",
+      "account": "Аккаунт",
+      "accountDashboard": "Личный кабинет",
+      "orderHistory": "История заказов",
+      "beautyProfile": "Профиль красоты",
+      "loyaltyProgram": "Программа лояльности",
+      "myRoutines": "Мои ритуалы",
+      "reviewsRatings": "Отзывы и оценки",
+      "accountSettings": "Настройки аккаунта"
     }
   },
-  "empty": {
-    "title": "Сохранённых адресов пока нет",
-    "description": "Добавьте свой первый адрес доставки, чтобы начать",
-    "addAddress": "Добавить адрес"
+  "productDetail": {
+    "home": "Главная",
+    "reviews": "отзывов",
+    "stars": "звёзд",
+    "installments": "или 4 платежа без процентов по ${{amount}}",
+    "size": "Размер",
+    "quantity": "Количество",
+    "addToCart": "В корзину",
+    "buyNow": "Купить сейчас",
+    "addToWishlist": "В избранное",
+    "share": "Поделиться",
+    "addedToCart": "Добавлено в корзину!",
+    "whyYoullLoveIt": "Почему вам понравится",
+    "keyBenefits": "Ключевые преимущества",
+    "fullDescription": "Полное описание",
+    "howToUse": "Как использовать",
+    "keyIngredients": "Ключевые ингредиенты",
+    "skinType": "Тип кожи",
+    "bestFor": "Подходит для",
+    "noIngredients": "Информация об ингредиентах недоступна.",
+    "customerReviews": "Отзывы покупателей",
+    "writeReview": "Написать отзыв",
+    "writeReviewDesc": "Поделитесь своим мнением о продукте",
+    "rating": "Оценка",
+    "reviewTitle": "Заголовок отзыва",
+    "reviewTitlePlaceholder": "Опишите ваш опыт кратко",
+    "yourReview": "Ваш отзыв",
+    "reviewPlaceholder": "Расскажите, что думаете об этом продукте",
+    "submitReview": "Отправить отзыв",
+    "submitting": "Отправка...",
+    "selectRating": "Пожалуйста, выберите оценку",
+    "fillAllFields": "Пожалуйста, заполните все поля",
+    "reviewError": "Не удалось отправить отзыв. Попробуйте снова.",
+    "noReviews": "Отзывов пока нет",
+    "beFirst": "Будьте первым, кто оставит отзыв",
+    "wasThisHelpful": "Был ли этот отзыв полезен?",
+    "yes": "Да",
+    "no": "Нет",
+    "anonymous": "Аноним",
+    "notFound": "Товар не найден",
+    "completeRoutine": "Дополните свой уход",
+    "shareProduct": "Поделиться товаром",
+    "shareDesc": "Поделитесь этим товаром с друзьями",
+    "copyLink": "Копировать ссылку",
+    "copied": "Скопировано!",
+    "freeShipping": "Бесплатная доставка",
+    "freeShippingDesc": "При заказе от $100",
+    "returns": "Возврат за 90 дней",
+    "returnsDesc": "Возврат без лишних вопросов",
+    "authentic": "Гарантия подлинности",
+    "authenticDesc": "100% оригинальные товары",
+    "crueltyFree": "Без тестов на животных",
+    "crueltyFreeDesc": "Никогда не тестируется на животных",
+    "cleanBeauty": "Чистая косметика",
+    "cleanBeautyDesc": "Без вредных ингредиентов",
+    "sustainable": "Экологично",
+    "sustainableDesc": "Экологичная упаковка",
+    "joinCommunity": "Присоединяйтесь к нашему сообществу",
+    "joinCommunityDesc": "Эксклюзивные предложения и советы по уходу",
+    "emailPlaceholder": "Введите email",
+    "subscribe": "Подписаться",
+    "timelessLuxury": "Вневременная роскошь",
+    "shop": "Магазин",
+    "help": "Помощь",
+    "about": "О нас",
+    "contact": "Контакты",
+    "shipping": "Доставка",
+    "ourStory": "Наша история",
+    "ingredients": "Ингредиенты",
+    "sustainability": "Устойчивость",
+    "copyright": "© 2024 Shan Loray. Все права защищены."
   },
-  "addressCard": {
-    "default": "По умолчанию"
+  "shippingAddress": {
+    "user": "Пользователь",
+    "loading": "Загрузка...",
+    "breadcrumb": {
+      "home": "Главная",
+      "accountDashboard": "Панель аккаунта",
+      "shippingAddresses": "Адреса доставки"
+    },
+    "hero": {
+      "title": "Адреса доставки",
+      "subtitle": "Управляйте своими адресами доставки"
+    },
+    "sidebar": {
+      "userAvatar": "Аватар пользователя",
+      "member": "участник",
+      "points": "баллов",
+      "tiers": {
+        "member": "Обычный",
+        "elite": "Элитный",
+        "gold": "Золотой"
+      }
+    },
+    "nav": {
+      "accountDashboard": "Панель аккаунта",
+      "orderHistory": "История заказов",
+      "myWishlist": "Моё избранное",
+      "shippingAddresses": "Адреса доставки",
+      "paymentMethods": "Способы оплаты",
+      "beautyProfile": "Бьюти-профиль",
+      "loyaltyProgram": "Программа лояльности",
+      "myRoutines": "Мои рутины",
+      "reviewsRatings": "Отзывы и рейтинги",
+      "accountSettings": "Настройки аккаунта",
+      "notifications": "Уведомления",
+      "pointsBadge": "{{count}} баллов"
+    },
+    "stats": {
+      "totalOrders": "Всего заказов",
+      "wishlistItems": "В избранном",
+      "reviewsWritten": "Написано отзывов"
+    },
+    "actions": {
+      "addNewAddress": "Добавить новый адрес",
+      "updateAddress": "Обновить адрес",
+      "saveAddress": "Сохранить адрес",
+      "cancel": "Отмена",
+      "setDefault": "Сделать основным",
+      "edit": "Редактировать",
+      "delete": "Удалить",
+      "deleteConfirm": "Вы уверены, что хотите удалить этот адрес?"
+    },
+    "form": {
+      "newTitle": "Новый адрес",
+      "editTitle": "Редактировать адрес",
+      "validation": "Пожалуйста, заполните все обязательные поля",
+      "addressLabel": "Метка адреса",
+      "recipientName": "Имя получателя",
+      "streetAddress": "Улица и номер дома",
+      "city": "Город",
+      "stateProvince": "Штат / Провинция",
+      "postalCode": "Почтовый индекс",
+      "country": "Страна",
+      "phoneNumber": "Номер телефона",
+      "setDefault": "Сделать адресом по умолчанию",
+      "placeholders": {
+        "fullName": "Полное имя",
+        "streetAddress": "Адрес",
+        "city": "Город",
+        "state": "Штат",
+        "zip": "Индекс",
+        "phone": "+1 (555) 000-0000"
+      },
+      "options": {
+        "home": "Дом",
+        "work": "Работа",
+        "office": "Офис",
+        "other": "Другое"
+      },
+      "countries": {
+        "us": "Соединённые Штаты",
+        "canada": "Канада",
+        "uk": "Великобритания",
+        "australia": "Австралия",
+        "uae": "Объединённые Арабские Эмираты"
+      }
+    },
+    "empty": {
+      "title": "Сохранённых адресов пока нет",
+      "description": "Добавьте свой первый адрес доставки, чтобы начать",
+      "addAddress": "Добавить адрес"
+    },
+    "addressCard": {
+      "default": "По умолчанию"
+    },
+    "security": {
+      "title": "Безопасно и конфиденциально",
+      "description": "Информация о ваших адресах зашифрована и никогда не передаётся третьим лицам."
+    }
   },
-  "security": {
-    "title": "Безопасно и конфиденциально",
-    "description": "Информация о ваших адресах зашифрована и никогда не передаётся третьим лицам."
-  }
-},
   "footer": {
-  "tagline": "Вневременная роскошь",
-  "description": "Создаём исключительный опыт красоты через союз науки и природы.",
-  "shop": "Магазин",
-  "support": "Поддержка",
-  "stayConnected": "Оставайтесь на связи",
-  "skincare": "Уход за кожей",
-  "makeup": "Макияж",
-  "fragrance": "Ароматы",
-  "tools": "Инструменты",
-  "giftSets": "Подарочные наборы",
-  "newArrivals": "Новинки",
-  "contactUs": "Связаться с нами",
-  "shipping": "Доставка",
-  "returns": "Возврат",
-  "faqs": "Вопросы и ответы",
-  "trackOrder": "Отследить заказ",
-  "sizeGuide": "Гид по размерам",
-  "emailPlaceholder": "Введите ваш email",
-  "subscribe": "Подписаться",
-  "copyright": "© 2024 Shan Loray. Все права защищены.",
-  "privacyPolicy": "Политика конфиденциальности",
-  "termsOfService": "Условия использования",
-  "cookiePolicy": "Политика cookies"
-},
-  "skinAnalysis": {
-  "heroBadge": "AI-анализ кожи",
-  "heroTitle": "Откройте истинный потенциал вашей кожи",
-  "heroSubtitle": "Передовые технологии ИИ анализируют вашу кожу за секунды с медицинской точностью",
-
-  "bannerTitle": "Впервые на анализе кожи?",
-  "bannerSubtitle": "Узнайте, как это работает",
-  "bannerDesc": "Наш AI-анализ кожи использует медицинские технологии для персонализированных результатов за секунды. Узнайте о процессе консультации перед началом.",
-  "bannerLearn": "Узнать, как это работает",
-  "bannerUnderstand": "Я понимаю",
-
-  "uploadTitle": "Начните анализ кожи",
-  "uploadSubtitle": "Загрузите чёткое фото или используйте анкету ниже",
-  "uploadPhotoTitle": "Загрузите фото",
-  "uploadDrag": "Перетащите фото сюда или нажмите для выбора",
-  "uploadWorkingTitle": "Мы работаем над этой функцией!",
-  "uploadWorkingDesc": "Пока используйте анкету ниже для получения анализа кожи.",
-  "goToQuestionnaire": "Перейти к анкете",
-  "uploadPhotoBtn": "Загрузить фото",
-  "takeSelfieBtn": "Сделать селфи",
-
-  "guideLight": "Хорошее освещение",
-  "guideLightDesc": "Предпочтительно дневной свет",
-  "guideFace": "Лицом вперёд",
-  "guideFaceDesc": "Смотрите прямо в камеру",
-  "guideMakeup": "Снимите макияж",
-  "guideMakeupDesc": "Чистая кожа без макияжа",
-
-  "questionnaireTitle": "Расскажите нам о вашей коже",
-  "questionnaireSubtitle": "Помогите нам понять ваши индивидуальные проблемы с кожей",
-  "analyzing": "Анализируем вашу кожу... Это займёт несколько секунд",
-  "primaryConcern": "Основная проблема кожи",
-  "skinType": "Тип кожи",
-  "currentRoutine": "Текущий уход",
-  "routineMinimal": "Минимальный (1-3 продукта)",
-  "routineModerate": "Умеренный (4-6 продуктов)",
-  "routineExtensive": "Интенсивный (7+ продуктов)",
-  "sunExposure": "Воздействие солнца",
-  "ageRange": "Возрастная группа",
-  "specificConcerns": "Конкретные проблемы",
-  "errorSelect": "Пожалуйста, выберите тип кожи и основную проблему",
-  "errorFailed": "Не удалось выполнить анализ. Попробуйте ещё раз.",
-  "analyzeBtn": "Анализировать мою кожу",
-  "analyzingBtn": "Анализируем...",
-  "saveResults": "Сохраните результаты",
-  "signInSave": "Войдите, чтобы сохранить анализ",
-
-  "resultsTitle": "Результаты анализа вашей кожи",
-  "analysisComplete": "Анализ завершён",
-  "metricHydration": "Увлажнение",
-  "metricTexture": "Текстура",
-  "metricClarity": "Чистота",
-  "metricTone": "Ровность тона",
-  "metricToneShort": "Тон",
-
-  "recsTitle": "Персонализированные рекомендации по продуктам",
-  "recsSubtitle": "Подобраны специально по результатам вашего анализа кожи",
-  "step1": "ШАГ 1: УТРО",
-  "morningTitle": "Утренний защитный ритуал",
-  "step2": "ШАГ 2: ВЕЧЕР",
-  "eveningTitle": "Вечерний восстанавливающий ритуал",
-  "step3": "ШАГ 3: ЦЕЛЕВОЙ УХОД",
-  "targetedTitle": "Специализированные средства",
-  "loadingProducts": "Загружаем продукты...",
-  "selectConcerns": "Выберите конкретные проблемы выше, чтобы увидеть целевые продукты.",
-  "savedSuccess": "✓ Анализ успешно сохранён в вашем профиле!",
-  "viewRoutine": "Смотреть полный ритуал",
-  "saveBtn": "Сохранить в профиль",
-  "savingBtn": "Сохраняем...",
-  "savedBtn": "✓ Сохранено в профиль",
-  "addToCart": "В корзину",
-
-  "journeyTitle": "Отслеживайте путь вашей кожи",
-  "journeySubtitle": "Следите за улучшениями с помощью регулярного анализа кожи",
-  "noAnalysis": "Анализов ещё нет",
-  "noAnalysisDesc": "Пройдите первый анализ кожи выше, чтобы начать отслеживать путь вашей кожи.",
-  "scheduleBtn": "Запланировать следующий анализ",
-
-  "scheduleModalTitle": "Запланировать следующий анализ",
-  "reminderTo": "Напоминание на:",
-  "reminderScheduled": "Напоминание запланировано!",
-  "reminderSetFor": "Напоминание установлено на",
-  "confirmReminder": "Подтвердить и отправить напоминание",
-  "selectDate": "Выберите дату",
-  "done": "Готово",
-
-  "faqTitle": "Часто задаваемые вопросы",
-  "faq1q": "Насколько точен AI-анализ кожи?",
-  "faq1a": "Наш ИИ анализирует кожу с точностью 98%, подтверждённой дерматологами на основе миллионов сканирований.",
-  "faq2q": "Как часто следует проходить анализ?",
-  "faq2a": "Мы рекомендуем ежемесячный анализ для отслеживания улучшений и корректировки ухода за кожей.",
-  "faq3q": "Мои данные в безопасности?",
-  "faq3a": "Абсолютно. Все изображения и данные зашифрованы и никогда не передаются третьим лицам.",
-  "faq4q": "Анализ платный?",
-  "faq4a": "Базовый анализ бесплатный. Премиум-функции включают консультации экспертов и расширенное отслеживание.",
-  "faq5q": "Могу ли я использовать продукты других брендов?",
-  "faq5a": "Хотя мы рекомендуем наши научно разработанные продукты, результаты анализа подходят для любого выбора.",
-  "faq6q": "Когда я увижу результаты?",
-  "faq6a": "Большинство пользователей замечают улучшения в течение 4-6 недель при последовательном соблюдении ритуала.",
-
-  "newsletterTitle": "Будьте в курсе здоровья кожи",
-  "newsletterSubtitle": "Получайте персонализированные советы по уходу и эксклюзивные предложения"
-},
-  "virtualTryOn": {
-  "pinTitle": "Доступ к предпросмотру",
-  "pinDesc": "Эта версия ещё не является публичной. Введите код доступа для продолжения.",
-  "pinLabel": "Код доступа",
-  "pinError": "Неверный код доступа. Пожалуйста, попробуйте снова.",
-  "pinContinue": "Продолжить",
-  "pinShop": "Продолжить покупки",
-  "pinFooter": "Вы останетесь в предпросмотре до выхода из аккаунта или закрытия вкладки браузера."
-},
+    "tagline": "Вневременная роскошь",
+    "description": "Создаём исключительный опыт красоты через союз науки и природы.",
+    "shop": "Магазин",
+    "support": "Поддержка",
+    "stayConnected": "Оставайтесь на связи",
+    "skincare": "Уход за кожей",
+    "makeup": "Макияж",
+    "fragrance": "Ароматы",
+    "tools": "Инструменты",
+    "giftSets": "Подарочные наборы",
+    "newArrivals": "Новинки",
+    "contactUs": "Связаться с нами",
+    "shipping": "Доставка",
+    "returns": "Возврат",
+    "faqs": "Вопросы и ответы",
+    "trackOrder": "Отследить заказ",
+    "sizeGuide": "Гид по размерам",
+    "emailPlaceholder": "Введите ваш email",
+    "subscribe": "Подписаться",
+    "copyright": "© 2024 Shan Loray. Все права защищены.",
+    "privacyPolicy": "Политика конфиденциальности",
+    "termsOfService": "Условия использования",
+    "cookiePolicy": "Политика cookies"
+  },
   "explore": {
     "title": "Откройте Shan Loray",
     "subtitle": "Найдите свой идеальный бьюти-ритуал",
@@ -2157,39 +2088,5 @@
       "bodyButter": "Масло-крем для тела",
       "bodyScrubs": "Скрабы для тела"
     }
-  },
-  "bodycare": {
-  "nourishRestore": "ПИТАНИЕ И ВОССТАНОВЛЕНИЕ",
-  "heroTitle": "Уход за телом",
-  "heroDesc": "Роскошные ритуалы для гладкой, сияющей кожи",
-  "heroDescDesktop": "Роскошные ритуалы для гладкой, сияющей кожи с головы до пят",
-  "home": "Главная",
-  "shop": "Магазин",
-  "searchPlaceholder": "Поиск средств по уходу за телом...",
-  "showing": "Показано",
-  "products": "товаров",
-  "bodyCareProducts": "товаров по уходу за телом",
-  "noProducts": "Товары не найдены",
-  "filters": "Фильтры",
-  "sortBy": "Сортировка",
-  "sortBestSelling": "Хиты продаж",
-  "sortNewest": "Новинки",
-  "sortPriceLow": "Цена: по возрастанию",
-  "sortPriceHigh": "Цена: по убыванию",
-  "sortTopRated": "Лучший рейтинг",
-  "addToBag": "В корзину",
-  "loadMore": "Загрузить ещё",
-  "remaining": "осталось",
-  "clearAll": "Сбросить",
-  "clearAllFilters": "Сбросить фильтры",
-  "applyFilters": "Применить",
-  "refineSelection": "Уточнить выбор",
-  "allBodyCare": "Весь уход за телом",
-  "productCategory": "Категория",
-  "priceRange": "Ценовой диапазон",
-  "skinType": "Тип кожи",
-  "skinConcern": "Проблемы кожи",
-  "ingredients": "Ключевые ингредиенты",
-  "scent": "Аромат"
-}
+  }
 }
