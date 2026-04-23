@@ -1508,7 +1508,7 @@
     "errorPlaceOrder": "Не удалось оформить заказ. Повторите попытку.",
     "errorFailedAdd": "Не удалось добавить способ оплаты"
   },
- "privacyPage": {
+"privacyPage": {
   "title": "Настройки конфиденциальности",
   "subtitle": "Управляйте использованием ваших данных",
   "guest": "Гость",
@@ -1533,8 +1533,21 @@
       "title": "Передача данных третьим лицам",
       "desc": "Передавать анонимные данные доверенным партнёрам для улучшения сервисов"
     }
-  }
   },
+  "navItems": {
+    "Account Dashboard": "Панель управления",
+    "Order History": "История заказов",
+    "My Wishlist": "Мой список желаний",
+    "Shipping Addresses": "Адреса доставки",
+    "Payment Methods": "Способы оплаты",
+    "Beauty Profile": "Профиль красоты",
+    "Loyalty Program": "Программа лояльности",
+    "My Routines": "Мои процедуры",
+    "Reviews & Ratings": "Отзывы и оценки",
+    "Account Settings": "Настройки аккаунта",
+    "Notifications": "Уведомления"
+  }
+},
   "formulations": {
     "home": "Главная",
     "breadcrumb": "Передовые формулы",
