@@ -282,13 +282,13 @@ export default function Journal() {
         <p className="text-[14px] lg:text-[16px] font-light text-white/60 mb-8 max-w-[480px] mx-auto">
           {t('journal.newsletterDesc')}
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-[460px] mx-auto">
+        <div className="flex flex-col gap-3 justify-center max-w-[460px] mx-auto">
           <input
             type="email"
             placeholder={t('journal.emailPlaceholder')}
-            className="flex-1 h-[52px] px-5 bg-white/10 border border-white/20 rounded-[8px] text-[14px] text-white placeholder-white/40 outline-none focus:border-[#C9A870] transition-colors"
+            className="w-full h-[56px] px-5 bg-white/10 border border-white/20 rounded-[8px] text-[15px] text-white placeholder-white/60 outline-none focus:border-[#C9A870] transition-colors"
           />
-          <button className="h-[52px] px-8 bg-[#C9A870] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#b8956a] transition-colors whitespace-nowrap">
+          <button className="w-full h-[56px] px-8 bg-[#C9A870] text-white text-[15px] font-medium rounded-[8px] hover:bg-[#b8956a] transition-colors">
             {t('journal.subscribe')}
           </button>
         </div>
