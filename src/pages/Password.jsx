@@ -48,9 +48,9 @@ export default function Password() {
   const { user } = useAuth()
   const { wishlistItems } = useWishlist()
 
-  const [totalOrders, setTotalOrders] = useState(0)
+  const [orders, setOrders] = useState([])
+  const [reviews, setReviews] = useState([])
   const [loyaltyPoints, setLoyaltyPoints] = useState(0)
-  const [reviewsCount, setReviewsCount] = useState(0)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showDrawer, setShowDrawer] = useState(false)
 
@@ -70,35 +70,29 @@ export default function Password() {
     .toUpperCase()
     .slice(0, 2)
   const wishlistCount = wishlistItems?.length || 0
+  const totalOrders = orders.length
+  const reviewsCount = reviews.length
 
   useEffect(() => {
-    const fetchStats = async () => {
-      if (!user) return
-      try {
-        const { data: orders } = await supabase
-          .from('orders')
-          .select('total_amount')
-          .eq('user_id', user.id)
-
-        setTotalOrders(orders?.length || 0)
-
-        const points =
-          orders?.reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0) || 0
-        setLoyaltyPoints(prev => Math.floor(points))
-
-        const { data: reviews } = await supabase
-          .from('reviews')
-          .select('id')
-          .eq('user_id', user.id)
-
-        setReviewsCount(reviews?.length || 0)
-      } catch (err) {
-        console.error('Error fetching stats:', err)
-      }
-    }
-
-    fetchStats()
+    if (user) fetchAllData()
   }, [user])
+
+  async function fetchAllData() {
+    try {
+      const [ordersRes, reviewsRes] = await Promise.all([
+        supabase.from('orders').select('total_amount').eq('user_id', user.id),
+        supabase.from('reviews').select('id').eq('user_id', user.id),
+      ])
+      if (ordersRes.data) {
+        setOrders(ordersRes.data)
+        const points = ordersRes.data.reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0)
+        setLoyaltyPoints(Math.floor(points))
+      }
+      if (reviewsRes.data) setReviews(reviewsRes.data)
+    } catch (err) {
+      console.error('Error fetching stats:', err)
+    }
+  }
 
   const [current, setCurrent] = useState('')
   const [newPass, setNewPass] = useState('')
