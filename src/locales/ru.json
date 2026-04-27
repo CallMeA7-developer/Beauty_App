@@ -1198,9 +1198,15 @@
     "supportAvailability": "Наша команда поддержки работает с понедельника по пятницу, 9:00 - 18:00",
     "emailSupport": "Написать в поддержку",
     "trackMyOrder": "Отследить заказ",
-    "categories": {
-      "all": "Все"
-    },
+"categories": {
+  "all": "Все",
+  "ordersShipping": "Заказы и доставка",
+  "returnsRefunds": "Возвраты и возврат средств",
+  "payments": "Оплата",
+  "deliveryAddress": "Адрес доставки",
+  "productsSkincare": "Продукты и уход за кожей",
+  "accountLoyalty": "Аккаунт и лояльность"
+},
     "sections": {
       "ordersShipping": {
         "questions": {
