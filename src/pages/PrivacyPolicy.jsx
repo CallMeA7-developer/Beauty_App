@@ -147,15 +147,15 @@ export default function PrivacyPolicy() {
             <p className="text-[14px] lg:text-[15px] font-light text-[#666666] mb-6 max-w-[480px] mx-auto">
               {t('privacyPolicy.contact.description')}
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="mailto:privacy@shanloray.ru">
-                <button className="flex items-center gap-2 h-[48px] px-6 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
+            <div className="flex flex-col gap-3 justify-center items-center w-full sm:flex-row">
+              <a href="mailto:privacy@shanloray.ru" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto flex items-center justify-center gap-2 h-[52px] px-8 bg-[#8B7355] text-white text-[14px] font-medium rounded-[8px] hover:bg-[#7a6448] transition-colors">
                   <IoMailOutline className="w-[18px] h-[18px]" />
                   {t('privacyPolicy.contact.emailButton')}
                 </button>
               </a>
-              <Link to="/privacy-settings">
-                <button className="flex items-center gap-2 h-[48px] px-6 bg-white border border-[#8B7355] text-[#8B7355] text-[14px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
+              <Link to="/privacy-settings" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto flex items-center justify-center gap-2 h-[52px] px-8 bg-white border border-[#8B7355] text-[#8B7355] text-[14px] font-medium rounded-[8px] hover:bg-[#F5F1EA] transition-colors">
                   {t('privacyPolicy.contact.manageButton')}
                 </button>
               </Link>
