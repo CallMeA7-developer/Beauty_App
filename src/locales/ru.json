@@ -1477,6 +1477,19 @@
       "accountDashboard": "Личный кабинет",
       "changePassword": "Изменить пароль"
     },
+    "nav": {
+  "accountDashboard": "Личный кабинет",
+  "orderHistory": "История заказов",
+  "myWishlist": "Мой список желаний",
+  "shippingAddresses": "Адреса доставки",
+  "paymentMethods": "Способы оплаты",
+  "beautyProfile": "Профиль красоты",
+  "loyaltyProgram": "Программа лояльности",
+  "myRoutines": "Мои процедуры",
+  "reviewsRatings": "Отзывы и оценки",
+  "accountSettings": "Настройки аккаунта",
+  "notifications": "Уведомления"
+},
     "membership": {
       "member": "Участник",
       "elite": "Элитный участник",
