@@ -1466,6 +1466,19 @@
       "accountDashboard": "Account Dashboard",
       "changePassword": "Change Password"
     },
+    "nav": {
+  "accountDashboard": "Account Dashboard",
+  "orderHistory": "Order History",
+  "myWishlist": "My Wishlist",
+  "shippingAddresses": "Shipping Addresses",
+  "paymentMethods": "Payment Methods",
+  "beautyProfile": "Beauty Profile",
+  "loyaltyProgram": "Loyalty Program",
+  "myRoutines": "My Routines",
+  "reviewsRatings": "Reviews & Ratings",
+  "accountSettings": "Account Settings",
+  "notifications": "Notifications"
+},
     "membership": {
       "member": "Member",
       "elite": "Elite Member",
