@@ -1187,9 +1187,15 @@
     "supportAvailability": "Our support team is available Monday to Friday, 9am - 6pm EST",
     "emailSupport": "Email Support",
     "trackMyOrder": "Track My Order",
-    "categories": {
-      "all": "All"
-    },
+"categories": {
+  "all": "All",
+  "ordersShipping": "Orders & Shipping",
+  "returnsRefunds": "Returns & Refunds",
+  "payments": "Payments",
+  "deliveryAddress": "Delivery Address",
+  "productsSkincare": "Products & Skincare",
+  "accountLoyalty": "Account & Loyalty"
+},
     "sections": {
       "ordersShipping": {
         "questions": {
