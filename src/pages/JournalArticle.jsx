@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
-import { IoArrowBack, IoTimeOutline, IoCalendarOutline, IoShareSocialOutline, IoHeartOutline, IoCloseOutline, IoLinkOutline, IoLogoWhatsapp, IoLogoInstagram, IoCheckmarkCircle } from 'react-icons/io5'
+import { useState, useEffect } from 'react'
+import { IoArrowBack, IoTimeOutline, IoCalendarOutline, IoShareSocialOutline, IoHeartOutline, IoCloseOutline, IoLinkOutline, IoLogoWhatsapp, IoLogoInstagram, IoCheckmarkCircle, IoArrowUp } from 'react-icons/io5'
 
 const categoryColors = {
   Skincare: 'bg-[#E8F4F0] text-[#2D7D62]',
@@ -570,6 +570,13 @@ export default function JournalArticle() {
   const [liked, setLiked] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   const article = articles.find(a => a.id === parseInt(id))
 
   const handleLike = () => setLiked(true)
@@ -765,6 +772,15 @@ export default function JournalArticle() {
         </button>
       </div>
 
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
