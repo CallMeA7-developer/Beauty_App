@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
@@ -9,6 +9,7 @@ import {
   IoGlobeOutline,
   IoMailOutline,
   IoCallOutline,
+  IoArrowUp,
 } from 'react-icons/io5'
 
 const sectionIcons = [
@@ -23,6 +24,13 @@ const sectionIcons = [
 export default function PrivacyPolicy() {
   const { t, i18n } = useTranslation()
   const [openSections, setOpenSections] = useState({})
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const sections = t('privacyPolicy.sections', { returnObjects: true }).map((section, index) => ({
     ...section,
@@ -155,6 +163,15 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </div>
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
