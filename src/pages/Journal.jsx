@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { IoTimeOutline, IoArrowForward, IoSearchOutline } from 'react-icons/io5'
+import { IoTimeOutline, IoArrowForward, IoSearchOutline, IoArrowUp } from 'react-icons/io5'
 
 const articles = [
   {
@@ -117,7 +117,14 @@ export default function Journal() {
     'Trends': t('journal.categories.trends'),
   }
   const [searchQuery, setSearchQuery] = useState('')
+  const [showScrollTop, setShowScrollTop] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const filtered = articles.filter(a => {
     const matchCat = activeCategory === 'All' || a.category === activeCategory
@@ -294,6 +301,15 @@ export default function Journal() {
         </div>
       </div>
 
+      {/* Scroll to Top */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-br from-[#C9A870] to-[#8B7355] rounded-full flex items-center justify-center shadow-[0_4px_16px_rgba(139,115,85,0.4)] z-50 transition-all duration-300"
+        >
+          <IoArrowUp className="w-5 h-5 text-white" />
+        </button>
+      )}
     </div>
   )
 }
