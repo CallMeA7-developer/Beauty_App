@@ -80,12 +80,12 @@ export default function Password() {
   async function fetchAllData() {
     try {
       const [ordersRes, reviewsRes] = await Promise.all([
-        supabase.from('orders').select('total_amount').eq('user_id', user.id),
+        supabase.from('orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
         supabase.from('reviews').select('id').eq('user_id', user.id),
       ])
       if (ordersRes.data) {
         setOrders(ordersRes.data)
-        const points = ordersRes.data.reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0)
+        const points = ordersRes.data.reduce((sum, o) => sum + (parseFloat(o.total_amount || o.total) || 0), 0)
         setLoyaltyPoints(Math.floor(points))
       }
       if (reviewsRes.data) setReviews(reviewsRes.data)
