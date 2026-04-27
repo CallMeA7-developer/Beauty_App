@@ -60,19 +60,6 @@ export default function Password() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || t('passwordPage.user')
-  const userEmail = user?.email || ''
-  const userAvatar = user?.user_metadata?.avatar_url
-  const userInitials = userName
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
-  const wishlistCount = wishlistItems?.length || 0
-  const totalOrders = orders.length
-  const reviewsCount = reviews.length
-
   useEffect(() => {
     if (user) fetchAllData()
   }, [user])
@@ -93,6 +80,20 @@ export default function Password() {
       console.error('Error fetching stats:', err)
     }
   }
+
+  // Derived values — computed after state is set so they're always up to date
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || t('passwordPage.user')
+  const userEmail = user?.email || ''
+  const userAvatar = user?.user_metadata?.avatar_url
+  const userInitials = userName
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+  const wishlistCount = wishlistItems?.length || 0
+  const totalOrders = orders.length
+  const reviewsCount = reviews.length
 
   const [current, setCurrent] = useState('')
   const [newPass, setNewPass] = useState('')
