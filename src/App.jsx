@@ -46,9 +46,16 @@ import { useAuth } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { CheckoutProvider } from './contexts/CheckoutContext'
 import { WishlistProvider } from './contexts/WishlistContext'
+import ComingSoon from './components/ComingSoon'
+
+const COMING_SOON = true
 
 export default function App() {
   const { showAuthModal, closeAuthModal } = useAuth()
+
+  if (COMING_SOON) {
+    return <ComingSoon />
+  }
 
   return (
     <CartProvider>
